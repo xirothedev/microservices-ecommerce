@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "web-store-backend",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -22,8 +22,10 @@
   "dependencies": {
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^11.0.1",
     "@prisma/client": "^6.11.1",
+    "argon2": "^0.43.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
@@ -71,5 +73,8 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "prisma": {
+    "schema": "./prisma/schema"
   }
 }

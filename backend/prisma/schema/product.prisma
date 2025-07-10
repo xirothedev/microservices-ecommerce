@@ -1,0 +1,36 @@
+model Product {
+  id            String        @id @default(cuid())
+  createAt      DateTime      @default(now())
+  updateAt      DateTime      @updatedAt
+  sku           String?       @unique
+  isActive      Boolean       @default(true)
+  slug          String        @unique
+  name          String
+  description   String
+  stock         Int
+  sold          Int           @default(0)
+  flags         ProductFlag[]
+  originalPrice Int
+  discountPrice Int
+  tags          String[]
+  medias        String[]
+
+  categoryId String
+  category   Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  cartItem   CartItem[]
+  OrderItem  OrderItem[]
+}
+
+model Category {
+  id       String    @id @default(uuid())
+  name     String
+  slug     String
+  products Product[]
+}
+
+enum ProductFlag {
+  BEST_CHOICE
+  BEST_SELLER
+  BEST_CHEAP
+  POPULAR
+}

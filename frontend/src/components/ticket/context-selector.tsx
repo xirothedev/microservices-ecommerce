@@ -1,0 +1,262 @@
+"use client";
+
+import type React from "react";
+
+import { useState, useRef, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { X, Search, Package, ShoppingBag, User, CreditCard } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+
+interface Context {
+	type: string;
+	id: string;
+	label: string;
+}
+
+interface ContextSelectorProps {
+	selectedContexts: Context[];
+	onContextsChange: (contexts: Context[]) => void;
+	disabled?: boolean;
+}
+
+// Mock data for different context types
+const mockContexts = {
+	order: [
+		{ id: "ORD-001", label: "Order #ORD-001 - Apple ID Premium Setup ($49.99)" },
+		{ id: "ORD-002", label: "Order #ORD-002 - Facebook Business Account ($79.99)" },
+		{ id: "ORD-003", label: "Order #ORD-003 - YouTube Premium Family ($29.99)" },
+	],
+	product: [
+		{ id: "PROD-001", label: "Apple ID Premium Setup" },
+		{ id: "PROD-002", label: "Facebook Business Account" },
+		{ id: "PROD-003", label: "Instagram Growth Package" },
+		{ id: "PROD-004", label: "YouTube Premium Family" },
+	],
+	transaction: [
+		{ id: "TXN-001", label: "Transaction #TXN-ABC123 - $49.99" },
+		{ id: "TXN-002", label: "Transaction #TXN-DEF456 - $79.99" },
+		{ id: "TXN-003", label: "Transaction #TXN-GHI789 - $29.99" },
+	],
+	account: [{ id: "ACC-001", label: "My Account - john.doe@example.com" }],
+};
+
+export default function ContextSelector({
+	selectedContexts,
+	onContextsChange,
+	disabled = false,
+}: ContextSelectorProps) {
+	const [inputValue, setInputValue] = useState("");
+	const [showSuggestions, setShowSuggestions] = useState(false);
+	const [filteredSuggestions, setFilteredSuggestions] = useState<Array<Context & { type: string }>>([]);
+	const inputRef = useRef<HTMLInputElement>(null);
+	const suggestionsRef = useRef<HTMLDivElement>(null);
+
+	const contextIcons = {
+		order: ShoppingBag,
+		product: Package,
+		transaction: CreditCard,
+		account: User,
+	};
+
+	const contextColors = {
+		order: "bg-blue-100 text-blue-800",
+		product: "bg-green-100 text-green-800",
+		transaction: "bg-purple-100 text-purple-800",
+		account: "bg-orange-100 text-orange-800",
+	};
+
+	useEffect(() => {
+		if (inputValue.length > 0) {
+			const query = inputValue.toLowerCase();
+			const suggestions: Array<Context & { type: string }> = [];
+
+			Object.entries(mockContexts).forEach(([type, items]) => {
+				items.forEach((item) => {
+					if (
+						item.label.toLowerCase().includes(query) &&
+						!selectedContexts.some((selected) => selected.id === item.id && selected.type === type)
+					) {
+						suggestions.push({ ...item, type });
+					}
+				});
+			});
+
+			setFilteredSuggestions(suggestions.slice(0, 8)); // Limit to 8 suggestions
+			setShowSuggestions(suggestions.length > 0);
+		} else {
+			setShowSuggestions(false);
+			setFilteredSuggestions([]);
+		}
+	}, [inputValue, selectedContexts]);
+
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (disabled) return;
+		setInputValue(e.target.value);
+	};
+
+	const handleKeyDown = (e: React.KeyboardEvent) => {
+		if (disabled) return;
+
+		if (e.key === "Escape") {
+			setShowSuggestions(false);
+			setInputValue("");
+		}
+	};
+
+	const selectContext = (context: Context & { type: string }) => {
+		if (disabled) return;
+
+		const newContext: Context = {
+			type: context.type,
+			id: context.id,
+			label: context.label,
+		};
+
+		onContextsChange([...selectedContexts, newContext]);
+		setInputValue("");
+		setShowSuggestions(false);
+		inputRef.current?.focus();
+	};
+
+	const removeContext = (index: number) => {
+		if (disabled) return;
+		const newContexts = selectedContexts.filter((_, i) => i !== index);
+		onContextsChange(newContexts);
+	};
+
+	const getContextIcon = (type: string) => {
+		const IconComponent = contextIcons[type as keyof typeof contextIcons];
+		return IconComponent ? <IconComponent className="h-3 w-3" /> : <Package className="h-3 w-3" />;
+	};
+
+	const getContextColor = (type: string) => {
+		return contextColors[type as keyof typeof contextColors] || "bg-gray-100 text-gray-800";
+	};
+
+	// Close suggestions when clicking outside
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (
+				suggestionsRef.current &&
+				!suggestionsRef.current.contains(event.target as Node) &&
+				!inputRef.current?.contains(event.target as Node)
+			) {
+				setShowSuggestions(false);
+			}
+		};
+
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => document.removeEventListener("mousedown", handleClickOutside);
+	}, []);
+
+	return (
+		<div className="space-y-3">
+			<div className="relative">
+				<div className="relative">
+					<Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
+					<Input
+						ref={inputRef}
+						type="text"
+						placeholder="Type to search orders, products, transactions... (e.g., 'Order #ORD-001')"
+						value={inputValue}
+						onChange={handleInputChange}
+						onKeyDown={handleKeyDown}
+						onFocus={() => inputValue && setShowSuggestions(filteredSuggestions.length > 0)}
+						className="pl-10"
+						disabled={disabled}
+					/>
+				</div>
+
+				{/* Suggestions Dropdown */}
+				<AnimatePresence>
+					{showSuggestions && (
+						<motion.div
+							ref={suggestionsRef}
+							initial={{ opacity: 0, y: -10 }}
+							animate={{ opacity: 1, y: 0 }}
+							exit={{ opacity: 0, y: -10 }}
+							className="absolute top-full right-0 left-0 z-50 mt-1"
+						>
+							<Card className="shadow-lg">
+								<CardContent className="p-2">
+									<div className="space-y-1">
+										{filteredSuggestions.map((suggestion, index) => (
+											<button
+												key={`${suggestion.type}-${suggestion.id}`}
+												onClick={() => selectContext(suggestion)}
+												className="flex w-full items-center gap-2 rounded p-2 text-left transition-colors hover:bg-gray-100"
+											>
+												<div className={`rounded p-1 ${getContextColor(suggestion.type)}`}>
+													{getContextIcon(suggestion.type)}
+												</div>
+												<div className="min-w-0 flex-1">
+													<div className="truncate text-sm font-medium">
+														{suggestion.label}
+													</div>
+													<div className="text-xs text-gray-500 capitalize">
+														{suggestion.type}
+													</div>
+												</div>
+											</button>
+										))}
+									</div>
+								</CardContent>
+							</Card>
+						</motion.div>
+					)}
+				</AnimatePresence>
+			</div>
+
+			{/* Selected Contexts */}
+			<AnimatePresence>
+				{selectedContexts.length > 0 && (
+					<motion.div
+						initial={{ opacity: 0, height: 0 }}
+						animate={{ opacity: 1, height: "auto" }}
+						exit={{ opacity: 0, height: 0 }}
+						className="space-y-2"
+					>
+						<div className="text-sm font-medium text-gray-700">Referenced Items:</div>
+						<div className="flex flex-wrap gap-2">
+							{selectedContexts.map((context, index) => (
+								<motion.div
+									key={`selected-${index}`}
+									initial={{ opacity: 0, scale: 0.8 }}
+									animate={{ opacity: 1, scale: 1 }}
+									exit={{ opacity: 0, scale: 0.8 }}
+								>
+									<Badge
+										variant="secondary"
+										className={`${getContextColor(context.type)} gap-1 pr-1`}
+									>
+										{getContextIcon(context.type)}
+										<span className="max-w-48 truncate">{context.label}</span>
+										<Button
+											type="button"
+											variant="ghost"
+											size="sm"
+											onClick={() => removeContext(index)}
+											disabled={disabled}
+											className="ml-1 h-4 w-4 p-0 hover:bg-transparent"
+										>
+											<X className="h-3 w-3" />
+										</Button>
+									</Badge>
+								</motion.div>
+							))}
+						</div>
+					</motion.div>
+				)}
+			</AnimatePresence>
+
+			{/* Helper Text */}
+			<div className="text-xs text-gray-500">
+				Tip: Reference your orders, products, or transactions to help our support team understand your issue
+				better.
+			</div>
+		</div>
+	);
+}

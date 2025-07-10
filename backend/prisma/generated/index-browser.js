@@ -120,21 +120,26 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.UserScalarFieldEnum = {
+exports.Prisma.OrderScalarFieldEnum = {
   id: 'id',
-  email: 'email',
-  phone: 'phone',
-  hashedPassword: 'hashedPassword',
-  role: 'role',
-  flags: 'flags',
   createAt: 'createAt',
   updateAt: 'updateAt',
-  credit: 'credit'
+  totalPrice: 'totalPrice',
+  billId: 'billId'
 };
 
 exports.Prisma.RelationLoadStrategy = {
   query: 'query',
   join: 'join'
+};
+
+exports.Prisma.OrderItemScalarFieldEnum = {
+  id: 'id',
+  from: 'from',
+  quantity: 'quantity',
+  price: 'price',
+  productId: 'productId',
+  orderId: 'orderId'
 };
 
 exports.Prisma.ProductScalarFieldEnum = {
@@ -162,6 +167,19 @@ exports.Prisma.CategoryScalarFieldEnum = {
   slug: 'slug'
 };
 
+exports.Prisma.UserScalarFieldEnum = {
+  id: 'id',
+  displayName: 'displayName',
+  email: 'email',
+  phone: 'phone',
+  hashedPassword: 'hashedPassword',
+  role: 'role',
+  flags: 'flags',
+  createAt: 'createAt',
+  updateAt: 'updateAt',
+  credit: 'credit'
+};
+
 exports.Prisma.BillScalarFieldEnum = {
   id: 'id',
   createAt: 'createAt',
@@ -175,23 +193,6 @@ exports.Prisma.BillScalarFieldEnum = {
   userId: 'userId'
 };
 
-exports.Prisma.OrderScalarFieldEnum = {
-  id: 'id',
-  createAt: 'createAt',
-  updateAt: 'updateAt',
-  totalPrice: 'totalPrice',
-  billId: 'billId'
-};
-
-exports.Prisma.OrderItemScalarFieldEnum = {
-  id: 'id',
-  from: 'from',
-  quantity: 'quantity',
-  price: 'price',
-  productId: 'productId',
-  orderId: 'orderId'
-};
-
 exports.Prisma.CartItemScalarFieldEnum = {
   createAt: 'createAt',
   updateAt: 'updateAt',
@@ -199,6 +200,22 @@ exports.Prisma.CartItemScalarFieldEnum = {
   unitPrice: 'unitPrice',
   productId: 'productId',
   userId: 'userId'
+};
+
+exports.Prisma.TicketScalarFieldEnum = {
+  id: 'id',
+  numericalOrder: 'numericalOrder',
+  createAt: 'createAt',
+  updateAt: 'updateAt',
+  title: 'title',
+  description: 'description',
+  status: 'status',
+  category: 'category',
+  priority: 'priority',
+  referenceContext: 'referenceContext',
+  images: 'images',
+  authorId: 'authorId',
+  assignedId: 'assignedId'
 };
 
 exports.Prisma.SortOrder = {
@@ -215,8 +232,21 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.SelectFrom = exports.$Enums.SelectFrom = {
+  CART: 'CART',
+  SERVICES: 'SERVICES'
+};
+
+exports.ProductFlag = exports.$Enums.ProductFlag = {
+  BEST_CHOICE: 'BEST_CHOICE',
+  BEST_SELLER: 'BEST_SELLER',
+  BEST_CHEAP: 'BEST_CHEAP',
+  POPULAR: 'POPULAR'
+};
+
 exports.UserRole = exports.$Enums.UserRole = {
   ADMINISTRATOR: 'ADMINISTRATOR',
+  SUPPORTER: 'SUPPORTER',
   USER: 'USER'
 };
 
@@ -228,13 +258,6 @@ exports.UserFlag = exports.$Enums.UserFlag = {
   COPPER_CUSTOMER: 'COPPER_CUSTOMER',
   CUSTOMER: 'CUSTOMER',
   BANNED: 'BANNED'
-};
-
-exports.ProductFlag = exports.$Enums.ProductFlag = {
-  BEST_CHOICE: 'BEST_CHOICE',
-  BEST_SELLER: 'BEST_SELLER',
-  BEST_CHEAP: 'BEST_CHEAP',
-  POPULAR: 'POPULAR'
 };
 
 exports.PaymentMethod = exports.$Enums.PaymentMethod = {
@@ -255,19 +278,39 @@ exports.BillStatus = exports.$Enums.BillStatus = {
   FAILED: 'FAILED'
 };
 
-exports.SelectFrom = exports.$Enums.SelectFrom = {
-  CART: 'CART',
-  SERVICES: 'SERVICES'
+exports.TicketStatus = exports.$Enums.TicketStatus = {
+  RESOLVED: 'RESOLVED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  WAITING: 'WAITING',
+  OPEN: 'OPEN',
+  CLOSED: 'CLOSED'
+};
+
+exports.TicketCategory = exports.$Enums.TicketCategory = {
+  TECHNICAL_SUPPORT: 'TECHNICAL_SUPPORT',
+  BILLING_PAYMENT: 'BILLING_PAYMENT',
+  ACCOUNT_ISSUE: 'ACCOUNT_ISSUE',
+  SERVICE_REQUEST: 'SERVICE_REQUEST',
+  REFUND_REQUEST: 'REFUND_REQUEST',
+  GENERAL_INQUIRY: 'GENERAL_INQUIRY'
+};
+
+exports.TicketPriority = exports.$Enums.TicketPriority = {
+  URGENT: 'URGENT',
+  HIGH: 'HIGH',
+  MEDIUM: 'MEDIUM',
+  LOW: 'LOW'
 };
 
 exports.Prisma.ModelName = {
-  User: 'User',
-  Product: 'Product',
-  Category: 'Category',
-  Bill: 'Bill',
   Order: 'Order',
   OrderItem: 'OrderItem',
-  CartItem: 'CartItem'
+  Product: 'Product',
+  Category: 'Category',
+  User: 'User',
+  Bill: 'Bill',
+  CartItem: 'CartItem',
+  Ticket: 'Ticket'
 };
 
 /**

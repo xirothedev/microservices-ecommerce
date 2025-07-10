@@ -1,12 +1,12 @@
-import { Suspense } from "react"
-import type { Metadata } from "next"
-import ServicesHero from "./components/services-hero"
-import ServicesList from "./components/services-list"
-import ServicesFilter from "./components/services-filter"
-import ServicesLoading from "./components/services-loading"
+import ServicesFilter from "@/components/services/services-filter";
+import ServicesHero from "@/components/services/services-hero";
+import ServicesList from "@/components/services/services-list";
+import ServicesLoading from "@/components/services/services-loading";
+import type { Metadata } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "Digital Services - DigitalPro | Premium Digital Solutions",
+  title: "Services",
   description:
     "Explore our comprehensive range of digital services including Apple ID setup, social media management, YouTube Premium, and custom solutions.",
   keywords: "digital services, Apple ID, Facebook management, YouTube Premium, social media, digital solutions",

@@ -1,0 +1,42 @@
+model Ticket {
+  id               String         @id @default(uuid())
+  numericalOrder   Int            @default(autoincrement())
+  createAt         DateTime       @default(now())
+  updateAt         DateTime       @updatedAt
+  title            String
+  description      String
+  status           TicketStatus
+  category         TicketCategory
+  priority         TicketPriority
+  referenceContext String?
+  images           String[]
+
+  authorId   String
+  author     User   @relation(name: "TicketAuthor", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  assignedId String
+  assigned   User   @relation(name: "TicketAssigned", fields: [assignedId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+enum TicketStatus {
+  RESOLVED
+  IN_PROGRESS
+  WAITING
+  OPEN
+  CLOSED
+}
+
+enum TicketCategory {
+  TECHNICAL_SUPPORT
+  BILLING_PAYMENT
+  ACCOUNT_ISSUE
+  SERVICE_REQUEST
+  REFUND_REQUEST
+  GENERAL_INQUIRY
+}
+
+enum TicketPriority {
+  URGENT
+  HIGH
+  MEDIUM
+  LOW
+}

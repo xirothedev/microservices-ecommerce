@@ -1,35 +1,24 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+model Order {
+  id         String   @id @default(uuid())
+  createAt   DateTime @default(now())
+  updateAt   DateTime @updatedAt
+  totalPrice Int
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-generator client {
-  provider        = "prisma-client-js"
-  output          = "./generated"
-  previewFeatures = ["postgresqlExtensions", "relationJoins"]
-  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
-  engineType      = "library"
+  billId String      @unique
+  bill   Bill        @relation(fields: [billId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  items  OrderItem[]
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
+model OrderItem {
+  id       String     @id @default(uuid())
+  from     SelectFrom
+  quantity Int        @default(1)
+  price    Int
 
-model User {
-  id             String     @id @default(uuid())
-  email          String     @unique
-  phone          String     @unique
-  hashedPassword String?
-  role           UserRole
-  flags          UserFlag[]
-  createAt       DateTime   @default(now())
-  updateAt       DateTime   @updatedAt
-  credit         Int        @default(0)
-
-  bills Bill[]
-  cart  CartItem[]
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Product {
@@ -62,6 +51,50 @@ model Category {
   products Product[]
 }
 
+enum ProductFlag {
+  BEST_CHOICE
+  BEST_SELLER
+  BEST_CHEAP
+  POPULAR
+}
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../generated"
+  previewFeatures = ["postgresqlExtensions", "relationJoins"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
+  engineType      = "library"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String     @id @default(uuid())
+  displayName    String
+  email          String     @unique
+  phone          String     @unique
+  hashedPassword String?
+  role           UserRole
+  flags          UserFlag[]
+  createAt       DateTime   @default(now())
+  updateAt       DateTime   @updatedAt
+  credit         Int        @default(0)
+
+  ticketAuthor   Ticket[]   @relation("TicketAuthor")
+  ticketAssigned Ticket[]   @relation("TicketAssigned")
+  cart           CartItem[]
+  bills          Bill[]
+}
+
 model Bill {
   id            String        @id @default(uuid())
   createAt      DateTime      @default(now())
@@ -76,29 +109,6 @@ model Bill {
   order  Order?
   userId String?
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-}
-
-model Order {
-  id         String   @id @default(uuid())
-  createAt   DateTime @default(now())
-  updateAt   DateTime @updatedAt
-  totalPrice Int
-
-  billId String      @unique
-  bill   Bill        @relation(fields: [billId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  items  OrderItem[]
-}
-
-model OrderItem {
-  id       String     @id @default(uuid())
-  from     SelectFrom
-  quantity Int        @default(1)
-  price    Int
-
-  productId String
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  orderId   String
-  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model CartItem {
@@ -117,6 +127,7 @@ model CartItem {
 
 enum UserRole {
   ADMINISTRATOR
+  SUPPORTER
   USER
 }
 
@@ -128,13 +139,6 @@ enum UserFlag {
   COPPER_CUSTOMER
   CUSTOMER
   BANNED
-}
-
-enum ProductFlag {
-  BEST_CHOICE
-  BEST_SELLER
-  BEST_CHEAP
-  POPULAR
 }
 
 enum BillType {
@@ -158,4 +162,47 @@ enum PaymentMethod {
 enum SelectFrom {
   CART
   SERVICES
+}
+
+model Ticket {
+  id               String         @id @default(uuid())
+  numericalOrder   Int            @default(autoincrement())
+  createAt         DateTime       @default(now())
+  updateAt         DateTime       @updatedAt
+  title            String
+  description      String
+  status           TicketStatus
+  category         TicketCategory
+  priority         TicketPriority
+  referenceContext String?
+  images           String[]
+
+  authorId   String
+  author     User   @relation(name: "TicketAuthor", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  assignedId String
+  assigned   User   @relation(name: "TicketAssigned", fields: [assignedId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+enum TicketStatus {
+  RESOLVED
+  IN_PROGRESS
+  WAITING
+  OPEN
+  CLOSED
+}
+
+enum TicketCategory {
+  TECHNICAL_SUPPORT
+  BILLING_PAYMENT
+  ACCOUNT_ISSUE
+  SERVICE_REQUEST
+  REFUND_REQUEST
+  GENERAL_INQUIRY
+}
+
+enum TicketPriority {
+  URGENT
+  HIGH
+  MEDIUM
+  LOW
 }

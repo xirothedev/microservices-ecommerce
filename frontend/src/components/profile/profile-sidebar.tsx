@@ -1,0 +1,139 @@
+import { CreditCard, HelpCircle, Lock, LogOut, Settings, ShoppingBag, User } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
+import { Card, CardContent } from "../ui/card";
+import { Dispatch, SetStateAction } from "react";
+
+const userData = {
+	name: "John Doe",
+	email: "john.doe@example.com",
+	avatar: "https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=80&width=80",
+	memberSince: "January 2023",
+	accountType: "Premium",
+	totalOrders: 24,
+	totalSpent: 1250,
+};
+
+const navigationItems = [
+	{
+		id: "personal-info",
+		label: "Personal Information",
+		icon: User,
+		description: "Manage your profile details",
+	},
+	{
+		id: "transaction-history",
+		label: "Transaction History",
+		icon: CreditCard,
+		description: "View your payment history",
+	},
+	{
+		id: "purchase-history",
+		label: "Purchase History",
+		icon: ShoppingBag,
+		description: "Track your orders",
+	},
+	{
+		id: "change-password",
+		label: "Change Password",
+		icon: Lock,
+		description: "Update your security",
+	},
+	{
+		id: "support-tickets",
+		label: "Support Tickets",
+		icon: HelpCircle,
+		description: "Get help and support",
+	},
+	{
+		id: "settings",
+		label: "Account Settings",
+		icon: Settings,
+		description: "Manage preferences",
+	},
+];
+
+interface ProfileSidebarProps {
+	setActiveSection: Dispatch<SetStateAction<string>>;
+	setSidebarOpen: Dispatch<SetStateAction<boolean>>;
+	activeSection: string;
+}
+
+export default function ProfileSidebar({ setActiveSection, setSidebarOpen, activeSection }: ProfileSidebarProps) {
+	return (
+		<Card className="sticky top-24 h-fit">
+			<CardContent className="p-6">
+				{/* User Profile Header */}
+				<div className="mb-6 text-center">
+					<Avatar className="mx-auto mb-4 h-20 w-20">
+						<AvatarImage
+							src={
+								userData.avatar ||
+								"https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg"
+							}
+							alt={userData.name}
+						/>
+						<AvatarFallback className="text-lg">
+							{userData.name
+								.split(" ")
+								.map((n) => n[0])
+								.join("")}
+						</AvatarFallback>
+					</Avatar>
+					<h2 className="text-xl font-semibold text-gray-900">{userData.name}</h2>
+					<p className="mb-2 text-sm text-gray-600">{userData.email}</p>
+					<Badge variant="secondary" className="bg-blue-100 text-blue-800">
+						{userData.accountType}
+					</Badge>
+				</div>
+
+				{/* Quick Stats */}
+				<div className="mb-6 grid grid-cols-2 gap-4 rounded-lg bg-gray-50 p-4">
+					<div className="text-center">
+						<div className="text-2xl font-bold text-gray-900">{userData.totalOrders}</div>
+						<div className="text-xs text-gray-600">Total Orders</div>
+					</div>
+					<div className="text-center">
+						<div className="text-2xl font-bold text-gray-900">${userData.totalSpent}</div>
+						<div className="text-xs text-gray-600">Total Spent</div>
+					</div>
+				</div>
+
+				{/* Navigation */}
+				<nav className="space-y-2">
+					{navigationItems.map((item) => (
+						<Button
+							key={item.id}
+							variant={activeSection === item.id ? "default" : "ghost"}
+							className={`h-auto w-full justify-start p-3 ${
+								activeSection === item.id ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-gray-100"
+							}`}
+							onClick={() => {
+								setActiveSection(item.id);
+								setSidebarOpen(false);
+							}}
+						>
+							<item.icon className="mr-3 h-5 w-5" />
+							<div className="text-left">
+								<div className="font-medium">{item.label}</div>
+								<div className="text-xs opacity-75">{item.description}</div>
+							</div>
+						</Button>
+					))}
+				</nav>
+
+				{/* Logout Button */}
+				<div className="mt-6 border-t pt-6">
+					<Button
+						variant="outline"
+						className="w-full justify-start bg-transparent text-red-600 hover:bg-red-50"
+					>
+						<LogOut className="mr-3 h-5 w-5" />
+						Sign Out
+					</Button>
+				</div>
+			</CardContent>
+		</Card>
+	);
+}
