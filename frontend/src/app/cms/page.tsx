@@ -249,110 +249,108 @@ export default function CmsLayout() {
 	}
 
 	return (
-		<div className="mt-16 min-h-screen bg-gray-50">
-			<div className="container mx-auto px-4 py-8">
-				{/* Header */}
-				<div className="mb-8 flex flex-col lg:flex-row lg:items-center lg:justify-between">
-					<div>
-						<h1 className="mb-2 text-3xl font-bold text-gray-900">Content Management System</h1>
-						<p className="text-gray-600">Manage your product listings and content</p>
+		<div className="container mx-auto px-4 py-8">
+			{/* Header */}
+			<div className="mb-8 flex flex-col lg:flex-row lg:items-center lg:justify-between">
+				<div>
+					<h1 className="mb-2 text-3xl font-bold">Content Management System</h1>
+					<p className="text-gray-600">Manage your product listings and content</p>
+				</div>
+				<div className="mt-4 flex items-center gap-4 lg:mt-0">
+					<Button onClick={handleCreateProduct} variant="default">
+						<Plus className="mr-2 h-4 w-4" />
+						Add Product
+					</Button>
+				</div>
+			</div>
+
+			{/* Stats */}
+			<div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+				<div className="rounded-lg border bg-white p-4 shadow-sm">
+					<div className="text-2xl font-bold text-gray-900">{stats.total}</div>
+					<div className="text-sm text-gray-600">Total Products</div>
+				</div>
+				<div className="rounded-lg border bg-white p-4 shadow-sm">
+					<div className="text-2xl font-bold text-green-600">{stats.active}</div>
+					<div className="text-sm text-gray-600">Active</div>
+				</div>
+				<div className="rounded-lg border bg-white p-4 shadow-sm">
+					<div className="text-2xl font-bold text-yellow-600">{stats.draft}</div>
+					<div className="text-sm text-gray-600">Draft</div>
+				</div>
+				<div className="rounded-lg border bg-white p-4 shadow-sm">
+					<div className="text-2xl font-bold text-gray-600">{stats.archived}</div>
+					<div className="text-sm text-gray-600">Archived</div>
+				</div>
+			</div>
+
+			{/* Search and Filters */}
+			<div className="mb-8 rounded-lg border bg-white p-6 shadow-sm">
+				<div className="flex flex-col gap-4 lg:flex-row">
+					<div className="flex-1">
+						<div className="relative">
+							<Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
+							<Input
+								placeholder="Search products by name or category..."
+								value={searchQuery}
+								onChange={(e) => setSearchQuery(e.target.value)}
+								className="pl-10"
+							/>
+						</div>
 					</div>
-					<div className="mt-4 flex items-center gap-4 lg:mt-0">
-						<Button onClick={handleCreateProduct} className="bg-blue-600 hover:bg-blue-700">
-							<Plus className="mr-2 h-4 w-4" />
-							Add Product
+					<SearchFilters
+						sortBy={sortBy}
+						sortOrder={sortOrder}
+						onSortChange={(field, order) => {
+							setSortBy(field);
+							setSortOrder(order);
+						}}
+					/>
+					<div className="flex items-center gap-2">
+						<Button
+							variant={viewMode === "grid" ? "default" : "outline"}
+							size="sm"
+							onClick={() => setViewMode("grid")}
+						>
+							<Grid className="h-4 w-4" />
+						</Button>
+						<Button
+							variant={viewMode === "list" ? "default" : "outline"}
+							size="sm"
+							onClick={() => setViewMode("list")}
+						>
+							<List className="h-4 w-4" />
 						</Button>
 					</div>
 				</div>
-
-				{/* Stats */}
-				<div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-					<div className="rounded-lg border bg-white p-4 shadow-sm">
-						<div className="text-2xl font-bold text-gray-900">{stats.total}</div>
-						<div className="text-sm text-gray-600">Total Products</div>
-					</div>
-					<div className="rounded-lg border bg-white p-4 shadow-sm">
-						<div className="text-2xl font-bold text-green-600">{stats.active}</div>
-						<div className="text-sm text-gray-600">Active</div>
-					</div>
-					<div className="rounded-lg border bg-white p-4 shadow-sm">
-						<div className="text-2xl font-bold text-yellow-600">{stats.draft}</div>
-						<div className="text-sm text-gray-600">Draft</div>
-					</div>
-					<div className="rounded-lg border bg-white p-4 shadow-sm">
-						<div className="text-2xl font-bold text-gray-600">{stats.archived}</div>
-						<div className="text-sm text-gray-600">Archived</div>
-					</div>
-				</div>
-
-				{/* Search and Filters */}
-				<div className="mb-8 rounded-lg border bg-white p-6 shadow-sm">
-					<div className="flex flex-col gap-4 lg:flex-row">
-						<div className="flex-1">
-							<div className="relative">
-								<Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
-								<Input
-									placeholder="Search products by name or category..."
-									value={searchQuery}
-									onChange={(e) => setSearchQuery(e.target.value)}
-									className="pl-10"
-								/>
-							</div>
-						</div>
-						<SearchFilters
-							sortBy={sortBy}
-							sortOrder={sortOrder}
-							onSortChange={(field, order) => {
-								setSortBy(field);
-								setSortOrder(order);
-							}}
-						/>
-						<div className="flex items-center gap-2">
-							<Button
-								variant={viewMode === "grid" ? "default" : "outline"}
-								size="sm"
-								onClick={() => setViewMode("grid")}
-							>
-								<Grid className="h-4 w-4" />
-							</Button>
-							<Button
-								variant={viewMode === "list" ? "default" : "outline"}
-								size="sm"
-								onClick={() => setViewMode("list")}
-							>
-								<List className="h-4 w-4" />
-							</Button>
-						</div>
-					</div>
-				</div>
-
-				{/* Product List */}
-				<ProductList
-					products={filteredProducts}
-					viewMode={viewMode}
-					onEdit={handleEditProduct}
-					onDelete={handleDeleteProduct}
-					onPreview={handlePreviewProduct}
-				/>
-
-				{/* Product Form Modal */}
-				<AnimatePresence>
-					{isFormOpen && (
-						<ProductForm
-							product={selectedProduct}
-							onSave={handleSaveProduct}
-							onClose={() => setIsFormOpen(false)}
-						/>
-					)}
-				</AnimatePresence>
-
-				{/* Preview Modal */}
-				<AnimatePresence>
-					{isPreviewOpen && previewProduct && (
-						<PreviewModal product={previewProduct} onClose={() => setIsPreviewOpen(false)} />
-					)}
-				</AnimatePresence>
 			</div>
+
+			{/* Product List */}
+			<ProductList
+				products={filteredProducts}
+				viewMode={viewMode}
+				onEdit={handleEditProduct}
+				onDelete={handleDeleteProduct}
+				onPreview={handlePreviewProduct}
+			/>
+
+			{/* Product Form Modal */}
+			<AnimatePresence>
+				{isFormOpen && (
+					<ProductForm
+						product={selectedProduct}
+						onSave={handleSaveProduct}
+						onClose={() => setIsFormOpen(false)}
+					/>
+				)}
+			</AnimatePresence>
+
+			{/* Preview Modal */}
+			<AnimatePresence>
+				{isPreviewOpen && previewProduct && (
+					<PreviewModal product={previewProduct} onClose={() => setIsPreviewOpen(false)} />
+				)}
+			</AnimatePresence>
 		</div>
 	);
 }

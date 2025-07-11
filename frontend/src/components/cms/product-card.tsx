@@ -24,7 +24,7 @@ import {
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import Image from "next/image";
-import { formatDate } from "@/lib/format-date";
+import { formatDate } from "@/lib/format";
 
 interface Product {
 	id: string;

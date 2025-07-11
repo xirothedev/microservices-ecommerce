@@ -41,23 +41,19 @@ interface PreviewModalProps {
 }
 
 export default function PreviewModal({ product, onClose }: PreviewModalProps) {
-	const stripHtml = (html: string) => {
-		return html.replace(/<[^>]*>/g, "");
-	};
-
 	return (
 		<motion.div
 			initial={{ opacity: 0 }}
 			animate={{ opacity: 1 }}
 			exit={{ opacity: 0 }}
-			className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black p-4"
+			className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
 			onClick={(e) => e.target === e.currentTarget && onClose()}
 		>
 			<motion.div
 				initial={{ scale: 0.95, opacity: 0 }}
 				animate={{ scale: 1, opacity: 1 }}
 				exit={{ scale: 0.95, opacity: 0 }}
-				className="max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-lg bg-white shadow-xl"
+				className="max-h-[90vh] w-full max-w-[60vw] overflow-hidden rounded-lg bg-white shadow-xl"
 			>
 				<div className="flex items-center justify-between border-b p-6">
 					<h2 className="text-xl font-semibold">Product Preview</h2>
@@ -181,7 +177,7 @@ export default function PreviewModal({ product, onClose }: PreviewModalProps) {
 																key={option.id}
 																className="cursor-pointer transition-shadow hover:shadow-md"
 															>
-																<CardContent className="p-3">
+																<CardContent className="p-3 flex flex-col items-center">
 																	<div className="font-medium">{option.value}</div>
 																	<div className="text-sm text-gray-600">
 																		${option.price} • {option.inventory} available

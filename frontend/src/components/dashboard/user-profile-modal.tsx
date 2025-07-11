@@ -48,7 +48,7 @@ interface UserProfileModalProps {
 	user: UserProfile | null;
 	isOpen: boolean;
 	onClose: () => void;
-	onAdjustCredits: (userId: string, newCredits: number) => void;
+	onAdjustCredits: (userId: string, newCredits: number) => Promise<void>;
 	onBanUser: (userId: string) => void;
 	onDeleteUser: (userId: string) => void;
 }
@@ -235,7 +235,7 @@ export default function UserProfileModal({
 
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
-			<DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto">
+			<DialogContent className="max-h-[90vh] sm:max-w-[60vw] overflow-y-auto">
 				<DialogHeader>
 					<DialogTitle>User Profile</DialogTitle>
 					<DialogDescription>View and manage user account details and activity</DialogDescription>
@@ -336,7 +336,7 @@ export default function UserProfileModal({
 					{/* Stats Cards */}
 					<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 						<Card>
-							<CardContent className="pt-6">
+							<CardContent>
 								<div className="flex items-center gap-3">
 									<div className="rounded-lg bg-blue-100 p-2">
 										<ShoppingCart className="h-5 w-5 text-blue-600" />
@@ -349,7 +349,7 @@ export default function UserProfileModal({
 							</CardContent>
 						</Card>
 						<Card>
-							<CardContent className="pt-6">
+							<CardContent>
 								<div className="flex items-center gap-3">
 									<div className="rounded-lg bg-green-100 p-2">
 										<DollarSign className="h-5 w-5 text-green-600" />
@@ -362,7 +362,7 @@ export default function UserProfileModal({
 							</CardContent>
 						</Card>
 						<Card>
-							<CardContent className="pt-6">
+							<CardContent>
 								<div className="flex items-center gap-3">
 									<div className="rounded-lg bg-purple-100 p-2">
 										<Activity className="h-5 w-5 text-purple-600" />

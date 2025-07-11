@@ -6,7 +6,10 @@ import { motion } from "motion/react"
 
 export default function Hero() {
   return (
-    <section id="home" className="pt-16 bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <section
+      id="home"
+      className="pt-16 bg-gradient-to-br from-blue-50 via-white to-purple-50 transition-colors"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <motion.div
@@ -29,11 +32,18 @@ export default function Hero() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-3">
+              <Button
+                size="lg"
+                className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-3"
+              >
                 Get Started Today
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8 py-3 bg-transparent">
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-lg px-8 py-3 bg-transparent border-gray-300 text-gray-900 hover:bg-gray-100"
+              >
                 View Services
               </Button>
             </div>

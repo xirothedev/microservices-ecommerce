@@ -58,7 +58,7 @@ export default function Testimonials() {
 	];
 
 	return (
-		<section id="about" className="bg-white py-20">
+		<section id="about" className="bg-white py-20 transition-colors">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 				<motion.div
 					initial={{ opacity: 0, y: 20 }}
@@ -67,7 +67,9 @@ export default function Testimonials() {
 					viewport={{ once: true }}
 					className="mb-16 space-y-4 text-center"
 				>
-					<h2 className="text-3xl font-bold text-gray-900 md:text-4xl">Trusted by Thousands</h2>
+					<h2 className="text-3xl font-bold text-gray-900 md:text-4xl">
+						Trusted by Thousands
+					</h2>
 					<p className="mx-auto max-w-3xl text-xl text-gray-600">
 						See what our customers say about our digital services and support.
 					</p>
@@ -89,7 +91,9 @@ export default function Testimonials() {
 											<Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
 										))}
 									</div>
-									<p className="leading-relaxed text-gray-700">"{testimonial.content}"</p>
+									<p className="leading-relaxed text-gray-700">
+										"{testimonial.content}"
+									</p>
 									<div className="flex items-center space-x-3 pt-4">
 										<Avatar>
 											<AvatarImage
@@ -99,7 +103,7 @@ export default function Testimonials() {
 												}
 												alt={testimonial.name}
 											/>
-											<AvatarFallback>
+											<AvatarFallback className="bg-blue-100 text-blue-600">
 												{testimonial.name
 													.split(" ")
 													.map((n) => n[0])
@@ -107,8 +111,12 @@ export default function Testimonials() {
 											</AvatarFallback>
 										</Avatar>
 										<div>
-											<div className="font-semibold text-gray-900">{testimonial.name}</div>
-											<div className="text-sm text-gray-600">{testimonial.role}</div>
+											<div className="font-semibold text-gray-900">
+												{testimonial.name}
+											</div>
+											<div className="text-sm text-gray-600">
+												{testimonial.role}
+											</div>
 										</div>
 									</div>
 								</CardContent>

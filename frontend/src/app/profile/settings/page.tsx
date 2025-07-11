@@ -13,7 +13,7 @@ import { motion } from "motion/react";
 import { useTheme } from "next-themes";
 
 export default function AccountSettings() {
-	const { setTheme } = useTheme();
+	const { setTheme, theme } = useTheme();
 	const [settings, setSettings] = useState({
 		notifications: {
 			email: true,
@@ -29,7 +29,6 @@ export default function AccountSettings() {
 		preferences: {
 			language: "en",
 			timezone: "America/New_York",
-			theme: "light",
 			currency: "USD",
 		},
 		security: {
@@ -225,7 +224,7 @@ export default function AccountSettings() {
 						<div className="space-y-2">
 							<Label>Theme</Label>
 							<Select
-								value={settings.preferences.theme}
+								value={theme}
 								onValueChange={(value) => {
                   console.log(value)
 									setTheme(value);

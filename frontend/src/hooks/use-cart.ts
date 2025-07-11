@@ -1,5 +1,3 @@
-"use client"
-
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
@@ -16,15 +14,15 @@ interface CartItem {
 interface CartStore {
   items: CartItem[]
   isOpen: boolean
-  addToCart: (item: Omit<CartItem, "quantity">) => void
+  addToCart: (item: Omit<CartItem, "quantity">) => Promise<void>
   removeFromCart: (id: number) => void
   updateQuantity: (id: number, quantity: number) => void
   clearCart: () => void
+  toggleCart: () => void
   getTotalItems: () => number
   getTotalPrice: () => number
   isInCart: (id: number) => boolean
   getCartItemQuantity: (id: number) => number
-  toggleCart: () => void
 }
 
 export const useCart = create<CartStore>()(
@@ -33,28 +31,25 @@ export const useCart = create<CartStore>()(
       items: [],
       isOpen: false,
 
-      addToCart: (newItem) => {
-        set((state) => {
-          const existingItem = state.items.find((item) => item.id === newItem.id)
+      addToCart: async (newItem) => {
+        const { items } = get()
+        const existingItem = items.find((item) => item.id === newItem.id)
 
-          if (existingItem) {
-            return {
-              items: state.items.map((item) =>
-                item.id === newItem.id ? { ...item, quantity: item.quantity + 1 } : item,
-              ),
-            }
-          } else {
-            return {
-              items: [...state.items, { ...newItem, quantity: 1 }],
-            }
-          }
-        })
+        if (existingItem) {
+          set({
+            items: items.map((item) => (item.id === newItem.id ? { ...item, quantity: item.quantity + 1 } : item)),
+          })
+        } else {
+          set({
+            items: [...items, { ...newItem, quantity: 1 }],
+          })
+        }
       },
 
       removeFromCart: (id) => {
-        set((state) => ({
-          items: state.items.filter((item) => item.id !== id),
-        }))
+        set({
+          items: get().items.filter((item) => item.id !== id),
+        })
       },
 
       updateQuantity: (id, quantity) => {
@@ -63,13 +58,17 @@ export const useCart = create<CartStore>()(
           return
         }
 
-        set((state) => ({
-          items: state.items.map((item) => (item.id === id ? { ...item, quantity } : item)),
-        }))
+        set({
+          items: get().items.map((item) => (item.id === id ? { ...item, quantity } : item)),
+        })
       },
 
       clearCart: () => {
         set({ items: [] })
+      },
+
+      toggleCart: () => {
+        set({ isOpen: !get().isOpen })
       },
 
       getTotalItems: () => {
@@ -88,13 +87,10 @@ export const useCart = create<CartStore>()(
         const item = get().items.find((item) => item.id === id)
         return item ? item.quantity : 0
       },
-
-      toggleCart: () => {
-        set((state) => ({ isOpen: !state.isOpen }))
-      },
     }),
     {
       name: "shopping-cart",
+      partialize: (state) => ({ items: state.items }),
     },
   ),
 )

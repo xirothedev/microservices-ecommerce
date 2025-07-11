@@ -9,7 +9,10 @@ import { motion } from "motion/react"
 
 export default function Contact() {
   return (
-    <section id="contact" className="py-20 bg-gradient-to-br from-blue-50 to-purple-50">
+    <section
+      id="contact"
+      className="py-20 bg-gradient-to-br from-blue-50 to-purple-50 transition-colors"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -35,17 +38,28 @@ export default function Contact() {
           >
             <Card>
               <CardHeader>
-                <CardTitle>Send us a Message</CardTitle>
-                <CardDescription>Fill out the form below and we'll get back to you within 24 hours.</CardDescription>
+                <CardTitle className="text-gray-900">Send us a Message</CardTitle>
+                <CardDescription className="text-gray-600">
+                  Fill out the form below and we'll get back to you within 24 hours.
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid md:grid-cols-2 gap-4">
                   <Input placeholder="First Name" />
                   <Input placeholder="Last Name" />
                 </div>
-                <Input placeholder="Email Address" type="email" />
-                <Input placeholder="Phone Number" type="tel" />
-                <Textarea placeholder="Tell us about your project..." className="min-h-[120px]" />
+                <Input
+                  placeholder="Email Address"
+                  type="email"
+                />
+                <Input
+                  placeholder="Phone Number"
+                  type="tel"
+                />
+                <Textarea
+                  placeholder="Tell us about your project..."
+                  className="min-h-[120px]"
+                />
                 <Button className="w-full bg-blue-600 hover:bg-blue-700">
                   Send Message
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -101,11 +115,14 @@ export default function Contact() {
               </div>
             </div>
 
-            <Card className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+            <Card className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0">
               <CardContent className="p-6">
                 <h4 className="text-lg font-semibold mb-2">Need Immediate Help?</h4>
                 <p className="text-blue-100 mb-4">Our support team is available 24/7 to assist with urgent requests.</p>
-                <Button variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100">
+                <Button
+                  variant="secondary"
+                  className="bg-white text-blue-600 hover:bg-gray-100"
+                >
                   Start Live Chat
                 </Button>
               </CardContent>
