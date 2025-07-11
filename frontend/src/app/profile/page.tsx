@@ -10,20 +10,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Edit, Save, X, Upload } from "lucide-react";
 import { motion } from "motion/react";
+import { user } from "@/data/mock";
 
 export default function PersonalInformation() {
 	const [isEditing, setIsEditing] = useState(false);
-	const [formData, setFormData] = useState({
-		firstName: "John",
-		lastName: "Doe",
-		email: "john.doe@example.com",
-		phone: "+1 (555) 123-4567",
-		address: "123 Main Street",
-		city: "San Francisco",
-		state: "CA",
-		zipCode: "94102",
-		bio: "Digital marketing enthusiast with a passion for innovative solutions.",
-	});
+	const [formData, setFormData] = useState<User>(user);
 
 	const handleSave = () => {
 		// Here you would typically make an API call to save the data
@@ -79,22 +70,13 @@ export default function PersonalInformation() {
 					</div>
 
 					{/* Form Fields */}
-					<div className="grid gap-6 md:grid-cols-2">
-						<div className="space-y-2">
-							<Label htmlFor="firstName">First Name</Label>
+					<form className="grid gap-6 md:grid-cols-2">
+						<div className="space-y-2 md:col-span-2">
+							<Label htmlFor="fullname">Full name</Label>
 							<Input
-								id="firstName"
-								value={formData.firstName}
-								onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-								disabled={!isEditing}
-							/>
-						</div>
-						<div className="space-y-2">
-							<Label htmlFor="lastName">Last Name</Label>
-							<Input
-								id="lastName"
-								value={formData.lastName}
-								onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+								id="fullname"
+								value={formData.fullname}
+								onChange={(e) => setFormData({ ...formData, fullname: e.target.value })}
 								disabled={!isEditing}
 							/>
 						</div>
@@ -163,7 +145,7 @@ export default function PersonalInformation() {
 								rows={3}
 							/>
 						</div>
-					</div>
+					</form>
 
 					{/* Save Button */}
 					{isEditing && (

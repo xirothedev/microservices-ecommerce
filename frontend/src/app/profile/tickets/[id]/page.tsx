@@ -1,8 +1,6 @@
-import { Suspense } from "react";
+import TicketDetail from "@/components/profile/ticket/ticket-detail";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import TicketDetailSkeleton from "@/app/profile/tickets/[id]/loading";
-import TicketDetail from "@/components/ticket/ticket-detail";
 
 interface TicketDetailPageProps {
 	params: Promise<{

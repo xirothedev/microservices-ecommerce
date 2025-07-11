@@ -1,9 +1,13 @@
-import { CreditCard, HelpCircle, Lock, LogOut, Settings, ShoppingBag, User } from "lucide-react";
+"use client";
+
+import { CreditCard, HelpCircle, ListOrdered, Lock, LogOut, Settings, ShoppingBag, User } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Dispatch, SetStateAction } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
-import { Dispatch, SetStateAction } from "react";
+import Link from "next/link";
 
 const userData = {
 	name: "John Doe",
@@ -17,37 +21,37 @@ const userData = {
 
 const navigationItems = [
 	{
-		id: "personal-info",
+		url: "",
 		label: "Personal Information",
 		icon: User,
 		description: "Manage your profile details",
 	},
+  {
+    url: "orders",
+    label: "Orders History",
+    icon: ListOrdered,
+    description: "View your orders history",
+  },
 	{
-		id: "transaction-history",
+		url: "transaction",
 		label: "Transaction History",
 		icon: CreditCard,
 		description: "View your payment history",
 	},
 	{
-		id: "purchase-history",
-		label: "Purchase History",
-		icon: ShoppingBag,
-		description: "Track your orders",
-	},
-	{
-		id: "change-password",
+		url: "change-password",
 		label: "Change Password",
 		icon: Lock,
 		description: "Update your security",
 	},
 	{
-		id: "support-tickets",
+		url: "tickets",
 		label: "Support Tickets",
 		icon: HelpCircle,
 		description: "Get help and support",
 	},
 	{
-		id: "settings",
+		url: "settings",
 		label: "Account Settings",
 		icon: Settings,
 		description: "Manage preferences",
@@ -55,12 +59,15 @@ const navigationItems = [
 ];
 
 interface ProfileSidebarProps {
-	setActiveSection: Dispatch<SetStateAction<string>>;
 	setSidebarOpen: Dispatch<SetStateAction<boolean>>;
-	activeSection: string;
 }
 
-export default function ProfileSidebar({ setActiveSection, setSidebarOpen, activeSection }: ProfileSidebarProps) {
+export default function ProfileSidebar({ setSidebarOpen }: ProfileSidebarProps) {
+	const path = usePathname();
+
+	const activePage = path.split("/")[2] ?? "";
+	console.log(activePage);
+
 	return (
 		<Card className="sticky top-24 h-fit">
 			<CardContent className="p-6">
@@ -104,21 +111,20 @@ export default function ProfileSidebar({ setActiveSection, setSidebarOpen, activ
 				<nav className="space-y-2">
 					{navigationItems.map((item) => (
 						<Button
-							key={item.id}
-							variant={activeSection === item.id ? "default" : "ghost"}
+							key={item.url}
+							variant={activePage === item.url ? "default" : "ghost"}
 							className={`h-auto w-full justify-start p-3 ${
-								activeSection === item.id ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-gray-100"
+								activePage === item.url ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-gray-100"
 							}`}
-							onClick={() => {
-								setActiveSection(item.id);
-								setSidebarOpen(false);
-							}}
+							onClick={() => setSidebarOpen(false)}
 						>
-							<item.icon className="mr-3 h-5 w-5" />
-							<div className="text-left">
-								<div className="font-medium">{item.label}</div>
-								<div className="text-xs opacity-75">{item.description}</div>
-							</div>
+							<Link className="flex items-center" href={`/profile/${item.url}`}>
+								<item.icon className="mr-3 h-5 w-5" />
+								<div className="text-left">
+									<div className="font-medium">{item.label}</div>
+									<div className="text-xs opacity-75">{item.description}</div>
+								</div>
+							</Link>
 						</Button>
 					))}
 				</nav>
