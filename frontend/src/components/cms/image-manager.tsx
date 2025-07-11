@@ -1,7 +1,5 @@
 "use client";
 
-import type React from "react";
-
 import { useState, useRef } from "react";
 import { Upload, X, Plus, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";

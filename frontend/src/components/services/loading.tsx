@@ -1,32 +1,71 @@
-import ServicesLoading from "./services-loading"
-
 export default function Loading() {
   return (
-    <main className="min-h-screen pt-16">
-      {/* Hero skeleton */}
-      <section className="bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="text-center space-y-8">
-            <div className="h-8 bg-white/20 rounded w-48 mx-auto animate-pulse" />
-            <div className="space-y-4">
-              <div className="h-16 bg-white/20 rounded w-3/4 mx-auto animate-pulse" />
-              <div className="h-6 bg-white/20 rounded w-1/2 mx-auto animate-pulse" />
-            </div>
-            <div className="flex gap-4 justify-center">
-              <div className="h-12 bg-white/20 rounded w-32 animate-pulse" />
-              <div className="h-12 bg-white/20 rounded w-32 animate-pulse" />
-            </div>
-          </div>
-        </div>
-      </section>
+		<main className="min-h-screen pt-16">
+			{/* Hero skeleton */}
+			<section className="bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800">
+				<div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+					<div className="space-y-8 text-center">
+						<div className="mx-auto h-8 w-48 animate-pulse rounded bg-white/20" />
+						<div className="space-y-4">
+							<div className="mx-auto h-16 w-3/4 animate-pulse rounded bg-white/20" />
+							<div className="mx-auto h-6 w-1/2 animate-pulse rounded bg-white/20" />
+						</div>
+						<div className="flex justify-center gap-4">
+							<div className="h-12 w-32 animate-pulse rounded bg-white/20" />
+							<div className="h-12 w-32 animate-pulse rounded bg-white/20" />
+						</div>
+					</div>
+				</div>
+			</section>
 
-      {/* Services skeleton */}
-      <section className="py-12 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="h-16 bg-white rounded-lg animate-pulse mb-8" />
-          <ServicesLoading />
-        </div>
-      </section>
-    </main>
-  )
+			{/* Services skeleton */}
+			<section className="bg-gray-50 py-12">
+				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+					<div className="mb-8 h-16 animate-pulse rounded-lg bg-white" />
+					<div className="space-y-8">
+						<div className="flex items-center justify-between">
+							<div className="space-y-2">
+								<div className="h-8 w-48 animate-pulse rounded bg-gray-200" />
+								<div className="h-4 w-32 animate-pulse rounded bg-gray-200" />
+							</div>
+						</div>
+
+						<div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+							{[...Array(6)].map((_, index) => (
+								<div key={index} className="overflow-hidden rounded-lg bg-white shadow-md">
+									{/* Image skeleton */}
+									<div className="aspect-[4/3] animate-pulse bg-gray-200" />
+
+									{/* Content skeleton */}
+									<div className="space-y-4 p-6">
+										<div className="space-y-2">
+											<div className="h-6 animate-pulse rounded bg-gray-200" />
+											<div className="h-4 w-3/4 animate-pulse rounded bg-gray-200" />
+											<div className="h-4 w-1/2 animate-pulse rounded bg-gray-200" />
+										</div>
+
+										<div className="flex gap-2">
+											<div className="h-6 w-16 animate-pulse rounded bg-gray-200" />
+											<div className="h-6 w-20 animate-pulse rounded bg-gray-200" />
+											<div className="h-6 w-14 animate-pulse rounded bg-gray-200" />
+										</div>
+
+										<div className="flex items-center gap-2">
+											<div className="h-8 w-16 animate-pulse rounded bg-gray-200" />
+											<div className="h-6 w-12 animate-pulse rounded bg-gray-200" />
+										</div>
+
+										<div className="space-y-2">
+											<div className="h-10 animate-pulse rounded bg-gray-200" />
+											<div className="h-10 animate-pulse rounded bg-gray-200" />
+										</div>
+									</div>
+								</div>
+							))}
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+  );
 }

@@ -104,6 +104,28 @@ const mockTicketData: Record<string, TicketData> = {
 	},
 };
 
+const statusConfig = {
+	open: { icon: AlertCircle, color: "text-red-600", bg: "bg-red-100", label: "Open" },
+	"in-progress": { icon: Clock, color: "text-blue-600", bg: "bg-blue-100", label: "In Progress" },
+	waiting: { icon: Clock, color: "text-yellow-600", bg: "bg-yellow-100", label: "Waiting" },
+	resolved: { icon: CheckCircle, color: "text-green-600", bg: "bg-green-100", label: "Resolved" },
+	closed: { icon: XCircle, color: "text-gray-600", bg: "bg-gray-100", label: "Closed" },
+};
+
+const priorityConfig = {
+	low: { color: "text-gray-600", bg: "bg-gray-100" },
+	medium: { color: "text-blue-600", bg: "bg-blue-100" },
+	high: { color: "text-orange-600", bg: "bg-orange-100" },
+	urgent: { color: "text-red-600", bg: "bg-red-100" },
+};
+
+const contextIcons = {
+	order: "🛒",
+	product: "📦",
+	transaction: "💳",
+	account: "👤",
+};
+
 export default function TicketDetail({ ticketId }: TicketDetailProps) {
 	const [ticket, setTicket] = useState<TicketData | null>(null);
 	const [loading, setLoading] = useState(true);
@@ -119,28 +141,6 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 
 		loadTicket();
 	}, [ticketId]);
-
-	const statusConfig = {
-		open: { icon: AlertCircle, color: "text-red-600", bg: "bg-red-100", label: "Open" },
-		"in-progress": { icon: Clock, color: "text-blue-600", bg: "bg-blue-100", label: "In Progress" },
-		waiting: { icon: Clock, color: "text-yellow-600", bg: "bg-yellow-100", label: "Waiting" },
-		resolved: { icon: CheckCircle, color: "text-green-600", bg: "bg-green-100", label: "Resolved" },
-		closed: { icon: XCircle, color: "text-gray-600", bg: "bg-gray-100", label: "Closed" },
-	};
-
-	const priorityConfig = {
-		low: { color: "text-gray-600", bg: "bg-gray-100" },
-		medium: { color: "text-blue-600", bg: "bg-blue-100" },
-		high: { color: "text-orange-600", bg: "bg-orange-100" },
-		urgent: { color: "text-red-600", bg: "bg-red-100" },
-	};
-
-	const contextIcons = {
-		order: "🛒",
-		product: "📦",
-		transaction: "💳",
-		account: "👤",
-	};
 
 	const formatDate = (dateString: string) => {
 		const date = new Date(dateString);
@@ -212,7 +212,7 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 				<p className="mb-4 text-gray-600">
 					The ticket you're looking for doesn't exist or you don't have access to it.
 				</p>
-				<Link href="/tickets">
+				<Link href="/profile/tickets">
 					<Button variant="outline">
 						<ArrowLeft className="mr-2 h-4 w-4" />
 						Back to Tickets
@@ -232,7 +232,7 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 			{/* Header */}
 			<div className="flex items-center justify-between">
 				<div className="flex items-center gap-4">
-					<Link href="/tickets">
+					<Link href="/profile/tickets">
 						<Button variant="outline" size="sm">
 							<ArrowLeft className="mr-2 h-4 w-4" />
 							Back to Tickets

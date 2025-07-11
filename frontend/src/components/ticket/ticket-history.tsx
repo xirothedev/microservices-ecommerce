@@ -334,7 +334,7 @@ export default function TicketHistory() {
 												<div className="text-xs text-gray-500">
 													Updated {formatDate(ticket.updatedAt)}
 												</div>
-												<Link href={`/tickets/${ticket.id}`}>
+												<Link href={`/profile/tickets/${ticket.id}`}>
 													<Button
 														variant="outline"
 														size="sm"

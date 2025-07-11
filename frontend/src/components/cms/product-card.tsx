@@ -24,6 +24,7 @@ import {
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import Image from "next/image";
+import { formatDate } from "@/lib/format-date";
 
 interface Product {
 	id: string;
@@ -60,33 +61,25 @@ interface ProductCardProps {
 	onPreview: () => void;
 }
 
+const getStatusColor = (status: string) => {
+	switch (status) {
+		case "active":
+			return "bg-green-100 text-green-800";
+		case "draft":
+			return "bg-yellow-100 text-yellow-800";
+		case "archived":
+			return "bg-gray-100 text-gray-800";
+		default:
+			return "bg-gray-100 text-gray-800";
+	}
+};
+
+const stripHtml = (html: string) => {
+	return html.replace(/<[^>]*>/g, "");
+};
+
 export default function ProductCard({ product, viewMode, onEdit, onDelete, onPreview }: ProductCardProps) {
 	const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-
-	const getStatusColor = (status: string) => {
-		switch (status) {
-			case "active":
-				return "bg-green-100 text-green-800";
-			case "draft":
-				return "bg-yellow-100 text-yellow-800";
-			case "archived":
-				return "bg-gray-100 text-gray-800";
-			default:
-				return "bg-gray-100 text-gray-800";
-		}
-	};
-
-	const formatDate = (dateString: string) => {
-		return new Date(dateString).toLocaleDateString("en-US", {
-			year: "numeric",
-			month: "short",
-			day: "numeric",
-		});
-	};
-
-	const stripHtml = (html: string) => {
-		return html.replace(/<[^>]*>/g, "");
-	};
 
 	if (viewMode === "list") {
 		return (
@@ -173,7 +166,7 @@ export default function ProductCard({ product, viewMode, onEdit, onDelete, onPre
 	return (
 		<>
 			<motion.div whileHover={{ y: -4 }} transition={{ duration: 0.2 }}>
-				<Card className="h-full transition-shadow hover:shadow-lg">
+				<Card className="h-full pt-0 transition-shadow hover:shadow-lg">
 					<CardHeader className="p-0">
 						<div className="aspect-square overflow-hidden rounded-t-lg bg-gray-100">
 							{product.images[0] ? (

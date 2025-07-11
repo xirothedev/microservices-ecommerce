@@ -1,7 +1,5 @@
 "use client";
 
-import type React from "react";
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -303,7 +301,7 @@ export default function TicketForm() {
 
 						{/* Submission Progress */}
 						<AnimatePresence>
-							{submissionStep !== "idle" && submissionStep !== "success" && (
+							{!["idle", "success"].includes(submissionStep) && (
 								<motion.div
 									initial={{ opacity: 0, height: 0 }}
 									animate={{ opacity: 1, height: "auto" }}

@@ -63,7 +63,7 @@ export default function CategorySelector({ selectedCategories, onChange }: Categ
                 variant="ghost"
                 size="sm"
                 onClick={() => removeCategory(category)}
-                className="h-auto p-0 w-4 h-4 hover:bg-transparent"
+                className="p-0 w-4 h-4 hover:bg-transparent"
               >
                 <X className="w-3 h-3" />
               </Button>

@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Manage Your Account",
+	title: "Profile",
 	description: "Manage your account settings, view transaction history, and access support tickets.",
 };
 
