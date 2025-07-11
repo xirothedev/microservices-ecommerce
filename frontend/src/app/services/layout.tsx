@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function ServiceLayout({ children }: { children: React.ReactElement }) {
 	return (
 		<>
-			<Navbar />
+			<Navbar navItems={[]} />
 			<main className="min-h-screen pt-16">
 				<ServicesHero />
 				<section className="bg-gray-50 py-12">{children}</section>

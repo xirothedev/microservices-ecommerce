@@ -7,25 +7,21 @@ import Link from "next/link";
 import { useState } from "react";
 import Cart from "./cart";
 
-export default function Navbar() {
+interface NavbarProps {
+	navItems: { name: string; href: string }[];
+}
+
+export default function Navbar({navItems}: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
 
-  const navItems = [
-    { name: "Home", href: "/" },
-    { name: "Services", href: "/services" },
-    { name: "Pricing", href: "#pricing" },
-    { name: "About", href: "#about" },
-    { name: "Contact", href: "#contact" },
-  ]
-
   return (
-		<nav className="fixed top-0 z-50 w-full border-b border-gray-200 bg-white/95 backdrop-blur-sm transition-colors">
+		<nav className="bg-color-100 fixed top-0 z-50 w-full border-b shadow-md backdrop-blur-sm transition-colors">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 				<div className="flex h-16 items-center justify-between">
-					<div className="flex items-center space-x-2">
+					<Link href="/" className="flex items-center space-x-2">
 						<Smartphone className="h-8 w-8 text-blue-600" />
 						<span className="text-xl font-bold text-gray-900">DigitalPro</span>
-					</div>
+					</Link>
 
 					{/* Desktop Navigation */}
 					<div className="hidden items-center space-x-8 md:flex">

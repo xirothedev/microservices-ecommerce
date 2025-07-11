@@ -58,7 +58,7 @@ export default function Testimonials() {
 	];
 
 	return (
-		<section id="about" className="bg-white py-20 transition-colors">
+		<section id="about" className="bg-color-100 py-20 transition-colors">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 				<motion.div
 					initial={{ opacity: 0, y: 20 }}

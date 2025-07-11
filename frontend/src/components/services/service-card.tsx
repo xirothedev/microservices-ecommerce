@@ -95,13 +95,6 @@ export default function ServiceCard({ service }: ServiceCardProps) {
               {cartQuantity > 0 && <Badge className="bg-blue-500 text-white">In Cart ({cartQuantity})</Badge>}
             </div>
 
-            <button
-              onClick={() => setIsFavorite(!isFavorite)}
-              className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm rounded-full hover:bg-white transition-colors duration-200"
-            >
-              <Heart className={`h-4 w-4 ${isFavorite ? "fill-red-500 text-red-500" : "text-gray-600"}`} />
-            </button>
-
             {/* Quick Action Overlay */}
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
               <Button onClick={handleViewDetails} className="bg-white text-black hover:bg-gray-100" size="sm">
