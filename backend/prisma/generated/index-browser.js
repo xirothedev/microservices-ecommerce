@@ -120,17 +120,59 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.AuthenticationScalarFieldEnum = {
+  code: 'code',
+  type: 'type',
+  retryTime: 'retryTime',
+  lastSentAt: 'lastSentAt',
+  expiresAt: 'expiresAt',
+  userId: 'userId'
+};
+
+exports.Prisma.RelationLoadStrategy = {
+  query: 'query',
+  join: 'join'
+};
+
+exports.Prisma.MfaSetupScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  isEnabled: 'isEnabled',
+  secret: 'secret',
+  phone: 'phone',
+  email: 'email',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MfaBackupCodeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  isUsed: 'isUsed',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt',
+  userId: 'userId'
+};
+
+exports.Prisma.LoginSessionScalarFieldEnum = {
+  id: 'id',
+  sessionToken: 'sessionToken',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  isActive: 'isActive',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  lastUsedAt: 'lastUsedAt',
+  userId: 'userId'
+};
+
 exports.Prisma.OrderScalarFieldEnum = {
   id: 'id',
   createAt: 'createAt',
   updateAt: 'updateAt',
   totalPrice: 'totalPrice',
   billId: 'billId'
-};
-
-exports.Prisma.RelationLoadStrategy = {
-  query: 'query',
-  join: 'join'
 };
 
 exports.Prisma.OrderItemScalarFieldEnum = {
@@ -169,11 +211,13 @@ exports.Prisma.CategoryScalarFieldEnum = {
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
-  displayName: 'displayName',
+  fullname: 'fullname',
   email: 'email',
   phone: 'phone',
+  isVerified: 'isVerified',
   hashedPassword: 'hashedPassword',
-  role: 'role',
+  avatarUrl: 'avatarUrl',
+  roles: 'roles',
   flags: 'flags',
   createAt: 'createAt',
   updateAt: 'updateAt',
@@ -232,6 +276,20 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.AuthType = exports.$Enums.AuthType = {
+  VERIFY_EMAIL: 'VERIFY_EMAIL',
+  MFA_EMAIL: 'MFA_EMAIL',
+  MFA_SMS: 'MFA_SMS',
+  MFA_TOTP: 'MFA_TOTP',
+  PASSWORD_RESET: 'PASSWORD_RESET'
+};
+
+exports.MfaType = exports.$Enums.MfaType = {
+  TOTP: 'TOTP',
+  SMS: 'SMS',
+  EMAIL: 'EMAIL'
+};
+
 exports.SelectFrom = exports.$Enums.SelectFrom = {
   CART: 'CART',
   SERVICES: 'SERVICES'
@@ -303,6 +361,10 @@ exports.TicketPriority = exports.$Enums.TicketPriority = {
 };
 
 exports.Prisma.ModelName = {
+  Authentication: 'Authentication',
+  MfaSetup: 'MfaSetup',
+  MfaBackupCode: 'MfaBackupCode',
+  LoginSession: 'LoginSession',
   Order: 'Order',
   OrderItem: 'OrderItem',
   Product: 'Product',

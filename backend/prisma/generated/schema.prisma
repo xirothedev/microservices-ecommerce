@@ -1,53 +1,122 @@
-model Order {
-  id         String   @id @default(uuid())
-  createAt   DateTime @default(now())
-  updateAt   DateTime @updatedAt
-  totalPrice Int
+model Authentication {
+  code       String   @db.Char(6)
+  type       AuthType
+  retryTime  Int      @default(0) @map("retry_time") @db.SmallInt
+  lastSentAt DateTime @map("last_sent_at") @db.Timestamptz()
+  expiresAt  DateTime @map("expires_at") @db.Timestamptz()
 
-  billId String      @unique
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([type, userId], name: "id")
+}
+
+model MfaSetup {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  type      MfaType
+  isEnabled Boolean  @default(false) @map("is_enabled")
+  secret    String?  @db.VarChar(255)
+  phone     String?  @db.VarChar(20)
+  email     String?  @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@unique([userId, type], name: "userMfaType", map: "user_mfa_type")
+}
+
+model MfaBackupCode {
+  id        String    @id @default(uuid()) @db.Uuid
+  code      String    @db.VarChar(10) // 8-10 character backup code
+  isUsed    Boolean   @default(false) @map("is_used")
+  usedAt    DateTime? @map("used_at") @db.Timestamptz
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([userId, code], name: "userBackupCode", map: "user_backup_code")
+}
+
+model LoginSession {
+  id           String   @id @default(uuid()) @db.Uuid
+  sessionToken String   @unique @map("session_token") @db.VarChar(255)
+  ipAddress    String?  @map("ip_address") @db.VarChar(45)
+  userAgent    String?  @map("user_agent") @db.Text
+  isActive     Boolean  @default(true) @map("is_active")
+  expiresAt    DateTime @map("expires_at") @db.Timestamptz
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  lastUsedAt   DateTime @updatedAt @map("last_used_at") @db.Timestamptz
+
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+enum AuthType {
+  VERIFY_EMAIL
+  MFA_EMAIL
+  MFA_SMS
+  MFA_TOTP
+  PASSWORD_RESET
+}
+
+enum MfaType {
+  TOTP
+  SMS
+  EMAIL
+}
+
+model Order {
+  id         String   @id @default(uuid()) @db.Uuid
+  createAt   DateTime @default(now()) @map("create_at") @db.Timestamptz
+  updateAt   DateTime @updatedAt @map("update_at") @db.Timestamptz
+  totalPrice Int      @map("total_price") @db.Integer
+
+  billId String      @unique @map("bill_id") @db.Uuid
   bill   Bill        @relation(fields: [billId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   items  OrderItem[]
 }
 
 model OrderItem {
-  id       String     @id @default(uuid())
+  id       String     @id @default(uuid()) @db.Uuid
   from     SelectFrom
-  quantity Int        @default(1)
-  price    Int
+  quantity Int        @default(1) @db.SmallInt
+  price    Int        @db.Integer
 
-  productId String
+  productId String  @map("product_id") @db.VarChar(25)
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  orderId   String
+  orderId   String  @map("order_id") @db.Uuid
   order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model Product {
-  id            String        @id @default(cuid())
-  createAt      DateTime      @default(now())
-  updateAt      DateTime      @updatedAt
-  sku           String?       @unique
-  isActive      Boolean       @default(true)
-  slug          String        @unique
-  name          String
-  description   String
-  stock         Int
-  sold          Int           @default(0)
+  id            String        @id @default(cuid()) @db.VarChar(25)
+  createAt      DateTime      @default(now()) @map("create_at") @db.Timestamptz
+  updateAt      DateTime      @updatedAt @map("update_at") @db.Timestamptz
+  sku           String?       @unique @db.VarChar(50)
+  isActive      Boolean       @default(true) @map("is_active")
+  slug          String        @unique @db.VarChar(255)
+  name          String        @db.VarChar(255)
+  description   String        @db.Text
+  stock         Int           @db.SmallInt
+  sold          Int           @default(0) @db.SmallInt
   flags         ProductFlag[]
-  originalPrice Int
-  discountPrice Int
-  tags          String[]
-  medias        String[]
+  originalPrice Int           @map("original_price") @db.Integer
+  discountPrice Int           @map("discount_price") @db.Integer
+  tags          String[]      @db.VarChar(100)
+  medias        String[]      @db.VarChar(500)
 
-  categoryId String
+  categoryId String      @map("category_id") @db.Uuid
   category   Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   cartItem   CartItem[]
   OrderItem  OrderItem[]
 }
 
 model Category {
-  id       String    @id @default(uuid())
-  name     String
-  slug     String
+  id       String    @id @default(uuid()) @db.Uuid
+  name     String    @db.VarChar(100)
+  slug     String    @db.VarChar(100)
   products Product[]
 }
 
@@ -73,53 +142,60 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
-  id             String     @id @default(uuid())
-  displayName    String
-  email          String     @unique
-  phone          String     @unique
-  hashedPassword String?
-  role           UserRole
+  id             String     @id @default(uuid()) @db.Uuid
+  fullname       String     @db.VarChar(255)
+  email          String     @unique @db.VarChar(255)
+  phone          String?    @unique @db.VarChar(20)
+  isVerified     Boolean    @default(false) @map("is_verified")
+  hashedPassword String?    @map("hashed_password") @db.VarChar(255)
+  avatarUrl      String?    @map("avatar_url") @db.VarChar(500)
+  roles          UserRole[]
   flags          UserFlag[]
-  createAt       DateTime   @default(now())
-  updateAt       DateTime   @updatedAt
-  credit         Int        @default(0)
+  createAt       DateTime   @default(now()) @map("create_at") @db.Timestamptz
+  updateAt       DateTime   @updatedAt @map("update_at") @db.Timestamptz
+  credit         Int        @default(0) @db.Integer
 
-  ticketAuthor   Ticket[]   @relation("TicketAuthor")
-  ticketAssigned Ticket[]   @relation("TicketAssigned")
+  auth           Authentication[]
+  backupCodes    MfaBackupCode[]
+  loginSessions  LoginSession[]
   cart           CartItem[]
+  mfaSetups      MfaSetup[]
+  ticketAuthor   Ticket[]         @relation("TicketAuthor")
+  ticketAssigned Ticket[]         @relation("TicketAssigned")
   bills          Bill[]
 }
 
 model Bill {
-  id            String        @id @default(uuid())
-  createAt      DateTime      @default(now())
-  updateAt      DateTime      @updatedAt
-  transactionId String?
-  paymentMethod PaymentMethod
+  id            String        @id @default(uuid()) @db.Uuid
+  createAt      DateTime      @default(now()) @map("create_at") @db.Timestamptz
+  updateAt      DateTime      @updatedAt @map("update_at") @db.Timestamptz
+  transactionId String?       @map("transaction_id") @db.VarChar(255)
+  paymentMethod PaymentMethod @map("payment_method")
   type          BillType
   status        BillStatus
-  amount        Int
-  note          String
+  amount        Int           @db.Integer
+  note          String        @db.Text
 
   order  Order?
-  userId String?
+  userId String? @map("user_id") @db.Uuid
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model CartItem {
-  createAt  DateTime @default(now())
-  updateAt  DateTime @updatedAt
-  quantity  Int      @default(1)
-  unitPrice Int
+  createAt  DateTime @default(now()) @map("create_at") @db.Timestamptz
+  updateAt  DateTime @updatedAt @map("update_at") @db.Timestamptz
+  quantity  Int      @default(1) @db.SmallInt
+  unitPrice Int      @map("unit_price") @db.Integer
 
-  productId String
+  productId String  @map("product_id")
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId    String
+  userId    String  @map("user_id") @db.Uuid
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([productId, userId], name: "id")
@@ -165,21 +241,21 @@ enum SelectFrom {
 }
 
 model Ticket {
-  id               String         @id @default(uuid())
-  numericalOrder   Int            @default(autoincrement())
-  createAt         DateTime       @default(now())
-  updateAt         DateTime       @updatedAt
-  title            String
-  description      String
+  id               String         @id @default(uuid()) @db.Uuid
+  numericalOrder   Int            @default(autoincrement()) @map("numerical_order") @db.Integer
+  createAt         DateTime       @default(now()) @map("create_at") @db.Timestamptz
+  updateAt         DateTime       @updatedAt @map("update_at") @db.Timestamptz
+  title            String         @db.VarChar(255)
+  description      String         @db.Text
   status           TicketStatus
   category         TicketCategory
   priority         TicketPriority
-  referenceContext String?
-  images           String[]
+  referenceContext String?        @map("reference_context") @db.Text
+  images           String[]       @db.VarChar(500)
 
-  authorId   String
+  authorId   String @map("author_id") @db.Uuid
   author     User   @relation(name: "TicketAuthor", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  assignedId String
+  assignedId String @map("assigned_id") @db.Uuid
   assigned   User   @relation(name: "TicketAssigned", fields: [assignedId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 

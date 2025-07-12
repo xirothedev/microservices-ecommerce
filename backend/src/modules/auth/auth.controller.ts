@@ -1,34 +1,100 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Public } from '@/common/decorators/public.decorator';
+import { Body, Controller, Get, Param, Post, Query, Req, UseGuards, ParseEnumPipe, BadRequestException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { LoginDto } from './dto/login.dto';
+import { SetupMfaDto, ToggleMfaDto, VerifyMfaSetupDto } from './dto/setup-mfa.dto';
+import { VerifyEmailDto } from './dto/verify-email.dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { MfaService } from './mfa.service';
+import { Request } from 'express';
+import { MfaStatus } from './auth.interface';
+import { MfaVerificationDto, RequestMfaCodeDto } from './dto/mfa-verification.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly mfaService: MfaService,
+  ) { }
 
-  @Post()
+  @Post('register')
+  @Public()
   create(@Body() createAuthDto: CreateAuthDto) {
     return this.authService.create(createAuthDto);
   }
 
-  @Get()
-  findAll() {
-    return this.authService.findAll();
+  @Post('login')
+  @Public()
+  login(@Body() body: LoginDto) {
+    return this.authService.login(body);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
+  @Post('verify-email')
+  @Public()
+  verifyEmail(@Body('email') email: string) {
+    return this.authService.verifyEmail(email);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
+  @Get('verify-email')
+  @Public()
+  confirmVerifyEmail(@Query() query: VerifyEmailDto) {
+    return this.authService.confirmVerifyEmail(query);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
+  // MFA Setup endpoints
+  @Post('mfa/setup')
+  @UseGuards(JwtAuthGuard)
+  setupMfa(@Req() req: Request, @Body() body: SetupMfaDto) {
+    return this.mfaService.setupMfa(req, body);
+  }
+
+  @Post('mfa/verify-setup')
+  @UseGuards(JwtAuthGuard)
+  verifyMfaSetup(@Req() req: Request, @Body() body: VerifyMfaSetupDto) {
+    return this.mfaService.verifyMfaSetup(req.user.id, body);
+  }
+
+  @Post('mfa/:status')
+  @UseGuards(JwtAuthGuard)
+  disableMfa(
+    @Req() req: Request,
+    @Param('status', new ParseEnumPipe(MfaStatus)) status: MfaStatus,
+    @Body() disableDto: ToggleMfaDto
+  ) {
+    return this.mfaService.toggleMfa(req.user.id, status, disableDto);
+  }
+
+  // MFA Verification endpoints
+  @Post('mfa/verify/:id')
+  @Public()
+  verifyMfa(@Param("id") userId: string, @Body() body: MfaVerificationDto) {
+    // Note: This endpoint should be used after initial login when MFA is required
+    // The userId should be passed in the request body or extracted from a temporary session
+    if (!userId) {
+      throw new BadRequestException("Missing params")
+    }
+    return this.mfaService.verifyMfa(userId, body);
+  }
+
+  @Post('mfa/request-code')
+  @Public()
+  requestMfaCode(@Body() body: RequestMfaCodeDto) {
+    // Note: This endpoint should be used after initial login when MFA is required
+    // The userId should be passed in the request body or extracted from a temporary session
+    return this.mfaService.requestMfaCode(body);
+  }
+
+  // MFA Status and Management
+  @Get('mfa/status')
+  @UseGuards(JwtAuthGuard)
+  getMfaStatus(@Req() req: Request) {
+    return this.mfaService.getMfaStatus(req.user.id);
+  }
+
+  @Post('mfa/regenerate-backup-codes')
+  @UseGuards(JwtAuthGuard)
+  regenerateBackupCodes(@Req() req: Request) {
+    return this.mfaService.regenerateBackupCodes(req.user.id);
   }
 }
