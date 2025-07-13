@@ -123,8 +123,8 @@ export default function UserProfileModal({
 	onBanUser,
 	onDeleteUser,
 }: UserProfileModalProps) {
-	const [activityLogs, setActivityLogs] = useState<ActivityLog[]>(mockActivityLogs);
-	const [orders, setOrders] = useState<Order[]>(mockOrders);
+	const [activityLogs, _setActivityLogs] = useState<ActivityLog[]>(mockActivityLogs);
+	const [orders, _setOrders] = useState<Order[]>(mockOrders);
 	const [isEditingCredits, setIsEditingCredits] = useState(false);
 	const [newCredits, setNewCredits] = useState("");
 	const [loading, setLoading] = useState(false);
@@ -235,7 +235,7 @@ export default function UserProfileModal({
 
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
-			<DialogContent className="max-h-[90vh] sm:max-w-[60vw] overflow-y-auto">
+			<DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[60vw]">
 				<DialogHeader>
 					<DialogTitle>User Profile</DialogTitle>
 					<DialogDescription>View and manage user account details and activity</DialogDescription>
@@ -388,7 +388,7 @@ export default function UserProfileModal({
 							<Card>
 								<CardHeader>
 									<CardTitle>Recent Activity</CardTitle>
-									<CardDescription>User's recent actions and system events</CardDescription>
+									<CardDescription>User&apos;s recent actions and system events</CardDescription>
 								</CardHeader>
 								<CardContent>
 									<div className="space-y-4">
@@ -424,7 +424,7 @@ export default function UserProfileModal({
 							<Card>
 								<CardHeader>
 									<CardTitle>Order History</CardTitle>
-									<CardDescription>Complete list of user's orders and purchases</CardDescription>
+									<CardDescription>Complete list of user&apos;s orders and purchases</CardDescription>
 								</CardHeader>
 								<CardContent>
 									<Table>

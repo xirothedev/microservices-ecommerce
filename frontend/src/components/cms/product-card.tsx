@@ -259,7 +259,7 @@ export default function ProductCard({ product, viewMode, onEdit, onDelete, onPre
 					<AlertDialogHeader>
 						<AlertDialogTitle>Delete Product</AlertDialogTitle>
 						<AlertDialogDescription>
-							Are you sure you want to delete "{product.name}"? This action cannot be undone.
+							Are you sure you want to delete &quot;{product.name}&quot;? This action cannot be undone.
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>

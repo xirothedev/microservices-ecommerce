@@ -61,12 +61,12 @@ export default function ImageManager({ images, onChange, maxImages = 10 }: Image
 		onChange(newImages);
 	};
 
-	const moveImage = (fromIndex: number, toIndex: number) => {
-		const newImages = [...images];
-		const [movedImage] = newImages.splice(fromIndex, 1);
-		newImages.splice(toIndex, 0, movedImage);
-		onChange(newImages);
-	};
+	// const moveImage = (fromIndex: number, toIndex: number) => {
+	// 	const newImages = [...images];
+	// 	const [movedImage] = newImages.splice(fromIndex, 1);
+	// 	newImages.splice(toIndex, 0, movedImage);
+	// 	onChange(newImages);
+	// };
 
 	return (
 		<div className="space-y-4">

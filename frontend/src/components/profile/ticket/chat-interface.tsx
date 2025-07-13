@@ -149,7 +149,7 @@ const mockMessages: Message[] = [
 	},
 ];
 
-export default function ChatInterface({ ticketId }: ChatInterfaceProps) {
+export default function ChatInterface({}: ChatInterfaceProps) {
 	const [messages, setMessages] = useState<Message[]>(mockMessages);
 	const [isConnected, setIsConnected] = useState(true);
 	const [isAgentTyping, setIsAgentTyping] = useState(false);
@@ -244,15 +244,6 @@ export default function ChatInterface({ ticketId }: ChatInterfaceProps) {
 		}
 	};
 
-	const formatTime = (timestamp: string) => {
-		const date = new Date(timestamp);
-		return date.toLocaleTimeString("en-US", {
-			hour: "2-digit",
-			minute: "2-digit",
-			hour12: true,
-		});
-	};
-
 	return (
 		<div className="flex h-[600px] flex-col">
 			{/* Connection Status */}
@@ -289,7 +280,7 @@ export default function ChatInterface({ ticketId }: ChatInterfaceProps) {
 			</div>
 
 			{/* Messages Area */}
-			<ScrollArea ref={scrollAreaRef} className="flex-1 h-96 p-4">
+			<ScrollArea ref={scrollAreaRef} className="h-96 flex-1 p-4">
 				<MessageList messages={messages} />
 
 				{/* Agent Typing Indicator */}

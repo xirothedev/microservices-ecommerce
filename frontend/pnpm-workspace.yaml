@@ -1,6 +1,7 @@
 packages:
-  - .
+    - .
 
 onlyBuiltDependencies:
-  - sharp
-  - unrs-resolver
+    - "@tailwindcss/oxide"
+    - sharp
+    - unrs-resolver

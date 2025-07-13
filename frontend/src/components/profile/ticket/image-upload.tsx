@@ -22,24 +22,14 @@ interface UploadingFile {
 	status: "uploading" | "success" | "error";
 }
 
+const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp", "application/pdf"];
+// const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_FILES = 5;
+
 export default function ImageUpload({ images, onImagesChange, disabled = false, error }: ImageUploadProps) {
 	const [isDragOver, setIsDragOver] = useState(false);
 	const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
 	const fileInputRef = useRef<HTMLInputElement>(null);
-
-	const acceptedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp", "application/pdf"];
-	const maxSize = 5 * 1024 * 1024; // 5MB
-	const maxFiles = 5;
-
-	const validateFile = (file: File): string | null => {
-		if (!acceptedTypes.includes(file.type)) {
-			return `${file.name}: Invalid file type. Please upload images or PDF files.`;
-		}
-		if (file.size > maxSize) {
-			return `${file.name}: File too large. Maximum size is 5MB.`;
-		}
-		return null;
-	};
 
 	const simulateUpload = async (file: File): Promise<void> => {
 		return new Promise((resolve) => {
@@ -66,14 +56,24 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 			const newFiles = Array.from(fileList);
 			const currentTotal = images.length + newFiles.length;
 
-			if (currentTotal > maxFiles) {
-				alert(`You can only upload up to ${maxFiles} files total.`);
+			if (currentTotal > MAX_FILES) {
+				alert(`You can only upload up to ${MAX_FILES} files total.`);
 				return;
 			}
 
 			// Validate files
 			const validFiles: File[] = [];
 			const errors: string[] = [];
+
+			const validateFile = (file: File): string | null => {
+				if (!ACCEPTED_TYPES.includes(file.type)) {
+					return `${file.name}: Invalid file type. Please upload images or PDF files.`;
+				}
+				if (file.size > MAX_FILES) {
+					return `${file.name}: File too large. Maximum size is 5MB.`;
+				}
+				return null;
+			};
 
 			for (const file of newFiles) {
 				const error = validateFile(file);
@@ -119,7 +119,7 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 				setUploadingFiles((prev) => prev.map((f) => ({ ...f, status: "error" as const })));
 			}
 		},
-		[images, onImagesChange, disabled],
+		[images, disabled, onImagesChange],
 	);
 
 	const handleDrop = useCallback(
@@ -180,14 +180,14 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 					<span className="font-medium">Click to upload</span> or drag and drop
 				</p>
 				<p className="text-xs text-gray-500">
-					PNG, JPG, GIF, WebP or PDF up to 5MB each (max {maxFiles} files)
+					PNG, JPG, GIF, WebP or PDF up to 5MB each (max {MAX_FILES} files)
 				</p>
 
 				<input
 					ref={fileInputRef}
 					type="file"
 					multiple
-					accept={acceptedTypes.join(",")}
+					accept={ACCEPTED_TYPES.join(",")}
 					onChange={(e) => e.target.files && handleFiles(e.target.files)}
 					className="hidden"
 					disabled={disabled}
@@ -261,7 +261,7 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 			{/* File Count Info */}
 			{images.length > 0 && (
 				<div className="text-center text-xs text-gray-500">
-					{images.length} of {maxFiles} files uploaded
+					{images.length} of {MAX_FILES} files uploaded
 				</div>
 			)}
 		</div>

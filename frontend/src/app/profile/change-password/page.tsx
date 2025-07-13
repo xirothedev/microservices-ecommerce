@@ -56,11 +56,11 @@ export default function ChangePasswordContent() {
 	const passwordStrength = updatedRequirements.filter((req) => req.met).length;
 	const strengthPercentage = (passwordStrength / requirements.length) * 100;
 
-	const getStrengthColor = () => {
-		if (strengthPercentage < 40) return "bg-red-500";
-		if (strengthPercentage < 70) return "bg-yellow-500";
-		return "bg-green-500";
-	};
+	// const getStrengthColor = () => {
+	// 	if (strengthPercentage < 40) return "bg-red-500";
+	// 	if (strengthPercentage < 70) return "bg-yellow-500";
+	// 	return "bg-green-500";
+	// };
 
 	const getStrengthText = () => {
 		if (strengthPercentage < 40) return "Weak";
@@ -107,7 +107,7 @@ export default function ChangePasswordContent() {
 			await new Promise((resolve) => setTimeout(resolve, 2000));
 			setSuccess(true);
 			setPasswords({ current: "", new: "", confirm: "" });
-		} catch (error) {
+		} catch {
 			setErrors(["Failed to update password. Please try again."]);
 		} finally {
 			setIsLoading(false);
@@ -131,8 +131,8 @@ export default function ChangePasswordContent() {
 						Change Password
 					</CardTitle>
 					<CardDescription>
-						Update your password to keep your account secure. Choose a strong password that you haven't used
-						before.
+						Update your password to keep your account secure. Choose a strong password that you haven&apos;t
+						used before.
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
@@ -402,7 +402,7 @@ export default function ChangePasswordContent() {
 								<p className="mb-2">
 									We recommend enabling two-factor authentication for enhanced security.
 								</p>
-								<p>You'll receive a code on your phone each time you log in.</p>
+								<p>You&apos;ll receive a code on your phone each time you log in.</p>
 							</div>
 						</div>
 					</CardContent>

@@ -21,13 +21,15 @@ import { useEffect, useState } from "react";
 import AdminChatInterface from "./admin-chat-interface";
 import TicketAssignment from "./ticket-assignment";
 
+type TicketStatus = "open" | "in-progress" | "waiting" | "resolved" | "closed";
+
 interface Ticket {
 	id: string;
 	subject: string;
 	description: string;
 	category: string;
 	priority: "low" | "medium" | "high" | "urgent";
-	status: "open" | "in-progress" | "waiting" | "resolved" | "closed";
+	status: TicketStatus;
 	createdAt: string;
 	updatedAt: string;
 	user: {
@@ -344,7 +346,7 @@ export default function TicketManagement() {
 		setLoading(false);
 	};
 
-	const handleStatusChange = async (ticketId: string, newStatus: string) => {
+	const handleStatusChange = async (ticketId: string, newStatus: TicketStatus) => {
 		setLoading(true);
 		// Simulate API call
 		await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -354,7 +356,7 @@ export default function TicketManagement() {
 				ticket.id === ticketId
 					? {
 							...ticket,
-							status: newStatus as any,
+							status: newStatus,
 							updatedAt: new Date().toISOString(),
 						}
 					: ticket,

@@ -210,7 +210,7 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 				<AlertCircle className="mx-auto mb-4 h-12 w-12 text-gray-400" />
 				<h2 className="mb-2 text-xl font-semibold text-gray-900">Ticket Not Found</h2>
 				<p className="mb-4 text-gray-600">
-					The ticket you're looking for doesn't exist or you don't have access to it.
+					The ticket you&apos;re looking for doesn&apos;t exist or you don&apos;t have access to it.
 				</p>
 				<Link href="/profile/tickets">
 					<Button variant="outline">

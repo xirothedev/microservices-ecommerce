@@ -29,7 +29,7 @@ export default function PaymentSuccessPage() {
 	}, [router]);
 
 	return (
-		<WavyBackground className="max-w-4xl mx-auto">
+		<WavyBackground className="mx-auto max-w-4xl">
 			<motion.div
 				initial={{ opacity: 0, scale: 0.8 }}
 				animate={{ opacity: 1, scale: 1 }}
@@ -56,10 +56,10 @@ export default function PaymentSuccessPage() {
 						<div className="rounded-lg bg-green-50 p-6">
 							<h3 className="mb-2 font-semibold text-green-800">What happens next?</h3>
 							<ul className="space-y-1 text-sm text-green-700">
-								<li>• You'll receive an email confirmation shortly</li>
+								<li>• You&apos;ll receive an email confirmation shortly</li>
 								<li>• Our team will start working on your services</li>
 								<li>• You can track progress in your dashboard</li>
-								<li>• We'll notify you of any updates</li>
+								<li>• We&apos;ll notify you of any updates</li>
 							</ul>
 						</div>
 

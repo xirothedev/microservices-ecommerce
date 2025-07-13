@@ -40,7 +40,7 @@ export default function AccountSettings() {
 
 	const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-	const updateSetting = (category: string, key: string, value: any) => {
+	const updateSetting = (category: string, key: string, value: unknown) => {
 		setSettings((prev) => ({
 			...prev,
 			[category]: {
@@ -226,7 +226,7 @@ export default function AccountSettings() {
 							<Select
 								value={theme}
 								onValueChange={(value) => {
-                  console.log(value)
+									console.log(value);
 									setTheme(value);
 									updateSetting("preferences", "theme", value);
 								}}

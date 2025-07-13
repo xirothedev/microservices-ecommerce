@@ -51,9 +51,9 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
 		},
 	];
 
-	const stripHtml = (html: string) => {
-		return html.replace(/<[^>]*>/g, "");
-	};
+	// const stripHtml = (html: string) => {
+	// 	return html.replace(/<[^>]*>/g, "");
+	// };
 
 	return (
 		<div className="overflow-hidden rounded-lg border">

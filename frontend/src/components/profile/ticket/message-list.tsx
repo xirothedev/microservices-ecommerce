@@ -59,7 +59,7 @@ export default function MessageList({ messages }: MessageListProps) {
 		return <FileText className="h-4 w-4" />;
 	};
 
-	const formatFileSize = (url: string): string => {
+	const formatFileSize = (_url: string): string => {
 		// In a real app, you'd get this from the file metadata
 		return "245 KB";
 	};

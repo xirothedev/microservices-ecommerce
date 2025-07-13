@@ -1,13 +1,13 @@
 "use client";
 
-import { CreditCard, HelpCircle, ListOrdered, Lock, LogOut, Settings, ShoppingBag, User } from "lucide-react";
+import { CreditCard, HelpCircle, ListOrdered, Lock, LogOut, Settings, User } from "lucide-react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
-import Link from "next/link";
 
 const userData = {
 	name: "John Doe",
@@ -26,12 +26,12 @@ const navigationItems = [
 		icon: User,
 		description: "Manage your profile details",
 	},
-  {
-    url: "orders",
-    label: "Orders History",
-    icon: ListOrdered,
-    description: "View your orders history",
-  },
+	{
+		url: "orders",
+		label: "Orders History",
+		icon: ListOrdered,
+		description: "View your orders history",
+	},
 	{
 		url: "transaction",
 		label: "Transaction History",

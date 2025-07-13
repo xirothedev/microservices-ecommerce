@@ -35,99 +35,100 @@ interface PaymentTransaction {
 
 type SortField = "createdAt" | "amount" | "status";
 type SortOrder = "asc" | "desc";
+type StatusFilter = "all" | "in" | "out";
+
+// Mock payment data
+const transactions: PaymentTransaction[] = [
+	{
+		id: "PAY-001",
+		createdAt: "2024-01-15T10:30:00Z",
+		transactionId: "TXN-ABC123",
+		paymentMethod: "Visa **** 4242",
+		type: "out",
+		status: "completed",
+		amount: 49.99,
+		note: "Apple ID Premium Setup Service",
+	},
+	{
+		id: "PAY-002",
+		createdAt: "2024-01-14T15:45:00Z",
+		transactionId: "TXN-DEF456",
+		paymentMethod: "PayPal",
+		type: "out",
+		status: "completed",
+		amount: 79.99,
+		note: "Facebook Business Account Setup",
+	},
+	{
+		id: "PAY-003",
+		createdAt: "2024-01-12T09:15:00Z",
+		transactionId: "TXN-GHI789",
+		paymentMethod: "Mastercard **** 5555",
+		type: "out",
+		status: "pending",
+		amount: 29.99,
+		note: "YouTube Premium Family Plan",
+	},
+	{
+		id: "PAY-004",
+		createdAt: "2024-01-10T14:20:00Z",
+		transactionId: "TXN-JKL012",
+		paymentMethod: "Visa **** 4242",
+		type: "in",
+		status: "completed",
+		amount: 25.0,
+		note: "Refund for cancelled service",
+	},
+	{
+		id: "PAY-005",
+		createdAt: "2024-01-08T11:30:00Z",
+		transactionId: "TXN-MNO345",
+		paymentMethod: "Apple Pay",
+		type: "out",
+		status: "failed",
+		amount: 89.99,
+		note: "Instagram Growth Package",
+	},
+	{
+		id: "PAY-006",
+		createdAt: "2024-01-05T16:45:00Z",
+		transactionId: "TXN-PQR678",
+		paymentMethod: "Google Pay",
+		type: "out",
+		status: "completed",
+		amount: 69.99,
+		note: "LinkedIn Business Profile Setup",
+	},
+	{
+		id: "PAY-007",
+		createdAt: "2024-01-03T13:10:00Z",
+		transactionId: "TXN-STU901",
+		paymentMethod: "Visa **** 4242",
+		type: "out",
+		status: "cancelled",
+		amount: 39.99,
+		note: "TikTok Business Account - Cancelled",
+	},
+	{
+		id: "PAY-008",
+		createdAt: "2023-12-28T10:00:00Z",
+		transactionId: "TXN-VWX234",
+		paymentMethod: "PayPal",
+		type: "in",
+		status: "completed",
+		amount: 15.5,
+		note: "Partial refund for service modification",
+	},
+];
 
 export default function PaymentContent() {
 	const [searchTerm, setSearchTerm] = useState("");
-	const [typeFilter, setTypeFilter] = useState<"all" | "in" | "out">("all");
+	const [typeFilter, setTypeFilter] = useState<StatusFilter>("all");
 	const [statusFilter, setStatusFilter] = useState<string>("all");
-	const [methodFilter, setMethodFilter] = useState<string>("all");
+	const [methodFilter, _setMethodFilter] = useState<string>("all");
 	const [sortField, setSortField] = useState<SortField>("createdAt");
 	const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
 	const [dateRange, setDateRange] = useState<{ from?: Date; to?: Date }>({});
-
-	// Mock payment data
-	const transactions: PaymentTransaction[] = [
-		{
-			id: "PAY-001",
-			createdAt: "2024-01-15T10:30:00Z",
-			transactionId: "TXN-ABC123",
-			paymentMethod: "Visa **** 4242",
-			type: "out",
-			status: "completed",
-			amount: 49.99,
-			note: "Apple ID Premium Setup Service",
-		},
-		{
-			id: "PAY-002",
-			createdAt: "2024-01-14T15:45:00Z",
-			transactionId: "TXN-DEF456",
-			paymentMethod: "PayPal",
-			type: "out",
-			status: "completed",
-			amount: 79.99,
-			note: "Facebook Business Account Setup",
-		},
-		{
-			id: "PAY-003",
-			createdAt: "2024-01-12T09:15:00Z",
-			transactionId: "TXN-GHI789",
-			paymentMethod: "Mastercard **** 5555",
-			type: "out",
-			status: "pending",
-			amount: 29.99,
-			note: "YouTube Premium Family Plan",
-		},
-		{
-			id: "PAY-004",
-			createdAt: "2024-01-10T14:20:00Z",
-			transactionId: "TXN-JKL012",
-			paymentMethod: "Visa **** 4242",
-			type: "in",
-			status: "completed",
-			amount: 25.0,
-			note: "Refund for cancelled service",
-		},
-		{
-			id: "PAY-005",
-			createdAt: "2024-01-08T11:30:00Z",
-			transactionId: "TXN-MNO345",
-			paymentMethod: "Apple Pay",
-			type: "out",
-			status: "failed",
-			amount: 89.99,
-			note: "Instagram Growth Package",
-		},
-		{
-			id: "PAY-006",
-			createdAt: "2024-01-05T16:45:00Z",
-			transactionId: "TXN-PQR678",
-			paymentMethod: "Google Pay",
-			type: "out",
-			status: "completed",
-			amount: 69.99,
-			note: "LinkedIn Business Profile Setup",
-		},
-		{
-			id: "PAY-007",
-			createdAt: "2024-01-03T13:10:00Z",
-			transactionId: "TXN-STU901",
-			paymentMethod: "Visa **** 4242",
-			type: "out",
-			status: "cancelled",
-			amount: 39.99,
-			note: "TikTok Business Account - Cancelled",
-		},
-		{
-			id: "PAY-008",
-			createdAt: "2023-12-28T10:00:00Z",
-			transactionId: "TXN-VWX234",
-			paymentMethod: "PayPal",
-			type: "in",
-			status: "completed",
-			amount: 15.5,
-			note: "Partial refund for service modification",
-		},
-	];
 
 	const filteredAndSortedTransactions = useMemo(() => {
 		const filtered = transactions.filter((transaction) => {
@@ -150,8 +151,8 @@ export default function PaymentContent() {
 
 		// Sort transactions
 		filtered.sort((a, b) => {
-			let aValue: any = a[sortField];
-			let bValue: any = b[sortField];
+			let aValue: string | number = a[sortField];
+			let bValue: string | number = b[sortField];
 
 			if (sortField === "createdAt") {
 				aValue = new Date(aValue).getTime();
@@ -169,7 +170,7 @@ export default function PaymentContent() {
 		});
 
 		return filtered;
-	}, [transactions, searchTerm, typeFilter, statusFilter, methodFilter, sortField, sortOrder, dateRange]);
+	}, [searchTerm, typeFilter, statusFilter, methodFilter, sortField, sortOrder, dateRange]);
 
 	const handleSort = (field: SortField) => {
 		if (sortField === field) {
@@ -288,7 +289,10 @@ export default function PaymentContent() {
 							</div>
 
 							<div className="flex flex-col gap-2 sm:flex-row">
-								<Select value={typeFilter} onValueChange={(value: any) => setTypeFilter(value)}>
+								<Select
+									value={typeFilter}
+									onValueChange={(value: StatusFilter) => setTypeFilter(value)}
+								>
 									<SelectTrigger className="w-full sm:w-32">
 										<SelectValue placeholder="Type" />
 									</SelectTrigger>

@@ -17,7 +17,7 @@ export default function PaymentFailedPage() {
 	];
 
 	return (
-		<WavyBackground className="max-w-4xl mx-auto">
+		<WavyBackground className="mx-auto max-w-4xl">
 			<motion.div
 				initial={{ opacity: 0, scale: 0.8 }}
 				animate={{ opacity: 1, scale: 1 }}
@@ -35,7 +35,9 @@ export default function PaymentFailedPage() {
 							<XCircle className="h-20 w-20 text-red-500" />
 						</motion.div>
 						<CardTitle className="mb-2 text-3xl font-bold text-gray-900">Payment Failed</CardTitle>
-						<p className="text-lg text-gray-600">We couldn't process your payment. Please try again.</p>
+						<p className="text-lg text-gray-600">
+							We couldn&apos;t process your payment. Please try again.
+						</p>
 					</CardHeader>
 
 					<CardContent className="space-y-6">

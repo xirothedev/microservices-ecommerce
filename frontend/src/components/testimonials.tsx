@@ -67,9 +67,7 @@ export default function Testimonials() {
 					viewport={{ once: true }}
 					className="mb-16 space-y-4 text-center"
 				>
-					<h2 className="text-3xl font-bold text-gray-900 md:text-4xl">
-						Trusted by Thousands
-					</h2>
+					<h2 className="text-3xl font-bold text-gray-900 md:text-4xl">Trusted by Thousands</h2>
 					<p className="mx-auto max-w-3xl text-xl text-gray-600">
 						See what our customers say about our digital services and support.
 					</p>
@@ -91,9 +89,7 @@ export default function Testimonials() {
 											<Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
 										))}
 									</div>
-									<p className="leading-relaxed text-gray-700">
-										"{testimonial.content}"
-									</p>
+									<p className="leading-relaxed text-gray-700">&quot;{testimonial.content}&quot;</p>
 									<div className="flex items-center space-x-3 pt-4">
 										<Avatar>
 											<AvatarImage
@@ -111,12 +107,8 @@ export default function Testimonials() {
 											</AvatarFallback>
 										</Avatar>
 										<div>
-											<div className="font-semibold text-gray-900">
-												{testimonial.name}
-											</div>
-											<div className="text-sm text-gray-600">
-												{testimonial.role}
-											</div>
+											<div className="font-semibold text-gray-900">{testimonial.name}</div>
+											<div className="text-sm text-gray-600">{testimonial.role}</div>
 										</div>
 									</div>
 								</CardContent>

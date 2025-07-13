@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Minus, UserCheck, Wifi, WifiOff } from "lucide-react";
+import { UserCheck } from "lucide-react";
 import { useState } from "react";
 
 interface Agent {
@@ -61,18 +61,18 @@ export default function TicketAssignment({
 		}
 	};
 
-	const getStatusIcon = (status: string) => {
-		switch (status) {
-			case "online":
-				return <Wifi className="h-4 w-4 text-green-600" />;
-			case "away":
-				return <Minus className="h-4 w-4 text-yellow-600" />;
-			case "offline":
-				return <WifiOff className="h-4 w-4 text-gray-600" />;
-			default:
-				return <WifiOff className="h-4 w-4 text-gray-600" />;
-		}
-	};
+	// const getStatusIcon = (status: string) => {
+	// 	switch (status) {
+	// 		case "online":
+	// 			return <Wifi className="h-4 w-4 text-green-600" />;
+	// 		case "away":
+	// 			return <Minus className="h-4 w-4 text-yellow-600" />;
+	// 		case "offline":
+	// 			return <WifiOff className="h-4 w-4 text-gray-600" />;
+	// 		default:
+	// 			return <WifiOff className="h-4 w-4 text-gray-600" />;
+	// 	}
+	// };
 
 	const getStatusBadge = (status: string) => {
 		switch (status) {

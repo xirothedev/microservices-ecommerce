@@ -183,7 +183,7 @@ export default function ContextSelector({
 							<Card className="shadow-lg">
 								<CardContent className="p-2">
 									<div className="space-y-1">
-										{filteredSuggestions.map((suggestion, index) => (
+										{filteredSuggestions.map((suggestion) => (
 											<button
 												key={`${suggestion.type}-${suggestion.id}`}
 												onClick={() => selectContext(suggestion)}

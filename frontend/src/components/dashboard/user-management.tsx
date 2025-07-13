@@ -1,25 +1,11 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Ban, DollarSign, Eye, Mail, MoreHorizontal, Phone, Search, Trash2 } from "lucide-react";
-import { motion } from "motion/react";
+import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import UserProfileModal from "./user-profile-modal";
-import { Skeleton } from "@/components/ui/skeleton";
 import UserTable from "./user-table";
 
 export interface User {

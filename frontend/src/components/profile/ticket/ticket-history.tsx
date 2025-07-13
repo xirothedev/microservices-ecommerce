@@ -113,7 +113,7 @@ const mockTickets: Ticket[] = [
 ];
 
 export default function TicketHistory() {
-	const [tickets, setTickets] = useState<Ticket[]>(mockTickets);
+	const [tickets, _setTickets] = useState<Ticket[]>(mockTickets);
 	const [filteredTickets, setFilteredTickets] = useState<Ticket[]>(mockTickets);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [statusFilter, setStatusFilter] = useState("all");
