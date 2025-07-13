@@ -1,0 +1,24 @@
+FILES=$(git diff --cached --name-only --diff-filter=ACMR)
+
+FE_FILES=$(echo "$FILES" | grep '^frontend/' | sed 's|^frontend/||')
+BE_FILES=$(echo "$FILES" | grep '^backend/' | sed 's|^backend/||')
+
+# === FRONTEND ===
+if [ -n "$FE_FILES" ]; then
+  echo "Prettier (frontend)..."
+  cd frontend
+  prettier $FE_FILES --write --ignore-unknown
+  pnpm lint
+  cd ..
+fi
+
+# === BACKEND ===
+if [ -n "$BE_FILES" ]; then
+  echo "Prettier (backend)..."
+  cd backend
+  prettier $BE_FILES --write --ignore-unknown
+  pnpm lint
+  cd ..
+fi
+
+git update-index --again
