@@ -1,35 +1,41 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Roles } from '@/common/decorators/role.decorator';
+import { Req } from '@nestjs/common';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Request } from 'express';
+import { UpdateUserByAdmin } from './dto/update-user-by-admin-input.dto';
+import { UpdateUserInput } from './dto/update-user-input.dto';
+import { UserQL } from './entities/user.entity';
 import { UsersService } from './users.service';
-import { User } from './entities/user.entity';
-import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserInput } from './dto/update-user.input';
 
-@Resolver(() => User)
+@Resolver(() => UserQL)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @Mutation(() => User)
-  createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
-    return this.usersService.create(createUserInput);
+  @Query(() => UserQL, { name: "me" })
+  findMe(@Req() req: Request) {
+    return req.user;
   }
 
-  @Query(() => [User], { name: 'users' })
-  findAll() {
-    return this.usersService.findAll();
+  @Roles("ADMINISTRATOR", "SUPPORTER")
+  @Query(() => UserQL, { name: "user" })
+  findUser(@Args("id", { type: () => String }) id: string) {
+    return this.usersService.findUser(id);
   }
 
-  @Query(() => User, { name: 'user' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.usersService.findOne(id);
+  @Mutation(() => UserQL)
+  updateUser(
+    @Args("id", { type: () => String }) id: string,
+    @Args("input", { type: () => UpdateUserInput }) input: UpdateUserInput,
+  ) {
+    return this.usersService.updateUser(id, input);
   }
 
-  @Mutation(() => User)
-  updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-    return this.usersService.update(updateUserInput.id, updateUserInput);
-  }
-
-  @Mutation(() => User)
-  removeUser(@Args('id', { type: () => Int }) id: number) {
-    return this.usersService.remove(id);
+  @Mutation(() => UserQL)
+  @Roles("ADMINISTRATOR")
+  updateAdminUser(
+    @Args("id", { type: () => String }) id: string,
+    @Args("input", { type: () => UpdateUserByAdmin }) input: UpdateUserByAdmin,
+  ) {
+    return this.usersService.updateUserByAdmin(id, input)
   }
 }

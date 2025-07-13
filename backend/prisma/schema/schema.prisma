@@ -20,12 +20,17 @@ datasource db {
 
 model User {
   id             String     @id @default(uuid()) @db.Uuid
-  fullname       String     @db.VarChar(255)
+  fullname       String     @db.VarChar(50)
   email          String     @unique @db.VarChar(255)
   phone          String?    @unique @db.VarChar(20)
   isVerified     Boolean    @default(false) @map("is_verified")
   hashedPassword String?    @map("hashed_password") @db.VarChar(255)
   avatarUrl      String?    @map("avatar_url") @db.VarChar(500)
+  address        String?    @db.VarChar(500)
+  city           String?    @db.VarChar(50)
+  state          String?    @db.VarChar(50)
+  zipCode        String?    @db.VarChar(10)
+  biography      String?    @db.Text()
   roles          UserRole[]
   flags          UserFlag[]
   createAt       DateTime   @default(now()) @map("create_at") @db.Timestamptz

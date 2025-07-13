@@ -5,16 +5,16 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { join } from 'node:path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { EmailModule } from './email/email.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthCookieGuard } from './modules/auth/guards/auth-cookie.guard';
 import { UsersModule } from './modules/users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RedisModule } from './redis/redis.module';
 import { SupabaseModule } from './supabase/supabase.module';
-import { join } from 'node:path';
-import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [

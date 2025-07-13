@@ -11310,6 +11310,11 @@ export namespace Prisma {
     isVerified: boolean | null
     hashedPassword: string | null
     avatarUrl: string | null
+    address: string | null
+    city: string | null
+    state: string | null
+    zipCode: string | null
+    biography: string | null
     createAt: Date | null
     updateAt: Date | null
     credit: number | null
@@ -11323,6 +11328,11 @@ export namespace Prisma {
     isVerified: boolean | null
     hashedPassword: string | null
     avatarUrl: string | null
+    address: string | null
+    city: string | null
+    state: string | null
+    zipCode: string | null
+    biography: string | null
     createAt: Date | null
     updateAt: Date | null
     credit: number | null
@@ -11336,6 +11346,11 @@ export namespace Prisma {
     isVerified: number
     hashedPassword: number
     avatarUrl: number
+    address: number
+    city: number
+    state: number
+    zipCode: number
+    biography: number
     roles: number
     flags: number
     createAt: number
@@ -11361,6 +11376,11 @@ export namespace Prisma {
     isVerified?: true
     hashedPassword?: true
     avatarUrl?: true
+    address?: true
+    city?: true
+    state?: true
+    zipCode?: true
+    biography?: true
     createAt?: true
     updateAt?: true
     credit?: true
@@ -11374,6 +11394,11 @@ export namespace Prisma {
     isVerified?: true
     hashedPassword?: true
     avatarUrl?: true
+    address?: true
+    city?: true
+    state?: true
+    zipCode?: true
+    biography?: true
     createAt?: true
     updateAt?: true
     credit?: true
@@ -11387,6 +11412,11 @@ export namespace Prisma {
     isVerified?: true
     hashedPassword?: true
     avatarUrl?: true
+    address?: true
+    city?: true
+    state?: true
+    zipCode?: true
+    biography?: true
     roles?: true
     flags?: true
     createAt?: true
@@ -11489,6 +11519,11 @@ export namespace Prisma {
     isVerified: boolean
     hashedPassword: string | null
     avatarUrl: string | null
+    address: string | null
+    city: string | null
+    state: string | null
+    zipCode: string | null
+    biography: string | null
     roles: $Enums.UserRole[]
     flags: $Enums.UserFlag[]
     createAt: Date
@@ -11523,6 +11558,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: boolean
     avatarUrl?: boolean
+    address?: boolean
+    city?: boolean
+    state?: boolean
+    zipCode?: boolean
+    biography?: boolean
     roles?: boolean
     flags?: boolean
     createAt?: boolean
@@ -11547,6 +11587,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: boolean
     avatarUrl?: boolean
+    address?: boolean
+    city?: boolean
+    state?: boolean
+    zipCode?: boolean
+    biography?: boolean
     roles?: boolean
     flags?: boolean
     createAt?: boolean
@@ -11562,6 +11607,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: boolean
     avatarUrl?: boolean
+    address?: boolean
+    city?: boolean
+    state?: boolean
+    zipCode?: boolean
+    biography?: boolean
     roles?: boolean
     flags?: boolean
     createAt?: boolean
@@ -11577,6 +11627,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: boolean
     avatarUrl?: boolean
+    address?: boolean
+    city?: boolean
+    state?: boolean
+    zipCode?: boolean
+    biography?: boolean
     roles?: boolean
     flags?: boolean
     createAt?: boolean
@@ -11584,7 +11639,7 @@ export namespace Prisma {
     credit?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullname" | "email" | "phone" | "isVerified" | "hashedPassword" | "avatarUrl" | "roles" | "flags" | "createAt" | "updateAt" | "credit", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fullname" | "email" | "phone" | "isVerified" | "hashedPassword" | "avatarUrl" | "address" | "city" | "state" | "zipCode" | "biography" | "roles" | "flags" | "createAt" | "updateAt" | "credit", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     auth?: boolean | User$authArgs<ExtArgs>
     backupCodes?: boolean | User$backupCodesArgs<ExtArgs>
@@ -11619,6 +11674,11 @@ export namespace Prisma {
       isVerified: boolean
       hashedPassword: string | null
       avatarUrl: string | null
+      address: string | null
+      city: string | null
+      state: string | null
+      zipCode: string | null
+      biography: string | null
       roles: $Enums.UserRole[]
       flags: $Enums.UserFlag[]
       createAt: Date
@@ -12062,6 +12122,11 @@ export namespace Prisma {
     readonly isVerified: FieldRef<"User", 'Boolean'>
     readonly hashedPassword: FieldRef<"User", 'String'>
     readonly avatarUrl: FieldRef<"User", 'String'>
+    readonly address: FieldRef<"User", 'String'>
+    readonly city: FieldRef<"User", 'String'>
+    readonly state: FieldRef<"User", 'String'>
+    readonly zipCode: FieldRef<"User", 'String'>
+    readonly biography: FieldRef<"User", 'String'>
     readonly roles: FieldRef<"User", 'UserRole[]'>
     readonly flags: FieldRef<"User", 'UserFlag[]'>
     readonly createAt: FieldRef<"User", 'DateTime'>
@@ -16355,6 +16420,11 @@ export namespace Prisma {
     isVerified: 'isVerified',
     hashedPassword: 'hashedPassword',
     avatarUrl: 'avatarUrl',
+    address: 'address',
+    city: 'city',
+    state: 'state',
+    zipCode: 'zipCode',
+    biography: 'biography',
     roles: 'roles',
     flags: 'flags',
     createAt: 'createAt',
@@ -17249,6 +17319,11 @@ export namespace Prisma {
     isVerified?: BoolFilter<"User"> | boolean
     hashedPassword?: StringNullableFilter<"User"> | string | null
     avatarUrl?: StringNullableFilter<"User"> | string | null
+    address?: StringNullableFilter<"User"> | string | null
+    city?: StringNullableFilter<"User"> | string | null
+    state?: StringNullableFilter<"User"> | string | null
+    zipCode?: StringNullableFilter<"User"> | string | null
+    biography?: StringNullableFilter<"User"> | string | null
     roles?: EnumUserRoleNullableListFilter<"User">
     flags?: EnumUserFlagNullableListFilter<"User">
     createAt?: DateTimeFilter<"User"> | Date | string
@@ -17272,6 +17347,11 @@ export namespace Prisma {
     isVerified?: SortOrder
     hashedPassword?: SortOrderInput | SortOrder
     avatarUrl?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    city?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
+    zipCode?: SortOrderInput | SortOrder
+    biography?: SortOrderInput | SortOrder
     roles?: SortOrder
     flags?: SortOrder
     createAt?: SortOrder
@@ -17298,6 +17378,11 @@ export namespace Prisma {
     isVerified?: BoolFilter<"User"> | boolean
     hashedPassword?: StringNullableFilter<"User"> | string | null
     avatarUrl?: StringNullableFilter<"User"> | string | null
+    address?: StringNullableFilter<"User"> | string | null
+    city?: StringNullableFilter<"User"> | string | null
+    state?: StringNullableFilter<"User"> | string | null
+    zipCode?: StringNullableFilter<"User"> | string | null
+    biography?: StringNullableFilter<"User"> | string | null
     roles?: EnumUserRoleNullableListFilter<"User">
     flags?: EnumUserFlagNullableListFilter<"User">
     createAt?: DateTimeFilter<"User"> | Date | string
@@ -17321,6 +17406,11 @@ export namespace Prisma {
     isVerified?: SortOrder
     hashedPassword?: SortOrderInput | SortOrder
     avatarUrl?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    city?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
+    zipCode?: SortOrderInput | SortOrder
+    biography?: SortOrderInput | SortOrder
     roles?: SortOrder
     flags?: SortOrder
     createAt?: SortOrder
@@ -17344,6 +17434,11 @@ export namespace Prisma {
     isVerified?: BoolWithAggregatesFilter<"User"> | boolean
     hashedPassword?: StringNullableWithAggregatesFilter<"User"> | string | null
     avatarUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
+    address?: StringNullableWithAggregatesFilter<"User"> | string | null
+    city?: StringNullableWithAggregatesFilter<"User"> | string | null
+    state?: StringNullableWithAggregatesFilter<"User"> | string | null
+    zipCode?: StringNullableWithAggregatesFilter<"User"> | string | null
+    biography?: StringNullableWithAggregatesFilter<"User"> | string | null
     roles?: EnumUserRoleNullableListFilter<"User">
     flags?: EnumUserFlagNullableListFilter<"User">
     createAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -18206,6 +18301,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: string | null
     avatarUrl?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    biography?: string | null
     roles?: UserCreaterolesInput | $Enums.UserRole[]
     flags?: UserCreateflagsInput | $Enums.UserFlag[]
     createAt?: Date | string
@@ -18229,6 +18329,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: string | null
     avatarUrl?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    biography?: string | null
     roles?: UserCreaterolesInput | $Enums.UserRole[]
     flags?: UserCreateflagsInput | $Enums.UserFlag[]
     createAt?: Date | string
@@ -18252,6 +18357,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18275,6 +18385,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18298,6 +18413,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: string | null
     avatarUrl?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    biography?: string | null
     roles?: UserCreaterolesInput | $Enums.UserRole[]
     flags?: UserCreateflagsInput | $Enums.UserFlag[]
     createAt?: Date | string
@@ -18313,6 +18433,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18328,6 +18453,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19295,6 +19425,11 @@ export namespace Prisma {
     isVerified?: SortOrder
     hashedPassword?: SortOrder
     avatarUrl?: SortOrder
+    address?: SortOrder
+    city?: SortOrder
+    state?: SortOrder
+    zipCode?: SortOrder
+    biography?: SortOrder
     roles?: SortOrder
     flags?: SortOrder
     createAt?: SortOrder
@@ -19314,6 +19449,11 @@ export namespace Prisma {
     isVerified?: SortOrder
     hashedPassword?: SortOrder
     avatarUrl?: SortOrder
+    address?: SortOrder
+    city?: SortOrder
+    state?: SortOrder
+    zipCode?: SortOrder
+    biography?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
     credit?: SortOrder
@@ -19327,6 +19467,11 @@ export namespace Prisma {
     isVerified?: SortOrder
     hashedPassword?: SortOrder
     avatarUrl?: SortOrder
+    address?: SortOrder
+    city?: SortOrder
+    state?: SortOrder
+    zipCode?: SortOrder
+    biography?: SortOrder
     createAt?: SortOrder
     updateAt?: SortOrder
     credit?: SortOrder
@@ -20841,6 +20986,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: string | null
     avatarUrl?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    biography?: string | null
     roles?: UserCreaterolesInput | $Enums.UserRole[]
     flags?: UserCreateflagsInput | $Enums.UserFlag[]
     createAt?: Date | string
@@ -20863,6 +21013,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: string | null
     avatarUrl?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    biography?: string | null
     roles?: UserCreaterolesInput | $Enums.UserRole[]
     flags?: UserCreateflagsInput | $Enums.UserFlag[]
     createAt?: Date | string
@@ -20901,6 +21056,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20923,6 +21083,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20945,6 +21110,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: string | null
     avatarUrl?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    biography?: string | null
     roles?: UserCreaterolesInput | $Enums.UserRole[]
     flags?: UserCreateflagsInput | $Enums.UserFlag[]
     createAt?: Date | string
@@ -20967,6 +21137,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: string | null
     avatarUrl?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    biography?: string | null
     roles?: UserCreaterolesInput | $Enums.UserRole[]
     flags?: UserCreateflagsInput | $Enums.UserFlag[]
     createAt?: Date | string
@@ -21005,6 +21180,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21027,6 +21207,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21049,6 +21234,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: string | null
     avatarUrl?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    biography?: string | null
     roles?: UserCreaterolesInput | $Enums.UserRole[]
     flags?: UserCreateflagsInput | $Enums.UserFlag[]
     createAt?: Date | string
@@ -21071,6 +21261,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: string | null
     avatarUrl?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    biography?: string | null
     roles?: UserCreaterolesInput | $Enums.UserRole[]
     flags?: UserCreateflagsInput | $Enums.UserFlag[]
     createAt?: Date | string
@@ -21109,6 +21304,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21131,6 +21331,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21153,6 +21358,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: string | null
     avatarUrl?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    biography?: string | null
     roles?: UserCreaterolesInput | $Enums.UserRole[]
     flags?: UserCreateflagsInput | $Enums.UserFlag[]
     createAt?: Date | string
@@ -21175,6 +21385,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: string | null
     avatarUrl?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    biography?: string | null
     roles?: UserCreaterolesInput | $Enums.UserRole[]
     flags?: UserCreateflagsInput | $Enums.UserFlag[]
     createAt?: Date | string
@@ -21213,6 +21428,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -21235,6 +21455,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22243,6 +22468,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: string | null
     avatarUrl?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    biography?: string | null
     roles?: UserCreaterolesInput | $Enums.UserRole[]
     flags?: UserCreateflagsInput | $Enums.UserFlag[]
     createAt?: Date | string
@@ -22265,6 +22495,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: string | null
     avatarUrl?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    biography?: string | null
     roles?: UserCreaterolesInput | $Enums.UserRole[]
     flags?: UserCreateflagsInput | $Enums.UserFlag[]
     createAt?: Date | string
@@ -22330,6 +22565,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22352,6 +22592,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22419,6 +22664,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: string | null
     avatarUrl?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    biography?: string | null
     roles?: UserCreaterolesInput | $Enums.UserRole[]
     flags?: UserCreateflagsInput | $Enums.UserFlag[]
     createAt?: Date | string
@@ -22441,6 +22691,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: string | null
     avatarUrl?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    biography?: string | null
     roles?: UserCreaterolesInput | $Enums.UserRole[]
     flags?: UserCreateflagsInput | $Enums.UserFlag[]
     createAt?: Date | string
@@ -22530,6 +22785,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22552,6 +22812,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22574,6 +22839,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: string | null
     avatarUrl?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    biography?: string | null
     roles?: UserCreaterolesInput | $Enums.UserRole[]
     flags?: UserCreateflagsInput | $Enums.UserFlag[]
     createAt?: Date | string
@@ -22596,6 +22866,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: string | null
     avatarUrl?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    biography?: string | null
     roles?: UserCreaterolesInput | $Enums.UserRole[]
     flags?: UserCreateflagsInput | $Enums.UserFlag[]
     createAt?: Date | string
@@ -22623,6 +22898,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: string | null
     avatarUrl?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    biography?: string | null
     roles?: UserCreaterolesInput | $Enums.UserRole[]
     flags?: UserCreateflagsInput | $Enums.UserFlag[]
     createAt?: Date | string
@@ -22645,6 +22925,11 @@ export namespace Prisma {
     isVerified?: boolean
     hashedPassword?: string | null
     avatarUrl?: string | null
+    address?: string | null
+    city?: string | null
+    state?: string | null
+    zipCode?: string | null
+    biography?: string | null
     roles?: UserCreaterolesInput | $Enums.UserRole[]
     flags?: UserCreateflagsInput | $Enums.UserFlag[]
     createAt?: Date | string
@@ -22683,6 +22968,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22705,6 +22995,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22738,6 +23033,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -22760,6 +23060,11 @@ export namespace Prisma {
     isVerified?: BoolFieldUpdateOperationsInput | boolean
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null
+    biography?: NullableStringFieldUpdateOperationsInput | string | null
     roles?: UserUpdaterolesInput | $Enums.UserRole[]
     flags?: UserUpdateflagsInput | $Enums.UserFlag[]
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string
