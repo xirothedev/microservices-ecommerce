@@ -1,17 +1,21 @@
-import { Field } from "@nestjs/graphql";
-import { Max, Min } from "class-validator";
-import { UserFlag, UserRole } from "prisma/generated";
-import { UserQL } from "../entities/user.entity";
+import { Field } from '@nestjs/graphql';
+import { IsArray, IsEnum, Max, Min } from 'class-validator';
+import { UserFlag, UserRole } from 'prisma/generated';
+import { UserQL } from '../entities/user.entity';
 
 export class UpdateUserByAdmin implements Partial<UserQL> {
   @Field(() => [UserRole])
-  roles: UserRole[]
+  @IsEnum(UserRole, { each: true })
+  @IsArray()
+  roles: UserRole[];
 
   @Field(() => [UserFlag])
-  flags: UserFlag[]
+  @IsEnum(UserFlag, { each: true })
+  @IsArray()
+  flags: UserFlag[];
 
   @Field()
   @Min(0)
   @Max(Number.MAX_SAFE_INTEGER)
-  credit: number
+  credit: number;
 }

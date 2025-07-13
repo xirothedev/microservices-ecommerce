@@ -15,6 +15,7 @@ import { UsersModule } from './modules/users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RedisModule } from './redis/redis.module';
 import { SupabaseModule } from './supabase/supabase.module';
+import { ProductsModule } from './modules/products/products.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { SupabaseModule } from './supabase/supabase.module';
     UsersModule,
     SupabaseModule,
     EmailModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [

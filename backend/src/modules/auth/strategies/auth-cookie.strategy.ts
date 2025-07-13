@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { Strategy } from 'passport-custom';
+import { User } from 'prisma/generated';
 import { Payload } from '../auth.interface';
 
 @Injectable()
@@ -17,7 +18,7 @@ export class AuthCookieStrategy extends PassportStrategy(Strategy, 'auth-cookie'
     super();
   }
 
-  async validate(req: Request): Promise<any> {
+  async validate(req: Request): Promise<User> {
     const accessToken: string = req.cookies?.access_token;
 
     if (!accessToken) {

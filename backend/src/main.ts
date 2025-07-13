@@ -7,6 +7,7 @@ import helmet from 'helmet';
 import 'reflect-metadata';
 import { ValidationPipe } from '@nestjs/common';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
+import { useContainer } from 'class-validator';
 
 // Swagger config
 const swaggerConfig = new DocumentBuilder()
@@ -40,6 +41,8 @@ const corsConfig = {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: corsConfig });
+
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new ResponseInterceptor());
