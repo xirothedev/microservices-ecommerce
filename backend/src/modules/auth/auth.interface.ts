@@ -7,6 +7,6 @@ export interface Payload {
 export const MfaStatus = {
   ENABLE: 'enable',
   DISABLE: 'disable',
-} as const
+} as const;
 
-export type MfaStatus = typeof MfaStatus[keyof typeof MfaStatus];
+export type MfaStatus = (typeof MfaStatus)[keyof typeof MfaStatus];

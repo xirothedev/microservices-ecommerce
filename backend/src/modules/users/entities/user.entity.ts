@@ -2,12 +2,12 @@ import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { User, UserFlag, UserRole } from 'prisma/generated';
 
 registerEnumType(UserFlag, {
-  name: "UserFlag",
+  name: 'UserFlag',
 });
 
 registerEnumType(UserRole, {
-  name: "UserRole"
-})
+  name: 'UserRole',
+});
 
 @ObjectType()
 export class UserQL implements Partial<User> {
@@ -15,34 +15,34 @@ export class UserQL implements Partial<User> {
   id: string;
 
   @Field()
-  fullname: string
+  fullname: string;
 
   @Field()
-  email: string
+  email: string;
 
   @Field({ nullable: true })
-  phone?: string
+  phone?: string;
 
   @Field()
-  isVerified: boolean
+  isVerified: boolean;
 
   @Field({ nullable: true })
-  avatarUrl?: string
+  avatarUrl?: string;
 
   @Field({ nullable: true })
   address?: string;
 
   @Field({ nullable: true })
-  city?: string
+  city?: string;
 
   @Field({ nullable: true })
-  state?: string
+  state?: string;
 
   @Field({ nullable: true })
-  zipCode?: string
+  zipCode?: string;
 
   @Field(() => [UserRole])
-  roles: UserRole[]
+  roles: UserRole[];
 
   @Field(() => [UserFlag])
   flags: UserFlag[];
@@ -54,5 +54,5 @@ export class UserQL implements Partial<User> {
   updateAt: Date;
 
   @Field()
-  credit: number
+  credit: number;
 }

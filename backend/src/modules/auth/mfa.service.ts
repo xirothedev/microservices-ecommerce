@@ -9,16 +9,16 @@ import { SetupMfaDto, ToggleMfaDto, VerifyMfaSetupDto } from './dto/setup-mfa.dt
 import { MfaVerificationDto, RequestMfaCodeDto } from './dto/mfa-verification.dto';
 import { MfaStatus } from './auth.interface';
 
-export const MFA_CODE_EXPIRY = 5 * 60 * 1000
-export const BACKUP_CODE_COUNT = 10
-export const BACKUP_CODE_LENGTH = 8
+export const MFA_CODE_EXPIRY = 5 * 60 * 1000;
+export const BACKUP_CODE_COUNT = 10;
+export const BACKUP_CODE_LENGTH = 8;
 
 @Injectable()
 export class MfaService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly emailService: EmailService,
-  ) { }
+  ) {}
 
   public async setupMfa(req: Request, body: SetupMfaDto) {
     // Check if MFA is already enabled for this type
@@ -31,11 +31,11 @@ export class MfaService {
     }
 
     switch (body.type) {
-      case "TOTP":
+      case 'TOTP':
         return await this.setupTotp(req.user.id);
-      case "SMS":
+      case 'SMS':
         return await this.setupSms(req.user.id, body.phone);
-      case "EMAIL":
+      case 'EMAIL':
         return await this.setupEmail(req.user.id, body.email);
       default:
         throw new BadRequestException('Invalid MFA type');
@@ -43,7 +43,7 @@ export class MfaService {
   }
 
   public async verifyMfaSetup(userId: string, verifyDto: VerifyMfaSetupDto) {
-    let mfaSetup: MfaSetup
+    let mfaSetup: MfaSetup;
 
     try {
       mfaSetup = await this.prismaService.mfaSetup.findUniqueOrThrow({
@@ -60,15 +60,15 @@ export class MfaService {
     let isValid = false;
 
     switch (verifyDto.type) {
-      case "TOTP":
+      case 'TOTP':
         if (!mfaSetup.secret) {
-          isValid = false
+          isValid = false;
           break;
         }
         isValid = this.verifyTotp(mfaSetup.secret, verifyDto.code);
         break;
-      case "SMS":
-      case "EMAIL":
+      case 'SMS':
+      case 'EMAIL':
         isValid = await this.verifyOtp(userId, verifyDto.type, verifyDto.code);
         break;
     }
@@ -95,7 +95,7 @@ export class MfaService {
   }
 
   public async toggleMfa(userId: string, status: MfaStatus, body: ToggleMfaDto) {
-    let mfaSetup: MfaSetup
+    let mfaSetup: MfaSetup;
 
     try {
       mfaSetup = await this.prismaService.mfaSetup.findUniqueOrThrow({
@@ -105,28 +105,28 @@ export class MfaService {
       throw new NotFoundException('MFA setup not found');
     }
 
-    if ((mfaSetup.isEnabled && status === "enable") || (!mfaSetup.isEnabled && status === "disable")) {
+    if ((mfaSetup.isEnabled && status === 'enable') || (!mfaSetup.isEnabled && status === 'disable')) {
       throw new BadRequestException(`MFA is already ${status}d`);
     }
 
-    if (status === "disable") {
+    if (status === 'disable') {
       if (!body.code) {
-        throw new BadRequestException("You need to enter the 'code' field to enable MFA")
+        throw new BadRequestException("You need to enter the 'code' field to enable MFA");
       }
 
       // Verify the code before disabling
       let isValid = false;
 
       switch (body.type) {
-        case "TOTP":
+        case 'TOTP':
           if (!mfaSetup.secret) {
-            isValid = false
+            isValid = false;
             break;
           }
           isValid = this.verifyTotp(mfaSetup.secret, body.code);
           break;
-        case "SMS":
-        case "EMAIL":
+        case 'SMS':
+        case 'EMAIL':
           isValid = await this.verifyOtp(userId, body.type, body.code);
           break;
       }
@@ -171,23 +171,23 @@ export class MfaService {
     }
   }
 
-  public async verifyMfa(userId: string, verificationDto: MfaVerificationDto) {
-    switch (verificationDto.type) {
-      case "TOTP":
-        return await this.verifyTotpMfa(userId, verificationDto.code);
-      case "SMS":
-        return await this.verifyOtpMfa(userId, 'SMS', verificationDto.code);
-      case "EMAIL":
-        return await this.verifyOtpMfa(userId, 'EMAIL', verificationDto.code);
-      case "BACKUP_CODE":
-        return await this.verifyBackupCode(userId, verificationDto.code);
+  public async verifyMfa(userId: string, body: MfaVerificationDto) {
+    switch (body.type) {
+      case 'TOTP':
+        return await this.verifyTotpMfa(userId, body.code);
+      case 'SMS':
+        return await this.verifyOtpMfa(userId, 'SMS', body.code);
+      case 'EMAIL':
+        return await this.verifyOtpMfa(userId, 'EMAIL', body.code);
+      case 'BACKUP_CODE':
+        return await this.verifyBackupCode(userId, body.code);
       default:
         throw new BadRequestException('Invalid MFA verification type');
     }
   }
 
   public async requestMfaCode(body: RequestMfaCodeDto) {
-    let mfaSetup: MfaSetup
+    let mfaSetup: MfaSetup;
 
     try {
       mfaSetup = await this.prismaService.mfaSetup.findUniqueOrThrow({
@@ -202,11 +202,11 @@ export class MfaService {
     }
 
     switch (body.type) {
-      case "SMS":
-        if (!mfaSetup.phone) throw new NotFoundException("Phone in MFA not found")
+      case 'SMS':
+        if (!mfaSetup.phone) throw new NotFoundException('Phone in MFA not found');
         return await this.sendSmsCode(body.userId, mfaSetup.phone);
-      case "EMAIL":
-        if (!mfaSetup.email) throw new NotFoundException("Email in MFA not found")
+      case 'EMAIL':
+        if (!mfaSetup.email) throw new NotFoundException('Email in MFA not found');
         return await this.sendEmailCode(body.userId, mfaSetup.email);
       default:
         throw new BadRequestException('Invalid MFA type for code request');
@@ -223,7 +223,7 @@ export class MfaService {
     });
 
     return {
-      mfaMethods: mfaSetups.map(setup => ({
+      mfaMethods: mfaSetups.map((setup) => ({
         type: setup.type,
         isEnabled: setup.isEnabled,
         createdAt: setup.createdAt,
@@ -253,8 +253,8 @@ export class MfaService {
   }
 
   // Private helper methods
-  private async setupTotp(userId: string): Promise<{ secret: string; otpauthUrl: string, qrCode: string }> {
-    let user: User
+  private async setupTotp(userId: string): Promise<{ secret: string; otpauthUrl: string; qrCode: string }> {
+    let user: User;
 
     try {
       user = await this.prismaService.user.findUniqueOrThrow({
@@ -442,6 +442,6 @@ export class MfaService {
       data: codes,
     });
 
-    return codes.map(c => c.code);
+    return codes.map((c) => c.code);
   }
-} 
+}

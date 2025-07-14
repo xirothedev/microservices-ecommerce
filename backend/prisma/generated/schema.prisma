@@ -41,13 +41,13 @@ model MfaBackupCode {
 
 model LoginSession {
   id           String   @id @default(uuid()) @db.Uuid
-  sessionToken String   @unique @map("session_token") @db.VarChar(255)
+  sessionId    String   @unique @map("session_id") @db.VarChar(255)
+  refreshToken String   @unique @map("refresh_token") @db.VarChar(512)
   ipAddress    String?  @map("ip_address") @db.VarChar(45)
   userAgent    String?  @map("user_agent") @db.Text
   isActive     Boolean  @default(true) @map("is_active")
-  expiresAt    DateTime @map("expires_at") @db.Timestamptz
   createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
-  lastUsedAt   DateTime @updatedAt @map("last_used_at") @db.Timestamptz
+  lastUsedAt   DateTime @default(now()) @updatedAt @map("last_used_at") @db.Timestamptz
 
   userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)

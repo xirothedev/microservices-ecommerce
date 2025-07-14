@@ -14,7 +14,7 @@ import { AuthCookieStrategy } from './strategies/auth-cookie.strategy';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
         return {
-          secret: config.get<string>('SUPABASE_JWT_SECRET'),
+          secret: config.get<string>('JWT_SECRET_KEY'),
           signOptions: {
             expiresIn: '1h',
           },

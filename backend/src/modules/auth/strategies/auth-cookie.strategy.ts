@@ -1,5 +1,5 @@
 import { PrismaService } from '@/prisma/prisma.service';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { PassportStrategy } from '@nestjs/passport';
@@ -39,6 +39,10 @@ export class AuthCookieStrategy extends PassportStrategy(Strategy, 'auth-cookie'
       const user = await this.prismaService.user.findUniqueOrThrow({
         where: { id: payload.sub },
       });
+
+      if (!user.isVerified) {
+        throw new ForbiddenException('User needs to be verified');
+      }
 
       return user;
     } catch {

@@ -1,8 +1,10 @@
 import { EmailService } from '@/email/email.service';
 import { PrismaService } from '@/prisma/prisma.service';
+import { Snowflake } from '@/utils/snowflake';
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
   MethodNotAllowedException,
@@ -12,16 +14,24 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { hash, verify } from 'argon2';
+import { CookieOptions, Request, Response } from 'express';
 import { randomInt } from 'node:crypto';
 import { Authentication, User } from 'prisma/generated';
+import { Payload } from './auth.interface';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { LoginDto } from './dto/login.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { MfaService } from './mfa.service';
-import { Payload } from './auth.interface';
 
 export const MINIMUM_RETRY_TIME = 60_000;
-export const MAXINUM_AVAILABLE_TIME = 5 * 60 * 1000; 
+export const MAXINUM_AVAILABLE_TIME = 5 * 60 * 1000;
+export const cookieOptions: CookieOptions = {
+  httpOnly: true,
+  secure: false,
+  sameSite: 'lax',
+  path: '/',
+  expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7), // 7d
+};
 
 @Injectable()
 export class AuthService {
@@ -31,7 +41,7 @@ export class AuthService {
     private readonly emailService: EmailService,
     private readonly mfaService: MfaService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   public async create(body: CreateAuthDto) {
     const user = await this.prismaService.user.findUnique({
@@ -57,23 +67,27 @@ export class AuthService {
     };
   }
 
-  public async login(body: LoginDto) {
-    let user: User
+  public async login(body: LoginDto, res: Response, sessionId?: string) {
+    let user: User;
 
     try {
       user = await this.prismaService.user.findUniqueOrThrow({
         where: { email: body.email },
-        omit: { hashedPassword: false }
+        omit: { hashedPassword: false },
       });
     } catch {
       throw new NotFoundException('User not found');
     }
 
-    if (!user.hashedPassword) {
-      throw new MethodNotAllowedException("You need a password to perform this action")
+    if (!user.isVerified) {
+      throw new ForbiddenException('User needs to be verified');
     }
 
-    const isValidPassword = await verify(body.password, user.hashedPassword)
+    if (!user.hashedPassword) {
+      throw new MethodNotAllowedException('You need a password to perform this action');
+    }
+
+    const isValidPassword = await verify(user.hashedPassword, body.password);
     if (!isValidPassword) throw new UnauthorizedException('Invalid credentials');
 
     const hasMfa = await this.mfaService.hasMfaEnabled(user.id);
@@ -86,7 +100,7 @@ export class AuthService {
         return {
           message: 'MFA verification required',
           requiresMfa: true,
-          mfaMethods: mfaStatus.mfaMethods.filter(m => m.isEnabled),
+          mfaMethods: mfaStatus.mfaMethods.filter((m) => m.isEnabled),
           hasBackupCodes: mfaStatus.hasBackupCodes,
         };
       }
@@ -99,7 +113,7 @@ export class AuthService {
         });
       } else if (body.backupCode) {
         await this.mfaService.verifyMfa(user.id, {
-          type: "BACKUP_CODE",
+          type: 'BACKUP_CODE',
           code: body.backupCode,
         });
       } else {
@@ -114,28 +128,28 @@ export class AuthService {
       timestamp: new Date().toISOString(),
     };
 
-    const accessToken = this.jwtService.sign(payload, {
-      secret: this.configService.getOrThrow<string>('SUPABASE_JWT_SECRET'),
-      expiresIn: '1h',
-    });
+    const { accessToken, refreshToken } = this.generateToken(payload);
 
-    // Create login session
-    const sessionToken = this.generateSessionToken();
+    const session = await this.storageSession(user.id, refreshToken, sessionId);
 
-    await this.prismaService.loginSession.create({
-      data: {
-        userId: user.id,
-        sessionToken,
-        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
-      },
-    });
+    // Set cookie
+    res
+      .cookie('access_token', accessToken, cookieOptions)
+      .cookie('refresh_token', refreshToken, cookieOptions)
+      .cookie('session_id', session.sessionId, cookieOptions);
+
+    console.log('Session', session);
+    console.log('Token', sessionId);
+
+    const { hashedPassword: _hashedPassword, ...data } = user;
 
     return {
       message: 'Login successful',
-      data: {
-        user,
-        accessToken,
-        sessionToken,
+      data: data,
+      '@accessToken': accessToken,
+      '@refreshToken': refreshToken,
+      '@sessionId': sessionId,
+      '@data': {
         hasMfa,
       },
     };
@@ -170,8 +184,9 @@ export class AuthService {
 
     try {
       await this.emailService.sendVerifyEmail({ url, code, email: user.email });
-    } catch {
-      throw new InternalServerErrorException('Email servie error');
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException('Email service error');
     }
 
     await this.prismaService.authentication.upsert({
@@ -244,12 +259,84 @@ export class AuthService {
     };
   }
 
+  public async refreshToken(tokenFromCookie: string, tokenFromBody: string, req: Request, res: Response) {
+    const token = tokenFromCookie ?? tokenFromBody ?? req.header?.['Authentication'];
+
+    const isValidToken = this.jwtService.verify(token, {
+      secret: this.configService.getOrThrow<string>('REFRESH_TOKEN_SECRET_KEY'),
+    });
+    if (!isValidToken) {
+      throw new UnauthorizedException('Invalid credientials');
+    }
+
+    const session = await this.prismaService.loginSession.findUnique({
+      where: { refreshToken: token },
+      select: { isActive: true, user: { select: { id: true, email: true } } },
+    });
+
+    if (!session) {
+      throw new UnauthorizedException('Invalid credientials');
+    }
+
+    if (!session.isActive) {
+      throw new ForbiddenException('Session has been revoked');
+    }
+
+    // Generate JWT token
+    const payload: Payload = {
+      sub: session.user.id,
+      email: session.user.email,
+      timestamp: new Date().toISOString(),
+    };
+
+    const { accessToken, refreshToken } = this.generateToken(payload);
+
+    // Set cookie
+    res.cookie('access_token', accessToken, cookieOptions).cookie('refresh_token', refreshToken, cookieOptions);
+  }
+
   // private helper
   private hashing(string: string) {
     return hash(string);
   }
 
-  private generateSessionToken(): string {
-    return randomInt(100000000000000, 999999999999999).toString();
+  private generateToken(payload: Payload) {
+    const accessToken = this.jwtService.sign(payload, {
+      secret: this.configService.getOrThrow<string>('ACCESS_TOKEN_SECRET_KEY'),
+      expiresIn: this.configService.getOrThrow<string>('ACCESS_TOKEN_TIME_LIFE'),
+    });
+
+    const refreshToken = this.jwtService.sign(payload, {
+      secret: this.configService.getOrThrow<string>('REFRESH_TOKEN_SECRET_KEY'),
+      expiresIn: this.configService.getOrThrow<string>('REFRESH_TOKEN_TIME_LIFE'),
+    });
+
+    return { accessToken, refreshToken };
+  }
+
+  private async storageSession(userId: string, refreshToken: string, sessionId?: string) {
+    if (sessionId) {
+      const session = await this.prismaService.loginSession.findUnique({ where: { sessionId } });
+      if (!session) {
+        return this.createSession(userId, refreshToken);
+      } else {
+        return this.prismaService.loginSession.update({ where: { sessionId }, data: { refreshToken } });
+      }
+    } else {
+      return this.createSession(userId, refreshToken);
+    }
+  }
+
+  private async createSession(userId: string, refreshToken: string) {
+    const snowflake = new Snowflake();
+    const sessionId = snowflake.generate();
+
+    return this.prismaService.loginSession.create({
+      data: {
+        userId,
+        sessionId,
+        refreshToken,
+      },
+    });
   }
 }

@@ -6,7 +6,7 @@ import { VerifyEmailProps, MfaCodeProps } from './email.interface';
 
 @Injectable()
 export class EmailService {
-  constructor(private readonly mailerService: MailerService) { }
+  constructor(private readonly mailerService: MailerService) {}
 
   public async sendVerifyEmail({ code, email, url }: VerifyEmailProps) {
     const html = await this.extractHtml('verify-email', {

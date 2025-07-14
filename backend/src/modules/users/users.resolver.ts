@@ -11,31 +11,31 @@ import { UsersService } from './users.service';
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @Query(() => UserQL, { name: "me" })
+  @Query(() => UserQL, { name: 'me' })
   findMe(@Req() req: Request) {
     return req.user;
   }
 
-  @Roles("ADMINISTRATOR", "SUPPORTER")
-  @Query(() => UserQL, { name: "user" })
-  findUser(@Args("id", { type: () => String }) id: string) {
+  @Roles('ADMINISTRATOR', 'SUPPORTER')
+  @Query(() => UserQL, { name: 'user' })
+  findUser(@Args('id', { type: () => String }) id: string) {
     return this.usersService.findUser(id);
   }
 
   @Mutation(() => UserQL)
   updateUser(
-    @Args("id", { type: () => String }) id: string,
-    @Args("input", { type: () => UpdateUserInput }) input: UpdateUserInput,
+    @Args('id', { type: () => String }) id: string,
+    @Args('input', { type: () => UpdateUserInput }) input: UpdateUserInput,
   ) {
     return this.usersService.updateUser(id, input);
   }
 
   @Mutation(() => UserQL)
-  @Roles("ADMINISTRATOR")
+  @Roles('ADMINISTRATOR')
   updateAdminUser(
-    @Args("id", { type: () => String }) id: string,
-    @Args("input", { type: () => UpdateUserByAdmin }) input: UpdateUserByAdmin,
+    @Args('id', { type: () => String }) id: string,
+    @Args('input', { type: () => UpdateUserByAdmin }) input: UpdateUserByAdmin,
   ) {
-    return this.usersService.updateUserByAdmin(id, input)
+    return this.usersService.updateUserByAdmin(id, input);
   }
 }
