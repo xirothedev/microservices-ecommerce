@@ -52,4 +52,12 @@ export class Snowflake {
     // Return as string to avoid JS number precision issues
     return id.toString();
   }
+
+  public static decode(id: string) {
+    const bigId = BigInt(id);
+    const sequence = Number(bigId & BigInt(this.MAX_SEQUENCE));
+    const workerId = Number((bigId >> BigInt(this.SEQUENCE_BITS)) & BigInt(this.MAX_WORKER_ID));
+    const timestamp = Number(bigId >> BigInt(this.SEQUENCE_BITS + this.WORKER_ID_BITS)) + this.EPOCH;
+    return { timestamp, workerId, sequence };
+  }
 }

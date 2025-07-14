@@ -15,10 +15,23 @@ model Product {
   tags          String[]      @db.VarChar(100)
   medias        String[]      @db.VarChar(500)
 
-  categoryId String      @map("category_id") @db.Uuid
-  category   Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  cartItem   CartItem[]
-  OrderItem  OrderItem[]
+  categoryId   String        @map("category_id") @db.Uuid
+  category     Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  cartItem     CartItem[]
+  productItems ProductItem[]
+  orderItem    OrderItem[]
+}
+
+model ProductItem {
+  id        String  @id @default(cuid()) @db.VarChar(25)
+  productId String  @map("product_id") @db.VarChar(25)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  data   String    @db.Text
+  isSold Boolean   @default(false) @map("is_sold")
+  soldAt DateTime? @map("sold_at") @db.Timestamptz
+
+  order OrderItem?
 }
 
 model Category {
