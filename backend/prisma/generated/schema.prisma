@@ -222,8 +222,11 @@ model CartItem {
 }
 
 enum UserRole {
+  ROOT
   ADMINISTRATOR
   SUPPORTER
+  COLLABORATOR
+  SELLER
   USER
 }
 

@@ -3,12 +3,20 @@ import { IsArray, IsEnum, Max, Min } from 'class-validator';
 import { UserFlag, UserRole } from 'prisma/generated';
 import { UserQL } from '../entities/user.entity';
 
+export const AssignableUserRole = {
+  SUPPORTER: UserRole.SUPPORTER,
+  COLLABORATOR: UserRole.COLLABORATOR,
+  SELLER: UserRole.SELLER,
+  USER: UserRole.USER,
+} as const;
+export type AssignableUserRole = (typeof AssignableUserRole)[keyof typeof AssignableUserRole];
+
 @InputType()
 export class UpdateUserByAdmin implements Partial<UserQL> {
   @Field(() => [UserRole])
-  @IsEnum(UserRole, { each: true })
+  @IsEnum(AssignableUserRole, { each: true })
   @IsArray()
-  roles: UserRole[];
+  roles: AssignableUserRole[];
 
   @Field(() => [UserFlag])
   @IsEnum(UserFlag, { each: true })

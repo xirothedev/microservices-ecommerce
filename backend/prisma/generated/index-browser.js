@@ -306,8 +306,11 @@ exports.ProductFlag = exports.$Enums.ProductFlag = {
 };
 
 exports.UserRole = exports.$Enums.UserRole = {
+  ROOT: 'ROOT',
   ADMINISTRATOR: 'ADMINISTRATOR',
   SUPPORTER: 'SUPPORTER',
+  COLLABORATOR: 'COLLABORATOR',
+  SELLER: 'SELLER',
   USER: 'USER',
 };
 

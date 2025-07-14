@@ -1,7 +1,17 @@
 import { IsSlug } from '@/common/decorators/is-slug.decorator';
-import { IsSmallInt } from '@/common/decorators/is-smallInt.decorator';
-import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsPositive, IsString, MaxLength } from 'class-validator';
-import { Product, ProductFlag } from 'prisma/generated';
+import { Type } from 'class-transformer';
+import {
+  ArrayMinSize,
+  IsArray,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsPositive,
+  IsString,
+  MaxLength,
+  ValidateNested,
+} from 'class-validator';
+import { Product, ProductFlag, ProductItem } from 'prisma/generated';
 
 export class CreateProductDto implements Partial<Product> {
   @IsNotEmpty()
@@ -17,11 +27,6 @@ export class CreateProductDto implements Partial<Product> {
   @IsNotEmpty()
   description: string;
 
-  @IsPositive()
-  @IsOptional()
-  @IsSmallInt()
-  stock?: number;
-
   @IsArray()
   @IsNotEmpty({ each: true })
   @IsEnum(ProductFlag, { each: true })
@@ -34,4 +39,16 @@ export class CreateProductDto implements Partial<Product> {
   @IsOptional()
   @IsPositive()
   discountPrice?: number;
+
+  @IsArray()
+  @ArrayMinSize(1)
+  @ValidateNested({ each: true })
+  @Type(() => CreateProductItemDto)
+  productItems: CreateProductItemDto[];
+}
+
+export class CreateProductItemDto implements Partial<ProductItem> {
+  @IsNotEmpty()
+  @IsString()
+  data: string;
 }

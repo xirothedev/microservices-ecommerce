@@ -109,8 +109,11 @@ export namespace $Enums {
   export type ProductFlag = (typeof ProductFlag)[keyof typeof ProductFlag];
 
   export const UserRole: {
+    ROOT: 'ROOT';
     ADMINISTRATOR: 'ADMINISTRATOR';
     SUPPORTER: 'SUPPORTER';
+    COLLABORATOR: 'COLLABORATOR';
+    SELLER: 'SELLER';
     USER: 'USER';
   };
 
