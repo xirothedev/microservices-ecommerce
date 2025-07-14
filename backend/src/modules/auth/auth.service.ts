@@ -138,9 +138,6 @@ export class AuthService {
       .cookie('refresh_token', refreshToken, cookieOptions)
       .cookie('session_id', session.sessionId, cookieOptions);
 
-    console.log('Session', session);
-    console.log('Token', sessionId);
-
     const { hashedPassword: _hashedPassword, ...data } = user;
 
     return {
