@@ -2256,6 +2256,7 @@ export namespace Prisma {
     auth: number;
     backupCodes: number;
     loginSessions: number;
+    products: number;
     cart: number;
     mfaSetups: number;
     ticketAuthor: number;
@@ -2267,6 +2268,7 @@ export namespace Prisma {
     auth?: boolean | UserCountOutputTypeCountAuthArgs;
     backupCodes?: boolean | UserCountOutputTypeCountBackupCodesArgs;
     loginSessions?: boolean | UserCountOutputTypeCountLoginSessionsArgs;
+    products?: boolean | UserCountOutputTypeCountProductsArgs;
     cart?: boolean | UserCountOutputTypeCountCartArgs;
     mfaSetups?: boolean | UserCountOutputTypeCountMfaSetupsArgs;
     ticketAuthor?: boolean | UserCountOutputTypeCountTicketAuthorArgs;
@@ -2309,6 +2311,14 @@ export namespace Prisma {
   > = {
     where?: LoginSessionWhereInput;
   };
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountProductsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    {
+      where?: ProductWhereInput;
+    };
 
   /**
    * UserCountOutputType without action
@@ -9758,6 +9768,7 @@ export namespace Prisma {
     originalPrice: number | null;
     discountPrice: number | null;
     categoryId: string | null;
+    sellerId: string | null;
   };
 
   export type ProductMaxAggregateOutputType = {
@@ -9774,6 +9785,7 @@ export namespace Prisma {
     originalPrice: number | null;
     discountPrice: number | null;
     categoryId: string | null;
+    sellerId: string | null;
   };
 
   export type ProductCountAggregateOutputType = {
@@ -9793,6 +9805,7 @@ export namespace Prisma {
     tags: number;
     medias: number;
     categoryId: number;
+    sellerId: number;
     _all: number;
   };
 
@@ -9824,6 +9837,7 @@ export namespace Prisma {
     originalPrice?: true;
     discountPrice?: true;
     categoryId?: true;
+    sellerId?: true;
   };
 
   export type ProductMaxAggregateInputType = {
@@ -9840,6 +9854,7 @@ export namespace Prisma {
     originalPrice?: true;
     discountPrice?: true;
     categoryId?: true;
+    sellerId?: true;
   };
 
   export type ProductCountAggregateInputType = {
@@ -9859,6 +9874,7 @@ export namespace Prisma {
     tags?: true;
     medias?: true;
     categoryId?: true;
+    sellerId?: true;
     _all?: true;
   };
 
@@ -9962,6 +9978,7 @@ export namespace Prisma {
     tags: string[];
     medias: string[];
     categoryId: string;
+    sellerId: string;
     _count: ProductCountAggregateOutputType | null;
     _avg: ProductAvgAggregateOutputType | null;
     _sum: ProductSumAggregateOutputType | null;
@@ -9999,7 +10016,9 @@ export namespace Prisma {
       tags?: boolean;
       medias?: boolean;
       categoryId?: boolean;
+      sellerId?: boolean;
       category?: boolean | CategoryDefaultArgs<ExtArgs>;
+      seller?: boolean | UserDefaultArgs<ExtArgs>;
       cartItem?: boolean | Product$cartItemArgs<ExtArgs>;
       productItems?: boolean | Product$productItemsArgs<ExtArgs>;
       orderItem?: boolean | Product$orderItemArgs<ExtArgs>;
@@ -10027,7 +10046,9 @@ export namespace Prisma {
         tags?: boolean;
         medias?: boolean;
         categoryId?: boolean;
+        sellerId?: boolean;
         category?: boolean | CategoryDefaultArgs<ExtArgs>;
+        seller?: boolean | UserDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['product']
     >;
@@ -10051,7 +10072,9 @@ export namespace Prisma {
         tags?: boolean;
         medias?: boolean;
         categoryId?: boolean;
+        sellerId?: boolean;
         category?: boolean | CategoryDefaultArgs<ExtArgs>;
+        seller?: boolean | UserDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['product']
     >;
@@ -10073,6 +10096,7 @@ export namespace Prisma {
     tags?: boolean;
     medias?: boolean;
     categoryId?: boolean;
+    sellerId?: boolean;
   };
 
   export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<
@@ -10091,11 +10115,13 @@ export namespace Prisma {
     | 'discountPrice'
     | 'tags'
     | 'medias'
-    | 'categoryId',
+    | 'categoryId'
+    | 'sellerId',
     ExtArgs['result']['product']
   >;
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | CategoryDefaultArgs<ExtArgs>;
+    seller?: boolean | UserDefaultArgs<ExtArgs>;
     cartItem?: boolean | Product$cartItemArgs<ExtArgs>;
     productItems?: boolean | Product$productItemsArgs<ExtArgs>;
     orderItem?: boolean | Product$orderItemArgs<ExtArgs>;
@@ -10103,15 +10129,18 @@ export namespace Prisma {
   };
   export type ProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | CategoryDefaultArgs<ExtArgs>;
+    seller?: boolean | UserDefaultArgs<ExtArgs>;
   };
   export type ProductIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | CategoryDefaultArgs<ExtArgs>;
+    seller?: boolean | UserDefaultArgs<ExtArgs>;
   };
 
   export type $ProductPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: 'Product';
     objects: {
       category: Prisma.$CategoryPayload<ExtArgs>;
+      seller: Prisma.$UserPayload<ExtArgs>;
       cartItem: Prisma.$CartItemPayload<ExtArgs>[];
       productItems: Prisma.$ProductItemPayload<ExtArgs>[];
       orderItem: Prisma.$OrderItemPayload<ExtArgs>[];
@@ -10134,6 +10163,7 @@ export namespace Prisma {
         tags: string[];
         medias: string[];
         categoryId: string;
+        sellerId: string;
       },
       ExtArgs['result']['product']
     >;
@@ -10618,6 +10648,14 @@ export namespace Prisma {
       ExtArgs,
       GlobalOmitOptions
     >;
+    seller<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
     cartItem<T extends Product$cartItemArgs<ExtArgs> = {}>(
       args?: Subset<T, Product$cartItemArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
@@ -10680,6 +10718,7 @@ export namespace Prisma {
     readonly tags: FieldRef<'Product', 'String[]'>;
     readonly medias: FieldRef<'Product', 'String[]'>;
     readonly categoryId: FieldRef<'Product', 'String'>;
+    readonly sellerId: FieldRef<'Product', 'String'>;
   }
 
   // Custom InputTypes
@@ -13808,6 +13847,7 @@ export namespace Prisma {
       auth?: boolean | User$authArgs<ExtArgs>;
       backupCodes?: boolean | User$backupCodesArgs<ExtArgs>;
       loginSessions?: boolean | User$loginSessionsArgs<ExtArgs>;
+      products?: boolean | User$productsArgs<ExtArgs>;
       cart?: boolean | User$cartArgs<ExtArgs>;
       mfaSetups?: boolean | User$mfaSetupsArgs<ExtArgs>;
       ticketAuthor?: boolean | User$ticketAuthorArgs<ExtArgs>;
@@ -13910,6 +13950,7 @@ export namespace Prisma {
     auth?: boolean | User$authArgs<ExtArgs>;
     backupCodes?: boolean | User$backupCodesArgs<ExtArgs>;
     loginSessions?: boolean | User$loginSessionsArgs<ExtArgs>;
+    products?: boolean | User$productsArgs<ExtArgs>;
     cart?: boolean | User$cartArgs<ExtArgs>;
     mfaSetups?: boolean | User$mfaSetupsArgs<ExtArgs>;
     ticketAuthor?: boolean | User$ticketAuthorArgs<ExtArgs>;
@@ -13926,6 +13967,7 @@ export namespace Prisma {
       auth: Prisma.$AuthenticationPayload<ExtArgs>[];
       backupCodes: Prisma.$MfaBackupCodePayload<ExtArgs>[];
       loginSessions: Prisma.$LoginSessionPayload<ExtArgs>[];
+      products: Prisma.$ProductPayload<ExtArgs>[];
       cart: Prisma.$CartItemPayload<ExtArgs>[];
       mfaSetups: Prisma.$MfaSetupPayload<ExtArgs>[];
       ticketAuthor: Prisma.$TicketPayload<ExtArgs>[];
@@ -14441,6 +14483,11 @@ export namespace Prisma {
       args?: Subset<T, User$loginSessionsArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$LoginSessionPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions> | Null
+    >;
+    products<T extends User$productsArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$productsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions> | Null
     >;
     cart<T extends User$cartArgs<ExtArgs> = {}>(
       args?: Subset<T, User$cartArgs<ExtArgs>>,
@@ -14974,6 +15021,30 @@ export namespace Prisma {
     take?: number;
     skip?: number;
     distinct?: LoginSessionScalarFieldEnum | LoginSessionScalarFieldEnum[];
+  };
+
+  /**
+   * User.products
+   */
+  export type User$productsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Product
+     */
+    omit?: ProductOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null;
+    where?: ProductWhereInput;
+    orderBy?: ProductOrderByWithRelationInput | ProductOrderByWithRelationInput[];
+    cursor?: ProductWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[];
   };
 
   /**
@@ -19106,6 +19177,7 @@ export namespace Prisma {
     tags: 'tags';
     medias: 'medias';
     categoryId: 'categoryId';
+    sellerId: 'sellerId';
   };
 
   export type ProductScalarFieldEnum = (typeof ProductScalarFieldEnum)[keyof typeof ProductScalarFieldEnum];
@@ -19834,7 +19906,9 @@ export namespace Prisma {
     tags?: StringNullableListFilter<'Product'>;
     medias?: StringNullableListFilter<'Product'>;
     categoryId?: UuidFilter<'Product'> | string;
+    sellerId?: UuidFilter<'Product'> | string;
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>;
+    seller?: XOR<UserScalarRelationFilter, UserWhereInput>;
     cartItem?: CartItemListRelationFilter;
     productItems?: ProductItemListRelationFilter;
     orderItem?: OrderItemListRelationFilter;
@@ -19857,7 +19931,9 @@ export namespace Prisma {
     tags?: SortOrder;
     medias?: SortOrder;
     categoryId?: SortOrder;
+    sellerId?: SortOrder;
     category?: CategoryOrderByWithRelationInput;
+    seller?: UserOrderByWithRelationInput;
     cartItem?: CartItemOrderByRelationAggregateInput;
     productItems?: ProductItemOrderByRelationAggregateInput;
     orderItem?: OrderItemOrderByRelationAggregateInput;
@@ -19884,7 +19960,9 @@ export namespace Prisma {
       tags?: StringNullableListFilter<'Product'>;
       medias?: StringNullableListFilter<'Product'>;
       categoryId?: UuidFilter<'Product'> | string;
+      sellerId?: UuidFilter<'Product'> | string;
       category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>;
+      seller?: XOR<UserScalarRelationFilter, UserWhereInput>;
       cartItem?: CartItemListRelationFilter;
       productItems?: ProductItemListRelationFilter;
       orderItem?: OrderItemListRelationFilter;
@@ -19909,6 +19987,7 @@ export namespace Prisma {
     tags?: SortOrder;
     medias?: SortOrder;
     categoryId?: SortOrder;
+    sellerId?: SortOrder;
     _count?: ProductCountOrderByAggregateInput;
     _avg?: ProductAvgOrderByAggregateInput;
     _max?: ProductMaxOrderByAggregateInput;
@@ -19936,6 +20015,7 @@ export namespace Prisma {
     tags?: StringNullableListFilter<'Product'>;
     medias?: StringNullableListFilter<'Product'>;
     categoryId?: UuidWithAggregatesFilter<'Product'> | string;
+    sellerId?: UuidWithAggregatesFilter<'Product'> | string;
   };
 
   export type ProductItemWhereInput = {
@@ -20071,6 +20151,7 @@ export namespace Prisma {
     auth?: AuthenticationListRelationFilter;
     backupCodes?: MfaBackupCodeListRelationFilter;
     loginSessions?: LoginSessionListRelationFilter;
+    products?: ProductListRelationFilter;
     cart?: CartItemListRelationFilter;
     mfaSetups?: MfaSetupListRelationFilter;
     ticketAuthor?: TicketListRelationFilter;
@@ -20099,6 +20180,7 @@ export namespace Prisma {
     auth?: AuthenticationOrderByRelationAggregateInput;
     backupCodes?: MfaBackupCodeOrderByRelationAggregateInput;
     loginSessions?: LoginSessionOrderByRelationAggregateInput;
+    products?: ProductOrderByRelationAggregateInput;
     cart?: CartItemOrderByRelationAggregateInput;
     mfaSetups?: MfaSetupOrderByRelationAggregateInput;
     ticketAuthor?: TicketOrderByRelationAggregateInput;
@@ -20131,6 +20213,7 @@ export namespace Prisma {
       auth?: AuthenticationListRelationFilter;
       backupCodes?: MfaBackupCodeListRelationFilter;
       loginSessions?: LoginSessionListRelationFilter;
+      products?: ProductListRelationFilter;
       cart?: CartItemListRelationFilter;
       mfaSetups?: MfaSetupListRelationFilter;
       ticketAuthor?: TicketListRelationFilter;
@@ -20881,6 +20964,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     category: CategoryCreateNestedOneWithoutProductsInput;
+    seller: UserCreateNestedOneWithoutProductsInput;
     cartItem?: CartItemCreateNestedManyWithoutProductInput;
     productItems?: ProductItemCreateNestedManyWithoutProductInput;
     orderItem?: OrderItemCreateNestedManyWithoutProductInput;
@@ -20903,6 +20987,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     categoryId: string;
+    sellerId: string;
     cartItem?: CartItemUncheckedCreateNestedManyWithoutProductInput;
     productItems?: ProductItemUncheckedCreateNestedManyWithoutProductInput;
     orderItem?: OrderItemUncheckedCreateNestedManyWithoutProductInput;
@@ -20925,6 +21010,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
+    seller?: UserUpdateOneRequiredWithoutProductsNestedInput;
     cartItem?: CartItemUpdateManyWithoutProductNestedInput;
     productItems?: ProductItemUpdateManyWithoutProductNestedInput;
     orderItem?: OrderItemUpdateManyWithoutProductNestedInput;
@@ -20947,6 +21033,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     categoryId?: StringFieldUpdateOperationsInput | string;
+    sellerId?: StringFieldUpdateOperationsInput | string;
     cartItem?: CartItemUncheckedUpdateManyWithoutProductNestedInput;
     productItems?: ProductItemUncheckedUpdateManyWithoutProductNestedInput;
     orderItem?: OrderItemUncheckedUpdateManyWithoutProductNestedInput;
@@ -20969,6 +21056,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     categoryId: string;
+    sellerId: string;
   };
 
   export type ProductUpdateManyMutationInput = {
@@ -21006,6 +21094,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     categoryId?: StringFieldUpdateOperationsInput | string;
+    sellerId?: StringFieldUpdateOperationsInput | string;
   };
 
   export type ProductItemCreateInput = {
@@ -21134,6 +21223,7 @@ export namespace Prisma {
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
+    products?: ProductCreateNestedManyWithoutSellerInput;
     cart?: CartItemCreateNestedManyWithoutUserInput;
     mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
@@ -21162,6 +21252,7 @@ export namespace Prisma {
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
     cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
     mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
@@ -21190,6 +21281,7 @@ export namespace Prisma {
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
+    products?: ProductUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUpdateManyWithoutUserNestedInput;
     mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
@@ -21218,6 +21310,7 @@ export namespace Prisma {
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
     mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
@@ -22103,6 +22196,7 @@ export namespace Prisma {
     tags?: SortOrder;
     medias?: SortOrder;
     categoryId?: SortOrder;
+    sellerId?: SortOrder;
   };
 
   export type ProductAvgOrderByAggregateInput = {
@@ -22126,6 +22220,7 @@ export namespace Prisma {
     originalPrice?: SortOrder;
     discountPrice?: SortOrder;
     categoryId?: SortOrder;
+    sellerId?: SortOrder;
   };
 
   export type ProductMinOrderByAggregateInput = {
@@ -22142,6 +22237,7 @@ export namespace Prisma {
     originalPrice?: SortOrder;
     discountPrice?: SortOrder;
     categoryId?: SortOrder;
+    sellerId?: SortOrder;
   };
 
   export type ProductSumOrderByAggregateInput = {
@@ -22878,6 +22974,12 @@ export namespace Prisma {
     connect?: CategoryWhereUniqueInput;
   };
 
+  export type UserCreateNestedOneWithoutProductsInput = {
+    create?: XOR<UserCreateWithoutProductsInput, UserUncheckedCreateWithoutProductsInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutProductsInput;
+    connect?: UserWhereUniqueInput;
+  };
+
   export type CartItemCreateNestedManyWithoutProductInput = {
     create?:
       | XOR<CartItemCreateWithoutProductInput, CartItemUncheckedCreateWithoutProductInput>
@@ -22961,6 +23063,17 @@ export namespace Prisma {
     update?: XOR<
       XOR<CategoryUpdateToOneWithWhereWithoutProductsInput, CategoryUpdateWithoutProductsInput>,
       CategoryUncheckedUpdateWithoutProductsInput
+    >;
+  };
+
+  export type UserUpdateOneRequiredWithoutProductsNestedInput = {
+    create?: XOR<UserCreateWithoutProductsInput, UserUncheckedCreateWithoutProductsInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutProductsInput;
+    upsert?: UserUpsertWithoutProductsInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<UserUpdateToOneWithWhereWithoutProductsInput, UserUpdateWithoutProductsInput>,
+      UserUncheckedUpdateWithoutProductsInput
     >;
   };
 
@@ -23225,6 +23338,16 @@ export namespace Prisma {
     connect?: LoginSessionWhereUniqueInput | LoginSessionWhereUniqueInput[];
   };
 
+  export type ProductCreateNestedManyWithoutSellerInput = {
+    create?:
+      | XOR<ProductCreateWithoutSellerInput, ProductUncheckedCreateWithoutSellerInput>
+      | ProductCreateWithoutSellerInput[]
+      | ProductUncheckedCreateWithoutSellerInput[];
+    connectOrCreate?: ProductCreateOrConnectWithoutSellerInput | ProductCreateOrConnectWithoutSellerInput[];
+    createMany?: ProductCreateManySellerInputEnvelope;
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[];
+  };
+
   export type CartItemCreateNestedManyWithoutUserInput = {
     create?:
       | XOR<CartItemCreateWithoutUserInput, CartItemUncheckedCreateWithoutUserInput>
@@ -23303,6 +23426,16 @@ export namespace Prisma {
     connectOrCreate?: LoginSessionCreateOrConnectWithoutUserInput | LoginSessionCreateOrConnectWithoutUserInput[];
     createMany?: LoginSessionCreateManyUserInputEnvelope;
     connect?: LoginSessionWhereUniqueInput | LoginSessionWhereUniqueInput[];
+  };
+
+  export type ProductUncheckedCreateNestedManyWithoutSellerInput = {
+    create?:
+      | XOR<ProductCreateWithoutSellerInput, ProductUncheckedCreateWithoutSellerInput>
+      | ProductCreateWithoutSellerInput[]
+      | ProductUncheckedCreateWithoutSellerInput[];
+    connectOrCreate?: ProductCreateOrConnectWithoutSellerInput | ProductCreateOrConnectWithoutSellerInput[];
+    createMany?: ProductCreateManySellerInputEnvelope;
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[];
   };
 
   export type CartItemUncheckedCreateNestedManyWithoutUserInput = {
@@ -23420,6 +23553,23 @@ export namespace Prisma {
     update?: LoginSessionUpdateWithWhereUniqueWithoutUserInput | LoginSessionUpdateWithWhereUniqueWithoutUserInput[];
     updateMany?: LoginSessionUpdateManyWithWhereWithoutUserInput | LoginSessionUpdateManyWithWhereWithoutUserInput[];
     deleteMany?: LoginSessionScalarWhereInput | LoginSessionScalarWhereInput[];
+  };
+
+  export type ProductUpdateManyWithoutSellerNestedInput = {
+    create?:
+      | XOR<ProductCreateWithoutSellerInput, ProductUncheckedCreateWithoutSellerInput>
+      | ProductCreateWithoutSellerInput[]
+      | ProductUncheckedCreateWithoutSellerInput[];
+    connectOrCreate?: ProductCreateOrConnectWithoutSellerInput | ProductCreateOrConnectWithoutSellerInput[];
+    upsert?: ProductUpsertWithWhereUniqueWithoutSellerInput | ProductUpsertWithWhereUniqueWithoutSellerInput[];
+    createMany?: ProductCreateManySellerInputEnvelope;
+    set?: ProductWhereUniqueInput | ProductWhereUniqueInput[];
+    disconnect?: ProductWhereUniqueInput | ProductWhereUniqueInput[];
+    delete?: ProductWhereUniqueInput | ProductWhereUniqueInput[];
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[];
+    update?: ProductUpdateWithWhereUniqueWithoutSellerInput | ProductUpdateWithWhereUniqueWithoutSellerInput[];
+    updateMany?: ProductUpdateManyWithWhereWithoutSellerInput | ProductUpdateManyWithWhereWithoutSellerInput[];
+    deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[];
   };
 
   export type CartItemUpdateManyWithoutUserNestedInput = {
@@ -23562,6 +23712,23 @@ export namespace Prisma {
     update?: LoginSessionUpdateWithWhereUniqueWithoutUserInput | LoginSessionUpdateWithWhereUniqueWithoutUserInput[];
     updateMany?: LoginSessionUpdateManyWithWhereWithoutUserInput | LoginSessionUpdateManyWithWhereWithoutUserInput[];
     deleteMany?: LoginSessionScalarWhereInput | LoginSessionScalarWhereInput[];
+  };
+
+  export type ProductUncheckedUpdateManyWithoutSellerNestedInput = {
+    create?:
+      | XOR<ProductCreateWithoutSellerInput, ProductUncheckedCreateWithoutSellerInput>
+      | ProductCreateWithoutSellerInput[]
+      | ProductUncheckedCreateWithoutSellerInput[];
+    connectOrCreate?: ProductCreateOrConnectWithoutSellerInput | ProductCreateOrConnectWithoutSellerInput[];
+    upsert?: ProductUpsertWithWhereUniqueWithoutSellerInput | ProductUpsertWithWhereUniqueWithoutSellerInput[];
+    createMany?: ProductCreateManySellerInputEnvelope;
+    set?: ProductWhereUniqueInput | ProductWhereUniqueInput[];
+    disconnect?: ProductWhereUniqueInput | ProductWhereUniqueInput[];
+    delete?: ProductWhereUniqueInput | ProductWhereUniqueInput[];
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[];
+    update?: ProductUpdateWithWhereUniqueWithoutSellerInput | ProductUpdateWithWhereUniqueWithoutSellerInput[];
+    updateMany?: ProductUpdateManyWithWhereWithoutSellerInput | ProductUpdateManyWithWhereWithoutSellerInput[];
+    deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[];
   };
 
   export type CartItemUncheckedUpdateManyWithoutUserNestedInput = {
@@ -24204,6 +24371,7 @@ export namespace Prisma {
     credit?: number;
     backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
+    products?: ProductCreateNestedManyWithoutSellerInput;
     cart?: CartItemCreateNestedManyWithoutUserInput;
     mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
@@ -24231,6 +24399,7 @@ export namespace Prisma {
     credit?: number;
     backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
     cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
     mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
@@ -24274,6 +24443,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number;
     backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
+    products?: ProductUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUpdateManyWithoutUserNestedInput;
     mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
@@ -24301,6 +24471,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number;
     backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
     mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
@@ -24329,6 +24500,7 @@ export namespace Prisma {
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
+    products?: ProductCreateNestedManyWithoutSellerInput;
     cart?: CartItemCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
     ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
@@ -24356,6 +24528,7 @@ export namespace Prisma {
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
     cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
     ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
@@ -24399,6 +24572,7 @@ export namespace Prisma {
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
+    products?: ProductUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
     ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
@@ -24426,6 +24600,7 @@ export namespace Prisma {
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
     ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
@@ -24452,6 +24627,7 @@ export namespace Prisma {
     credit?: number;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
+    products?: ProductCreateNestedManyWithoutSellerInput;
     cart?: CartItemCreateNestedManyWithoutUserInput;
     mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
@@ -24479,6 +24655,7 @@ export namespace Prisma {
     credit?: number;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
     cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
     mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
@@ -24522,6 +24699,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
+    products?: ProductUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUpdateManyWithoutUserNestedInput;
     mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
@@ -24549,6 +24727,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
     mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
@@ -24576,6 +24755,7 @@ export namespace Prisma {
     credit?: number;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
+    products?: ProductCreateNestedManyWithoutSellerInput;
     cart?: CartItemCreateNestedManyWithoutUserInput;
     mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
@@ -24603,6 +24783,7 @@ export namespace Prisma {
     credit?: number;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
     cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
     mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
@@ -24646,6 +24827,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
+    products?: ProductUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUpdateManyWithoutUserNestedInput;
     mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
@@ -24673,6 +24855,7 @@ export namespace Prisma {
     credit?: IntFieldUpdateOperationsInput | number;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
     mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
@@ -24822,6 +25005,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     category: CategoryCreateNestedOneWithoutProductsInput;
+    seller: UserCreateNestedOneWithoutProductsInput;
     cartItem?: CartItemCreateNestedManyWithoutProductInput;
     productItems?: ProductItemCreateNestedManyWithoutProductInput;
   };
@@ -24843,6 +25027,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     categoryId: string;
+    sellerId: string;
     cartItem?: CartItemUncheckedCreateNestedManyWithoutProductInput;
     productItems?: ProductItemUncheckedCreateNestedManyWithoutProductInput;
   };
@@ -24922,6 +25107,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
+    seller?: UserUpdateOneRequiredWithoutProductsNestedInput;
     cartItem?: CartItemUpdateManyWithoutProductNestedInput;
     productItems?: ProductItemUpdateManyWithoutProductNestedInput;
   };
@@ -24943,6 +25129,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     categoryId?: StringFieldUpdateOperationsInput | string;
+    sellerId?: StringFieldUpdateOperationsInput | string;
     cartItem?: CartItemUncheckedUpdateManyWithoutProductNestedInput;
     productItems?: ProductItemUncheckedUpdateManyWithoutProductNestedInput;
   };
@@ -25016,6 +25203,67 @@ export namespace Prisma {
   export type CategoryCreateOrConnectWithoutProductsInput = {
     where: CategoryWhereUniqueInput;
     create: XOR<CategoryCreateWithoutProductsInput, CategoryUncheckedCreateWithoutProductsInput>;
+  };
+
+  export type UserCreateWithoutProductsInput = {
+    id?: string;
+    fullname: string;
+    email: string;
+    phone?: string | null;
+    isVerified?: boolean;
+    hashedPassword?: string | null;
+    avatarUrl?: string | null;
+    address?: string | null;
+    city?: string | null;
+    state?: string | null;
+    zipCode?: string | null;
+    biography?: string | null;
+    roles?: UserCreaterolesInput | $Enums.UserRole[];
+    flags?: UserCreateflagsInput | $Enums.UserFlag[];
+    createAt?: Date | string;
+    updateAt?: Date | string;
+    credit?: number;
+    auth?: AuthenticationCreateNestedManyWithoutUserInput;
+    backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
+    loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
+    cart?: CartItemCreateNestedManyWithoutUserInput;
+    mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
+    ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
+    ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
+    bills?: BillCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutProductsInput = {
+    id?: string;
+    fullname: string;
+    email: string;
+    phone?: string | null;
+    isVerified?: boolean;
+    hashedPassword?: string | null;
+    avatarUrl?: string | null;
+    address?: string | null;
+    city?: string | null;
+    state?: string | null;
+    zipCode?: string | null;
+    biography?: string | null;
+    roles?: UserCreaterolesInput | $Enums.UserRole[];
+    flags?: UserCreateflagsInput | $Enums.UserFlag[];
+    createAt?: Date | string;
+    updateAt?: Date | string;
+    credit?: number;
+    auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
+    backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
+    loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
+    cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
+    mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
+    ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
+    ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
+    bills?: BillUncheckedCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutProductsInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<UserCreateWithoutProductsInput, UserUncheckedCreateWithoutProductsInput>;
   };
 
   export type CartItemCreateWithoutProductInput = {
@@ -25121,6 +25369,73 @@ export namespace Prisma {
     slug?: StringFieldUpdateOperationsInput | string;
   };
 
+  export type UserUpsertWithoutProductsInput = {
+    update: XOR<UserUpdateWithoutProductsInput, UserUncheckedUpdateWithoutProductsInput>;
+    create: XOR<UserCreateWithoutProductsInput, UserUncheckedCreateWithoutProductsInput>;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutProductsInput = {
+    where?: UserWhereInput;
+    data: XOR<UserUpdateWithoutProductsInput, UserUncheckedUpdateWithoutProductsInput>;
+  };
+
+  export type UserUpdateWithoutProductsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    fullname?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    address?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    state?: NullableStringFieldUpdateOperationsInput | string | null;
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null;
+    biography?: NullableStringFieldUpdateOperationsInput | string | null;
+    roles?: UserUpdaterolesInput | $Enums.UserRole[];
+    flags?: UserUpdateflagsInput | $Enums.UserFlag[];
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    credit?: IntFieldUpdateOperationsInput | number;
+    auth?: AuthenticationUpdateManyWithoutUserNestedInput;
+    backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
+    loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
+    cart?: CartItemUpdateManyWithoutUserNestedInput;
+    mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
+    ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
+    ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
+    bills?: BillUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutProductsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    fullname?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    address?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    state?: NullableStringFieldUpdateOperationsInput | string | null;
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null;
+    biography?: NullableStringFieldUpdateOperationsInput | string | null;
+    roles?: UserUpdaterolesInput | $Enums.UserRole[];
+    flags?: UserUpdateflagsInput | $Enums.UserFlag[];
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    credit?: IntFieldUpdateOperationsInput | number;
+    auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
+    backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
+    loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
+    cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
+    mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
+    ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
+    ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
+    bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
+  };
+
   export type CartItemUpsertWithWhereUniqueWithoutProductInput = {
     where: CartItemWhereUniqueInput;
     update: XOR<CartItemUpdateWithoutProductInput, CartItemUncheckedUpdateWithoutProductInput>;
@@ -25209,6 +25524,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     category: CategoryCreateNestedOneWithoutProductsInput;
+    seller: UserCreateNestedOneWithoutProductsInput;
     cartItem?: CartItemCreateNestedManyWithoutProductInput;
     orderItem?: OrderItemCreateNestedManyWithoutProductInput;
   };
@@ -25230,6 +25546,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     categoryId: string;
+    sellerId: string;
     cartItem?: CartItemUncheckedCreateNestedManyWithoutProductInput;
     orderItem?: OrderItemUncheckedCreateNestedManyWithoutProductInput;
   };
@@ -25290,6 +25607,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
+    seller?: UserUpdateOneRequiredWithoutProductsNestedInput;
     cartItem?: CartItemUpdateManyWithoutProductNestedInput;
     orderItem?: OrderItemUpdateManyWithoutProductNestedInput;
   };
@@ -25311,6 +25629,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     categoryId?: StringFieldUpdateOperationsInput | string;
+    sellerId?: StringFieldUpdateOperationsInput | string;
     cartItem?: CartItemUncheckedUpdateManyWithoutProductNestedInput;
     orderItem?: OrderItemUncheckedUpdateManyWithoutProductNestedInput;
   };
@@ -25360,6 +25679,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    seller: UserCreateNestedOneWithoutProductsInput;
     cartItem?: CartItemCreateNestedManyWithoutProductInput;
     productItems?: ProductItemCreateNestedManyWithoutProductInput;
     orderItem?: OrderItemCreateNestedManyWithoutProductInput;
@@ -25381,6 +25701,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    sellerId: string;
     cartItem?: CartItemUncheckedCreateNestedManyWithoutProductInput;
     productItems?: ProductItemUncheckedCreateNestedManyWithoutProductInput;
     orderItem?: OrderItemUncheckedCreateNestedManyWithoutProductInput;
@@ -25432,6 +25753,7 @@ export namespace Prisma {
     tags?: StringNullableListFilter<'Product'>;
     medias?: StringNullableListFilter<'Product'>;
     categoryId?: UuidFilter<'Product'> | string;
+    sellerId?: UuidFilter<'Product'> | string;
   };
 
   export type AuthenticationCreateWithoutUserInput = {
@@ -25515,6 +25837,60 @@ export namespace Prisma {
 
   export type LoginSessionCreateManyUserInputEnvelope = {
     data: LoginSessionCreateManyUserInput | LoginSessionCreateManyUserInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type ProductCreateWithoutSellerInput = {
+    id?: string;
+    createAt?: Date | string;
+    updateAt?: Date | string;
+    sku?: string | null;
+    isActive?: boolean;
+    slug: string;
+    name: string;
+    description: string;
+    stock: number;
+    sold?: number;
+    flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
+    originalPrice: number;
+    discountPrice: number;
+    tags?: ProductCreatetagsInput | string[];
+    medias?: ProductCreatemediasInput | string[];
+    category: CategoryCreateNestedOneWithoutProductsInput;
+    cartItem?: CartItemCreateNestedManyWithoutProductInput;
+    productItems?: ProductItemCreateNestedManyWithoutProductInput;
+    orderItem?: OrderItemCreateNestedManyWithoutProductInput;
+  };
+
+  export type ProductUncheckedCreateWithoutSellerInput = {
+    id?: string;
+    createAt?: Date | string;
+    updateAt?: Date | string;
+    sku?: string | null;
+    isActive?: boolean;
+    slug: string;
+    name: string;
+    description: string;
+    stock: number;
+    sold?: number;
+    flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
+    originalPrice: number;
+    discountPrice: number;
+    tags?: ProductCreatetagsInput | string[];
+    medias?: ProductCreatemediasInput | string[];
+    categoryId: string;
+    cartItem?: CartItemUncheckedCreateNestedManyWithoutProductInput;
+    productItems?: ProductItemUncheckedCreateNestedManyWithoutProductInput;
+    orderItem?: OrderItemUncheckedCreateNestedManyWithoutProductInput;
+  };
+
+  export type ProductCreateOrConnectWithoutSellerInput = {
+    where: ProductWhereUniqueInput;
+    create: XOR<ProductCreateWithoutSellerInput, ProductUncheckedCreateWithoutSellerInput>;
+  };
+
+  export type ProductCreateManySellerInputEnvelope = {
+    data: ProductCreateManySellerInput | ProductCreateManySellerInput[];
     skipDuplicates?: boolean;
   };
 
@@ -25779,6 +26155,22 @@ export namespace Prisma {
     userId?: UuidFilter<'LoginSession'> | string;
   };
 
+  export type ProductUpsertWithWhereUniqueWithoutSellerInput = {
+    where: ProductWhereUniqueInput;
+    update: XOR<ProductUpdateWithoutSellerInput, ProductUncheckedUpdateWithoutSellerInput>;
+    create: XOR<ProductCreateWithoutSellerInput, ProductUncheckedCreateWithoutSellerInput>;
+  };
+
+  export type ProductUpdateWithWhereUniqueWithoutSellerInput = {
+    where: ProductWhereUniqueInput;
+    data: XOR<ProductUpdateWithoutSellerInput, ProductUncheckedUpdateWithoutSellerInput>;
+  };
+
+  export type ProductUpdateManyWithWhereWithoutSellerInput = {
+    where: ProductScalarWhereInput;
+    data: XOR<ProductUpdateManyMutationInput, ProductUncheckedUpdateManyWithoutSellerInput>;
+  };
+
   export type CartItemUpsertWithWhereUniqueWithoutUserInput = {
     where: CartItemWhereUniqueInput;
     update: XOR<CartItemUpdateWithoutUserInput, CartItemUncheckedUpdateWithoutUserInput>;
@@ -25951,6 +26343,7 @@ export namespace Prisma {
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
+    products?: ProductCreateNestedManyWithoutSellerInput;
     cart?: CartItemCreateNestedManyWithoutUserInput;
     mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
@@ -25978,6 +26371,7 @@ export namespace Prisma {
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
     cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
     mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
@@ -26048,6 +26442,7 @@ export namespace Prisma {
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
+    products?: ProductUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUpdateManyWithoutUserNestedInput;
     mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
@@ -26075,6 +26470,7 @@ export namespace Prisma {
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
     mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
@@ -26098,6 +26494,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     category: CategoryCreateNestedOneWithoutProductsInput;
+    seller: UserCreateNestedOneWithoutProductsInput;
     productItems?: ProductItemCreateNestedManyWithoutProductInput;
     orderItem?: OrderItemCreateNestedManyWithoutProductInput;
   };
@@ -26119,6 +26516,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     categoryId: string;
+    sellerId: string;
     productItems?: ProductItemUncheckedCreateNestedManyWithoutProductInput;
     orderItem?: OrderItemUncheckedCreateNestedManyWithoutProductInput;
   };
@@ -26149,6 +26547,7 @@ export namespace Prisma {
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
+    products?: ProductCreateNestedManyWithoutSellerInput;
     mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
     ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
@@ -26176,6 +26575,7 @@ export namespace Prisma {
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
     mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
     ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
@@ -26215,6 +26615,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
+    seller?: UserUpdateOneRequiredWithoutProductsNestedInput;
     productItems?: ProductItemUpdateManyWithoutProductNestedInput;
     orderItem?: OrderItemUpdateManyWithoutProductNestedInput;
   };
@@ -26236,6 +26637,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     categoryId?: StringFieldUpdateOperationsInput | string;
+    sellerId?: StringFieldUpdateOperationsInput | string;
     productItems?: ProductItemUncheckedUpdateManyWithoutProductNestedInput;
     orderItem?: OrderItemUncheckedUpdateManyWithoutProductNestedInput;
   };
@@ -26272,6 +26674,7 @@ export namespace Prisma {
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
+    products?: ProductUpdateManyWithoutSellerNestedInput;
     mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
     ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
@@ -26299,6 +26702,7 @@ export namespace Prisma {
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
     mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
     ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
@@ -26326,6 +26730,7 @@ export namespace Prisma {
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
+    products?: ProductCreateNestedManyWithoutSellerInput;
     cart?: CartItemCreateNestedManyWithoutUserInput;
     mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
     ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
@@ -26353,6 +26758,7 @@ export namespace Prisma {
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
     cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
     mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
     ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
@@ -26385,6 +26791,7 @@ export namespace Prisma {
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
+    products?: ProductCreateNestedManyWithoutSellerInput;
     cart?: CartItemCreateNestedManyWithoutUserInput;
     mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
@@ -26412,6 +26819,7 @@ export namespace Prisma {
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
     cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
     mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
@@ -26455,6 +26863,7 @@ export namespace Prisma {
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
+    products?: ProductUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUpdateManyWithoutUserNestedInput;
     mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
     ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
@@ -26482,6 +26891,7 @@ export namespace Prisma {
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
     mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
     ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
@@ -26520,6 +26930,7 @@ export namespace Prisma {
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
+    products?: ProductUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUpdateManyWithoutUserNestedInput;
     mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
@@ -26547,6 +26958,7 @@ export namespace Prisma {
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
     mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
@@ -26703,6 +27115,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    sellerId: string;
   };
 
   export type ProductUpdateWithoutCategoryInput = {
@@ -26721,6 +27134,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    seller?: UserUpdateOneRequiredWithoutProductsNestedInput;
     cartItem?: CartItemUpdateManyWithoutProductNestedInput;
     productItems?: ProductItemUpdateManyWithoutProductNestedInput;
     orderItem?: OrderItemUpdateManyWithoutProductNestedInput;
@@ -26742,6 +27156,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    sellerId?: StringFieldUpdateOperationsInput | string;
     cartItem?: CartItemUncheckedUpdateManyWithoutProductNestedInput;
     productItems?: ProductItemUncheckedUpdateManyWithoutProductNestedInput;
     orderItem?: OrderItemUncheckedUpdateManyWithoutProductNestedInput;
@@ -26763,6 +27178,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    sellerId?: StringFieldUpdateOperationsInput | string;
   };
 
   export type AuthenticationCreateManyUserInput = {
@@ -26790,6 +27206,25 @@ export namespace Prisma {
     isActive?: boolean;
     createdAt?: Date | string;
     lastUsedAt?: Date | string;
+  };
+
+  export type ProductCreateManySellerInput = {
+    id?: string;
+    createAt?: Date | string;
+    updateAt?: Date | string;
+    sku?: string | null;
+    isActive?: boolean;
+    slug: string;
+    name: string;
+    description: string;
+    stock: number;
+    sold?: number;
+    flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
+    originalPrice: number;
+    discountPrice: number;
+    tags?: ProductCreatetagsInput | string[];
+    medias?: ProductCreatemediasInput | string[];
+    categoryId: string;
   };
 
   export type CartItemCreateManyUserInput = {
@@ -26932,6 +27367,69 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     lastUsedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type ProductUpdateWithoutSellerInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    sku?: NullableStringFieldUpdateOperationsInput | string | null;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    description?: StringFieldUpdateOperationsInput | string;
+    stock?: IntFieldUpdateOperationsInput | number;
+    sold?: IntFieldUpdateOperationsInput | number;
+    flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
+    originalPrice?: IntFieldUpdateOperationsInput | number;
+    discountPrice?: IntFieldUpdateOperationsInput | number;
+    tags?: ProductUpdatetagsInput | string[];
+    medias?: ProductUpdatemediasInput | string[];
+    category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
+    cartItem?: CartItemUpdateManyWithoutProductNestedInput;
+    productItems?: ProductItemUpdateManyWithoutProductNestedInput;
+    orderItem?: OrderItemUpdateManyWithoutProductNestedInput;
+  };
+
+  export type ProductUncheckedUpdateWithoutSellerInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    sku?: NullableStringFieldUpdateOperationsInput | string | null;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    description?: StringFieldUpdateOperationsInput | string;
+    stock?: IntFieldUpdateOperationsInput | number;
+    sold?: IntFieldUpdateOperationsInput | number;
+    flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
+    originalPrice?: IntFieldUpdateOperationsInput | number;
+    discountPrice?: IntFieldUpdateOperationsInput | number;
+    tags?: ProductUpdatetagsInput | string[];
+    medias?: ProductUpdatemediasInput | string[];
+    categoryId?: StringFieldUpdateOperationsInput | string;
+    cartItem?: CartItemUncheckedUpdateManyWithoutProductNestedInput;
+    productItems?: ProductItemUncheckedUpdateManyWithoutProductNestedInput;
+    orderItem?: OrderItemUncheckedUpdateManyWithoutProductNestedInput;
+  };
+
+  export type ProductUncheckedUpdateManyWithoutSellerInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    sku?: NullableStringFieldUpdateOperationsInput | string | null;
+    isActive?: BoolFieldUpdateOperationsInput | boolean;
+    slug?: StringFieldUpdateOperationsInput | string;
+    name?: StringFieldUpdateOperationsInput | string;
+    description?: StringFieldUpdateOperationsInput | string;
+    stock?: IntFieldUpdateOperationsInput | number;
+    sold?: IntFieldUpdateOperationsInput | number;
+    flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
+    originalPrice?: IntFieldUpdateOperationsInput | number;
+    discountPrice?: IntFieldUpdateOperationsInput | number;
+    tags?: ProductUpdatetagsInput | string[];
+    medias?: ProductUpdatemediasInput | string[];
+    categoryId?: StringFieldUpdateOperationsInput | string;
   };
 
   export type CartItemUpdateWithoutUserInput = {

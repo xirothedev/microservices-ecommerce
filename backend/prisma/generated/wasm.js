@@ -191,6 +191,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   tags: 'tags',
   medias: 'medias',
   categoryId: 'categoryId',
+  sellerId: 'sellerId',
 };
 
 exports.Prisma.ProductItemScalarFieldEnum = {

@@ -23,6 +23,11 @@ export class CreateProductDto implements Partial<Product> {
   @MaxLength(255)
   name: string;
 
+  @IsString({ each: true })
+  @ArrayMinSize(4)
+  @IsArray()
+  tags: string[];
+
   @IsString()
   @IsNotEmpty()
   description: string;
@@ -45,6 +50,10 @@ export class CreateProductDto implements Partial<Product> {
   @ValidateNested({ each: true })
   @Type(() => CreateProductItemDto)
   productItems: CreateProductItemDto[];
+
+  @IsString()
+  @IsNotEmpty()
+  categoryId: string;
 }
 
 export class CreateProductItemDto implements Partial<ProductItem> {

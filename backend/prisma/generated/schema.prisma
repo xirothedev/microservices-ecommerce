@@ -111,6 +111,8 @@ model Product {
 
   categoryId   String        @map("category_id") @db.Uuid
   category     Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  sellerId     String        @db.Uuid
+  seller       User          @relation(fields: [sellerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   cartItem     CartItem[]
   productItems ProductItem[]
   orderItem    OrderItem[]
@@ -184,6 +186,7 @@ model User {
   auth           Authentication[]
   backupCodes    MfaBackupCode[]
   loginSessions  LoginSession[]
+  products       Product[]
   cart           CartItem[]
   mfaSetups      MfaSetup[]
   ticketAuthor   Ticket[]         @relation("TicketAuthor")
