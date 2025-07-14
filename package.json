@@ -4,5 +4,8 @@
 	},
 	"scripts": {
 		"prepare": "husky"
+	},
+	"devDependencies": {
+		"@types/multer": "^2.0.0"
 	}
 }
