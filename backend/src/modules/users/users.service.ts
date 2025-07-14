@@ -1,16 +1,16 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { UpdateUserInput } from './dto/update-user-input.dto';
-import { Prisma } from 'prisma/generated';
-import { UpdateUserByAdmin } from './dto/update-user-by-admin-input.dto';
 import { Request } from 'express';
-import { MediaService } from '@/media/media.service';
+import { Prisma } from 'prisma/generated';
+import { SupabaseService } from '@/supabase/supabase.service';
+import { UpdateUserByAdmin } from './dto/update-user-by-admin-input.dto';
+import { UpdateUserInput } from './dto/update-user-input.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly mediaService: MediaService,
+    private readonly supabaseService: SupabaseService,
   ) {}
 
   // Resolver
@@ -63,17 +63,19 @@ export class UsersService {
   // Controller
   async updateUserAvatar(req: Request, avatar: Express.Multer.File) {
     const user = req.user;
-    let url: string;
+    const path = `${req.user.id}/${Date.now()}-${avatar.originalname}`;
 
-    try {
-      url = await this.mediaService.uploadSquareImage(avatar);
-    } catch {
-      throw new InternalServerErrorException('Failed to upload image');
+    const { error } = await this.supabaseService.uploadFile(path, avatar.buffer, {
+      contentType: avatar.mimetype,
+    });
+
+    if (error) {
+      throw new InternalServerErrorException(`Failed to upload file: ${avatar.originalname}`);
     }
 
-    if (user.avatarUrl && (await this.mediaService.getFile(user.avatarUrl))) {
+    if (user.avatarUrl) {
       try {
-        await this.mediaService.deleteFile(user.avatarUrl);
+        await this.supabaseService.deleteFile(user.avatarUrl);
       } catch {
         throw new InternalServerErrorException('Failed to delete old image');
       }
@@ -81,7 +83,7 @@ export class UsersService {
 
     const data = await this.prismaService.user.update({
       where: { id: user.id },
-      data: { avatarUrl: url },
+      data: { avatarUrl: path },
     });
 
     return {
