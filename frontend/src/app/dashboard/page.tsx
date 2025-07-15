@@ -4,9 +4,9 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, Ticket, BarChart3, Settings } from "lucide-react";
-import DashboardOverview from "@/components/dashboard/dashboard-overview";
-import UserManagement from "@/components/dashboard/user-management";
-import TicketManagement from "@/components/dashboard/ticket-management";
+import DashboardOverview from "@/app/dashboard/components/dashboard-overview";
+import UserManagement from "@/app/dashboard/components/user-management";
+import TicketManagement from "@/app/dashboard/components/ticket-management";
 
 export default function DashboardPage() {
 	const [activeTab, setActiveTab] = useState("overview");

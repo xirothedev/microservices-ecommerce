@@ -1,5 +1,5 @@
 export default function Loading() {
-  return (
+	return (
 		<main className="min-h-screen pt-16">
 			{/* Hero skeleton */}
 			<section className="bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800">
@@ -67,5 +67,5 @@ export default function Loading() {
 				</div>
 			</section>
 		</main>
-  );
+	);
 }

@@ -1,4 +1,4 @@
-import TicketDetail from "@/components/profile/ticket/ticket-detail";
+import TicketDetail from "@/app/profile/components/ticket/ticket-detail";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 

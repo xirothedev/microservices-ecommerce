@@ -5,10 +5,10 @@ import { AnimatePresence } from "motion/react";
 import { Plus, Search, Grid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import SearchFilters from "@/components/cms/search-filters";
-import ProductList from "@/components/cms/product-list";
-import PreviewModal from "@/components/cms/preview-modal";
-import ProductForm from "@/components/cms/product-form";
+import SearchFilters from "@/app/cms/components/search-filters";
+import ProductList from "@/app/cms/components/product-list";
+import PreviewModal from "@/app/cms/components/preview-modal";
+import ProductForm from "@/app/cms/components/product-form";
 
 interface Product {
 	id: string;

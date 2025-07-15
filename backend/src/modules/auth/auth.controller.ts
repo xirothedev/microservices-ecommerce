@@ -1,29 +1,27 @@
+import { Cookies } from '@/common/decorators/cookie.decorator';
 import { Public } from '@/common/decorators/public.decorator';
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
   Param,
+  ParseEnumPipe,
   Post,
   Query,
   Req,
-  UseGuards,
-  ParseEnumPipe,
-  BadRequestException,
   Res,
 } from '@nestjs/common';
+import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Request, Response } from 'express';
+import { MfaStatus } from './auth.interface';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { LoginDto } from './dto/login.dto';
+import { MfaVerificationDto, RequestMfaCodeDto } from './dto/mfa-verification.dto';
 import { SetupMfaDto, ToggleMfaDto, VerifyMfaSetupDto } from './dto/setup-mfa.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { MfaService } from './mfa.service';
-import { Request, Response } from 'express';
-import { MfaStatus } from './auth.interface';
-import { MfaVerificationDto, RequestMfaCodeDto } from './dto/mfa-verification.dto';
-import { Cookies } from '@/common/decorators/cookie.decorator';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam, ApiQuery } from '@nestjs/swagger';
 
 @ApiTags('Auth')
 @Controller('auth')

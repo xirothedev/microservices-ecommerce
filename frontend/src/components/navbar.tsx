@@ -1,6 +1,13 @@
-"use client"
+"use client";
 
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Smartphone } from "lucide-react";
 import Link from "next/link";
@@ -11,10 +18,11 @@ interface NavbarProps {
 	navItems: { name: string; href: string }[];
 }
 
-export default function Navbar({navItems}: NavbarProps) {
-  const [isOpen, setIsOpen] = useState(false)
+export default function Navbar({ navItems }: NavbarProps) {
+	const [isOpen, setIsOpen] = useState(false);
+	const [isLoggedIn, setIsLoggedIn] = useState(false); // Simulate auth state
 
-  return (
+	return (
 		<nav className="bg-color-100 fixed top-0 z-50 w-full border-b shadow-md backdrop-blur-sm transition-colors">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 				<div className="flex h-16 items-center justify-between">
@@ -36,7 +44,20 @@ export default function Navbar({navItems}: NavbarProps) {
 						))}
 						<div className="flex items-center space-x-2">
 							<Cart />
-							<Button className="bg-blue-600 hover:bg-blue-700">Get Started</Button>
+							{isLoggedIn ? (
+								<Avatar className="cursor-pointer">
+									<AvatarFallback>U</AvatarFallback>
+								</Avatar>
+							) : (
+								<>
+									<Button className="bg-blue-600 hover:bg-blue-700" type="button">
+										<Link href="/register">Register</Link>
+									</Button>
+									<Button variant="outline" onClick={() => setIsLoggedIn(true)}>
+										<Link href="/login">Login</Link>
+									</Button>
+								</>
+							)}
 						</div>
 					</div>
 
@@ -62,12 +83,38 @@ export default function Navbar({navItems}: NavbarProps) {
 								<div className="flex items-center justify-center gap-4 py-4">
 									<Cart />
 								</div>
-								<Button className="mt-4 bg-blue-600 hover:bg-blue-700">Get Started</Button>
+								{isLoggedIn ? (
+									<DropdownMenu>
+										<DropdownMenuTrigger asChild>
+											<Avatar>
+												<AvatarFallback>U</AvatarFallback>
+											</Avatar>
+										</DropdownMenuTrigger>
+										<DropdownMenuContent align="end">
+											<DropdownMenuItem>Profile</DropdownMenuItem>
+											<DropdownMenuItem onClick={() => setIsLoggedIn(false)}>
+												Logout
+											</DropdownMenuItem>
+										</DropdownMenuContent>
+									</DropdownMenu>
+								) : (
+									<>
+										<Button
+											className="mt-4 bg-blue-600 hover:bg-blue-700"
+											onClick={() => setIsLoggedIn(true)}
+										>
+											Register
+										</Button>
+										<Button className="mt-4" variant="outline" onClick={() => setIsLoggedIn(true)}>
+											Login
+										</Button>
+									</>
+								)}
 							</div>
 						</SheetContent>
 					</Sheet>
 				</div>
 			</div>
 		</nav>
-  );
+	);
 }

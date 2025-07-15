@@ -4,19 +4,19 @@ import { formatCurrency, formatDate } from "@/lib/format";
 import { Ban, DollarSign, Eye, Mail, MoreHorizontal, Phone, Search, Trash2 } from "lucide-react";
 import { motion } from "motion/react";
 import { Dispatch, SetStateAction } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar";
+import { Badge } from "../../../components/ui/badge";
+import { Button } from "../../../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "../../../components/ui/dropdown-menu";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../components/ui/table";
 import { User } from "./user-management";
 
 interface UserTableProps {
@@ -139,7 +139,7 @@ export default function UserTable({
 									<TableCell className="text-sm text-gray-600">
 										{formatDate(user.lastActivity)}
 									</TableCell>
-									<TableCell className="text-right rounded-r-xl">
+									<TableCell className="rounded-r-xl text-right">
 										<DropdownMenu>
 											<DropdownMenuTrigger asChild>
 												<Button variant="ghost" className="h-8 w-8 p-0">

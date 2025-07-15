@@ -1,5 +1,5 @@
 import Navbar from "@/components/navbar";
-import ServicesHero from "@/components/services/services-hero";
+import ServicesHero from "@/app/services/components/services-hero";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

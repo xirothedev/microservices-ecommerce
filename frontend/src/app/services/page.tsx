@@ -1,5 +1,5 @@
-import ServicesFilter from "@/components/services/services-filter";
-import ServicesList from "@/components/services/services-list";
+import ServicesFilter from "@/app/services/components/services-filter";
+import ServicesList from "@/app/services/components/services-list";
 
 export default function ServicesPage() {
 	return (

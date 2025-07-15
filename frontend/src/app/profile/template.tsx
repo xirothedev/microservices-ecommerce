@@ -1,6 +1,6 @@
 "use client";
 
-import ProfileSidebar from "@/components/profile/profile-sidebar";
+import ProfileSidebar from "@/app/profile/components/profile-sidebar";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";

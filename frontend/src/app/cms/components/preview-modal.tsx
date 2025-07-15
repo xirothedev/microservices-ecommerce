@@ -177,7 +177,7 @@ export default function PreviewModal({ product, onClose }: PreviewModalProps) {
 																key={option.id}
 																className="cursor-pointer transition-shadow hover:shadow-md"
 															>
-																<CardContent className="p-3 flex flex-col items-center">
+																<CardContent className="flex flex-col items-center p-3">
 																	<div className="font-medium">{option.value}</div>
 																	<div className="text-sm text-gray-600">
 																		${option.price} • {option.inventory} available
