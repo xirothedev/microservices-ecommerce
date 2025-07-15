@@ -2,12 +2,6 @@
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Smartphone } from "lucide-react";
 import Link from "next/link";
@@ -45,15 +39,17 @@ export default function Navbar({ navItems }: NavbarProps) {
 						<div className="flex items-center space-x-2">
 							<Cart />
 							{isLoggedIn ? (
-								<Avatar className="cursor-pointer">
-									<AvatarFallback>U</AvatarFallback>
+								<Avatar>
+									<Link href="/profile">
+										<AvatarFallback>U</AvatarFallback>
+									</Link>
 								</Avatar>
 							) : (
 								<>
 									<Button className="bg-blue-600 hover:bg-blue-700" type="button">
 										<Link href="/register">Register</Link>
 									</Button>
-									<Button variant="outline" onClick={() => setIsLoggedIn(true)}>
+									<Button variant="outline">
 										<Link href="/login">Login</Link>
 									</Button>
 								</>
@@ -84,19 +80,11 @@ export default function Navbar({ navItems }: NavbarProps) {
 									<Cart />
 								</div>
 								{isLoggedIn ? (
-									<DropdownMenu>
-										<DropdownMenuTrigger asChild>
-											<Avatar>
-												<AvatarFallback>U</AvatarFallback>
-											</Avatar>
-										</DropdownMenuTrigger>
-										<DropdownMenuContent align="end">
-											<DropdownMenuItem>Profile</DropdownMenuItem>
-											<DropdownMenuItem onClick={() => setIsLoggedIn(false)}>
-												Logout
-											</DropdownMenuItem>
-										</DropdownMenuContent>
-									</DropdownMenu>
+									<Avatar>
+										<Link href="/profile">
+											<AvatarFallback>U</AvatarFallback>
+										</Link>
+									</Avatar>
 								) : (
 									<>
 										<Button
