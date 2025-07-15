@@ -1,9 +1,10 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { Request } from 'express';
 import { PrismaService } from '@/prisma/prisma.service';
-import { Prisma } from 'prisma/generated';
 import { SupabaseService } from '@/supabase/supabase.service';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { Request } from 'express';
+import { Prisma } from 'prisma/generated';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductsService {
@@ -12,7 +13,7 @@ export class ProductsService {
     private readonly supabaseService: SupabaseService,
   ) {}
 
-  async create(req: Request, body: CreateProductDto, medias: Express.Multer.File[]) {
+  public async create(req: Request, body: CreateProductDto, medias: Express.Multer.File[]) {
     const seller = req.user;
     const urls: Array<string> = [];
 
@@ -64,5 +65,219 @@ export class ProductsService {
       // Unknown error fallback
       throw error;
     }
+  }
+
+  public async update(req: Request, productId: string, body: UpdateProductDto, medias: Express.Multer.File[]) {
+    const seller = req.user;
+
+    // Check if product exists and belongs to the seller
+    const existingProduct = await this.prismaService.product.findFirst({
+      where: {
+        id: productId,
+        sellerId: seller.id,
+      },
+      include: {
+        productItems: true,
+      },
+    });
+
+    if (!existingProduct) {
+      throw new NotFoundException('Product not found or you do not have permission to update it');
+    }
+
+    const updateData: Prisma.ProductUpdateInput = {};
+
+    updateData.medias = await this.handleProductMedias({
+      userId: seller.id,
+      oldMedias: existingProduct.medias || [],
+      mediasKeep: body.mediasKeep,
+      newFiles: medias,
+      supabaseService: this.supabaseService,
+    });
+
+    // Update basic product fields if provided
+    if (body.slug !== undefined) updateData.slug = body.slug;
+    if (body.name !== undefined) updateData.name = body.name;
+    if (body.description !== undefined) updateData.description = body.description;
+    if (body.flags !== undefined) updateData.flags = body.flags;
+    if (body.originalPrice !== undefined) updateData.originalPrice = body.originalPrice;
+    if (body.discountPrice !== undefined) {
+      updateData.discountPrice = body.discountPrice;
+    } else if (body.originalPrice !== undefined) {
+      updateData.discountPrice = body.originalPrice;
+    }
+    if (body.categoryId !== undefined) {
+      updateData.category = {
+        connect: { id: body.categoryId },
+      };
+    }
+    if (body.tags !== undefined) updateData.tags = body.tags;
+
+    // Handle product items update if provided
+    if (body.productItems !== undefined) {
+      // Delete existing product items that are not sold
+      await this.prismaService.productItem.deleteMany({
+        where: {
+          productId: productId,
+          isSold: false,
+        },
+      });
+
+      // Create new product items
+      updateData.productItems = {
+        createMany: { data: body.productItems, skipDuplicates: false },
+      };
+      updateData.stock = body.productItems.length;
+    }
+
+    try {
+      const updatedProduct = await this.prismaService.product.update({
+        where: {
+          id: productId,
+        },
+        data: updateData,
+        include: {
+          productItems: true,
+          category: true,
+        },
+      });
+
+      return {
+        message: 'Update product successful',
+        data: updatedProduct,
+      };
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          throw new Error('Slug already exists');
+        }
+        if (error.code === 'P2025') {
+          throw new NotFoundException('Product not found');
+        }
+      }
+
+      // Unknown error fallback
+      throw error;
+    }
+  }
+
+  public async findById(productId: string) {
+    const product = await this.prismaService.product.findUnique({
+      where: { id: productId },
+      include: {
+        productItems: true,
+        category: true,
+        seller: {
+          select: {
+            id: true,
+            fullname: true,
+            email: true,
+          },
+        },
+      },
+    });
+
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    return {
+      message: 'Get product successful',
+      data: product,
+    };
+  }
+
+  public async findBySeller(sellerId: string) {
+    const products = await this.prismaService.product.findMany({
+      where: { sellerId },
+      include: {
+        productItems: true,
+        category: true,
+      },
+      orderBy: {
+        createAt: 'desc',
+      },
+    });
+
+    return {
+      message: 'Get seller products successful',
+      data: products,
+    };
+  }
+
+  public async delete(req: Request, productId: string) {
+    const seller = req.user;
+
+    // Check if product exists and belongs to the seller
+    const existingProduct = await this.prismaService.product.findFirst({
+      where: {
+        id: productId,
+        sellerId: seller.id,
+      },
+    });
+
+    if (!existingProduct) {
+      throw new NotFoundException('Product not found or you do not have permission to delete it');
+    }
+
+    try {
+      await this.prismaService.product.delete({
+        where: { id: productId },
+      });
+
+      return {
+        message: 'Delete product successful',
+      };
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new NotFoundException('Product not found');
+        }
+      }
+
+      throw error;
+    }
+  }
+
+  // private helper
+  private async handleProductMedias({
+    userId,
+    oldMedias,
+    mediasKeep,
+    newFiles,
+    supabaseService,
+  }: {
+    userId: string;
+    oldMedias: string[];
+    mediasKeep?: string[];
+    newFiles: Express.Multer.File[];
+    supabaseService: SupabaseService;
+  }): Promise<string[]> {
+    // 1. keep medias
+    const keepMedias = Array.isArray(mediasKeep) ? mediasKeep : oldMedias || [];
+
+    // 2. Delete old medias
+    const mediasToDelete = (oldMedias || []).filter((m) => !keepMedias.includes(m));
+    for (const mediaPath of mediasToDelete) {
+      await supabaseService.deleteFile(mediaPath);
+    }
+
+    // 3. Upload new medias
+    const uploadedMedias: string[] = [];
+    if (newFiles && newFiles.length > 0) {
+      for (const media of newFiles) {
+        const path = `${userId}/${Date.now()}-${media.originalname}`;
+        const { error } = await supabaseService.uploadFile(path, media.buffer, {
+          contentType: media.mimetype,
+        });
+        if (error) {
+          throw new InternalServerErrorException(`Failed to upload file: ${media.originalname}`);
+        }
+        uploadedMedias.push(path);
+      }
+    }
+
+    // 4. return medias array
+    return [...keepMedias, ...uploadedMedias];
   }
 }
