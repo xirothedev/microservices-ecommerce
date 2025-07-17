@@ -17,4 +17,22 @@ export class FindAllProductDto {
   @IsOptional()
   @IsString()
   cursor?: string;
+
+  @IsOptional()
+  @IsString()
+  categoryId?: string;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  minPrice?: number;
+
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  maxPrice?: number;
+
+  @IsOptional()
+  @IsString()
+  search?: string;
 }

@@ -207,7 +207,7 @@ export class ProductsService {
   }
 
   public async findAll(query: FindAllProductDto) {
-    const { page, limit, cursor } = query;
+    const { page, limit, cursor, categoryId, minPrice, maxPrice, search } = query;
     const take = limit ?? 20;
     let skip: number | undefined = undefined;
     let cursorObj: Prisma.ProductWhereUniqueInput | undefined = undefined;
@@ -219,7 +219,28 @@ export class ProductsService {
       skip = (page - 1) * take;
     }
 
+    // Build Prisma where clause for filtering
+    const where: Prisma.ProductWhereInput = {};
+    if (categoryId && categoryId !== 'all') {
+      where.categoryId = categoryId;
+    }
+    // Build discountPrice filter
+    if (typeof minPrice === 'number' && typeof maxPrice === 'number') {
+      where.discountPrice = { gte: minPrice, lte: maxPrice };
+    } else if (typeof minPrice === 'number') {
+      where.discountPrice = { gte: minPrice };
+    } else if (typeof maxPrice === 'number') {
+      where.discountPrice = { lte: maxPrice };
+    }
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
     const products = await this.prismaService.product.findMany({
+      where,
       include: {
         productItems: true,
         category: true,
@@ -238,7 +259,7 @@ export class ProductsService {
       ...(cursorObj && { cursor: cursorObj }),
     });
 
-    const totalItems = await this.prismaService.product.count();
+    const totalItems = await this.prismaService.product.count({ where });
 
     let nextCursor: string | null = null;
     let hasNextPage = false;

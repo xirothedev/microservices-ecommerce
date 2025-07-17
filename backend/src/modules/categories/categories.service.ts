@@ -16,7 +16,8 @@ export class CategoriesService {
       },
     });
 
-    const formatted = categories.map((cat) => ({
+    const filtered = categories.filter((cat) => cat._count.products > 0);
+    const formatted = filtered.map((cat) => ({
       id: cat.id,
       name: cat.name,
       count: cat._count.products,

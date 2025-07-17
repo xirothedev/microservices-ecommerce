@@ -33,9 +33,12 @@ export default function ServicesList() {
 		queryFn: async ({ pageParam }) => {
 			const params: Record<string, unknown> = { limit: PAGE_SIZE };
 			if (pageParam) params.cursor = pageParam;
-			// Optional: add filter params to API if backend supports
-			// if (activeCategory !== "all") params.categoryId = activeCategory;
-			// if (debouncedSearchQuery) params.search = debouncedSearchQuery;
+			if (activeCategory && activeCategory !== "all") params.categoryId = activeCategory;
+			if (debouncedSearchQuery) params.search = debouncedSearchQuery;
+			if (activePriceRange) {
+				params.minPrice = activePriceRange.min;
+				params.maxPrice = activePriceRange.max;
+			}
 			const res = await axiosInstance.get<ProductsApiResponse>("/products", { params });
 			return res.data;
 		},
@@ -49,21 +52,8 @@ export default function ServicesList() {
 	// Flatten all loaded products
 	const services: Product[] = (data?.pages || []).flatMap((page: ProductsApiResponse) => page.data || []);
 
-	// Client-side filtering (optional, can move to server-side if needed)
-	let filteredServices = services;
-	if (activeCategory !== "all") {
-		filteredServices = filteredServices.filter((s) => s.categoryId === activeCategory);
-	}
-	if (debouncedSearchQuery) {
-		filteredServices = filteredServices.filter((s) =>
-			s.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase()),
-		);
-	}
-	if (activePriceRange) {
-		filteredServices = filteredServices.filter(
-			(s) => s.discountPrice >= activePriceRange.min && s.discountPrice <= activePriceRange.max,
-		);
-	}
+	// Remove client-side filtering (all filters are now backend)
+	const filteredServices = services;
 
 	// Loading state
 	if (isLoading) {
@@ -144,7 +134,8 @@ export default function ServicesList() {
 				next={fetchNextPage}
 				hasMore={!!hasNextPage}
 				loader={<div className="py-4 text-center text-gray-500">Loading...</div>}
-				scrollThreshold={0.9}
+				endMessage={<div className="py-4 text-center text-gray-500">End</div>}
+				scrollThreshold={0.8}
 			>
 				<motion.div
 					className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
