@@ -4,12 +4,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { useCart } from "@/hooks/use-cart";
-import { ArrowRight, Clock, Eye, ShoppingCart, Star } from "lucide-react";
+import { Product } from "@/typings/backend";
+import { ArrowRight, Eye, ShoppingCart, Star } from "lucide-react";
 import { motion } from "motion/react";
 import Image from "next/image";
 import { useState } from "react";
 import ServiceDetailModal from "./service-detail-modal";
-import { Product } from "@/typings/backend";
 
 interface ServiceCardProps {
 	service: Product;
@@ -45,7 +45,6 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 								}`}
 								onLoad={() => setImageLoaded(true)}
 								loading="lazy"
-								sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 							/>
 							{!imageLoaded && <div className="absolute inset-0 animate-pulse bg-gray-200" />}
 						</div>
@@ -122,20 +121,6 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 							)}
 						</div>
 					</CardContent>
-
-					<CardFooter className="pt-0">
-						<div className="w-full space-y-3">
-							<Button disabled={isAddingToCart} className="group w-full bg-blue-600 hover:bg-blue-700">
-								<ShoppingCart className="mr-2 h-4 w-4" />
-								{isAddingToCart ? "Adding..." : isInCart(service.id) ? "Add More" : "Add to Cart"}
-								<ArrowRight className="ml-2 h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
-							</Button>
-							<Button variant="outline" className="w-full bg-transparent" onClick={handleViewDetails}>
-								<Eye className="mr-2 h-4 w-4" />
-								View Details
-							</Button>
-						</div>
-					</CardFooter>
 				</Card>
 			</motion.div>
 

@@ -17,6 +17,7 @@ import { RedisModule } from './redis/redis.module';
 import { SupabaseModule } from './supabase/supabase.module';
 import { ProductsModule } from './modules/products/products.module';
 import { CategoriesModule } from './modules/categories/categories.module';
+import { CartModule } from './modules/cart/cart.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { CategoriesModule } from './modules/categories/categories.module';
     EmailModule,
     ProductsModule,
     CategoriesModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [
