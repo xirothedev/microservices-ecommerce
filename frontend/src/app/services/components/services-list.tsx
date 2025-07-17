@@ -7,6 +7,7 @@ import { motion } from "motion/react";
 import { useState } from "react";
 import ServiceCard from "./service-card";
 import { useFilterStore } from "@/store/use-filter-store";
+import { useDebounce } from "@/hooks/use-debounce";
 
 export default function ServicesList() {
 	const [visibleServices, setVisibleServices] = useState(6);
@@ -25,14 +26,17 @@ export default function ServicesList() {
 	});
 
 	const { activeCategory, searchQuery, activePriceRange } = useFilterStore();
+	const debouncedSearchQuery = useDebounce<string>(searchQuery, 1000);
 
 	// Filter services based on Zustand filter state
 	let filteredServices = services || [];
 	if (activeCategory !== "all") {
 		filteredServices = filteredServices.filter((s) => s.categoryId === activeCategory);
 	}
-	if (searchQuery) {
-		filteredServices = filteredServices.filter((s) => s.name.toLowerCase().includes(searchQuery.toLowerCase()));
+	if (debouncedSearchQuery) {
+		filteredServices = filteredServices.filter((s) =>
+			s.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase()),
+		);
 	}
 	if (activePriceRange) {
 		filteredServices = filteredServices.filter(

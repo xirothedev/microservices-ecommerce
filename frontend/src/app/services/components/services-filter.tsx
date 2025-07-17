@@ -4,10 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import axiosInstance from "@/lib/axios";
+import { useFilterStore } from "@/store/use-filter-store";
 import { useQuery } from "@tanstack/react-query";
 import { Filter, Search, X } from "lucide-react";
 import { useState } from "react";
-import { useFilterStore } from "@/store/use-filter-store";
 
 interface Category {
 	id: string;
