@@ -1,7 +1,7 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { Request } from 'express';
-import { Prisma } from 'prisma/generated';
+import { Prisma } from '@prisma/generated';
 import { SupabaseService } from '@/supabase/supabase.service';
 import { UpdateUserByAdmin } from './dto/update-user-by-admin-input.dto';
 import { UpdateUserInput } from './dto/update-user-input.dto';

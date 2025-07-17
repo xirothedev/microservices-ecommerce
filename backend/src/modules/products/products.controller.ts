@@ -1,11 +1,12 @@
+import { Public } from '@/common/decorators/public.decorator';
 import { Roles } from '@/common/decorators/role.decorator';
 import { MediasInterceptor } from '@/common/interceptors/media.interceptor';
-import { Body, Controller, Post, Put, Get, Delete, Param, Req, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseInterceptors } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsService } from './products.service';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
 
 @ApiTags('Products')
 @ApiBearerAuth()
@@ -23,6 +24,15 @@ export class ProductsController {
     return this.productsService.create(req, body, medias);
   }
 
+  @Get()
+  @Public()
+  @ApiOperation({ summary: 'Get all products' })
+  @ApiResponse({ status: 200, description: 'List of all products' })
+  findAll() {
+    return this.productsService.findAll();
+  }
+
+  @Public()
   @Get('seller/:sellerId')
   @ApiOperation({ summary: 'Get all products by seller' })
   @ApiParam({ name: 'sellerId', type: String })
@@ -31,6 +41,7 @@ export class ProductsController {
     return this.productsService.findBySeller(sellerId);
   }
 
+  @Public()
   @Get(':id')
   @ApiOperation({ summary: 'Get product by ID' })
   @ApiParam({ name: 'id', type: String })
@@ -39,6 +50,7 @@ export class ProductsController {
     return this.productsService.findById(id);
   }
 
+  @Public()
   @Put(':id')
   @Roles('SELLER')
   @UseInterceptors(MediasInterceptor('medias'))

@@ -1,6 +1,6 @@
 import { IsEmail, IsEnum, IsMobilePhone, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { MfaType } from 'prisma/generated';
+import { MfaType } from '@prisma/generated';
 
 const MfaTypeWithBackupCode = { ...MfaType, BACKUP_CODE: 'BACKUP_CODE' };
 export type MfaTypeWithBackupCode = MfaType | 'BACKUP_CODE';

@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString, IsStrongPassword, Length } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { MfaType } from 'prisma/generated';
+import { MfaType } from '@prisma/generated';
 
 export class LoginDto {
   @ApiProperty({ example: 'user@example.com', description: 'User email address' })

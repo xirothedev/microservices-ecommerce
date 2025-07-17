@@ -16,6 +16,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { RedisModule } from './redis/redis.module';
 import { SupabaseModule } from './supabase/supabase.module';
 import { ProductsModule } from './modules/products/products.module';
+import { CategoriesModule } from './modules/categories/categories.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { ProductsModule } from './modules/products/products.module';
     SupabaseModule,
     EmailModule,
     ProductsModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [

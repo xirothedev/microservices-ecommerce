@@ -1,147 +1,124 @@
 "use client";
 
+import axiosInstance from "@/lib/axios";
+import { Product } from "@/typings/backend";
+import { useQuery } from "@tanstack/react-query";
+import { motion } from "motion/react";
 import { useState } from "react";
 import ServiceCard from "./service-card";
-import { motion } from "motion/react";
-
-// Mock data - in a real app, this would come from an API
-const services = [
-	{
-		id: 1,
-		title: "Apple ID Premium Setup",
-		description:
-			"Complete Apple ID configuration with enhanced security, region optimization, and family sharing setup.",
-		price: 49,
-		originalPrice: 69,
-		image: "https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=300&width=400",
-		category: "apple",
-		rating: 4.9,
-		reviews: 234,
-		deliveryTime: "24 hours",
-		features: ["2FA Setup", "Region Optimization", "Family Sharing", "iCloud Configuration"],
-		popular: true,
-	},
-	{
-		id: 2,
-		title: "Facebook Business Account",
-		description:
-			"Professional Facebook business account setup with page optimization and advertising configuration.",
-		price: 79,
-		originalPrice: 99,
-		image: "https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=300&width=400",
-		category: "social",
-		rating: 4.8,
-		reviews: 189,
-		deliveryTime: "12 hours",
-		features: ["Business Page", "Ad Account", "Pixel Setup", "Analytics"],
-		popular: false,
-	},
-	{
-		id: 3,
-		title: "YouTube Premium Family",
-		description:
-			"YouTube Premium family plan setup with music integration and ad-free experience for up to 6 members.",
-		price: 29,
-		originalPrice: 39,
-		image: "https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=300&width=400",
-		category: "streaming",
-		rating: 4.7,
-		reviews: 156,
-		deliveryTime: "6 hours",
-		features: ["Family Plan", "YouTube Music", "Ad-Free", "Offline Downloads"],
-		popular: false,
-	},
-	{
-		id: 4,
-		title: "Instagram Growth Package",
-		description: "Complete Instagram account optimization with content strategy and engagement tools setup.",
-		price: 89,
-		originalPrice: 119,
-		image: "https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=300&width=400",
-		category: "social",
-		rating: 4.9,
-		reviews: 298,
-		deliveryTime: "48 hours",
-		features: ["Profile Optimization", "Content Strategy", "Hashtag Research", "Analytics Setup"],
-		popular: true,
-	},
-	{
-		id: 5,
-		title: "Apple Developer Account",
-		description: "Apple Developer Program enrollment with app store setup and certificate configuration.",
-		price: 149,
-		originalPrice: 199,
-		image: "https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=300&width=400",
-		category: "apple",
-		rating: 4.8,
-		reviews: 87,
-		deliveryTime: "72 hours",
-		features: ["Developer Enrollment", "Certificates", "App Store Setup", "Testing Tools"],
-		popular: false,
-	},
-	{
-		id: 6,
-		title: "Netflix Premium Account",
-		description: "Netflix premium subscription setup with 4K streaming and multiple device support.",
-		price: 19,
-		originalPrice: 25,
-		image: "https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=300&width=400",
-		category: "streaming",
-		rating: 4.6,
-		reviews: 445,
-		deliveryTime: "1 hour",
-		features: ["4K Streaming", "Multiple Devices", "Offline Downloads", "Premium Content"],
-		popular: false,
-	},
-	{
-		id: 7,
-		title: "LinkedIn Business Profile",
-		description:
-			"Professional LinkedIn business profile optimization with company page setup and lead generation tools.",
-		price: 69,
-		originalPrice: 89,
-		image: "https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=300&width=400",
-		category: "business",
-		rating: 4.7,
-		reviews: 167,
-		deliveryTime: "24 hours",
-		features: ["Profile Optimization", "Company Page", "Lead Gen Tools", "Analytics"],
-		popular: false,
-	},
-	{
-		id: 8,
-		title: "TikTok Business Account",
-		description: "TikTok business account setup with advertising tools and analytics configuration.",
-		price: 59,
-		originalPrice: 79,
-		image: "https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=300&width=400",
-		category: "social",
-		rating: 4.5,
-		reviews: 123,
-		deliveryTime: "18 hours",
-		features: ["Business Account", "Ad Manager", "Analytics", "Creator Tools"],
-		popular: false,
-	},
-];
+import { useFilterStore } from "@/store/use-filter-store";
 
 export default function ServicesList() {
 	const [visibleServices, setVisibleServices] = useState(6);
 	const [loading, setLoading] = useState(false);
+	const {
+		data: services,
+		isLoading,
+		isError,
+		error,
+	} = useQuery({
+		queryKey: ["products"],
+		queryFn: async () => {
+			const res = await axiosInstance.get<{ data: Product[] }>("/products");
+			return res.data.data;
+		},
+	});
+
+	const { activeCategory, searchQuery, activePriceRange } = useFilterStore();
+
+	// Filter services based on Zustand filter state
+	let filteredServices = services || [];
+	if (activeCategory !== "all") {
+		filteredServices = filteredServices.filter((s) => s.categoryId === activeCategory);
+	}
+	if (searchQuery) {
+		filteredServices = filteredServices.filter((s) => s.name.toLowerCase().includes(searchQuery.toLowerCase()));
+	}
+	if (activePriceRange) {
+		filteredServices = filteredServices.filter(
+			(s) => s.discountPrice >= activePriceRange.min && s.discountPrice <= activePriceRange.max,
+		);
+	}
 
 	const loadMoreServices = async () => {
 		setLoading(true);
 		// Simulate API call
 		await new Promise((resolve) => setTimeout(resolve, 1000));
-		setVisibleServices((prev) => Math.min(prev + 6, services.length));
+		setVisibleServices((prev) => Math.min(prev + 6, filteredServices.length));
 		setLoading(false);
 	};
+
+	// Loading state
+	if (isLoading) {
+		return (
+			<div id="services-list" className="space-y-8">
+				<div className="flex items-center justify-between">
+					<div>
+						<h2 className="text-2xl font-bold text-gray-900">Available Services</h2>
+						<p className="mt-1 text-gray-600">Loading services...</p>
+					</div>
+				</div>
+				<div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+					{Array.from({ length: 6 }).map((_, index) => (
+						<div key={index} className="h-64 animate-pulse rounded-lg bg-gray-200" />
+					))}
+				</div>
+			</div>
+		);
+	}
+
+	// Error state
+	if (isError) {
+		return (
+			<div id="services-list" className="space-y-8">
+				<div className="flex items-center justify-between">
+					<div>
+						<h2 className="text-2xl font-bold text-gray-900">Available Services</h2>
+						<p className="mt-1 text-red-600">Failed to load services</p>
+					</div>
+				</div>
+				<div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
+					<div className="mb-4 text-6xl">⚠️</div>
+					<h3 className="mb-2 text-lg font-semibold text-gray-900">Something went wrong</h3>
+					<p className="mb-4 text-gray-600">
+						{error instanceof Error ? error.message : "Failed to load services"}
+					</p>
+					<button
+						onClick={() => window.location.reload()}
+						className="rounded-lg bg-blue-600 px-6 py-2 font-semibold text-white transition-colors duration-200 hover:bg-blue-700"
+					>
+						Try Again
+					</button>
+				</div>
+			</div>
+		);
+	}
+
+	// No data state
+	if (!filteredServices || filteredServices.length === 0) {
+		return (
+			<div id="services-list" className="space-y-8">
+				<div className="flex items-center justify-between">
+					<div>
+						<h2 className="text-2xl font-bold text-gray-900">Available Services</h2>
+						<p className="mt-1 text-gray-600">No services available</p>
+					</div>
+				</div>
+				<div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
+					<div className="mb-4 text-6xl">📦</div>
+					<h3 className="mb-2 text-lg font-semibold text-gray-900">No services found</h3>
+					<p className="text-gray-600">There are currently no services available. Please check back later.</p>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<div id="services-list" className="space-y-8">
 			<div className="flex items-center justify-between">
 				<div>
 					<h2 className="text-2xl font-bold text-gray-900">Available Services</h2>
-					<p className="mt-1 text-gray-600">{services.length} services available</p>
+					<p className="mt-1 text-gray-600">{filteredServices.length} services available</p>
 				</div>
 			</div>
 
@@ -151,7 +128,7 @@ export default function ServicesList() {
 				animate={{ opacity: 1 }}
 				transition={{ duration: 0.6 }}
 			>
-				{services.slice(0, visibleServices).map((service, index) => (
+				{filteredServices.slice(0, visibleServices).map((service, index) => (
 					<motion.div
 						key={service.id}
 						initial={{ opacity: 0, y: 20 }}
@@ -163,14 +140,16 @@ export default function ServicesList() {
 				))}
 			</motion.div>
 
-			{visibleServices < services.length && (
+			{visibleServices < filteredServices.length && (
 				<div className="pt-8 text-center">
 					<button
 						onClick={loadMoreServices}
 						disabled={loading}
 						className="rounded-lg bg-blue-600 px-8 py-3 font-semibold text-white transition-colors duration-200 hover:bg-blue-700 disabled:opacity-50"
 					>
-						{loading ? "Loading..." : `Load More Services (${services.length - visibleServices} remaining)`}
+						{loading
+							? "Loading..."
+							: `Load More Services (${filteredServices.length - visibleServices} remaining)`}
 					</button>
 				</div>
 			)}

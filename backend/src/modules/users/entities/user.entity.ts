@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { User, UserFlag, UserRole } from 'prisma/generated';
+import { User, UserFlag, UserRole } from '@prisma/generated';
 
 registerEnumType(UserFlag, {
   name: 'UserFlag',

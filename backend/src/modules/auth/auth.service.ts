@@ -16,7 +16,7 @@ import { JwtService } from '@nestjs/jwt';
 import { hash, verify } from 'argon2';
 import { CookieOptions, Request, Response } from 'express';
 import { randomInt } from 'node:crypto';
-import { Authentication, User } from 'prisma/generated';
+import { Authentication, User } from '@prisma/generated';
 import { Payload } from './auth.interface';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { LoginDto } from './dto/login.dto';

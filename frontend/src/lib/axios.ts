@@ -26,7 +26,7 @@ function createAxiosResponseInterceptor() {
 			axios.interceptors.response.eject(interceptor);
 
 			return axiosInstance
-				.get("/auth/refresh")
+				.get("/auth/refresh-token")
 				.then(() => console.log("Refreshed successfully"))
 				.catch((error2) => {
 					// Retry failed, clean up and reject the promise

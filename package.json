@@ -1,5 +1,6 @@
 {
 	"dependencies": {
+		"decimal.js": "^10.6.0",
 		"husky": "^9.1.7"
 	},
 	"scripts": {

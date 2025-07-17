@@ -4,7 +4,7 @@ import { BadRequestException, Injectable, NotFoundException, UnauthorizedExcepti
 import { randomBytes, randomInt } from 'node:crypto';
 import { Request } from 'express';
 import { authenticator } from 'otplib';
-import { MfaSetup, Prisma, User } from 'prisma/generated';
+import { MfaSetup, Prisma, User } from '@prisma/generated';
 import { SetupMfaDto, ToggleMfaDto, VerifyMfaSetupDto } from './dto/setup-mfa.dto';
 import { MfaVerificationDto, RequestMfaCodeDto } from './dto/mfa-verification.dto';
 import { MfaStatus } from './auth.interface';

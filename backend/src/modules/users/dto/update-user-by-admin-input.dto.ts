@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsArray, IsEnum, Max, Min } from 'class-validator';
-import { UserFlag, UserRole } from 'prisma/generated';
+import { UserFlag, UserRole } from '@prisma/generated';
 import { UserQL } from '../entities/user.entity';
 
 export const AssignableUserRole = {

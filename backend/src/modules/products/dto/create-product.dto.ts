@@ -11,7 +11,7 @@ import {
   MaxLength,
   ValidateNested,
 } from 'class-validator';
-import { Product, ProductFlag, ProductItem } from 'prisma/generated';
+import { Product, ProductFlag, ProductItem } from '@prisma/generated';
 
 export class CreateProductDto implements Partial<Product> {
   @IsNotEmpty()

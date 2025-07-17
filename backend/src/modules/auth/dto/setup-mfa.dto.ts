@@ -1,6 +1,6 @@
 import { IsEmail, IsEnum, IsMobilePhone, IsNotEmpty, IsNumberString, IsOptional, Length } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { MfaType } from 'prisma/generated';
+import { MfaType } from '@prisma/generated';
 
 export class SetupMfaDto {
   @ApiProperty({ example: 'TOTP', description: 'Type of MFA', enum: MfaType })

@@ -45,6 +45,7 @@ model User {
   mfaSetups      MfaSetup[]
   ticketAuthor   Ticket[]         @relation("TicketAuthor")
   ticketAssigned Ticket[]         @relation("TicketAssigned")
+  reviews        Review[]
   bills          Bill[]
 }
 
@@ -65,6 +66,7 @@ model Bill {
 }
 
 model CartItem {
+  id        String   @id @default(cuid())
   createAt  DateTime @default(now()) @map("create_at") @db.Timestamptz
   updateAt  DateTime @updatedAt @map("update_at") @db.Timestamptz
   quantity  Int      @default(1) @db.SmallInt
@@ -75,7 +77,7 @@ model CartItem {
   userId    String  @map("user_id") @db.Uuid
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  @@unique([productId, userId], name: "id")
+  @@unique([productId, userId], name: "productUserId")
 }
 
 enum UserRole {

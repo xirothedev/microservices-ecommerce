@@ -1,7 +1,7 @@
 import { toast } from "@/hooks/use-toast";
 import axiosInstance from "@/lib/axios";
 import type { IAxiosError } from "@/typings";
-import type { SafeUser } from "@/typings/user";
+import type { SafeUser } from "@/typings/backend";
 import type { LoginForm } from "@/zods/login";
 import type { SignUpForm } from "@/zods/signup";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -17,7 +17,7 @@ export function useUser() {
 	return useQuery({
 		queryKey: userKeys.me(),
 		queryFn: async () => {
-			const response = await axiosInstance.get("/@me");
+			const response = await axiosInstance.get("/users/@me");
 			return response.data;
 		},
 		staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes

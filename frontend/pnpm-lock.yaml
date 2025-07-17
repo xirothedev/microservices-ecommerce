@@ -135,6 +135,9 @@ importers:
       fluid-tailwind:
         specifier: ^1.0.4
         version: 1.0.4(tailwindcss@4.1.11)
+      next-plugin-devtools-json:
+        specifier: ^3.1.6
+        version: 3.1.6(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
@@ -2411,6 +2414,12 @@ packages:
   negotiator@1.0.0:
     resolution: {integrity: sha512-8Ofs/AUQh8MaEcrlq5xOX0CQ9ypTF5dl78mjlMNfOK08fzpgTHQRQPBxcPlEtIw0yRpws+Zo/3r+5WRby7u3Gg==}
     engines: {node: '>= 0.6'}
+
+  next-plugin-devtools-json@3.1.6:
+    resolution: {integrity: sha512-akPPuFMhYsLONnMBPFdbBuN6hWoCsKQ98n+auA82wFPQbHd9Byfuq18WgCxh3jODuxsSPL0x8cJJfcLP8csTDA==}
+    hasBin: true
+    peerDependencies:
+      next: '>=12.0.0'
 
   next-themes@0.4.6:
     resolution: {integrity: sha512-pZvgD5L0IEvX5/9GWyHMf3m8BKiVQwsCMHfoFosXtXBMnaS0ZnIJ9ST4b4NqLVKDEm8QBxoNNGNaBv2JNF6XNA==}
@@ -5408,6 +5417,10 @@ snapshots:
   natural-compare@1.4.0: {}
 
   negotiator@1.0.0: {}
+
+  next-plugin-devtools-json@3.1.6(next@15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)):
+    dependencies:
+      next: 15.3.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
 
   next-themes@0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:

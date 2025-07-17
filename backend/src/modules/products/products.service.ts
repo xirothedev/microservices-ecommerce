@@ -2,7 +2,7 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { SupabaseService } from '@/supabase/supabase.service';
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { Request } from 'express';
-import { Prisma } from 'prisma/generated';
+import { Prisma } from '@prisma/generated';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 
@@ -201,6 +201,29 @@ export class ProductsService {
 
     return {
       message: 'Get seller products successful',
+      data: products,
+    };
+  }
+
+  public async findAll() {
+    const products = await this.prismaService.product.findMany({
+      include: {
+        productItems: true,
+        category: true,
+        seller: {
+          select: {
+            id: true,
+            fullname: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: {
+        createAt: 'desc',
+      },
+    });
+    return {
+      message: 'Get all products successful',
       data: products,
     };
   }
