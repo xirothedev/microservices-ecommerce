@@ -1,12 +1,13 @@
 import { Public } from '@/common/decorators/public.decorator';
 import { Roles } from '@/common/decorators/role.decorator';
 import { MediasInterceptor } from '@/common/interceptors/media.interceptor';
-import { Body, Controller, Delete, Get, Param, Post, Put, Req, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseInterceptors } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsService } from './products.service';
+import { FindAllProductDto } from './dto/find-all-product.dto';
 
 @ApiTags('Products')
 @ApiBearerAuth()
@@ -28,8 +29,8 @@ export class ProductsController {
   @Public()
   @ApiOperation({ summary: 'Get all products' })
   @ApiResponse({ status: 200, description: 'List of all products' })
-  findAll() {
-    return this.productsService.findAll();
+  findAll(@Query() query: FindAllProductDto) {
+    return this.productsService.findAll(query);
   }
 
   @Public()

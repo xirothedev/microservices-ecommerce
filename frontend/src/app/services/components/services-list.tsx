@@ -1,35 +1,56 @@
 "use client";
 
-import axiosInstance from "@/lib/axios";
-import { Product } from "@/typings/backend";
-import { useQuery } from "@tanstack/react-query";
-import { motion } from "motion/react";
-import { useState } from "react";
-import ServiceCard from "./service-card";
-import { useFilterStore } from "@/store/use-filter-store";
 import { useDebounce } from "@/hooks/use-debounce";
+import axiosInstance from "@/lib/axios";
+import { useFilterStore } from "@/store/use-filter-store";
+import { IAxiosError } from "@/typings";
+import { Product } from "@/typings/backend";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { motion } from "motion/react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import ServiceCard from "./service-card";
+
+const PAGE_SIZE = 12;
+
+type ProductsApiResponse = {
+	data: Product[];
+	"@data"?: {
+		totalItems: number;
+		nextCursor?: string;
+		hasNextPage?: boolean;
+	};
+};
 
 export default function ServicesList() {
-	const [visibleServices, setVisibleServices] = useState(6);
-	const [loading, setLoading] = useState(false);
-	const {
-		data: services,
-		isLoading,
-		isError,
-		error,
-	} = useQuery({
-		queryKey: ["products"],
-		queryFn: async () => {
-			const res = await axiosInstance.get<{ data: Product[] }>("/products");
-			return res.data.data;
-		},
-	});
-
 	const { activeCategory, searchQuery, activePriceRange } = useFilterStore();
 	const debouncedSearchQuery = useDebounce<string>(searchQuery, 1000);
 
-	// Filter services based on Zustand filter state
-	let filteredServices = services || [];
+	const { data, isLoading, isError, error, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery<
+		ProductsApiResponse,
+		IAxiosError
+	>({
+		queryKey: ["products", activeCategory, debouncedSearchQuery, activePriceRange],
+		queryFn: async ({ pageParam }) => {
+			const params: Record<string, unknown> = { limit: PAGE_SIZE };
+			if (pageParam) params.cursor = pageParam;
+			// Optional: add filter params to API if backend supports
+			// if (activeCategory !== "all") params.categoryId = activeCategory;
+			// if (debouncedSearchQuery) params.search = debouncedSearchQuery;
+			const res = await axiosInstance.get<ProductsApiResponse>("/products", { params });
+			return res.data;
+		},
+		getNextPageParam: (lastPage: ProductsApiResponse) => {
+			return lastPage?.["@data"]?.nextCursor || null;
+		},
+		select: (data) => data,
+		initialPageParam: undefined,
+	});
+
+	// Flatten all loaded products
+	const services: Product[] = (data?.pages || []).flatMap((page: ProductsApiResponse) => page.data || []);
+
+	// Client-side filtering (optional, can move to server-side if needed)
+	let filteredServices = services;
 	if (activeCategory !== "all") {
 		filteredServices = filteredServices.filter((s) => s.categoryId === activeCategory);
 	}
@@ -43,14 +64,6 @@ export default function ServicesList() {
 			(s) => s.discountPrice >= activePriceRange.min && s.discountPrice <= activePriceRange.max,
 		);
 	}
-
-	const loadMoreServices = async () => {
-		setLoading(true);
-		// Simulate API call
-		await new Promise((resolve) => setTimeout(resolve, 1000));
-		setVisibleServices((prev) => Math.min(prev + 6, filteredServices.length));
-		setLoading(false);
-	};
 
 	// Loading state
 	if (isLoading) {
@@ -88,7 +101,7 @@ export default function ServicesList() {
 						{error instanceof Error ? error.message : "Failed to load services"}
 					</p>
 					<button
-						onClick={() => window.location.reload()}
+						onClick={() => refetch()}
 						className="rounded-lg bg-blue-600 px-6 py-2 font-semibold text-white transition-colors duration-200 hover:bg-blue-700"
 					>
 						Try Again
@@ -122,41 +135,35 @@ export default function ServicesList() {
 			<div className="flex items-center justify-between">
 				<div>
 					<h2 className="text-2xl font-bold text-gray-900">Available Services</h2>
-					<p className="mt-1 text-gray-600">{filteredServices.length} services available</p>
+					<p className="mt-1 text-gray-600">{data?.pages[0]["@data"]?.totalItems ?? 0} services available</p>
 				</div>
 			</div>
 
-			<motion.div
-				className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
-				initial={{ opacity: 0 }}
-				animate={{ opacity: 1 }}
-				transition={{ duration: 0.6 }}
+			<InfiniteScroll
+				dataLength={filteredServices.length}
+				next={fetchNextPage}
+				hasMore={!!hasNextPage}
+				loader={<div className="py-4 text-center text-gray-500">Loading...</div>}
+				scrollThreshold={0.9}
 			>
-				{filteredServices.slice(0, visibleServices).map((service, index) => (
-					<motion.div
-						key={service.id}
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.6, delay: index * 0.1 }}
-					>
-						<ServiceCard service={service} />
-					</motion.div>
-				))}
-			</motion.div>
-
-			{visibleServices < filteredServices.length && (
-				<div className="pt-8 text-center">
-					<button
-						onClick={loadMoreServices}
-						disabled={loading}
-						className="rounded-lg bg-blue-600 px-8 py-3 font-semibold text-white transition-colors duration-200 hover:bg-blue-700 disabled:opacity-50"
-					>
-						{loading
-							? "Loading..."
-							: `Load More Services (${filteredServices.length - visibleServices} remaining)`}
-					</button>
-				</div>
-			)}
+				<motion.div
+					className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					transition={{ duration: 0.6 }}
+				>
+					{filteredServices.map((service, index) => (
+						<motion.div
+							key={service.id}
+							initial={{ opacity: 0, y: 20 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.6, delay: index * 0.1 }}
+						>
+							<ServiceCard service={service} />
+						</motion.div>
+					))}
+				</motion.div>
+			</InfiniteScroll>
 		</div>
 	);
 }

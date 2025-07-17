@@ -5,6 +5,7 @@ import { Request } from 'express';
 import { Prisma } from '@prisma/generated';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { FindAllProductDto } from './dto/find-all-product.dto';
 
 @Injectable()
 export class ProductsService {
@@ -205,7 +206,19 @@ export class ProductsService {
     };
   }
 
-  public async findAll() {
+  public async findAll(query: FindAllProductDto) {
+    const { page, limit, cursor } = query;
+    const take = limit ?? 20;
+    let skip: number | undefined = undefined;
+    let cursorObj: Prisma.ProductWhereUniqueInput | undefined = undefined;
+
+    if (cursor) {
+      cursorObj = { id: cursor };
+      skip = 1; // skip the cursor itself
+    } else if (page && page > 1) {
+      skip = (page - 1) * take;
+    }
+
     const products = await this.prismaService.product.findMany({
       include: {
         productItems: true,
@@ -214,17 +227,37 @@ export class ProductsService {
           select: {
             id: true,
             fullname: true,
-            email: true,
           },
         },
       },
       orderBy: {
         createAt: 'desc',
       },
+      take: take + 1, // fetch one extra to check if there's a next page
+      skip,
+      ...(cursorObj && { cursor: cursorObj }),
     });
+
+    const totalItems = await this.prismaService.product.count();
+
+    let nextCursor: string | null = null;
+    let hasNextPage = false;
+    let result = products;
+    if (products.length > take) {
+      hasNextPage = true;
+      const nextItem = products[take];
+      nextCursor = nextItem.id;
+      result = products.slice(0, take);
+    }
+
     return {
       message: 'Get all products successful',
-      data: products,
+      data: result,
+      '@data': {
+        totalItems,
+        nextCursor,
+        hasNextPage,
+      },
     };
   }
 

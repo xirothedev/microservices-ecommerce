@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Star, Clock, ShoppingCart, Heart, Check, X, ArrowLeft, ArrowRight } from "lucide-react";
 import { useCart } from "@/hooks/use-cart";
 import { Product } from "@/typings/backend";
+import { ArrowLeft, ArrowRight, Check, Heart, ShoppingCart, Star, X } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
 
 interface ServiceDetailModalProps {
 	service: Product;
