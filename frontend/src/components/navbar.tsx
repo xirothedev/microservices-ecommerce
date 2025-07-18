@@ -7,6 +7,7 @@ import { Menu, Smartphone } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import Cart from "./cart";
+import { useUser } from "@/hooks/use-auth";
 
 interface NavbarProps {
 	navItems: { name: string; href: string }[];
@@ -14,7 +15,7 @@ interface NavbarProps {
 
 export default function Navbar({ navItems }: NavbarProps) {
 	const [isOpen, setIsOpen] = useState(false);
-	const [isLoggedIn, setIsLoggedIn] = useState(false); // Simulate auth state
+	const { data } = useUser();
 
 	return (
 		<nav className="bg-color-100 fixed top-0 z-50 w-full border-b shadow-md backdrop-blur-sm transition-colors">
@@ -38,7 +39,7 @@ export default function Navbar({ navItems }: NavbarProps) {
 						))}
 						<div className="flex items-center space-x-2">
 							<Cart />
-							{isLoggedIn ? (
+							{data ? (
 								<Avatar>
 									<Link href="/profile">
 										<AvatarFallback>U</AvatarFallback>
@@ -79,7 +80,7 @@ export default function Navbar({ navItems }: NavbarProps) {
 								<div className="flex items-center justify-center gap-4 py-4">
 									<Cart />
 								</div>
-								{isLoggedIn ? (
+								{data ? (
 									<Avatar>
 										<Link href="/profile">
 											<AvatarFallback>U</AvatarFallback>
@@ -87,13 +88,8 @@ export default function Navbar({ navItems }: NavbarProps) {
 									</Avatar>
 								) : (
 									<>
-										<Button
-											className="mt-4 bg-blue-600 hover:bg-blue-700"
-											onClick={() => setIsLoggedIn(true)}
-										>
-											Register
-										</Button>
-										<Button className="mt-4" variant="outline" onClick={() => setIsLoggedIn(true)}>
+										<Button className="mt-4 bg-blue-600 hover:bg-blue-700">Register</Button>
+										<Button className="mt-4" variant="outline">
 											Login
 										</Button>
 									</>

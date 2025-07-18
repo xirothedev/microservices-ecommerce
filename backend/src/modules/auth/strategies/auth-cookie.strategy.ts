@@ -29,7 +29,7 @@ export class AuthCookieStrategy extends PassportStrategy(Strategy, 'auth-cookie'
 
     try {
       payload = this.jwtService.verify(accessToken, {
-        secret: this.config.getOrThrow<string>('jwt.secret'),
+        secret: this.config.getOrThrow<string>('ACCESS_TOKEN_SECRET_KEY'),
       });
     } catch {
       throw new UnauthorizedException('Invalid or expired access token');

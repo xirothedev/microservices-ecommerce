@@ -1,5 +1,6 @@
 import { toast } from "@/hooks/use-toast";
 import axiosInstance from "@/lib/axios";
+import { fetchGraphQL } from "@/lib/fetchGraphQL";
 import type { IAxiosError } from "@/typings";
 import type { SafeUser } from "@/typings/backend";
 import type { LoginForm } from "@/zods/login";
@@ -7,19 +8,31 @@ import type { SignUpForm } from "@/zods/signup";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
-// Query key for user data
-export const userKeys = {
-	all: ["user"] as const,
-	me: () => [...userKeys.all, "me"] as const,
-};
-
 export function useUser() {
 	return useQuery({
-		queryKey: userKeys.me(),
-		queryFn: async () => {
-			const response = await axiosInstance.get("/users/@me");
-			return response.data;
-		},
+		queryKey: [],
+		queryFn: () =>
+			fetchGraphQL(`
+        query Me {
+          me {
+            address
+            avatarUrl
+            city
+            createAt
+            credit
+            email
+            flags
+            fullname
+            id
+            isVerified
+            phone
+            roles
+            state
+            updateAt
+            zipCode
+          }
+        }
+      `),
 		staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
 	});
 }

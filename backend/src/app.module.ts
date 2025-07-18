@@ -4,20 +4,21 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { join } from 'node:path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ContextThrottlerGuard } from './common/guards/context-throttler.guard';
 import { EmailModule } from './email/email.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthCookieGuard } from './modules/auth/guards/auth-cookie.guard';
+import { CartModule } from './modules/cart/cart.module';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { ProductsModule } from './modules/products/products.module';
 import { UsersModule } from './modules/users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RedisModule } from './redis/redis.module';
 import { SupabaseModule } from './supabase/supabase.module';
-import { ProductsModule } from './modules/products/products.module';
-import { CategoriesModule } from './modules/categories/categories.module';
-import { CartModule } from './modules/cart/cart.module';
 
 @Module({
   imports: [
@@ -30,6 +31,14 @@ import { CartModule } from './modules/cart/cart.module';
       sortSchema: true,
       playground: false,
       introspection: true,
+      context: ({ req, res, connection }) => {
+        if (connection) {
+          // For subscriptions (WebSocket)
+          return { req: connection.context };
+        }
+        // For HTTP requests
+        return { req, res };
+      },
       // https://docs.nestjs.com/graphql/subscriptions#authentication-over-websockets
       subscriptions: {
         'graphql-ws': {
@@ -53,7 +62,7 @@ import { CartModule } from './modules/cart/cart.module';
     AppService,
     {
       provide: APP_GUARD,
-      useClass: ThrottlerGuard,
+      useClass: ContextThrottlerGuard,
     },
     {
       provide: APP_GUARD,

@@ -48,7 +48,7 @@ export class UserQL implements Partial<User> {
   flags: UserFlag[];
 
   @Field()
-  createdAt: Date;
+  createAt: Date;
 
   @Field()
   updateAt: Date;

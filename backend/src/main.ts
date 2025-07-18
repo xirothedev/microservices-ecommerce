@@ -1,13 +1,16 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { useContainer } from 'class-validator';
 import * as compression from 'compression';
 import * as cookieParser from 'cookie-parser';
 import helmet from 'helmet';
+import * as passport from 'passport';
 import 'reflect-metadata';
-import { ValidationPipe } from '@nestjs/common';
+import { AppModule } from './app.module';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
-import { useContainer } from 'class-validator';
+import * as session from 'express-session';
 
 // Swagger config
 const swaggerConfig = new DocumentBuilder()
@@ -40,7 +43,7 @@ const corsConfig = {
 };
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: corsConfig });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { cors: corsConfig });
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
@@ -56,6 +59,20 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, documentFactory);
 
   // Middleware
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET!,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 1000 * 60 * 60 * 24, // 1 day
+      },
+    }),
+  );
+  app.use(passport.initialize());
+  app.use(passport.session());
   app.use(cookieParser(process.env.COOKIE_SECRET));
   app.use(helmet(helmetConfig));
   app.use(compression());

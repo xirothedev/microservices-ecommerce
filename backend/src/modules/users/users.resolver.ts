@@ -1,7 +1,6 @@
 import { Roles } from '@/common/decorators/role.decorator';
-import { Req } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Request } from 'express';
+import { GqlContext } from '@/typings/gql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UpdateUserByAdmin } from './dto/update-user-by-admin-input.dto';
 import { UpdateUserInput } from './dto/update-user-input.dto';
 import { UserQL } from './entities/user.entity';
@@ -12,8 +11,8 @@ export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
   @Query(() => UserQL, { name: 'me' })
-  findMe(@Req() req: Request) {
-    return req.user;
+  findMe(@Context() context: GqlContext) {
+    return context.req.user;
   }
 
   @Roles('ADMINISTRATOR', 'SUPPORTER')
