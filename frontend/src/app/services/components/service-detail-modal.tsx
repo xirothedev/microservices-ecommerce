@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCart } from "@/hooks/use-cart";
 import { Product } from "@/typings/backend";
-import { ArrowLeft, ArrowRight, Check, Heart, ShoppingCart, Star, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Heart, Minus, Plus, ShoppingCart, Star } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -36,15 +36,9 @@ export default function ServiceDetailModal({ service, isOpen, onClose, isAddingT
 		setCurrentImageIndex((prev) => (prev - 1 + gallery.length) % gallery.length);
 	};
 
-	// const handleAddToCart = () => {
-	// 	for (let i = 0; i < quantity; i++) {
-	// 		onAddToCart();
-	// 	}
-	// };
-
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
-			<DialogContent className="max-h-[90vh] max-w-4xl overflow-y-auto">
+			<DialogContent className="max-h-[90vh] w-full overflow-y-auto lg:max-w-5xl">
 				<DialogHeader>
 					<DialogTitle className="text-2xl font-bold">{service.name}</DialogTitle>
 				</DialogHeader>
@@ -156,19 +150,21 @@ export default function ServiceDetailModal({ service, isOpen, onClose, isAddingT
 						{/* Quantity Selector */}
 						<div className="flex items-center gap-4">
 							<span className="text-sm font-medium">Quantity:</span>
-							<div className="flex items-center rounded-lg border">
+							<div className="flex items-center rounded-lg border px-1">
 								<button
+									type="button"
 									onClick={() => setQuantity(Math.max(1, quantity - 1))}
-									className="p-2 transition-colors hover:bg-gray-100"
+									className="cursor-pointer rounded-md p-2 transition-colors hover:bg-gray-100"
 								>
-									<X className="h-4 w-4" />
+									<Minus className="h-4 w-4" />
 								</button>
 								<span className="min-w-[3rem] px-4 py-2 text-center">{quantity}</span>
 								<button
+									type="button"
 									onClick={() => setQuantity(quantity + 1)}
-									className="p-2 transition-colors hover:bg-gray-100"
+									className="cursor-pointer rounded-md p-2 transition-colors hover:bg-gray-100"
 								>
-									<Check className="h-4 w-4" />
+									<Plus className="h-4 w-4" />
 								</button>
 							</div>
 						</div>
@@ -196,10 +192,18 @@ export default function ServiceDetailModal({ service, isOpen, onClose, isAddingT
 						{/* Detailed Information Tabs */}
 						<Tabs defaultValue="features" className="w-full">
 							<TabsList className="grid w-full grid-cols-4">
-								<TabsTrigger value="features">Features</TabsTrigger>
-								<TabsTrigger value="specs">Specs</TabsTrigger>
-								<TabsTrigger value="requirements">Requirements</TabsTrigger>
-								<TabsTrigger value="included">What&apos;s Included</TabsTrigger>
+								<TabsTrigger className="cursor-pointer" value="features">
+									Features
+								</TabsTrigger>
+								<TabsTrigger className="cursor-pointer" value="specs">
+									Specs
+								</TabsTrigger>
+								<TabsTrigger className="cursor-pointer" value="requirements">
+									Requirement
+								</TabsTrigger>
+								<TabsTrigger className="cursor-pointer" value="included">
+									Included
+								</TabsTrigger>
 							</TabsList>
 
 							<TabsContent value="features" className="space-y-3">
