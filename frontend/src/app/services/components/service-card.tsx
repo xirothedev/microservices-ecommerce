@@ -2,10 +2,10 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useCart } from "@/hooks/use-cart";
 import { Product } from "@/typings/backend";
-import { ArrowRight, Eye, ShoppingCart, Star } from "lucide-react";
+import { Eye, ShoppingCart, Star } from "lucide-react";
 import { motion } from "motion/react";
 import Image from "next/image";
 import { useState } from "react";
