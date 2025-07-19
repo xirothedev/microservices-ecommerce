@@ -7,7 +7,7 @@ import { Menu, Smartphone } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import Cart from "./cart";
-import { useUser } from "@/hooks/use-auth";
+import { useUser } from "@/hooks/use-user";
 
 interface NavbarProps {
 	navItems: { name: string; href: string }[];

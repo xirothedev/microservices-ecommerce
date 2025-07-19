@@ -1,13 +1,11 @@
 "use client";
 
-import { useUser } from "@/hooks/use-auth";
+import { useUser } from "@/hooks/use-user";
 import type { ReactNode } from "react";
 
 export default function UserProvider({ children }: { children: ReactNode }) {
 	// This will trigger the query and cache the result
-	const { data } = useUser();
-
-	console.log(data);
+	useUser();
 
 	return <>{children}</>;
 }

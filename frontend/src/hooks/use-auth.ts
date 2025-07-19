@@ -1,30 +1,11 @@
 import { toast } from "@/hooks/use-toast";
 import axiosInstance from "@/lib/axios";
-import { fetchGraphQL } from "@/lib/fetchGraphQL";
 import type { IAxiosError } from "@/typings";
 import type { SafeUser } from "@/typings/backend";
 import type { LoginForm } from "@/zods/login";
 import type { SignUpForm } from "@/zods/signup";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-
-export function useUser() {
-	return useQuery({
-		queryKey: [],
-		queryFn: () =>
-			fetchGraphQL(`
-        query Me {
-          me { address avatarUrl city createAt credit email flags fullname id isVerified phone roles state updateAt zipCode 
-            cart { createAt id productId quantity unitPrice updateAt userId 
-              product { categoryId createAt description discountPrice flags id isActive medias name originalPrice sellerId sku slug sold stock tags updateAt
-              }
-            }
-          }
-        }
-      `),
-		staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
-	});
-}
 
 export function useLogin() {
 	const router = useRouter();
@@ -41,7 +22,7 @@ export function useLogin() {
 			});
 			// Wait for cookies to be set - consider increasing timeout for slower environments
 			setTimeout(() => {
-				router.push("/dashboard");
+				router.push("/services");
 			}, 250);
 		},
 		onError: (error: unknown) => {

@@ -64,9 +64,7 @@ interface ProfileSidebarProps {
 
 export default function ProfileSidebar({ setSidebarOpen }: ProfileSidebarProps) {
 	const path = usePathname();
-
 	const activePage = path.split("/")[2] ?? "";
-	console.log(activePage);
 
 	return (
 		<Card className="sticky top-24 h-fit">

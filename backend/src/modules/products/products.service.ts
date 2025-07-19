@@ -305,7 +305,15 @@ export class ProductsService {
         where: { id: productId },
       });
 
-      return product;
+      const avgResult = await this.prismaService.review.aggregate({
+        where: { productId },
+        _avg: { rating: true },
+      });
+
+      return {
+        ...product,
+        averageRating: avgResult._avg.rating,
+      };
     } catch {
       throw new NotFoundException('Product not found');
     }

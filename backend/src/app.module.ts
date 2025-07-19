@@ -45,6 +45,13 @@ import { SupabaseModule } from './supabase/supabase.module';
           path: '/graphql',
         },
       },
+      formatError: (error) => {
+        return {
+          message: error.message,
+          path: error.path,
+          name: error.extensions?.code,
+        };
+      },
       definitions: {
         path: join(process.cwd(), 'src/graphql.ts'),
         outputAs: 'class',

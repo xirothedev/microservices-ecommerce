@@ -66,6 +66,7 @@ export abstract class IMutation {
 }
 
 export class ProductQL {
+  averageRating: number;
   categoryId: string;
   createAt: DateTime;
   description: string;

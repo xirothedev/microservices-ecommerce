@@ -29,6 +29,9 @@ export class ProductQL implements Partial<Product> {
   description: string;
 
   @Field()
+  averageRating: number;
+
+  @Field()
   slug: string;
 
   @Field()

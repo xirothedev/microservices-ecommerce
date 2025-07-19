@@ -3,8 +3,10 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useCart } from "@/hooks/use-cart";
+import { toast } from "@/hooks/use-toast";
+import axiosInstance from "@/lib/axios";
 import { Product } from "@/typings/backend";
+import { useMutation } from "@tanstack/react-query";
 import { Eye, ShoppingCart, Star } from "lucide-react";
 import { motion } from "motion/react";
 import Image from "next/image";
@@ -12,18 +14,26 @@ import { useState } from "react";
 import ServiceDetailModal from "./service-detail-modal";
 
 interface ServiceCardProps {
-	service: Product;
+	service: Product & { averageRating: number };
 }
 
 export default function ServiceCard({ service }: ServiceCardProps) {
 	const [imageLoaded, setImageLoaded] = useState(false);
 	const [showDetailModal, setShowDetailModal] = useState(false);
-	const [isAddingToCart, setIsAddingToCart] = useState(false);
 
-	const { addToCart, isInCart, getCartItemQuantity } = useCart();
+	// const { data } = useUser();
+	const { mutate, isPending } = useMutation({
+		mutationFn: async (productId: string) => {
+			const res = await axiosInstance.post("/cart/add", { productId, quantity: 1 });
+			return res.data;
+		},
+		onSuccess: () => {
+			toast({ title: "Added product to cart" });
+		},
+	});
 
 	const discount = Math.round(((service.originalPrice - service.discountPrice) / service.originalPrice) * 100);
-	const cartQuantity = getCartItemQuantity(service.id);
+	const cartQuantity = 1;
 
 	const handleViewDetails = () => {
 		setShowDetailModal(true);
@@ -70,9 +80,14 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 								<Eye className="mr-2 h-4 w-4" />
 								Quick View
 							</Button>
-							<Button disabled={isAddingToCart} className="bg-blue-600 hover:bg-blue-700" size="sm">
+							<Button
+								onClick={() => mutate(service.id)}
+								disabled={isPending}
+								className="bg-blue-600 hover:bg-blue-700"
+								size="sm"
+							>
 								<ShoppingCart className="mr-2 h-4 w-4" />
-								{isAddingToCart ? "Adding..." : "Add to Cart"}
+								{isPending ? "Adding..." : "Add to Cart"}
 							</Button>
 						</div>
 					</div>
@@ -129,7 +144,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 				service={service}
 				isOpen={showDetailModal}
 				onClose={() => setShowDetailModal(false)}
-				isAddingToCart={isAddingToCart}
+				isAddingToCart={isPending}
 			/>
 		</>
 	);
