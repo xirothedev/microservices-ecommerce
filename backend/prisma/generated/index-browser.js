@@ -188,7 +188,6 @@ exports.Prisma.ProductScalarFieldEnum = {
   flags: 'flags',
   originalPrice: 'originalPrice',
   discountPrice: 'discountPrice',
-  averageRating: 'averageRating',
   tags: 'tags',
   medias: 'medias',
   categoryId: 'categoryId',

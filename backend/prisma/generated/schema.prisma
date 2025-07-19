@@ -106,7 +106,6 @@ model Product {
   flags         ProductFlag[]
   originalPrice Int           @map("original_price") @db.Integer
   discountPrice Int           @map("discount_price") @db.Integer
-  averageRating Decimal?      @default(0.0) @map("average_rating") @db.Decimal(2, 1)
   tags          String[]      @db.VarChar(100)
   medias        String[]      @db.VarChar(500)
 

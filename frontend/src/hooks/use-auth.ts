@@ -14,22 +14,11 @@ export function useUser() {
 		queryFn: () =>
 			fetchGraphQL(`
         query Me {
-          me {
-            address
-            avatarUrl
-            city
-            createAt
-            credit
-            email
-            flags
-            fullname
-            id
-            isVerified
-            phone
-            roles
-            state
-            updateAt
-            zipCode
+          me { address avatarUrl city createAt credit email flags fullname id isVerified phone roles state updateAt zipCode 
+            cart { createAt id productId quantity unitPrice updateAt userId 
+              product { categoryId createAt description discountPrice flags id isActive medias name originalPrice sellerId sku slug sold stock tags updateAt
+              }
+            }
           }
         }
       `),

@@ -1,8 +1,8 @@
 import { PrismaService } from '@/prisma/prisma.service';
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { Request } from 'express';
-import { Prisma } from '@prisma/generated';
 import { SupabaseService } from '@/supabase/supabase.service';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { Prisma } from '@prisma/generated';
+import { Request } from 'express';
 import { UpdateUserByAdmin } from './dto/update-user-by-admin-input.dto';
 import { UpdateUserInput } from './dto/update-user-input.dto';
 
@@ -22,7 +22,7 @@ export class UsersService {
 
       return user;
     } catch {
-      throw new NotFoundException({ message: 'User not found' });
+      throw new NotFoundException('User not found');
     }
   }
 

@@ -9858,7 +9858,6 @@ export namespace Prisma {
     sold: number | null;
     originalPrice: number | null;
     discountPrice: number | null;
-    averageRating: Decimal | null;
   };
 
   export type ProductSumAggregateOutputType = {
@@ -9866,7 +9865,6 @@ export namespace Prisma {
     sold: number | null;
     originalPrice: number | null;
     discountPrice: number | null;
-    averageRating: Decimal | null;
   };
 
   export type ProductMinAggregateOutputType = {
@@ -9882,7 +9880,6 @@ export namespace Prisma {
     sold: number | null;
     originalPrice: number | null;
     discountPrice: number | null;
-    averageRating: Decimal | null;
     categoryId: string | null;
     sellerId: string | null;
   };
@@ -9900,7 +9897,6 @@ export namespace Prisma {
     sold: number | null;
     originalPrice: number | null;
     discountPrice: number | null;
-    averageRating: Decimal | null;
     categoryId: string | null;
     sellerId: string | null;
   };
@@ -9919,7 +9915,6 @@ export namespace Prisma {
     flags: number;
     originalPrice: number;
     discountPrice: number;
-    averageRating: number;
     tags: number;
     medias: number;
     categoryId: number;
@@ -9932,7 +9927,6 @@ export namespace Prisma {
     sold?: true;
     originalPrice?: true;
     discountPrice?: true;
-    averageRating?: true;
   };
 
   export type ProductSumAggregateInputType = {
@@ -9940,7 +9934,6 @@ export namespace Prisma {
     sold?: true;
     originalPrice?: true;
     discountPrice?: true;
-    averageRating?: true;
   };
 
   export type ProductMinAggregateInputType = {
@@ -9956,7 +9949,6 @@ export namespace Prisma {
     sold?: true;
     originalPrice?: true;
     discountPrice?: true;
-    averageRating?: true;
     categoryId?: true;
     sellerId?: true;
   };
@@ -9974,7 +9966,6 @@ export namespace Prisma {
     sold?: true;
     originalPrice?: true;
     discountPrice?: true;
-    averageRating?: true;
     categoryId?: true;
     sellerId?: true;
   };
@@ -9993,7 +9984,6 @@ export namespace Prisma {
     flags?: true;
     originalPrice?: true;
     discountPrice?: true;
-    averageRating?: true;
     tags?: true;
     medias?: true;
     categoryId?: true;
@@ -10098,7 +10088,6 @@ export namespace Prisma {
     flags: $Enums.ProductFlag[];
     originalPrice: number;
     discountPrice: number;
-    averageRating: Decimal | null;
     tags: string[];
     medias: string[];
     categoryId: string;
@@ -10137,7 +10126,6 @@ export namespace Prisma {
       flags?: boolean;
       originalPrice?: boolean;
       discountPrice?: boolean;
-      averageRating?: boolean;
       tags?: boolean;
       medias?: boolean;
       categoryId?: boolean;
@@ -10169,7 +10157,6 @@ export namespace Prisma {
         flags?: boolean;
         originalPrice?: boolean;
         discountPrice?: boolean;
-        averageRating?: boolean;
         tags?: boolean;
         medias?: boolean;
         categoryId?: boolean;
@@ -10196,7 +10183,6 @@ export namespace Prisma {
         flags?: boolean;
         originalPrice?: boolean;
         discountPrice?: boolean;
-        averageRating?: boolean;
         tags?: boolean;
         medias?: boolean;
         categoryId?: boolean;
@@ -10221,7 +10207,6 @@ export namespace Prisma {
     flags?: boolean;
     originalPrice?: boolean;
     discountPrice?: boolean;
-    averageRating?: boolean;
     tags?: boolean;
     medias?: boolean;
     categoryId?: boolean;
@@ -10242,7 +10227,6 @@ export namespace Prisma {
     | 'flags'
     | 'originalPrice'
     | 'discountPrice'
-    | 'averageRating'
     | 'tags'
     | 'medias'
     | 'categoryId'
@@ -10292,7 +10276,6 @@ export namespace Prisma {
         flags: $Enums.ProductFlag[];
         originalPrice: number;
         discountPrice: number;
-        averageRating: Prisma.Decimal | null;
         tags: string[];
         medias: string[];
         categoryId: string;
@@ -10851,7 +10834,6 @@ export namespace Prisma {
     readonly flags: FieldRef<'Product', 'ProductFlag[]'>;
     readonly originalPrice: FieldRef<'Product', 'Int'>;
     readonly discountPrice: FieldRef<'Product', 'Int'>;
-    readonly averageRating: FieldRef<'Product', 'Decimal'>;
     readonly tags: FieldRef<'Product', 'String[]'>;
     readonly medias: FieldRef<'Product', 'String[]'>;
     readonly categoryId: FieldRef<'Product', 'String'>;
@@ -20618,7 +20600,6 @@ export namespace Prisma {
     flags: 'flags';
     originalPrice: 'originalPrice';
     discountPrice: 'discountPrice';
-    averageRating: 'averageRating';
     tags: 'tags';
     medias: 'medias';
     categoryId: 'categoryId';
@@ -21371,7 +21352,6 @@ export namespace Prisma {
     flags?: EnumProductFlagNullableListFilter<'Product'>;
     originalPrice?: IntFilter<'Product'> | number;
     discountPrice?: IntFilter<'Product'> | number;
-    averageRating?: DecimalNullableFilter<'Product'> | Decimal | DecimalJsLike | number | string | null;
     tags?: StringNullableListFilter<'Product'>;
     medias?: StringNullableListFilter<'Product'>;
     categoryId?: UuidFilter<'Product'> | string;
@@ -21398,7 +21378,6 @@ export namespace Prisma {
     flags?: SortOrder;
     originalPrice?: SortOrder;
     discountPrice?: SortOrder;
-    averageRating?: SortOrderInput | SortOrder;
     tags?: SortOrder;
     medias?: SortOrder;
     categoryId?: SortOrder;
@@ -21429,7 +21408,6 @@ export namespace Prisma {
       flags?: EnumProductFlagNullableListFilter<'Product'>;
       originalPrice?: IntFilter<'Product'> | number;
       discountPrice?: IntFilter<'Product'> | number;
-      averageRating?: DecimalNullableFilter<'Product'> | Decimal | DecimalJsLike | number | string | null;
       tags?: StringNullableListFilter<'Product'>;
       medias?: StringNullableListFilter<'Product'>;
       categoryId?: UuidFilter<'Product'> | string;
@@ -21458,7 +21436,6 @@ export namespace Prisma {
     flags?: SortOrder;
     originalPrice?: SortOrder;
     discountPrice?: SortOrder;
-    averageRating?: SortOrderInput | SortOrder;
     tags?: SortOrder;
     medias?: SortOrder;
     categoryId?: SortOrder;
@@ -21487,7 +21464,6 @@ export namespace Prisma {
     flags?: EnumProductFlagNullableListFilter<'Product'>;
     originalPrice?: IntWithAggregatesFilter<'Product'> | number;
     discountPrice?: IntWithAggregatesFilter<'Product'> | number;
-    averageRating?: DecimalNullableWithAggregatesFilter<'Product'> | Decimal | DecimalJsLike | number | string | null;
     tags?: StringNullableListFilter<'Product'>;
     medias?: StringNullableListFilter<'Product'>;
     categoryId?: UuidWithAggregatesFilter<'Product'> | string;
@@ -22519,7 +22495,6 @@ export namespace Prisma {
     flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
     originalPrice: number;
     discountPrice: number;
-    averageRating?: Decimal | DecimalJsLike | number | string | null;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     category: CategoryCreateNestedOneWithoutProductsInput;
@@ -22544,7 +22519,6 @@ export namespace Prisma {
     flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
     originalPrice: number;
     discountPrice: number;
-    averageRating?: Decimal | DecimalJsLike | number | string | null;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     categoryId: string;
@@ -22569,7 +22543,6 @@ export namespace Prisma {
     flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
     originalPrice?: IntFieldUpdateOperationsInput | number;
     discountPrice?: IntFieldUpdateOperationsInput | number;
-    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
@@ -22594,7 +22567,6 @@ export namespace Prisma {
     flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
     originalPrice?: IntFieldUpdateOperationsInput | number;
     discountPrice?: IntFieldUpdateOperationsInput | number;
-    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     categoryId?: StringFieldUpdateOperationsInput | string;
@@ -22619,7 +22591,6 @@ export namespace Prisma {
     flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
     originalPrice: number;
     discountPrice: number;
-    averageRating?: Decimal | DecimalJsLike | number | string | null;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     categoryId: string;
@@ -22640,7 +22611,6 @@ export namespace Prisma {
     flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
     originalPrice?: IntFieldUpdateOperationsInput | number;
     discountPrice?: IntFieldUpdateOperationsInput | number;
-    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
   };
@@ -22659,7 +22629,6 @@ export namespace Prisma {
     flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
     originalPrice?: IntFieldUpdateOperationsInput | number;
     discountPrice?: IntFieldUpdateOperationsInput | number;
-    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     categoryId?: StringFieldUpdateOperationsInput | string;
@@ -23794,17 +23763,6 @@ export namespace Prisma {
     isEmpty?: boolean;
   };
 
-  export type DecimalNullableFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null;
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null;
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null;
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
-    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null;
-  };
-
   export type StringNullableListFilter<$PrismaModel = never> = {
     equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null;
     has?: string | StringFieldRefInput<$PrismaModel> | null;
@@ -23862,7 +23820,6 @@ export namespace Prisma {
     flags?: SortOrder;
     originalPrice?: SortOrder;
     discountPrice?: SortOrder;
-    averageRating?: SortOrder;
     tags?: SortOrder;
     medias?: SortOrder;
     categoryId?: SortOrder;
@@ -23874,7 +23831,6 @@ export namespace Prisma {
     sold?: SortOrder;
     originalPrice?: SortOrder;
     discountPrice?: SortOrder;
-    averageRating?: SortOrder;
   };
 
   export type ProductMaxOrderByAggregateInput = {
@@ -23890,7 +23846,6 @@ export namespace Prisma {
     sold?: SortOrder;
     originalPrice?: SortOrder;
     discountPrice?: SortOrder;
-    averageRating?: SortOrder;
     categoryId?: SortOrder;
     sellerId?: SortOrder;
   };
@@ -23908,7 +23863,6 @@ export namespace Prisma {
     sold?: SortOrder;
     originalPrice?: SortOrder;
     discountPrice?: SortOrder;
-    averageRating?: SortOrder;
     categoryId?: SortOrder;
     sellerId?: SortOrder;
   };
@@ -23918,23 +23872,6 @@ export namespace Prisma {
     sold?: SortOrder;
     originalPrice?: SortOrder;
     discountPrice?: SortOrder;
-    averageRating?: SortOrder;
-  };
-
-  export type DecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null;
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null;
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null;
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
-    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null;
-    _count?: NestedIntNullableFilter<$PrismaModel>;
-    _avg?: NestedDecimalNullableFilter<$PrismaModel>;
-    _sum?: NestedDecimalNullableFilter<$PrismaModel>;
-    _min?: NestedDecimalNullableFilter<$PrismaModel>;
-    _max?: NestedDecimalNullableFilter<$PrismaModel>;
   };
 
   export type OrderItemNullableScalarRelationFilter = {
@@ -24826,14 +24763,6 @@ export namespace Prisma {
   export type ProductUpdateflagsInput = {
     set?: $Enums.ProductFlag[];
     push?: $Enums.ProductFlag | $Enums.ProductFlag[];
-  };
-
-  export type NullableDecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string | null;
-    increment?: Decimal | DecimalJsLike | number | string;
-    decrement?: Decimal | DecimalJsLike | number | string;
-    multiply?: Decimal | DecimalJsLike | number | string;
-    divide?: Decimal | DecimalJsLike | number | string;
   };
 
   export type ProductUpdatetagsInput = {
@@ -26145,33 +26074,6 @@ export namespace Prisma {
     _max?: NestedEnumSelectFromFilter<$PrismaModel>;
   };
 
-  export type NestedDecimalNullableFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null;
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null;
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null;
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
-    not?: NestedDecimalNullableFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null;
-  };
-
-  export type NestedDecimalNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel> | null;
-    in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null;
-    notIn?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel> | null;
-    lt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
-    lte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
-    gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
-    gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
-    not?: NestedDecimalNullableWithAggregatesFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string | null;
-    _count?: NestedIntNullableFilter<$PrismaModel>;
-    _avg?: NestedDecimalNullableFilter<$PrismaModel>;
-    _sum?: NestedDecimalNullableFilter<$PrismaModel>;
-    _min?: NestedDecimalNullableFilter<$PrismaModel>;
-    _max?: NestedDecimalNullableFilter<$PrismaModel>;
-  };
-
   export type NestedDecimalFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>;
@@ -26993,7 +26895,6 @@ export namespace Prisma {
     flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
     originalPrice: number;
     discountPrice: number;
-    averageRating?: Decimal | DecimalJsLike | number | string | null;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     category: CategoryCreateNestedOneWithoutProductsInput;
@@ -27017,7 +26918,6 @@ export namespace Prisma {
     flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
     originalPrice: number;
     discountPrice: number;
-    averageRating?: Decimal | DecimalJsLike | number | string | null;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     categoryId: string;
@@ -27099,7 +26999,6 @@ export namespace Prisma {
     flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
     originalPrice?: IntFieldUpdateOperationsInput | number;
     discountPrice?: IntFieldUpdateOperationsInput | number;
-    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
@@ -27123,7 +27022,6 @@ export namespace Prisma {
     flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
     originalPrice?: IntFieldUpdateOperationsInput | number;
     discountPrice?: IntFieldUpdateOperationsInput | number;
-    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     categoryId?: StringFieldUpdateOperationsInput | string;
@@ -27584,7 +27482,6 @@ export namespace Prisma {
     flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
     originalPrice: number;
     discountPrice: number;
-    averageRating?: Decimal | DecimalJsLike | number | string | null;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     category: CategoryCreateNestedOneWithoutProductsInput;
@@ -27608,7 +27505,6 @@ export namespace Prisma {
     flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
     originalPrice: number;
     discountPrice: number;
-    averageRating?: Decimal | DecimalJsLike | number | string | null;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     categoryId: string;
@@ -27671,7 +27567,6 @@ export namespace Prisma {
     flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
     originalPrice?: IntFieldUpdateOperationsInput | number;
     discountPrice?: IntFieldUpdateOperationsInput | number;
-    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
@@ -27695,7 +27590,6 @@ export namespace Prisma {
     flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
     originalPrice?: IntFieldUpdateOperationsInput | number;
     discountPrice?: IntFieldUpdateOperationsInput | number;
-    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     categoryId?: StringFieldUpdateOperationsInput | string;
@@ -27748,7 +27642,6 @@ export namespace Prisma {
     flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
     originalPrice: number;
     discountPrice: number;
-    averageRating?: Decimal | DecimalJsLike | number | string | null;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     seller: UserCreateNestedOneWithoutProductsInput;
@@ -27772,7 +27665,6 @@ export namespace Prisma {
     flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
     originalPrice: number;
     discountPrice: number;
-    averageRating?: Decimal | DecimalJsLike | number | string | null;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     sellerId: string;
@@ -27825,7 +27717,6 @@ export namespace Prisma {
     flags?: EnumProductFlagNullableListFilter<'Product'>;
     originalPrice?: IntFilter<'Product'> | number;
     discountPrice?: IntFilter<'Product'> | number;
-    averageRating?: DecimalNullableFilter<'Product'> | Decimal | DecimalJsLike | number | string | null;
     tags?: StringNullableListFilter<'Product'>;
     medias?: StringNullableListFilter<'Product'>;
     categoryId?: UuidFilter<'Product'> | string;
@@ -27846,7 +27737,6 @@ export namespace Prisma {
     flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
     originalPrice: number;
     discountPrice: number;
-    averageRating?: Decimal | DecimalJsLike | number | string | null;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     category: CategoryCreateNestedOneWithoutProductsInput;
@@ -27870,7 +27760,6 @@ export namespace Prisma {
     flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
     originalPrice: number;
     discountPrice: number;
-    averageRating?: Decimal | DecimalJsLike | number | string | null;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     categoryId: string;
@@ -27973,7 +27862,6 @@ export namespace Prisma {
     flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
     originalPrice?: IntFieldUpdateOperationsInput | number;
     discountPrice?: IntFieldUpdateOperationsInput | number;
-    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
@@ -27997,7 +27885,6 @@ export namespace Prisma {
     flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
     originalPrice?: IntFieldUpdateOperationsInput | number;
     discountPrice?: IntFieldUpdateOperationsInput | number;
-    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     categoryId?: StringFieldUpdateOperationsInput | string;
@@ -28174,7 +28061,6 @@ export namespace Prisma {
     flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
     originalPrice: number;
     discountPrice: number;
-    averageRating?: Decimal | DecimalJsLike | number | string | null;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     category: CategoryCreateNestedOneWithoutProductsInput;
@@ -28198,7 +28084,6 @@ export namespace Prisma {
     flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
     originalPrice: number;
     discountPrice: number;
-    averageRating?: Decimal | DecimalJsLike | number | string | null;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     categoryId: string;
@@ -28865,7 +28750,6 @@ export namespace Prisma {
     flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
     originalPrice: number;
     discountPrice: number;
-    averageRating?: Decimal | DecimalJsLike | number | string | null;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     category: CategoryCreateNestedOneWithoutProductsInput;
@@ -28889,7 +28773,6 @@ export namespace Prisma {
     flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
     originalPrice: number;
     discountPrice: number;
-    averageRating?: Decimal | DecimalJsLike | number | string | null;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     categoryId: string;
@@ -28992,7 +28875,6 @@ export namespace Prisma {
     flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
     originalPrice?: IntFieldUpdateOperationsInput | number;
     discountPrice?: IntFieldUpdateOperationsInput | number;
-    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
@@ -29016,7 +28898,6 @@ export namespace Prisma {
     flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
     originalPrice?: IntFieldUpdateOperationsInput | number;
     discountPrice?: IntFieldUpdateOperationsInput | number;
-    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     categoryId?: StringFieldUpdateOperationsInput | string;
@@ -29547,7 +29428,6 @@ export namespace Prisma {
     flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
     originalPrice: number;
     discountPrice: number;
-    averageRating?: Decimal | DecimalJsLike | number | string | null;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     sellerId: string;
@@ -29567,7 +29447,6 @@ export namespace Prisma {
     flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
     originalPrice?: IntFieldUpdateOperationsInput | number;
     discountPrice?: IntFieldUpdateOperationsInput | number;
-    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     seller?: UserUpdateOneRequiredWithoutProductsNestedInput;
@@ -29591,7 +29470,6 @@ export namespace Prisma {
     flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
     originalPrice?: IntFieldUpdateOperationsInput | number;
     discountPrice?: IntFieldUpdateOperationsInput | number;
-    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     sellerId?: StringFieldUpdateOperationsInput | string;
@@ -29615,7 +29493,6 @@ export namespace Prisma {
     flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
     originalPrice?: IntFieldUpdateOperationsInput | number;
     discountPrice?: IntFieldUpdateOperationsInput | number;
-    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     sellerId?: StringFieldUpdateOperationsInput | string;
@@ -29662,7 +29539,6 @@ export namespace Prisma {
     flags?: ProductCreateflagsInput | $Enums.ProductFlag[];
     originalPrice: number;
     discountPrice: number;
-    averageRating?: Decimal | DecimalJsLike | number | string | null;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     categoryId: string;
@@ -29834,7 +29710,6 @@ export namespace Prisma {
     flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
     originalPrice?: IntFieldUpdateOperationsInput | number;
     discountPrice?: IntFieldUpdateOperationsInput | number;
-    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
@@ -29858,7 +29733,6 @@ export namespace Prisma {
     flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
     originalPrice?: IntFieldUpdateOperationsInput | number;
     discountPrice?: IntFieldUpdateOperationsInput | number;
-    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     categoryId?: StringFieldUpdateOperationsInput | string;
@@ -29882,7 +29756,6 @@ export namespace Prisma {
     flags?: ProductUpdateflagsInput | $Enums.ProductFlag[];
     originalPrice?: IntFieldUpdateOperationsInput | number;
     discountPrice?: IntFieldUpdateOperationsInput | number;
-    averageRating?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     categoryId?: StringFieldUpdateOperationsInput | string;

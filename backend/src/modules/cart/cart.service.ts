@@ -1,9 +1,10 @@
 import { PrismaService } from '@/prisma/prisma.service';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Request } from 'express';
 import { AddProductCartDto } from './dto/add-product-cart.dto';
 import { Product } from '@prisma/generated';
 import { RemoveProductCartDto } from './dto/remove-product-cart.dto';
+import { UserQL } from '../users/entities/user.entity';
 
 @Injectable()
 export class CartService {
@@ -106,6 +107,16 @@ export class CartService {
         message: 'Decreased product quantity in cart',
         data: cartItem,
       };
+    }
+  }
+
+  public async findCart(user: UserQL) {
+    try {
+      const carts = await this.prismaService.cartItem.findMany({ where: { userId: user.id } });
+
+      return carts;
+    } catch {
+      throw new NotFoundException('Cart not found');
     }
   }
 }

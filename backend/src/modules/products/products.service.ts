@@ -163,25 +163,7 @@ export class ProductsService {
   }
 
   public async findById(productId: string) {
-    const product = await this.prismaService.product.findUnique({
-      where: { id: productId },
-      include: {
-        productItems: true,
-        category: true,
-        seller: {
-          select: {
-            id: true,
-            fullname: true,
-            email: true,
-          },
-        },
-      },
-    });
-
-    if (!product) {
-      throw new NotFoundException('Product not found');
-    }
-
+    const product = await this.getProductById(productId);
     return {
       message: 'Get product successful',
       data: product,
@@ -313,6 +295,19 @@ export class ProductsService {
       }
 
       throw error;
+    }
+  }
+
+  // public handler
+  public async getProductById(productId: string) {
+    try {
+      const product = await this.prismaService.product.findUniqueOrThrow({
+        where: { id: productId },
+      });
+
+      return product;
+    } catch {
+      throw new NotFoundException('Product not found');
     }
   }
 
