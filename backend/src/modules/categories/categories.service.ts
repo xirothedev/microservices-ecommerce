@@ -1,5 +1,5 @@
 import { PrismaService } from '@/prisma/prisma.service';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class CategoriesService {
@@ -27,5 +27,18 @@ export class CategoriesService {
       message: 'Get categories successful',
       data: formatted,
     };
+  }
+
+  public async getCategoryById(id: string) {
+    try {
+      const category = await this.prismaService.category.findUniqueOrThrow({
+        where: { id },
+        select: undefined,
+      });
+
+      return category;
+    } catch {
+      throw new NotFoundException('Category not found');
+    }
   }
 }

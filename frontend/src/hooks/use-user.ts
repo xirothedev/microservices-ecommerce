@@ -1,11 +1,12 @@
 "use client";
 
 import axiosInstance from "@/lib/axios";
+import { UserQuery } from "@/typings/backend";
 import { gql, useQuery } from "@apollo/client";
 import { useEffect } from "react";
 
 export function useUser() {
-	const res = useQuery(
+	const res = useQuery<{ me: UserQuery }>(
 		gql`
 			query Me {
 				me {
@@ -24,40 +25,13 @@ export function useUser() {
 					state
 					updateAt
 					zipCode
-					cart {
-						createAt
-						id
-						productId
-						quantity
-						unitPrice
-						updateAt
-						userId
-						product {
-							categoryId
-							createAt
-							description
-							discountPrice
-							flags
-							id
-							isActive
-							medias
-							name
-							originalPrice
-							sellerId
-							sku
-							slug
-							sold
-							stock
-							tags
-							updateAt
-						}
-					}
 				}
 			}
 		`,
 		{
 			fetchPolicy: "network-only",
 			errorPolicy: "all",
+			ssr: true,
 		},
 	);
 

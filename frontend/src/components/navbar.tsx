@@ -14,7 +14,8 @@ interface NavbarProps {
 }
 
 export default function Navbar({ navItems }: NavbarProps) {
-	const [isOpen, setIsOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState<boolean>(false);
+	const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
 	const { data } = useUser();
 
 	return (
@@ -38,7 +39,7 @@ export default function Navbar({ navItems }: NavbarProps) {
 							</Link>
 						))}
 						<div className="flex items-center space-x-2">
-							<Cart />
+							<Cart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
 							{data ? (
 								<Avatar>
 									<Link href="/profile">
@@ -78,7 +79,7 @@ export default function Navbar({ navItems }: NavbarProps) {
 									</Link>
 								))}
 								<div className="flex items-center justify-center gap-4 py-4">
-									<Cart />
+									<Cart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
 								</div>
 								{data ? (
 									<Avatar>

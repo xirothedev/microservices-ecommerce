@@ -1,3 +1,4 @@
+import { CartItemQL } from '@/modules/cart/entities/cart.entity';
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { User, UserFlag, UserRole } from '@prisma/generated';
 
@@ -55,4 +56,7 @@ export class UserQL implements Partial<User> {
 
   @Field()
   credit: number;
+
+  @Field(() => [CartItemQL])
+  cart: CartItemQL;
 }

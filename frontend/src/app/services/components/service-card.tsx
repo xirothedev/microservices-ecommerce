@@ -3,34 +3,22 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { toast } from "@/hooks/use-toast";
-import axiosInstance from "@/lib/axios";
-import { Product } from "@/typings/backend";
-import { useMutation } from "@tanstack/react-query";
-import { Eye, ShoppingCart, Star } from "lucide-react";
+import { useUpdateCart } from "@/hooks/use-cart";
+import { ProductWithAverageRating } from "@/typings/backend";
 import { motion } from "motion/react";
 import Image from "next/image";
 import { useState } from "react";
 import ServiceDetailModal from "./service-detail-modal";
+import { Eye, ShoppingCart, Star } from "lucide-react";
 
 interface ServiceCardProps {
-	service: Product & { averageRating: number };
+	service: ProductWithAverageRating;
 }
 
 export default function ServiceCard({ service }: ServiceCardProps) {
 	const [imageLoaded, setImageLoaded] = useState(false);
 	const [showDetailModal, setShowDetailModal] = useState(false);
-
-	// const { data } = useUser();
-	const { mutate, isPending } = useMutation({
-		mutationFn: async (productId: string) => {
-			const res = await axiosInstance.post("/cart/add", { productId, quantity: 1 });
-			return res.data;
-		},
-		onSuccess: () => {
-			toast({ title: "Added product to cart" });
-		},
-	});
+	const { mutate, isPending } = useUpdateCart();
 
 	const discount = Math.round(((service.originalPrice - service.discountPrice) / service.originalPrice) * 100);
 	const cartQuantity = 1;
@@ -81,7 +69,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 								Quick View
 							</Button>
 							<Button
-								onClick={() => mutate(service.id)}
+								onClick={() => mutate({ productId: service.id, quantity: 1 })}
 								disabled={isPending}
 								className="bg-blue-600 hover:bg-blue-700"
 								size="sm"

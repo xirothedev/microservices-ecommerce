@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCart } from "@/hooks/use-cart";
-import { Product } from "@/typings/backend";
+import { ProductWithAverageRating } from "@/typings/backend";
 import { ArrowLeft, ArrowRight, Check, Heart, Minus, Plus, ShoppingCart, Star } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
 interface ServiceDetailModalProps {
-	service: Product;
+	service: ProductWithAverageRating;
 	isOpen: boolean;
 	onClose: () => void;
 	isAddingToCart: boolean;
@@ -20,12 +20,11 @@ interface ServiceDetailModalProps {
 export default function ServiceDetailModal({ service, isOpen, onClose, isAddingToCart }: ServiceDetailModalProps) {
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 	const [isFavorite, setIsFavorite] = useState(false);
-	const [quantity, setQuantity] = useState(1);
+	const [quantity, setQuantity] = useState<number>(1);
+	const { data } = useCart();
 
-	const { getCartItemQuantity } = useCart();
-	const cartQuantity = getCartItemQuantity(service.id);
 	const discount = Math.round(((service.originalPrice - service.discountPrice) / service.originalPrice) * 100);
-
+	const cartQuantity = data?.me?.cart?.find((cartItem) => cartItem.productId === service.id)?.quantity ?? 0;
 	const gallery = service.medias;
 
 	const nextImage = () => {

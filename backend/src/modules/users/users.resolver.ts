@@ -20,9 +20,9 @@ export class UsersResolver {
     return context.req.user;
   }
 
-  @ResolveField(() => [CartItemQL])
+  @ResolveField('cart', () => [CartItemQL])
   public cart(@Parent() user: UserQL) {
-    return this.cartService.findCart(user);
+    return this.cartService.findCartByUserId(user.id);
   }
 
   @Roles('ADMINISTRATOR', 'SUPPORTER')

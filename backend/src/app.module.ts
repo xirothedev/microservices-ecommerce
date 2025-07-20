@@ -46,6 +46,7 @@ import { SupabaseModule } from './supabase/supabase.module';
         },
       },
       formatError: (error) => {
+        console.log(error);
         return {
           message: error.message,
           path: error.path,

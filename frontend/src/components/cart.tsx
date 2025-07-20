@@ -4,17 +4,22 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { useCart } from "@/hooks/use-cart";
+import { useCart, useUpdateCart } from "@/hooks/use-cart";
 import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
-export default function Cart() {
-	const { items, isOpen, toggleCart, updateQuantity, removeFromCart, clearCart, getTotalItems, getTotalPrice } =
-		useCart();
+interface CartProps {
+	isOpen: boolean;
+	setIsOpen: Dispatch<SetStateAction<boolean>>;
+}
 
+export default function Cart({ isOpen, setIsOpen }: CartProps) {
 	const [isCheckingOut, setIsCheckingOut] = useState(false);
+	const { mutateAsync: addMutate, isPending: addPending } = useUpdateCart();
+	const { mutateAsync: removeMutate, isPending: removePending } = useUpdateCart(true);
+	const { data } = useCart();
 
 	const handleCheckout = async () => {
 		setIsCheckingOut(true);
@@ -25,8 +30,11 @@ export default function Cart() {
 		alert("Checkout functionality would be implemented here!");
 	};
 
-	const totalItems = getTotalItems();
-	const totalPrice = getTotalPrice();
+	const toggleCart = () => setIsOpen(!isOpen);
+
+	const items = data?.me?.cart ?? [];
+	const totalItems = items.length ?? 0;
+	const totalPrice = items.reduce((sum, cartItem) => sum + cartItem.product.discountPrice * cartItem.quantity, 0);
 
 	return (
 		<Sheet open={isOpen} onOpenChange={toggleCart}>
@@ -45,7 +53,7 @@ export default function Cart() {
 				<SheetHeader>
 					<SheetTitle className="flex items-center justify-between">
 						<span>Shopping Cart ({totalItems})</span>
-						{items.length > 0 && (
+						{/* {items.length > 0 && (
 							<Button
 								variant="ghost"
 								size="sm"
@@ -54,7 +62,7 @@ export default function Cart() {
 							>
 								Clear All
 							</Button>
-						)}
+						)} */}
 					</SheetTitle>
 				</SheetHeader>
 
@@ -85,8 +93,11 @@ export default function Cart() {
 											<div className="flex-shrink-0">
 												<div className="relative h-16 w-16 overflow-hidden rounded-lg bg-gray-100">
 													<Image
-														src={item.image || "/placeholder.svg?height=64&width=64"}
-														alt={item.title}
+														src={
+															item.product.medias[0] ||
+															"/placeholder.svg?height=64&width=64"
+														}
+														alt={item.product.name}
 														fill
 														className="object-cover"
 													/>
@@ -96,17 +107,24 @@ export default function Cart() {
 											{/* Item Details */}
 											<div className="min-w-0 flex-1">
 												<h4 className="truncate text-sm font-semibold text-gray-900">
-													{item.title}
+													{item.product.name}
 												</h4>
-												<p className="mb-2 text-xs text-gray-500">{item.category}</p>
+												<p className="mb-2 text-xs text-gray-500">
+													{item.product.category.name}
+												</p>
 												<div className="flex items-center justify-between">
-													<span className="font-bold text-blue-600">${item.price}</span>
+													<span className="font-bold text-blue-600">
+														${item.product.discountPrice}
+													</span>
 													<div className="flex items-center gap-2">
 														<Button
 															variant="outline"
 															size="icon"
+															disabled={removePending}
 															className="h-6 w-6 bg-transparent"
-															onClick={() => updateQuantity(item.id, item.quantity - 1)}
+															onClick={() =>
+																removeMutate({ productId: item.id, quantity: 1 })
+															}
 														>
 															<Minus className="h-3 w-3" />
 														</Button>
@@ -116,8 +134,11 @@ export default function Cart() {
 														<Button
 															variant="outline"
 															size="icon"
+															disabled={addPending}
 															className="h-6 w-6 bg-transparent"
-															onClick={() => updateQuantity(item.id, item.quantity + 1)}
+															onClick={() =>
+																addMutate({ productId: item.id, quantity: 1 })
+															}
 														>
 															<Plus className="h-3 w-3" />
 														</Button>
@@ -130,7 +151,9 @@ export default function Cart() {
 												variant="ghost"
 												size="icon"
 												className="h-6 w-6 text-red-500 hover:text-red-700"
-												onClick={() => removeFromCart(item.id)}
+												onClick={() =>
+													removeMutate({ productId: item.id, quantity: item.quantity })
+												}
 											>
 												<Trash2 className="h-3 w-3" />
 											</Button>

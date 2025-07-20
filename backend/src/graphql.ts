@@ -59,6 +59,12 @@ export class CartItemQL {
   userId: string;
 }
 
+export class CategoryQL {
+  id: string;
+  name: string;
+  slug: string;
+}
+
 export abstract class IMutation {
   abstract updateUser(id: string, input: UpdateUserInput): UserQL | Promise<UserQL>;
 
@@ -67,6 +73,7 @@ export abstract class IMutation {
 
 export class ProductQL {
   averageRating: number;
+  category?: Nullable<CategoryQL>;
   categoryId: string;
   createAt: DateTime;
   description: string;

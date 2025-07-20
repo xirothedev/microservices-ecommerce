@@ -1,11 +1,11 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import { SupabaseService } from '@/supabase/supabase.service';
 import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { Request } from 'express';
 import { Prisma } from '@prisma/generated';
+import { Request } from 'express';
 import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
 import { FindAllProductDto } from './dto/find-all-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductsService {
@@ -317,7 +317,7 @@ export class ProductsService {
 
       return {
         ...product,
-        averageRating: avgResult._avg.rating,
+        averageRating: avgResult._avg.rating ?? 0,
       };
     } catch {
       throw new NotFoundException('Product not found');

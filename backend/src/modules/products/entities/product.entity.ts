@@ -1,3 +1,4 @@
+import { CategoryQL } from '@/modules/categories/entities/category.entity';
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Product, ProductFlag } from '@prisma/generated';
 
@@ -12,6 +13,9 @@ export class ProductQL implements Partial<Product> {
 
   @Field(() => ID)
   categoryId: string;
+
+  @Field(() => CategoryQL, { nullable: true })
+  category?: CategoryQL;
 
   @Field(() => ID)
   sellerId: string;

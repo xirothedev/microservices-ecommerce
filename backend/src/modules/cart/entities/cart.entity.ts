@@ -1,5 +1,5 @@
 import { ProductQL } from '@/modules/products/entities/product.entity';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { CartItem } from '@prisma/generated';
 
 @ObjectType()
@@ -19,10 +19,10 @@ export class CartItemQL implements Partial<CartItem> {
   @Field()
   updateAt: Date;
 
-  @Field()
+  @Field(() => Int)
   quantity: number;
 
-  @Field()
+  @Field(() => Int)
   unitPrice: number;
 
   @Field(() => ProductQL, { nullable: true })

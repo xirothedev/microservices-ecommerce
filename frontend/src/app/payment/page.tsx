@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
-import { useCart } from "@/hooks/use-cart";
+import { useUpdateCart } from "@/hooks/use-cart";
 import { ArrowLeft, CreditCard, Lock, QrCode, Shield, Smartphone } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,7 +16,7 @@ import { useState } from "react";
 
 export default function PaymentContent() {
 	const router = useRouter();
-	const { items, getTotalItems, getTotalPrice, clearCart } = useCart();
+	const { items, getTotalItems, getTotalPrice, clearCart } = useUpdateCart();
 	const [selectedPayment, setSelectedPayment] = useState("momo");
 	const [isProcessing, setIsProcessing] = useState(false);
 	const [customerInfo, setCustomerInfo] = useState({
