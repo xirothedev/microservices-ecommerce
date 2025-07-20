@@ -1,8 +1,8 @@
-import Link from "next/link"
-import { Smartphone, Mail, Phone, MapPin } from "lucide-react"
+import Link from "next/link";
+import { Smartphone, Mail, Phone, MapPin } from "lucide-react";
 
 export default function Footer() {
-  return (
+	return (
 		<footer className="bg-color-1000 text-white transition-colors">
 			<div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
 				<div className="grid gap-8 md:grid-cols-4">
@@ -93,5 +93,5 @@ export default function Footer() {
 				</div>
 			</div>
 		</footer>
-  );
+	);
 }

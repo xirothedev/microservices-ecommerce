@@ -1,41 +1,41 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Apple, Facebook, Youtube, Shield, Clock, Headphones } from "lucide-react"
-import { motion } from "motion/react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Apple, Facebook, Youtube, Shield, Clock, Headphones } from "lucide-react";
+import { motion } from "motion/react";
 
 export default function Services() {
-  const services = [
-    {
-      icon: Apple,
-      title: "Apple ID Services",
-      description:
-        "Professional Apple ID setup and management with enhanced security features and region optimization.",
-      features: ["Secure Setup", "Region Optimization", "2FA Configuration", "Recovery Setup"],
-      price: "From $29",
-      popular: false,
-    },
-    {
-      icon: Facebook,
-      title: "Social Media Management",
-      description: "Complete Facebook account setup and management services for businesses and individuals.",
-      features: ["Account Setup", "Privacy Configuration", "Business Integration", "Security Audit"],
-      price: "From $39",
-      popular: true,
-    },
-    {
-      icon: Youtube,
-      title: "YouTube Premium Setup",
-      description: "YouTube Premium subscription management and family plan optimization services.",
-      features: ["Premium Setup", "Family Plans", "Music Integration", "Ad-Free Experience"],
-      price: "From $19",
-      popular: false,
-    },
-  ]
+	const services = [
+		{
+			icon: Apple,
+			title: "Apple ID Services",
+			description:
+				"Professional Apple ID setup and management with enhanced security features and region optimization.",
+			features: ["Secure Setup", "Region Optimization", "2FA Configuration", "Recovery Setup"],
+			price: "From $29",
+			popular: false,
+		},
+		{
+			icon: Facebook,
+			title: "Social Media Management",
+			description: "Complete Facebook account setup and management services for businesses and individuals.",
+			features: ["Account Setup", "Privacy Configuration", "Business Integration", "Security Audit"],
+			price: "From $39",
+			popular: true,
+		},
+		{
+			icon: Youtube,
+			title: "YouTube Premium Setup",
+			description: "YouTube Premium subscription management and family plan optimization services.",
+			features: ["Premium Setup", "Family Plans", "Music Integration", "Ad-Free Experience"],
+			price: "From $19",
+			popular: false,
+		},
+	];
 
-  return (
+	return (
 		<section id="services" className="bg-color-100 py-20 transition-colors">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 				<motion.div
@@ -45,7 +45,7 @@ export default function Services() {
 					viewport={{ once: true }}
 					className="mb-16 space-y-4 text-center"
 				>
-					<h2 className="text-3xl font-bold text-gray-900 md:text-4x">Our Premium Services</h2>
+					<h2 className="md:text-4x text-3xl font-bold text-gray-900">Our Premium Services</h2>
 					<p className="mx-auto max-w-3xl text-xl text-gray-600">
 						Professional digital services designed to enhance your online experience with security,
 						reliability, and expert support.
@@ -111,16 +111,16 @@ export default function Services() {
 					</div>
 					<div className="space-y-3 text-center">
 						<Clock className="mx-auto h-12 w-12 text-blue-600" />
-						<h3 className="text-lg font-semibold text-gray-90">Fast Delivery</h3>
+						<h3 className="text-gray-90 text-lg font-semibold">Fast Delivery</h3>
 						<p className="text-gray-600">Most services completed within 24 hours</p>
 					</div>
 					<div className="space-y-3 text-center">
 						<Headphones className="mx-auto h-12 w-12 text-blue-600" />
-						<h3 className="text-lg font-semibold text-gray-90">24/7 Support</h3>
+						<h3 className="text-gray-90 text-lg font-semibold">24/7 Support</h3>
 						<p className="text-gray-600">Round-the-clock customer support for all clients</p>
 					</div>
 				</motion.div>
 			</div>
 		</section>
-  );
+	);
 }

@@ -8,7 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function ProfileLayout({ children }: { children: React.ReactElement }) {
-  return (
-    <>{children}</>
-  );
+	return <>{children}</>;
 }

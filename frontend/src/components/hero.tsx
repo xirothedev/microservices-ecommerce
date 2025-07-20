@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { ArrowRight, Shield, Zap, Users } from "lucide-react"
-import { motion } from "motion/react"
+import { Button } from "@/components/ui/button";
+import { ArrowRight, Shield, Zap, Users } from "lucide-react";
+import { motion } from "motion/react";
 import ShinyText from "./ui/shiny-text";
 import { TextEffectWrapper } from "./ui/text-effect-wrapper";
 import Link from "next/link";
 
 export default function Hero() {
-  return (
+	return (
 		<section id="home" className="bg-gradient-to-br from-blue-50 via-white to-purple-50 pt-16 transition-colors">
 			<div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
 				<div className="grid items-center gap-12 lg:grid-cols-2">
@@ -100,5 +100,5 @@ export default function Hero() {
 				</div>
 			</div>
 		</section>
-  );
+	);
 }
