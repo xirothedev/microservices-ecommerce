@@ -1,6 +1,7 @@
 // @ts-check
 import eslint from '@eslint/js';
 // import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import eslintPluginPrisma from 'eslint-plugin-prisma';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
@@ -23,6 +24,9 @@ export default tseslint.config(
         tsconfigRootDir: import.meta.dirname,
       },
     },
+    plugins: {
+      prisma: eslintPluginPrisma,
+    },
   },
   {
     rules: {
@@ -42,6 +46,8 @@ export default tseslint.config(
           caughtErrorsIgnorePattern: '^_',
         },
       ],
+      'prisma/no-unsafe': 'error',
+      'prisma/require-select': 'error',
     },
   },
 );

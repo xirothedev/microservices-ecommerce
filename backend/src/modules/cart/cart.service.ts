@@ -1,10 +1,9 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Request } from 'express';
-import { AddProductCartDto } from './dto/add-product-cart.dto';
-import { Product } from '@prisma/generated';
-import { RemoveProductCartDto } from './dto/remove-product-cart.dto';
 import { UserQL } from '../users/entities/user.entity';
+import { AddProductCartDto } from './dto/add-product-cart.dto';
+import { RemoveProductCartDto } from './dto/remove-product-cart.dto';
 
 @Injectable()
 export class CartService {
@@ -12,11 +11,12 @@ export class CartService {
 
   public async add(req: Request, body: AddProductCartDto) {
     const user = req.user;
-    let product: Product;
+    const product = await this.prismaService.product.findUnique({
+      where: { id: body.productId },
+      select: { discountPrice: true },
+    });
 
-    try {
-      product = await this.prismaService.product.findUniqueOrThrow({ where: { id: body.productId } });
-    } catch {
+    if (!product) {
       throw new BadRequestException('Product not found');
     }
 
@@ -27,6 +27,7 @@ export class CartService {
           userId: user.id,
         },
       },
+      select: {},
     });
 
     if (cartItem) {
@@ -71,6 +72,7 @@ export class CartService {
           userId: user.id,
         },
       },
+      select: { quantity: true },
     });
 
     if (!cartItem) {
@@ -112,7 +114,7 @@ export class CartService {
 
   public async findCart(user: UserQL) {
     try {
-      const carts = await this.prismaService.cartItem.findMany({ where: { userId: user.id } });
+      const carts = await this.prismaService.cartItem.findMany({ where: { userId: user.id }, select: undefined });
 
       return carts;
     } catch {

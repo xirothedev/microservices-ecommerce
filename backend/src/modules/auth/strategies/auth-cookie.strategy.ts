@@ -38,6 +38,7 @@ export class AuthCookieStrategy extends PassportStrategy(Strategy, 'auth-cookie'
     try {
       const user = await this.prismaService.user.findUniqueOrThrow({
         where: { id: payload.sub },
+        select: undefined,
       });
 
       if (!user.isVerified) {

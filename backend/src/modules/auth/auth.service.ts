@@ -16,7 +16,6 @@ import { JwtService } from '@nestjs/jwt';
 import { hash, verify } from 'argon2';
 import { CookieOptions, Request, Response } from 'express';
 import { randomInt } from 'node:crypto';
-import { Authentication, User } from '@prisma/generated';
 import { Payload } from './auth.interface';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { LoginDto } from './dto/login.dto';
@@ -46,6 +45,7 @@ export class AuthService {
   public async create(body: CreateAuthDto) {
     const user = await this.prismaService.user.findUnique({
       where: { email: body.email },
+      select: { id: true },
     });
     if (user) {
       throw new ConflictException('User already exists');
@@ -68,14 +68,12 @@ export class AuthService {
   }
 
   public async login(body: LoginDto, res: Response, sessionId?: string) {
-    let user: User;
+    const user = await this.prismaService.user.findUnique({
+      where: { email: body.email },
+      select: { isVerified: true, hashedPassword: true, id: true, email: true },
+    });
 
-    try {
-      user = await this.prismaService.user.findUniqueOrThrow({
-        where: { email: body.email },
-        omit: { hashedPassword: false },
-      });
-    } catch {
+    if (!user) {
       throw new NotFoundException('User not found');
     }
 
@@ -142,7 +140,7 @@ export class AuthService {
 
     return {
       message: 'Login successful',
-      data: data,
+      data,
       '@accessToken': accessToken,
       '@refreshToken': refreshToken,
       '@sessionId': sessionId,
@@ -153,13 +151,12 @@ export class AuthService {
   }
 
   public async verifyEmail(email: string) {
-    let user: User;
+    const user = await this.prismaService.user.findUnique({
+      where: { email },
+      select: { isVerified: true, id: true, email: true },
+    });
 
-    try {
-      user = await this.prismaService.user.findUniqueOrThrow({
-        where: { email },
-      });
-    } catch {
+    if (!user) {
       throw new NotFoundException('User not found');
     }
 
@@ -169,6 +166,7 @@ export class AuthService {
 
     const auth = await this.prismaService.authentication.findUnique({
       where: { id: { type: 'VERIFY_EMAIL', userId: user.id } },
+      select: { lastSentAt: true },
     });
 
     if (auth && auth.lastSentAt > new Date(Date.now() - MINIMUM_RETRY_TIME)) {
@@ -210,14 +208,12 @@ export class AuthService {
   }
 
   public async confirmVerifyEmail(query: VerifyEmailDto) {
-    let user: User;
-    let auth: Authentication;
+    const user = await this.prismaService.user.findUnique({
+      where: { email: query.email },
+      select: { id: true, isVerified: true, email: true },
+    });
 
-    try {
-      user = await this.prismaService.user.findUniqueOrThrow({
-        where: { email: query.email },
-      });
-    } catch {
+    if (!user) {
       throw new NotFoundException('User not found');
     }
 
@@ -225,16 +221,12 @@ export class AuthService {
       throw new BadRequestException('User verified');
     }
 
-    try {
-      auth = await this.prismaService.authentication.findUniqueOrThrow({
-        where: { id: { type: 'VERIFY_EMAIL', userId: user.id } },
-      });
-    } catch {
+    const auth = await this.prismaService.authentication.findUnique({
+      where: { id: { type: 'VERIFY_EMAIL', userId: user.id } },
+      select: { expiresAt: true, code: true },
+    });
+    if (!auth) {
       throw new NotFoundException('Record not found');
-    }
-
-    if (user.isVerified) {
-      throw new BadRequestException('User verified');
     }
 
     if (auth.expiresAt >= new Date() && auth.code !== query.code) {
@@ -324,7 +316,7 @@ export class AuthService {
 
   private async storageSession(userId: string, refreshToken: string, sessionId?: string) {
     if (sessionId) {
-      const session = await this.prismaService.loginSession.findUnique({ where: { sessionId } });
+      const session = await this.prismaService.loginSession.findUnique({ where: { sessionId }, select: { id: true } });
       if (!session) {
         return this.createSession(userId, refreshToken);
       } else {

@@ -1,13 +1,13 @@
 import { EmailService } from '@/email/email.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { randomBytes, randomInt } from 'node:crypto';
+import { Prisma } from '@prisma/generated';
 import { Request } from 'express';
+import { randomBytes, randomInt } from 'node:crypto';
 import { authenticator } from 'otplib';
-import { MfaSetup, Prisma, User } from '@prisma/generated';
-import { SetupMfaDto, ToggleMfaDto, VerifyMfaSetupDto } from './dto/setup-mfa.dto';
-import { MfaVerificationDto, RequestMfaCodeDto } from './dto/mfa-verification.dto';
 import { MfaStatus } from './auth.interface';
+import { MfaVerificationDto, RequestMfaCodeDto } from './dto/mfa-verification.dto';
+import { SetupMfaDto, ToggleMfaDto, VerifyMfaSetupDto } from './dto/setup-mfa.dto';
 
 export const MFA_CODE_EXPIRY = 5 * 60 * 1000;
 export const BACKUP_CODE_COUNT = 10;
@@ -24,6 +24,7 @@ export class MfaService {
     // Check if MFA is already enabled for this type
     const existingMfa = await this.prismaService.mfaSetup.findUnique({
       where: { userMfaType: { userId: req.user.id, type: body.type } },
+      select: { isEnabled: true },
     });
 
     if (existingMfa && existingMfa.isEnabled) {
@@ -43,13 +44,12 @@ export class MfaService {
   }
 
   public async verifyMfaSetup(userId: string, verifyDto: VerifyMfaSetupDto) {
-    let mfaSetup: MfaSetup;
+    const mfaSetup = await this.prismaService.mfaSetup.findUnique({
+      where: { userMfaType: { userId, type: verifyDto.type } },
+      select: { isEnabled: true, secret: true, id: true },
+    });
 
-    try {
-      mfaSetup = await this.prismaService.mfaSetup.findUniqueOrThrow({
-        where: { userMfaType: { userId, type: verifyDto.type } },
-      });
-    } catch {
+    if (!mfaSetup) {
       throw new NotFoundException('MFA setup not found');
     }
 
@@ -95,13 +95,12 @@ export class MfaService {
   }
 
   public async toggleMfa(userId: string, status: MfaStatus, body: ToggleMfaDto) {
-    let mfaSetup: MfaSetup;
+    const mfaSetup = await this.prismaService.mfaSetup.findUnique({
+      where: { userMfaType: { userId, type: body.type } },
+      select: { isEnabled: true, id: true, secret: true },
+    });
 
-    try {
-      mfaSetup = await this.prismaService.mfaSetup.findUniqueOrThrow({
-        where: { userMfaType: { userId, type: body.type } },
-      });
-    } catch {
+    if (!mfaSetup) {
       throw new NotFoundException('MFA setup not found');
     }
 
@@ -187,13 +186,12 @@ export class MfaService {
   }
 
   public async requestMfaCode(body: RequestMfaCodeDto) {
-    let mfaSetup: MfaSetup;
+    const mfaSetup = await this.prismaService.mfaSetup.findUnique({
+      where: { userMfaType: { userId: body.userId, type: body.type } },
+      select: { isEnabled: true, phone: true, email: true },
+    });
 
-    try {
-      mfaSetup = await this.prismaService.mfaSetup.findUniqueOrThrow({
-        where: { userMfaType: { userId: body.userId, type: body.type } },
-      });
-    } catch {
+    if (!mfaSetup) {
       throw new NotFoundException('MFA setup not found');
     }
 
@@ -216,6 +214,7 @@ export class MfaService {
   public async getMfaStatus(userId: string) {
     const mfaSetups = await this.prismaService.mfaSetup.findMany({
       where: { userId },
+      select: { type: true, isEnabled: true, createdAt: true },
     });
 
     const backupCodes = await this.prismaService.mfaBackupCode.count({
@@ -254,13 +253,12 @@ export class MfaService {
 
   // Private helper methods
   private async setupTotp(userId: string): Promise<{ secret: string; otpauthUrl: string; qrCode: string }> {
-    let user: User;
+    const user = await this.prismaService.user.findUnique({
+      where: { id: userId },
+      select: { email: true },
+    });
 
-    try {
-      user = await this.prismaService.user.findUniqueOrThrow({
-        where: { id: userId },
-      });
-    } catch {
+    if (!user) {
       throw new NotFoundException('User not found');
     }
 
@@ -317,6 +315,7 @@ export class MfaService {
   private async verifyOtp(userId: string, type: string, code: string): Promise<boolean> {
     const auth = await this.prismaService.authentication.findUnique({
       where: { id: { type: type === 'SMS' ? 'MFA_SMS' : 'MFA_EMAIL', userId } },
+      select: { code: true, expiresAt: true, type: true, userId: true },
     });
 
     if (!auth || auth.expiresAt < new Date() || auth.code !== code) {
@@ -334,6 +333,7 @@ export class MfaService {
   private async verifyTotpMfa(userId: string, code: string) {
     const mfaSetup = await this.prismaService.mfaSetup.findUnique({
       where: { userMfaType: { userId, type: 'TOTP' } },
+      select: { isEnabled: true, secret: true },
     });
 
     if (!mfaSetup || !mfaSetup.isEnabled || !mfaSetup.secret) {
@@ -359,6 +359,7 @@ export class MfaService {
   private async verifyBackupCode(userId: string, code: string) {
     const backupCode = await this.prismaService.mfaBackupCode.findUnique({
       where: { userBackupCode: { userId, code } },
+      select: { isUsed: true, id: true },
     });
 
     if (!backupCode || backupCode.isUsed) {

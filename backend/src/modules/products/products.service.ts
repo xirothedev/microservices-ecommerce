@@ -77,8 +77,9 @@ export class ProductsService {
         id: productId,
         sellerId: seller.id,
       },
-      include: {
+      select: {
         productItems: true,
+        medias: true,
       },
     });
 
@@ -171,6 +172,7 @@ export class ProductsService {
   }
 
   public async findBySeller(sellerId: string) {
+    // eslint-disable-next-line prisma/require-select
     const products = await this.prismaService.product.findMany({
       where: { sellerId },
       include: {
@@ -221,6 +223,7 @@ export class ProductsService {
       ];
     }
 
+    // eslint-disable-next-line prisma/require-select
     const products = await this.prismaService.product.findMany({
       where,
       include: {
@@ -273,6 +276,7 @@ export class ProductsService {
         id: productId,
         sellerId: seller.id,
       },
+      select: { id: true },
     });
 
     if (!existingProduct) {
@@ -303,6 +307,7 @@ export class ProductsService {
     try {
       const product = await this.prismaService.product.findUniqueOrThrow({
         where: { id: productId },
+        select: undefined,
       });
 
       const avgResult = await this.prismaService.review.aggregate({
