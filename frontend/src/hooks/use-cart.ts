@@ -6,7 +6,7 @@ import { CartItemWithProduct } from "@/typings/backend";
 import { gql, useQuery } from "@apollo/client";
 import { useMutation } from "@tanstack/react-query";
 
-export function useUpdateCart(isRemove = false) {
+export function useUpdateCart(isRemove = false, refetch?: () => void) {
 	return useMutation({
 		mutationFn: async ({ productId, quantity }: { productId: string; quantity: number }) => {
 			const res = await axiosInstance.post(`/cart/${isRemove ? "remove" : "add"}`, { productId, quantity });
@@ -14,6 +14,7 @@ export function useUpdateCart(isRemove = false) {
 		},
 		onSuccess: () => {
 			toast({ title: `${isRemove ? "Removed" : "Added"} product to cart` });
+			if (refetch) refetch();
 		},
 	});
 }

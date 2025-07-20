@@ -112,7 +112,11 @@ export class CartService {
   }
 
   public async findCartByUserId(id: string) {
-    const carts = await this.prismaService.cartItem.findMany({ where: { userId: id }, select: undefined });
+    const carts = await this.prismaService.cartItem.findMany({
+      where: { userId: id },
+      orderBy: { createAt: 'desc' },
+      select: undefined,
+    });
     return carts;
   }
 }

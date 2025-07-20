@@ -17,9 +17,9 @@ interface CartProps {
 
 export default function Cart({ isOpen, setIsOpen }: CartProps) {
 	const [isCheckingOut, setIsCheckingOut] = useState(false);
-	const { mutateAsync: addMutate, isPending: addPending } = useUpdateCart();
-	const { mutateAsync: removeMutate, isPending: removePending } = useUpdateCart(true);
-	const { data } = useCart();
+	const { data, refetch } = useCart();
+	const { mutateAsync: addMutate, isPending: addPending } = useUpdateCart(false, refetch);
+	const { mutateAsync: removeMutate, isPending: removePending } = useUpdateCart(true, refetch);
 
 	const handleCheckout = async () => {
 		setIsCheckingOut(true);
@@ -50,7 +50,7 @@ export default function Cart({ isOpen, setIsOpen }: CartProps) {
 			</SheetTrigger>
 
 			<SheetContent withCloseButton={false} className="w-full sm:max-w-lg">
-				<SheetHeader>
+				<SheetHeader className="shadow-md">
 					<SheetTitle className="flex items-center justify-between">
 						<span>Shopping Cart ({totalItems})</span>
 						{/* {items.length > 0 && (
@@ -68,7 +68,7 @@ export default function Cart({ isOpen, setIsOpen }: CartProps) {
 
 				<div className="flex h-full flex-col px-4">
 					{/* Cart Items */}
-					<div className="flex-1 overflow-y-auto py-4">
+					<div className="flex-1 overflow-y-auto py-4 pb-20">
 						{items.length === 0 ? (
 							<div className="flex h-full flex-col items-center justify-center text-center">
 								<ShoppingCart className="mb-4 h-16 w-16 text-gray-300" />
@@ -137,7 +137,7 @@ export default function Cart({ isOpen, setIsOpen }: CartProps) {
 															disabled={addPending}
 															className="h-6 w-6 bg-transparent"
 															onClick={() =>
-																addMutate({ productId: item.id, quantity: 1 })
+																addMutate({ productId: item.productId, quantity: 1 })
 															}
 														>
 															<Plus className="h-3 w-3" />
@@ -152,7 +152,7 @@ export default function Cart({ isOpen, setIsOpen }: CartProps) {
 												size="icon"
 												className="h-6 w-6 text-red-500 hover:text-red-700"
 												onClick={() =>
-													removeMutate({ productId: item.id, quantity: item.quantity })
+													removeMutate({ productId: item.productId, quantity: item.quantity })
 												}
 											>
 												<Trash2 className="h-3 w-3" />
@@ -166,7 +166,7 @@ export default function Cart({ isOpen, setIsOpen }: CartProps) {
 
 					{/* Cart Summary */}
 					{items.length > 0 && (
-						<div className="space-y-4 border-t border-gray-200 pt-4">
+						<div className="sticky bottom-0 z-10 space-y-4 border-t border-gray-200 bg-white pt-4">
 							<div className="space-y-2">
 								<div className="flex justify-between text-sm">
 									<span>Subtotal ({totalItems} items)</span>
