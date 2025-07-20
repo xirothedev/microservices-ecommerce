@@ -3,13 +3,13 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useUpdateCart } from "@/hooks/use-cart";
+import { useCart, useUpdateCart } from "@/hooks/use-cart";
 import { ProductWithAverageRating } from "@/typings/backend";
+import { Eye, ShoppingCart, Star } from "lucide-react";
 import { motion } from "motion/react";
 import Image from "next/image";
 import { useState } from "react";
 import ServiceDetailModal from "./service-detail-modal";
-import { Eye, ShoppingCart, Star } from "lucide-react";
 
 interface ServiceCardProps {
 	service: ProductWithAverageRating;
@@ -18,10 +18,11 @@ interface ServiceCardProps {
 export default function ServiceCard({ service }: ServiceCardProps) {
 	const [imageLoaded, setImageLoaded] = useState(false);
 	const [showDetailModal, setShowDetailModal] = useState(false);
-	const { mutate, isPending } = useUpdateCart();
+	const { data, refetch } = useCart();
+	const { mutate, isPending } = useUpdateCart(false, refetch);
 
 	const discount = Math.round(((service.originalPrice - service.discountPrice) / service.originalPrice) * 100);
-	const cartQuantity = 1;
+	const cartQuantity = data?.me.cart.find((cartItem) => cartItem.productId === service.id)?.quantity ?? 0;
 
 	const handleViewDetails = () => {
 		setShowDetailModal(true);
