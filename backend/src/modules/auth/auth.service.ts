@@ -268,7 +268,7 @@ export class AuthService {
 
     const session = await this.prismaService.loginSession.findUnique({
       where: { refreshToken: token },
-      select: { isActive: true, user: { select: { id: true, email: true } } },
+      select: { id: true, isActive: true, user: { select: { id: true, email: true } } },
     });
 
     if (!session) {
@@ -288,8 +288,19 @@ export class AuthService {
 
     const { accessToken, refreshToken } = this.generateToken(payload);
 
+    await this.prismaService.loginSession.update({
+      where: { id: session.id },
+      data: { refreshToken },
+      select: { id: true },
+    });
+
     // Set cookie
     res.cookie('access_token', accessToken, cookieOptions).cookie('refresh_token', refreshToken, cookieOptions);
+
+    return {
+      message: 'Refreshed',
+      data: null,
+    };
   }
 
   // private helper

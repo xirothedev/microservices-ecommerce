@@ -49,7 +49,7 @@ import { SupabaseModule } from './supabase/supabase.module';
         return {
           message: error.message,
           path: error.path,
-          name: error.extensions?.code,
+          extensions: { code: error.extensions?.code },
         };
       },
       definitions: {

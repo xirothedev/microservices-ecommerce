@@ -76,7 +76,7 @@ export class AuthController {
     @Cookies('refresh_token') tokenFromCookie: string,
     @Body('refreshToken') tokenFromBody: string,
     @Req() req: Request,
-    @Res() res: Response,
+    @Res({ passthrough: true }) res: Response,
   ) {
     return this.authService.refreshToken(tokenFromCookie, tokenFromBody, req, res);
   }
