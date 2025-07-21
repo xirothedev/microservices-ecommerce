@@ -1,13 +1,12 @@
-import { Global, Module } from '@nestjs/common';
-import { EmailService } from './email.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { Global, Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { EmailService } from './email.service';
 
 @Global()
 @Module({
   imports: [
     MailerModule.forRootAsync({
-      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         transport: {

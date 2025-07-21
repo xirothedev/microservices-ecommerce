@@ -1,7 +1,7 @@
 import { NecordLavalinkModule } from '@necord/lavalink';
 import { NecordPaginationModule } from '@necord/pagination';
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { GatewayIntentBits, Partials } from 'discord.js';
 import { NecordModule } from 'necord';
 import { DiscordCommands } from './discord.commands';
@@ -13,7 +13,6 @@ import { LavaCommands } from './lava.commands';
 @Module({
   imports: [
     NecordModule.forRootAsync({
-      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
         return {
@@ -39,7 +38,6 @@ import { LavaCommands } from './lava.commands';
       buttonsPosition: 'end',
     }),
     NecordLavalinkModule.forRootAsync({
-      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         nodes: [
@@ -53,5 +51,6 @@ import { LavaCommands } from './lava.commands';
     }),
   ],
   providers: [DiscordUpdate, DiscordCommands, LavaCommands, DiscordComponents, DiscordService],
+  exports: [DiscordService],
 })
 export class DiscordModule {}

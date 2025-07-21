@@ -1,4 +1,3 @@
-import { SupabaseService } from '@/supabase/supabase.service';
 import { Module } from '@nestjs/common';
 import { CategoriesService } from '../categories/categories.service';
 import { ProductsController } from './products.controller';
@@ -7,6 +6,6 @@ import { ProductsService } from './products.service';
 
 @Module({
   controllers: [ProductsController],
-  providers: [ProductsService, SupabaseService, ProductsResolver, CategoriesService],
+  providers: [ProductsService, ProductsResolver, CategoriesService],
 })
 export class ProductsModule {}

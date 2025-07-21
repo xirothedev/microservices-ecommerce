@@ -3,11 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import type { SupabaseConfig } from './supabase.interface';
 
-const BUCKET_NAME = 'cdn';
-
 @Injectable()
 export class SupabaseService implements OnModuleInit {
   private readonly logger = new Logger(SupabaseService.name);
+  private readonly BUCKET_NAME = 'cdn';
   private supabase: SupabaseClient;
   private config: SupabaseConfig;
 
@@ -46,7 +45,7 @@ export class SupabaseService implements OnModuleInit {
     const path = `${Date.now()}-${file.originalname}`;
 
     try {
-      const { data, error } = await this.supabase.storage.from(BUCKET_NAME).upload(path, file.buffer, options);
+      const { data, error } = await this.supabase.storage.from(this.BUCKET_NAME).upload(path, file.buffer, options);
 
       if (error) {
         this.logger.error('Upload error for bucket:', error);
@@ -63,7 +62,7 @@ export class SupabaseService implements OnModuleInit {
 
   async downloadFile(path: string): Promise<{ data: Blob | null; error: any }> {
     try {
-      const { data, error } = await this.supabase.storage.from(BUCKET_NAME).download(path);
+      const { data, error } = await this.supabase.storage.from(this.BUCKET_NAME).download(path);
 
       if (error) {
         this.logger.error('Download error for bucket:', error);
@@ -82,7 +81,7 @@ export class SupabaseService implements OnModuleInit {
 
   async deleteFile(path: string): Promise<{ data: any; error: any }> {
     try {
-      const { data, error } = await this.supabase.storage.from(BUCKET_NAME).remove([path]);
+      const { data, error } = await this.supabase.storage.from(this.BUCKET_NAME).remove([path]);
 
       if (error) {
         this.logger.error('Delete file error for bucket:', error);
