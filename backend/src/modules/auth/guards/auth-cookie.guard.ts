@@ -12,6 +12,10 @@ export class AuthCookieGuard extends AuthGuard('auth-cookie') {
 
   canActivate(context: ExecutionContext) {
     // const ctx = GqlExecutionContext.create(context);
+    const type = context.getType<'http' | 'graphql' | 'ws' | 'necord'>();
+    if (type === 'necord') {
+      return true;
+    }
 
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),

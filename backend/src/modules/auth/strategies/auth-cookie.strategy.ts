@@ -19,6 +19,7 @@ export class AuthCookieStrategy extends PassportStrategy(Strategy, 'auth-cookie'
   }
 
   async validate(req: Request): Promise<User> {
+    console.log(req);
     const accessToken: string = req.cookies?.access_token;
 
     if (!accessToken) {

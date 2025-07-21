@@ -24,6 +24,5 @@ import { AuthCookieStrategy } from './strategies/auth-cookie.strategy';
   ],
   controllers: [AuthController],
   providers: [AuthService, MfaService, AuthCookieStrategy],
-  exports: [AuthService, MfaService],
 })
 export class AuthModule {}
