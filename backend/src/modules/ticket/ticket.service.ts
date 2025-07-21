@@ -49,11 +49,11 @@ export class TicketService {
     };
   }
 
-  public async findAll(query: FindAllTicketDto) {
+  public async findAll(req: Request, query: FindAllTicketDto) {
     const { page, limit, cursor, category, priority, status, search } = query;
     const take = limit ?? 20;
     let skip: number | undefined = undefined;
-    let cursorObj: any = undefined;
+    let cursorObj: Prisma.TicketWhereUniqueInput | undefined = undefined;
 
     if (cursor) {
       cursorObj = { id: cursor };
@@ -62,7 +62,10 @@ export class TicketService {
       skip = (page - 1) * take;
     }
 
-    const where: Prisma.TicketWhereInput = {};
+    const where: Prisma.TicketWhereInput = {
+      authorId: req.user.id,
+    };
+
     if (category) {
       where.category = category;
     }
@@ -92,7 +95,7 @@ export class TicketService {
         category: true,
         priority: true,
         referenceContext: true,
-        medias: true,
+        attachments: true,
         author: {
           select: {
             id: true,
@@ -109,7 +112,7 @@ export class TicketService {
             avatarUrl: true,
           },
         },
-        messages: false,
+        _count: { select: { messages: true } },
       },
       orderBy: {
         createAt: 'desc',

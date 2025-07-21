@@ -1,23 +1,14 @@
 "use client";
 
-import { CreditCard, HelpCircle, ListOrdered, Lock, LogOut, Settings, User } from "lucide-react";
+import { CreditCard, HelpCircle, ListOrdered, Loader2, Lock, LogOut, Settings, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar";
-import { Badge } from "../../../components/ui/badge";
-import { Button } from "../../../components/ui/button";
-import { Card, CardContent } from "../../../components/ui/card";
-
-const userData = {
-	name: "John Doe",
-	email: "john.doe@example.com",
-	avatar: "https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=80&width=80",
-	memberSince: "January 2023",
-	accountType: "Premium",
-	totalOrders: 24,
-	totalSpent: 1250,
-};
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { useUser } from "@/hooks/use-user";
 
 const navigationItems = [
 	{
@@ -64,7 +55,16 @@ interface ProfileSidebarProps {
 
 export default function ProfileSidebar({ setSidebarOpen }: ProfileSidebarProps) {
 	const path = usePathname();
+	const { data } = useUser();
 	const activePage = path.split("/")[2] ?? "";
+
+	if (!data) {
+		return (
+			<div className="flex h-64 items-center justify-center">
+				<Loader2 className="h-10 w-10 animate-spin text-blue-500" />
+			</div>
+		);
+	}
 
 	return (
 		<Card className="sticky top-24 h-fit">
@@ -74,33 +74,33 @@ export default function ProfileSidebar({ setSidebarOpen }: ProfileSidebarProps) 
 					<Avatar className="mx-auto mb-4 h-20 w-20">
 						<AvatarImage
 							src={
-								userData.avatar ||
+								data.me.avatarUrl ||
 								"https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg"
 							}
-							alt={userData.name}
+							alt={data.me.fullname}
 						/>
 						<AvatarFallback className="text-lg">
-							{userData.name
+							{data.me.fullname
 								.split(" ")
 								.map((n) => n[0])
 								.join("")}
 						</AvatarFallback>
 					</Avatar>
-					<h2 className="text-xl font-semibold text-gray-900">{userData.name}</h2>
-					<p className="mb-2 text-sm text-gray-600">{userData.email}</p>
+					<h2 className="text-xl font-semibold text-gray-900">{data.me.fullname}</h2>
+					<p className="mb-2 text-sm text-gray-600">{data.me.email}</p>
 					<Badge variant="secondary" className="bg-blue-100 text-blue-800">
-						{userData.accountType}
+						Premium
 					</Badge>
 				</div>
 
 				{/* Quick Stats */}
 				<div className="mb-6 grid grid-cols-2 gap-4 rounded-lg bg-gray-50 p-4">
 					<div className="text-center">
-						<div className="text-2xl font-bold text-gray-900">{userData.totalOrders}</div>
+						<div className="text-2xl font-bold text-gray-900">100</div>
 						<div className="text-xs text-gray-600">Total Orders</div>
 					</div>
 					<div className="text-center">
-						<div className="text-2xl font-bold text-gray-900">${userData.totalSpent}</div>
+						<div className="text-2xl font-bold text-gray-900">$10000</div>
 						<div className="text-xs text-gray-600">Total Spent</div>
 					</div>
 				</div>

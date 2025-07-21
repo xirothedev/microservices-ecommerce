@@ -30,8 +30,8 @@ export class TicketController {
   @ApiQuery({ name: 'priority', required: false })
   @ApiQuery({ name: 'status', required: false })
   @ApiQuery({ name: 'search', required: false })
-  findAll(@Query() query: FindAllTicketDto) {
-    return this.ticketService.findAll(query);
+  findAll(@Req() req: Request, @Query() query: FindAllTicketDto) {
+    return this.ticketService.findAll(req, query);
   }
 
   @Get(':id')

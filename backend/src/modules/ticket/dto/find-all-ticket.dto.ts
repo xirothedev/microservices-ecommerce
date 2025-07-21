@@ -1,13 +1,18 @@
-import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 import { TicketCategory, TicketPriority, TicketStatus } from '@prisma/generated';
+import { Type } from 'class-transformer';
+import { IsEnum, IsInt, IsOptional, IsString, Min } from 'class-validator';
 
 export class FindAllTicketDto {
   @IsOptional()
-  @IsNumber()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
   page?: number;
 
   @IsOptional()
-  @IsNumber()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
   limit?: number;
 
   @IsOptional()

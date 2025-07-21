@@ -4,7 +4,7 @@ import { useDebounce } from "@/hooks/use-debounce";
 import axiosInstance from "@/lib/axios";
 import { useFilterStore } from "@/store/use-filter-store";
 import { IAxiosError } from "@/typings";
-import { Product } from "@/typings/backend";
+import { ProductWithAverageRating } from "@/typings/backend";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -13,7 +13,7 @@ import ServiceCard from "./service-card";
 const PAGE_SIZE = 12;
 
 type ProductsApiResponse = {
-	data: Product[];
+	data: ProductWithAverageRating[];
 	"@data"?: {
 		totalItems: number;
 		nextCursor?: string;
@@ -50,7 +50,9 @@ export default function ServicesList() {
 	});
 
 	// Flatten all loaded products
-	const services: Product[] = (data?.pages || []).flatMap((page: ProductsApiResponse) => page.data || []);
+	const services: ProductWithAverageRating[] = (data?.pages || []).flatMap(
+		(page: ProductsApiResponse) => page.data || [],
+	);
 
 	// Remove client-side filtering (all filters are now backend)
 	const filteredServices = services;

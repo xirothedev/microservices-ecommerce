@@ -1,20 +1,37 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Edit, Save, X, Upload } from "lucide-react";
+import { useUser } from "@/hooks/use-user";
+import { UserQuery } from "@/typings/backend";
+import dayjs from "dayjs";
+import { Edit, Loader2, Save, Upload, X } from "lucide-react";
 import { motion } from "motion/react";
-import { user } from "@/data/mock";
+import { useEffect, useState } from "react";
 
 export default function PersonalInformation() {
 	const [isEditing, setIsEditing] = useState(false);
-	const [formData, setFormData] = useState<User>(user);
+	const { data } = useUser();
+	const [formData, setFormData] = useState<UserQuery | undefined>();
+
+	useEffect(() => {
+		if (data?.me) {
+			setFormData(data.me);
+		}
+	}, [data]);
+
+	if (!formData) {
+		return (
+			<div className="flex h-64 items-center justify-center">
+				<Loader2 className="h-10 w-10 animate-spin text-blue-500" />
+			</div>
+		);
+	}
 
 	const handleSave = () => {
 		// Here you would typically make an API call to save the data
@@ -49,7 +66,10 @@ export default function PersonalInformation() {
 					<div className="flex items-center space-x-4">
 						<Avatar className="h-24 w-24">
 							<AvatarImage
-								src="https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=96&width=96"
+								src={
+									data?.me.avatarUrl ??
+									"https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=96&width=96"
+								}
 								alt="Profile"
 							/>
 							<AvatarFallback className="text-2xl">JD</AvatarFallback>
@@ -94,7 +114,7 @@ export default function PersonalInformation() {
 							<Label htmlFor="phone">Phone Number</Label>
 							<Input
 								id="phone"
-								value={formData.phone}
+								value={formData.phone ?? ""}
 								onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
 								disabled={!isEditing}
 							/>
@@ -103,7 +123,7 @@ export default function PersonalInformation() {
 							<Label htmlFor="address">Address</Label>
 							<Input
 								id="address"
-								value={formData.address}
+								value={formData.address ?? ""}
 								onChange={(e) => setFormData({ ...formData, address: e.target.value })}
 								disabled={!isEditing}
 							/>
@@ -112,7 +132,7 @@ export default function PersonalInformation() {
 							<Label htmlFor="city">City</Label>
 							<Input
 								id="city"
-								value={formData.city}
+								value={formData.city ?? ""}
 								onChange={(e) => setFormData({ ...formData, city: e.target.value })}
 								disabled={!isEditing}
 							/>
@@ -121,7 +141,7 @@ export default function PersonalInformation() {
 							<Label htmlFor="state">State</Label>
 							<Input
 								id="state"
-								value={formData.state}
+								value={formData.state ?? ""}
 								onChange={(e) => setFormData({ ...formData, state: e.target.value })}
 								disabled={!isEditing}
 							/>
@@ -130,17 +150,17 @@ export default function PersonalInformation() {
 							<Label htmlFor="zipCode">ZIP Code</Label>
 							<Input
 								id="zipCode"
-								value={formData.zipCode}
+								value={formData.zipCode ?? ""}
 								onChange={(e) => setFormData({ ...formData, zipCode: e.target.value })}
 								disabled={!isEditing}
 							/>
 						</div>
 						<div className="space-y-2 md:col-span-2">
-							<Label htmlFor="bio">Bio</Label>
+							<Label htmlFor="biography">Biography</Label>
 							<Textarea
-								id="bio"
-								value={formData.bio}
-								onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+								id="biography"
+								value={formData.biography ?? ""}
+								onChange={(e) => setFormData({ ...formData, biography: e.target.value })}
 								disabled={!isEditing}
 								rows={3}
 							/>
@@ -183,7 +203,9 @@ export default function PersonalInformation() {
 							<div className="text-sm text-gray-600">Status</div>
 						</div>
 						<div className="rounded-lg bg-purple-50 p-4 text-center">
-							<div className="text-2xl font-bold text-purple-600">Jan 2023</div>
+							<div className="text-2xl font-bold text-purple-600">
+								{data?.me.createAt ? dayjs(data.me.createAt).format("MMM YYYY") : ""}
+							</div>
 							<div className="text-sm text-gray-600">Member Since</div>
 						</div>
 					</div>

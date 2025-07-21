@@ -42,6 +42,9 @@ export class UserQL implements Partial<User> {
   @Field({ nullable: true })
   zipCode?: string;
 
+  @Field({ nullable: true })
+  biography?: string;
+
   @Field(() => [UserRole])
   roles: UserRole[];
 

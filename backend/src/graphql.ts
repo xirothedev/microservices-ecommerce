@@ -102,6 +102,7 @@ export abstract class IQuery {
 export class UserQL {
   address?: Nullable<string>;
   avatarUrl?: Nullable<string>;
+  biography?: Nullable<string>;
   cart: CartItemQL[];
   city?: Nullable<string>;
   createAt: DateTime;

@@ -63,11 +63,11 @@ export default function TicketsPage() {
 				<Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
 					<div className="flex items-center justify-between">
 						<TabsList className="grid w-full max-w-md grid-cols-2">
-							<TabsTrigger value="history" className="flex items-center gap-2">
+							<TabsTrigger value="history" className="flex cursor-pointer items-center gap-2">
 								<History className="h-4 w-4" />
 								Ticket History
 							</TabsTrigger>
-							<TabsTrigger value="new" className="flex items-center gap-2">
+							<TabsTrigger value="new" className="flex cursor-pointer items-center gap-2">
 								<Plus className="h-4 w-4" />
 								New Ticket
 							</TabsTrigger>

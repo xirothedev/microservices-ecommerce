@@ -25,6 +25,7 @@ export function useUser() {
 					state
 					updateAt
 					zipCode
+					biography
 				}
 			}
 		`,
