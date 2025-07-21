@@ -1,7 +1,6 @@
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { PrismaClient, BillStatus, BillType, PaymentMethod, UserRole } from '@prisma/generated';
 import { faker } from '@faker-js/faker';
-import Decimal from 'decimal.js';
+import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { BillStatus, BillType, PaymentMethod, PrismaClient, UserRole } from '@prisma/generated';
 
 // Helper: Generate UUIDs for foreign keys
 const categoryIds = Array.from({ length: 5 }, () => faker.string.uuid());
@@ -51,7 +50,7 @@ const products = productIds.map((id, i) => ({
   flags: [],
   originalPrice: faker.number.int({ min: 10, max: 500 }),
   discountPrice: faker.number.int({ min: 5, max: 400 }),
-  averageRating: new Decimal(faker.number.float({ min: 3.5, max: 5, fractionDigits: 1 })),
+  // averageRating: new Decimal(faker.number.float({ min: 3.5, max: 5, fractionDigits: 1 })),
   tags: [faker.commerce.productAdjective().slice(0, 100), faker.commerce.productMaterial().slice(0, 100)],
   medias: [faker.image.urlPicsumPhotos({ width: 400, height: 300 }).slice(0, 500)],
   categoryId: faker.helpers.arrayElement(categoryIds),
@@ -104,10 +103,26 @@ const tickets = Array.from({ length: 10 }).map((_, i) => ({
   ]),
   priority: faker.helpers.arrayElement(['URGENT', 'HIGH', 'MEDIUM', 'LOW']),
   referenceContext: faker.lorem.sentence(),
-  images: [faker.image.urlPicsumPhotos({ width: 400, height: 300 })],
+  attachments: [faker.image.urlPicsumPhotos({ width: 400, height: 300 })],
   authorId: faker.helpers.arrayElement(userIds),
   assignedId: faker.helpers.arrayElement(userIds),
 }));
+
+// TicketMessage
+const ticketMessages = Array.from({ length: 50 }).map(() => {
+  const ticket = faker.helpers.arrayElement(tickets);
+  const senderId = faker.helpers.arrayElement(userIds);
+  return {
+    id: faker.string.uuid(),
+    content: faker.lorem.sentences({ min: 1, max: 3 }),
+    isRead: faker.datatype.boolean(),
+    createdAt: faker.date.past(),
+    updatedAt: faker.date.recent(),
+    ticketId: ticket.id,
+    senderId,
+    attachments: [faker.image.urlPicsumPhotos({ width: 400, height: 300 })],
+  };
+});
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
@@ -137,6 +152,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
     await this.bill.createMany({ data: bills });
     await this.order.createMany({ data: orders });
     await this.ticket.createMany({ data: tickets });
-    console.log('Seeded categories, users, products, bills, orders, tickets');
+    await this.ticketMessage.createMany({ data: ticketMessages });
+    console.log('Seeded categories, users, products, bills, orders, tickets, ticketMessages');
   }
 }
