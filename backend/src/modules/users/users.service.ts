@@ -64,9 +64,8 @@ export class UsersService {
   // Controller
   async updateUserAvatar(req: Request, avatar: Express.Multer.File) {
     const user = req.user;
-    const path = `${req.user.id}/${Date.now()}-${avatar.originalname}`;
 
-    const { error } = await this.supabaseService.uploadFile(path, avatar.buffer, {
+    const { error, path } = await this.supabaseService.uploadFile(avatar, {
       contentType: avatar.mimetype,
     });
 

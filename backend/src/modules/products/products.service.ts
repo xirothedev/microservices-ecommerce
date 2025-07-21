@@ -21,9 +21,7 @@ export class ProductsService {
     for (let i = 0; i < medias.length; i++) {
       const media = medias[i];
 
-      const path = `${req.user.id}/${Date.now()}-${media.originalname}`;
-
-      const { error } = await this.supabaseService.uploadFile(path, media.buffer, {
+      const { error, path } = await this.supabaseService.uploadFile(media, {
         contentType: media.mimetype,
       });
 
@@ -90,7 +88,6 @@ export class ProductsService {
     const updateData: Prisma.ProductUpdateInput = {};
 
     updateData.medias = await this.handleProductMedias({
-      userId: seller.id,
       oldMedias: existingProduct.medias || [],
       mediasKeep: body.mediasKeep,
       newFiles: medias,
@@ -326,13 +323,11 @@ export class ProductsService {
 
   // private helper
   private async handleProductMedias({
-    userId,
     oldMedias,
     mediasKeep,
     newFiles,
     supabaseService,
   }: {
-    userId: string;
     oldMedias: string[];
     mediasKeep?: string[];
     newFiles: Express.Multer.File[];
@@ -351,8 +346,7 @@ export class ProductsService {
     const uploadedMedias: string[] = [];
     if (newFiles && newFiles.length > 0) {
       for (const media of newFiles) {
-        const path = `${userId}/${Date.now()}-${media.originalname}`;
-        const { error } = await supabaseService.uploadFile(path, media.buffer, {
+        const { error, path } = await supabaseService.uploadFile(media, {
           contentType: media.mimetype,
         });
         if (error) {

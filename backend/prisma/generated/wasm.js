@@ -11,12 +11,12 @@ exports.Prisma = Prisma;
 exports.$Enums = {};
 
 /**
- * Prisma Client JS version: 6.11.1
- * Query Engine version: f40f79ec31188888a2e33acda0ecc8fd10a853a9
+ * Prisma Client JS version: 6.12.0
+ * Query Engine version: 8047c96bbd92db98a2abc7c9323ce77c02c89dbc
  */
 Prisma.prismaVersion = {
-  client: '6.11.1',
-  engine: 'f40f79ec31188888a2e33acda0ecc8fd10a853a9',
+  client: '6.12.0',
+  engine: '8047c96bbd92db98a2abc7c9323ce77c02c89dbc',
 };
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -272,9 +272,20 @@ exports.Prisma.TicketScalarFieldEnum = {
   category: 'category',
   priority: 'priority',
   referenceContext: 'referenceContext',
-  images: 'images',
+  attachments: 'attachments',
   authorId: 'authorId',
   assignedId: 'assignedId',
+};
+
+exports.Prisma.TicketMessageScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  isRead: 'isRead',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  ticketId: 'ticketId',
+  senderId: 'senderId',
+  attachments: 'attachments',
 };
 
 exports.Prisma.SortOrder = {
@@ -393,6 +404,7 @@ exports.Prisma.ModelName = {
   Bill: 'Bill',
   CartItem: 'CartItem',
   Ticket: 'Ticket',
+  TicketMessage: 'TicketMessage',
 };
 
 /**

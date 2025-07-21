@@ -40,12 +40,13 @@ export class SupabaseService implements OnModuleInit {
   }
 
   async uploadFile(
-    path: string,
-    file: Buffer | File,
+    file: Express.Multer.File,
     options?: { contentType?: string },
-  ): Promise<{ data: any; error: any }> {
+  ): Promise<{ data: any; path: string; error: any }> {
+    const path = `${Date.now()}-${file.originalname}`;
+
     try {
-      const { data, error } = await this.supabase.storage.from(BUCKET_NAME).upload(path, file, options);
+      const { data, error } = await this.supabase.storage.from(BUCKET_NAME).upload(path, file.buffer, options);
 
       if (error) {
         this.logger.error('Upload error for bucket:', error);
@@ -53,10 +54,10 @@ export class SupabaseService implements OnModuleInit {
         this.logger.log(`File uploaded successfully to ${path}`);
       }
 
-      return { data, error };
+      return { data, path, error };
     } catch (error) {
       this.logger.error('Upload exception for bucket:', error);
-      return { data: null, error };
+      return { data: null, path, error };
     }
   }
 

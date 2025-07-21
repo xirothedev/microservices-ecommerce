@@ -172,10 +172,6 @@ export default function Cart({ isOpen, setIsOpen }: CartProps) {
 									<span>Subtotal ({totalItems} items)</span>
 									<span>${totalPrice.toFixed(2)}</span>
 								</div>
-								<div className="flex justify-between text-sm text-gray-500">
-									<span>Estimated delivery</span>
-									<span>2-5 business days</span>
-								</div>
 								<Separator />
 								<div className="flex justify-between font-semibold">
 									<span>Total</span>

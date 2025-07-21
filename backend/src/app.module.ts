@@ -19,6 +19,10 @@ import { UsersModule } from './modules/users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RedisModule } from './redis/redis.module';
 import { SupabaseModule } from './supabase/supabase.module';
+import { DiscordModule } from './modules/discord/discord.module';
+import { CustomersModule } from './modules/customers/customers.module';
+import { TicketModule } from './modules/ticket/ticket.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -59,6 +63,7 @@ import { SupabaseModule } from './supabase/supabase.module';
       },
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
+    EventEmitterModule.forRoot(),
     ThrottlerModule.forRoot([{ ttl: 2000, limit: 100 }]),
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
@@ -68,6 +73,9 @@ import { SupabaseModule } from './supabase/supabase.module';
     ProductsModule,
     CategoriesModule,
     CartModule,
+    DiscordModule,
+    CustomersModule,
+    TicketModule,
   ],
   controllers: [AppController],
   providers: [
