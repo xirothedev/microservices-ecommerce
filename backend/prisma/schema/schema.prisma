@@ -37,17 +37,17 @@ model User {
   updateAt       DateTime   @updatedAt @map("update_at") @db.Timestamptz
   credit         Int        @default(0) @db.Integer
 
-  auth               Authentication[]
-  backupCodes        MfaBackupCode[]
-  loginSessions      LoginSession[]
-  products           Product[]
-  cart               CartItem[]
-  mfaSetups          MfaSetup[]
-  ticketAuthor       Ticket[]         @relation("TicketAuthor")
-  ticketAssigned     Ticket[]         @relation("TicketAssigned")
-  ticketMessagesSent TicketMessage[]  @relation("TicketMessageSender")
-  reviews            Review[]
-  bills              Bill[]
+  auth           Authentication[]
+  backupCodes    MfaBackupCode[]
+  loginSessions  LoginSession[]
+  products       Product[]
+  cart           CartItem[]
+  mfaSetups      MfaSetup[]
+  ticketAuthor   Ticket[]         @relation("TicketAuthor")
+  ticketAssigned Ticket[]         @relation("TicketAssigned")
+  ticketUser     TicketUser[]
+  reviews        Review[]
+  bills          Bill[]
 }
 
 model Bill {

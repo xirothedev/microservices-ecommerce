@@ -11,26 +11,42 @@ model Ticket {
   contexts       TicketContext[]
   attachments    String[]        @db.VarChar(500)
 
-  authorId   String          @map("author_id") @db.Uuid
-  author     User            @relation(name: "TicketAuthor", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  assignedId String?         @map("assigned_id") @db.Uuid
-  assigned   User?           @relation(name: "TicketAssigned", fields: [assignedId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  messages   TicketMessage[]
+  authorId     String          @map("author_id") @db.Uuid
+  author       User            @relation(name: "TicketAuthor", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  assignedId   String?         @map("assigned_id") @db.Uuid
+  assigned     User?           @relation(name: "TicketAssigned", fields: [assignedId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  messages     TicketMessage[]
+  participants TicketUser[]
+}
+
+model TicketUser {
+  id         String    @id @default(uuid()) @db.Uuid
+  lastReadAt DateTime?
+
+  ticketId           String          @db.Uuid
+  ticket             Ticket          @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  userId             String          @db.Uuid
+  user               User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lastReadMessageId  String?         @unique @db.Uuid
+  lastReadMessage    TicketMessage?  @relation(fields: [lastReadMessageId], references: [id])
+  ticketMessagesSent TicketMessage[] @relation("TicketMessageSender")
+
+  @@unique([ticketId, userId], name: "ticketUserId", map: "ticket_user_id")
 }
 
 model TicketMessage {
-  id        String   @id @default(uuid()) @db.Uuid
-  content   String   @db.Text
-  isRead    Boolean  @default(false) @map("is_read")
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
-
-  ticketId String @map("ticket_id") @db.Uuid
-  ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  senderId String @map("sender_id") @db.Uuid
-  sender   User   @relation("TicketMessageSender", fields: [senderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
+  id          String   @id @default(uuid()) @db.Uuid
+  content     String   @db.Text
+  isRead      Boolean  @default(false) @map("is_read")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
   attachments String[]
+
+  ticketUser TicketUser?
+  ticketId   String      @map("ticket_id") @db.Uuid
+  ticket     Ticket      @relation(fields: [ticketId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  senderId   String      @map("sender_id") @db.Uuid
+  sender     TicketUser  @relation("TicketMessageSender", fields: [senderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model TicketContext {

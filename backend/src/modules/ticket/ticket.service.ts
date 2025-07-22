@@ -193,10 +193,13 @@ export class TicketService {
               attachments: true,
               sender: {
                 select: {
-                  id: true,
-                  fullname: true,
-                  email: true,
-                  avatarUrl: true,
+                  user: {
+                    select: {
+                      fullname: true,
+                      email: true,
+                      avatarUrl: true,
+                    },
+                  },
                 },
               },
             },
@@ -303,10 +306,13 @@ export class TicketService {
         attachments: true,
         sender: {
           select: {
-            id: true,
-            fullname: true,
-            email: true,
-            avatarUrl: true,
+            user: {
+              select: {
+                fullname: true,
+                email: true,
+                avatarUrl: true,
+              },
+            },
           },
         },
       },
@@ -342,10 +348,13 @@ export class TicketService {
         attachments: true,
         sender: {
           select: {
-            id: true,
-            fullname: true,
-            email: true,
-            avatarUrl: true,
+            user: {
+              select: {
+                fullname: true,
+                email: true,
+                avatarUrl: true,
+              },
+            },
           },
         },
       },

@@ -65,7 +65,7 @@ export class TicketController {
   }
 
   @Get(':id/messages')
-  @ApiOperation({ summary: 'Get messages for a ticket with infinite loading' })
+  @ApiOperation({ summary: 'Get messages for a ticket' })
   @ApiParam({ name: 'id', required: true })
   @ApiQuery({ name: 'page', required: false })
   @ApiQuery({ name: 'limit', required: false })
