@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import axiosInstance from "@/lib/axios";
 import { IAxiosError } from "@/typings";
-import { TicketCategory, TicketPriority, TicketStatus } from "@/typings/backend";
+import { TicketCategory, TicketPriority, TicketResponse, TicketStatus } from "@/typings/backend";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import {
 	AlertCircle,
@@ -25,35 +25,6 @@ import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-
-interface Ticket {
-	id: string;
-	createAt: Date;
-	updateAt: Date;
-	numericalOrder: number;
-	title: string;
-	description: string;
-	status: TicketStatus;
-	category: TicketCategory;
-	priority: TicketPriority;
-	referenceContext: string | null;
-	attachments: string[];
-	author: {
-		id: string;
-		fullname: string;
-		email: string;
-		avatarUrl: string | null;
-	};
-	assigned: {
-		id: string;
-		fullname: string;
-		email: string;
-		avatarUrl: string | null;
-	} | null;
-	_count: {
-		messages: number;
-	};
-}
 
 const PAGE_SIZE = 10;
 
@@ -79,7 +50,7 @@ export default function TicketHistory() {
 
 	const { data, isLoading, isError, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery<
 		{
-			data: Ticket[];
+			data: TicketResponse[];
 			"@data"?: { totalItems: number; nextCursor?: string; hasNextPage?: boolean };
 		},
 		IAxiosError
@@ -98,7 +69,7 @@ export default function TicketHistory() {
 		initialPageParam: undefined,
 	});
 
-	const tickets: Ticket[] = (data?.pages || []).flatMap((page) => page.data || []);
+	const tickets: TicketResponse[] = (data?.pages || []).flatMap((page) => page.data || []);
 
 	const formatDate = (dateString: string) => {
 		const date = new Date(dateString);
@@ -245,7 +216,7 @@ export default function TicketHistory() {
 															<span className="font-medium">{ticket.id}</span>
 															<div className="flex items-center gap-1">
 																<Calendar className="h-4 w-4" />
-																{formatDate(ticket.createAt.toString())}
+																{formatDate(ticket.createAt)}
 															</div>
 															<div className="flex items-center gap-1">
 																<MessageCircle className="h-4 w-4" />
@@ -291,7 +262,7 @@ export default function TicketHistory() {
 
 													<div className="ml-4 flex flex-col items-end gap-2">
 														<div className="text-xs text-gray-500">
-															Updated {formatDate(ticket.updateAt.toString())}
+															Updated {formatDate(ticket.updateAt)}
 														</div>
 														<Link href={`/profile/tickets/${ticket.id}`}>
 															<Button

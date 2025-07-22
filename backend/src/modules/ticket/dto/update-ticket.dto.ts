@@ -1,10 +1,10 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateTicketDto } from './create-ticket.dto';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { TicketStatus } from '@prisma/generated';
 import { IsEnum, IsOptional } from 'class-validator';
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { TicketDto } from './create-ticket.dto';
 
-export class UpdateTicketDto extends PartialType(CreateTicketDto) {
+export class UpdateTicketDto extends PartialType(TicketDto) {
   @ApiPropertyOptional({ enum: TicketStatus, description: 'Ticket status' })
   @IsEnum(TicketStatus)
   @IsOptional()

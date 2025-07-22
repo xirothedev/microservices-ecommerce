@@ -271,7 +271,6 @@ exports.Prisma.TicketScalarFieldEnum = {
   status: 'status',
   category: 'category',
   priority: 'priority',
-  referenceContext: 'referenceContext',
   attachments: 'attachments',
   authorId: 'authorId',
   assignedId: 'assignedId',
@@ -286,6 +285,13 @@ exports.Prisma.TicketMessageScalarFieldEnum = {
   ticketId: 'ticketId',
   senderId: 'senderId',
   attachments: 'attachments',
+};
+
+exports.Prisma.TicketContextScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  label: 'label',
+  ticketId: 'ticketId',
 };
 
 exports.Prisma.SortOrder = {
@@ -389,6 +395,13 @@ exports.TicketPriority = exports.$Enums.TicketPriority = {
   LOW: 'LOW',
 };
 
+exports.TicketContextType = exports.$Enums.TicketContextType = {
+  ORDER: 'ORDER',
+  PRODUCT: 'PRODUCT',
+  TRANSACTION: 'TRANSACTION',
+  ACCOUNT: 'ACCOUNT',
+};
+
 exports.Prisma.ModelName = {
   Authentication: 'Authentication',
   MfaSetup: 'MfaSetup',
@@ -405,6 +418,7 @@ exports.Prisma.ModelName = {
   CartItem: 'CartItem',
   Ticket: 'Ticket',
   TicketMessage: 'TicketMessage',
+  TicketContext: 'TicketContext',
 };
 
 /**

@@ -1,122 +1,91 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import ChatInterface from "./chat-interface";
+import axiosInstance from "@/lib/axios";
+import { IAxiosError } from "@/typings";
+import { TicketResponse } from "@/typings/backend";
+import { useQuery } from "@tanstack/react-query";
 import {
+	AlertCircle,
 	ArrowLeft,
 	Calendar,
-	Tag,
-	AlertCircle,
-	Clock,
 	CheckCircle,
-	XCircle,
-	MessageCircle,
-	FileText,
+	Clock,
 	Download,
+	FileText,
+	MessageCircle,
+	Tag,
+	XCircle,
 } from "lucide-react";
 import { motion } from "motion/react";
+import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import ChatInterface from "./chat-interface";
+import { formatDate } from "@/lib/format";
 
 interface TicketDetailProps {
 	ticketId: string;
 }
 
-interface TicketData {
+interface TicketDetail {
 	id: string;
-	subject: string;
+	numericalOrder: number;
+	createAt: string;
+	updateAt: string;
+	title: string;
 	description: string;
+	status: string;
 	category: string;
-	priority: "low" | "medium" | "high" | "urgent";
-	status: "open" | "in-progress" | "waiting" | "resolved" | "closed";
-	createdAt: string;
-	updatedAt: string;
-	assignedAgent?: {
-		name: string;
-		avatar: string;
+	priority: string;
+	referenceContext: string;
+	attachments: string[];
+	author: {
+		id: string;
+		fullname: string;
 		email: string;
-		status: "online" | "offline" | "away";
+		avatarUrl: string;
 	};
-	attachments: Array<{
+	assigned: {
 		id: string;
-		name: string;
-		size: number;
-		type: string;
-		url: string;
-	}>;
-	contexts: Array<{
-		type: string;
+		fullname: string;
+		email: string;
+		avatarUrl: string;
+	} | null;
+	messages: Array<{
 		id: string;
-		label: string;
+		content: string;
+		isRead: boolean;
+		createdAt: string;
+		updatedAt: string;
+		attachments: string[];
+		sender: {
+			id: string;
+			fullname: string;
+			email: string;
+			avatarUrl: string;
+		};
 	}>;
 }
 
-// Mock ticket data
-const mockTicketData: Record<string, TicketData> = {
-	"TKT-123456": {
-		id: "TKT-123456",
-		subject: "Unable to access Apple ID Premium Setup",
-		description:
-			"I purchased the Apple ID Premium Setup service yesterday but I'm unable to access the setup instructions. When I try to log into my account, I get an error message saying 'Service not found'. I've tried clearing my browser cache and using different browsers but the issue persists. This is urgent as I need this for my business operations.",
-		category: "technical",
-		priority: "high",
-		status: "in-progress",
-		createdAt: "2024-01-15T10:30:00Z",
-		updatedAt: "2024-01-15T14:22:00Z",
-		assignedAgent: {
-			name: "Sarah Johnson",
-			avatar: "https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=40&width=40",
-			email: "sarah.johnson@digitalpro.com",
-			status: "online",
-		},
-		attachments: [
-			{
-				id: "att-1",
-				name: "error-screenshot.png",
-				size: 245760,
-				type: "image/png",
-				url: "https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=200&width=300",
-			},
-			{
-				id: "att-2",
-				name: "browser-console.png",
-				size: 189440,
-				type: "image/png",
-				url: "https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=200&width=300",
-			},
-		],
-		contexts: [
-			{
-				type: "order",
-				id: "ORD-001",
-				label: "Order #ORD-001 - Apple ID Premium Setup ($49.99)",
-			},
-			{
-				type: "product",
-				id: "PROD-001",
-				label: "Apple ID Premium Setup",
-			},
-		],
-	},
-};
-
 const statusConfig = {
-	open: { icon: AlertCircle, color: "text-red-600", bg: "bg-red-100", label: "Open" },
-	"in-progress": { icon: Clock, color: "text-blue-600", bg: "bg-blue-100", label: "In Progress" },
-	waiting: { icon: Clock, color: "text-yellow-600", bg: "bg-yellow-100", label: "Waiting" },
-	resolved: { icon: CheckCircle, color: "text-green-600", bg: "bg-green-100", label: "Resolved" },
-	closed: { icon: XCircle, color: "text-gray-600", bg: "bg-gray-100", label: "Closed" },
+	OPEN: { icon: AlertCircle, color: "text-red-600", bg: "bg-red-100", label: "Open" },
+	"IN-PROGRESS": { icon: Clock, color: "text-blue-600", bg: "bg-blue-100", label: "In Progress" },
+	WAITING: { icon: Clock, color: "text-yellow-600", bg: "bg-yellow-100", label: "Waiting" },
+	RESOLVED: { icon: CheckCircle, color: "text-green-600", bg: "bg-green-100", label: "Resolved" },
+	CLOSED: { icon: XCircle, color: "text-gray-600", bg: "bg-gray-100", label: "Closed" },
 };
 
 const priorityConfig = {
-	low: { color: "text-gray-600", bg: "bg-gray-100" },
-	medium: { color: "text-blue-600", bg: "bg-blue-100" },
-	high: { color: "text-orange-600", bg: "bg-orange-100" },
-	urgent: { color: "text-red-600", bg: "bg-red-100" },
+	LOW: { color: "text-gray-600", bg: "bg-gray-100" },
+	MEDIUM: { color: "text-blue-600", bg: "bg-blue-100" },
+	HIGH: { color: "text-orange-600", bg: "bg-orange-100" },
+	URGENT: { color: "text-red-600", bg: "bg-red-100" },
 };
 
 const contextIcons = {
@@ -127,39 +96,21 @@ const contextIcons = {
 };
 
 export default function TicketDetail({ ticketId }: TicketDetailProps) {
-	const [ticket, setTicket] = useState<TicketData | null>(null);
-	const [loading, setLoading] = useState(true);
+	const router = useRouter();
+	const { data, error, isError, isLoading } = useQuery<TicketResponse, IAxiosError>({
+		queryKey: [ticketId],
+		queryFn: async () => {
+			const res = await axiosInstance.get<{ data: TicketResponse }>(`/ticket/${ticketId}`);
+
+			return res.data.data;
+		},
+	});
 
 	useEffect(() => {
-		// Simulate API call
-		const loadTicket = async () => {
-			setLoading(true);
-			await new Promise((resolve) => setTimeout(resolve, 1000));
-			setTicket(mockTicketData[ticketId] || null);
-			setLoading(false);
-		};
-
-		loadTicket();
-	}, [ticketId]);
-
-	const formatDate = (dateString: string) => {
-		const date = new Date(dateString);
-		return date.toLocaleDateString("en-US", {
-			month: "long",
-			day: "numeric",
-			year: "numeric",
-			hour: "2-digit",
-			minute: "2-digit",
-		});
-	};
-
-	const formatFileSize = (bytes: number): string => {
-		if (bytes === 0) return "0 Bytes";
-		const k = 1024;
-		const sizes = ["Bytes", "KB", "MB"];
-		const i = Math.floor(Math.log(bytes) / Math.log(k));
-		return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-	};
+		if (isError && error.response?.status === 404) {
+			router.replace("/profile/tickets");
+		}
+	}, [error, router]);
 
 	const getStatusIcon = (status: string) => {
 		const config = statusConfig[status as keyof typeof statusConfig];
@@ -186,7 +137,7 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 		);
 	};
 
-	if (loading) {
+	if (isLoading) {
 		return (
 			<div className="space-y-6">
 				<div className="h-8 w-48 animate-pulse rounded bg-gray-200" />
@@ -204,7 +155,7 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 		);
 	}
 
-	if (!ticket) {
+	if (isError && error.response?.status === 404) {
 		return (
 			<div className="py-12 text-center">
 				<AlertCircle className="mx-auto mb-4 h-12 w-12 text-gray-400" />
@@ -239,13 +190,13 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 						</Button>
 					</Link>
 					<div>
-						<h1 className="text-2xl font-bold text-gray-900">{ticket.subject}</h1>
-						<p className="text-gray-600">Ticket #{ticket.id}</p>
+						<h1 className="line-clamp-1 text-2xl font-bold text-gray-900">{data?.title}</h1>
+						<p className="text-gray-600">Ticket #{data?.id}</p>
 					</div>
 				</div>
 				<div className="flex items-center gap-2">
-					{getStatusBadge(ticket.status)}
-					{getPriorityBadge(ticket.priority)}
+					{data?.status && getStatusBadge(data.status)}
+					{data?.priority && getPriorityBadge(data.priority)}
 				</div>
 			</div>
 
@@ -264,7 +215,7 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 							<div>
 								<h4 className="mb-2 font-medium text-gray-900">Description</h4>
 								<div className="prose prose-sm max-w-none text-gray-700">
-									{ticket.description.split("\n").map((paragraph, index) => (
+									{data?.description?.split("\n").map((paragraph, index) => (
 										<p key={index} className="mb-2">
 											{paragraph}
 										</p>
@@ -272,11 +223,11 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 								</div>
 							</div>
 
-							{ticket.contexts.length > 0 && (
+							{data?.contexts && data.contexts.length > 0 && (
 								<div>
 									<h4 className="mb-2 font-medium text-gray-900">Referenced Items</h4>
 									<div className="flex flex-wrap gap-2">
-										{ticket.contexts.map((context, index) => (
+										{data.contexts.map((context, index) => (
 											<Badge key={index} variant="outline" className="flex items-center gap-1">
 												<span>{contextIcons[context.type as keyof typeof contextIcons]}</span>
 												{context.label}
@@ -286,33 +237,38 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 								</div>
 							)}
 
-							{ticket.attachments.length > 0 && (
+							{data?.attachments && data.attachments.length > 0 && (
 								<div>
 									<h4 className="mb-2 font-medium text-gray-900">Attachments</h4>
-									<div className="space-y-2">
-										{ticket.attachments.map((attachment) => (
-											<div
-												key={attachment.id}
-												className="flex items-center justify-between rounded-lg bg-gray-50 p-3"
-											>
-												<div className="flex items-center gap-3">
-													<div className="flex h-8 w-8 items-center justify-center rounded bg-blue-100">
-														<FileText className="h-4 w-4 text-blue-600" />
-													</div>
-													<div>
-														<p className="text-sm font-medium text-gray-900">
-															{attachment.name}
-														</p>
-														<p className="text-xs text-gray-500">
-															{formatFileSize(attachment.size)}
-														</p>
-													</div>
+									<div
+										className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6"
+										style={{ gridAutoRows: "120px" }}
+									>
+										{data.attachments
+											.filter((url: string) => /\.(jpe?g|png|gif|webp|bmp|svg)$/i.test(url))
+											.map((url: string, index: number) => (
+												<div
+													key={index}
+													className="group relative aspect-square overflow-hidden rounded-lg bg-gray-100"
+												>
+													<Image
+														src={url}
+														alt={`Attachment ${index + 1}`}
+														fill
+														className="object-cover transition-transform duration-300 group-hover:scale-105"
+														sizes="(max-width: 768px) 100vw, 33vw"
+													/>
+													{/* Optional: Overlay for download or preview */}
+													<Link
+														href={url}
+														target="_blank"
+														rel="noopener noreferrer"
+														className="absolute right-2 bottom-2 rounded bg-white/80 px-2 py-1 text-xs text-gray-700 opacity-0 transition-opacity group-hover:opacity-100"
+													>
+														Preview
+													</Link>
 												</div>
-												<Button variant="ghost" size="sm">
-													<Download className="h-4 w-4" />
-												</Button>
-											</div>
-										))}
+											))}
 									</div>
 								</div>
 							)}
@@ -329,7 +285,7 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 							<CardDescription>Chat with our support team for real-time assistance</CardDescription>
 						</CardHeader>
 						<CardContent className="p-0">
-							<ChatInterface ticketId={ticket.id} />
+							<ChatInterface ticketId={ticketId} />
 						</CardContent>
 					</Card>
 				</div>
@@ -345,25 +301,25 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 							<div className="flex items-center gap-2 text-sm">
 								<Calendar className="h-4 w-4 text-gray-500" />
 								<span className="text-gray-600">Created:</span>
-								<span className="font-medium">{formatDate(ticket.createdAt)}</span>
+								<span className="font-medium">{data && formatDate(data.createAt)}</span>
 							</div>
 							<div className="flex items-center gap-2 text-sm">
 								<Clock className="h-4 w-4 text-gray-500" />
 								<span className="text-gray-600">Updated:</span>
-								<span className="font-medium">{formatDate(ticket.updatedAt)}</span>
+								<span className="font-medium">{data && formatDate(data.updateAt)}</span>
 							</div>
 							<div className="flex items-center gap-2 text-sm">
 								<Tag className="h-4 w-4 text-gray-500" />
 								<span className="text-gray-600">Category:</span>
 								<Badge variant="outline" className="capitalize">
-									{ticket.category.replace("-", " ")}
+									{data?.category.replace("_", " ").toLowerCase()}
 								</Badge>
 							</div>
 						</CardContent>
 					</Card>
 
 					{/* Assigned Agent */}
-					{ticket.assignedAgent && (
+					{data?.assigned && (
 						<Card>
 							<CardHeader>
 								<CardTitle className="text-lg">Assigned Agent</CardTitle>
@@ -374,12 +330,12 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 										<Avatar className="h-12 w-12">
 											<AvatarImage
 												src={
-													ticket.assignedAgent.avatar ||
+													data?.assigned.avatarUrl ||
 													"https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg"
 												}
 											/>
 											<AvatarFallback>
-												{ticket.assignedAgent.name
+												{data?.assigned.fullname
 													.split(" ")
 													.map((n) => n[0])
 													.join("")}
@@ -387,19 +343,21 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 										</Avatar>
 										<div
 											className={`absolute -right-1 -bottom-1 h-4 w-4 rounded-full border-2 border-white ${
-												ticket.assignedAgent.status === "online"
+												// data?.assigned.status === "online"
+												true
 													? "bg-green-500"
-													: ticket.assignedAgent.status === "away"
+													: // : ticket.assignedAgent.status === "away"
+														false
 														? "bg-yellow-500"
 														: "bg-gray-400"
 											}`}
 										/>
 									</div>
 									<div>
-										<p className="font-medium text-gray-900">{ticket.assignedAgent.name}</p>
-										<p className="text-sm text-gray-600">{ticket.assignedAgent.email}</p>
+										<p className="font-medium text-gray-900">{data?.assigned.fullname}</p>
+										<p className="text-sm text-gray-600">{data?.assigned.email}</p>
 										<p className="text-xs text-gray-500 capitalize">
-											{ticket.assignedAgent.status}
+											{/* {data?.assigned.status} */} Online
 										</p>
 									</div>
 								</div>

@@ -17,7 +17,7 @@ import { LabelInputContainer } from "../components/label-input-container";
 
 export default function LoginPage() {
 	const [isLoading, setIsLoading] = useState(false);
-	const login = useLogin();
+	const { mutateAsync } = useLogin();
 
 	const form = useForm<LoginForm>({
 		resolver: zodResolver(loginSchema),
@@ -30,7 +30,7 @@ export default function LoginPage() {
 	const onSubmit = async (data: LoginForm) => {
 		setIsLoading(true);
 		try {
-			await login.mutateAsync(data);
+			await mutateAsync(data);
 		} finally {
 			setIsLoading(false);
 		}

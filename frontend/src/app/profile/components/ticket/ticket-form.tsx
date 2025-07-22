@@ -1,191 +1,91 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
-import RichTextEditor from "./rich-text-editor";
-import ImageUpload from "./image-upload";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { TicketInput, ticketSchema } from "@/zods/ticket";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AlertTriangle, CheckCircle, Loader2, Send } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import ContextSelector from "./context-selector";
-import { Send, AlertTriangle, CheckCircle, Loader2 } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import ImageUpload from "./image-upload";
+import RichTextEditor from "./rich-text-editor";
+import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { Ticket, TicketCategory, TicketPriority } from "@/typings/backend";
+import axiosInstance from "@/lib/axios";
+import { toast } from "@/hooks/use-toast";
+import { IAxiosError } from "@/typings";
 
-interface TicketFormData {
-	subject: string;
-	category: string;
-	priority: string;
-	description: string;
-	images: File[];
-	contexts: Array<{
-		type: string;
-		id: string;
-		label: string;
-	}>;
-}
+const categories: { value: TicketCategory; label: string }[] = [
+	{ value: "TECHNICAL_SUPPORT", label: "Technical Support" },
+	{ value: "BILLING_PAYMENT", label: "Billing & Payment" },
+	{ value: "ACCOUNT_ISSUE", label: "Account Issues" },
+	{ value: "SERVICE_REQUEST", label: "Service Request" },
+	{ value: "REFUND_REQUEST", label: "Refund Request" },
+	{ value: "GENERAL_INQUIRY", label: "General Inquiry" },
+];
 
-type SubmissionStep = "idle" | "validating" | "uploading" | "submitting" | "success" | "error";
+const priorities: { value: TicketPriority; label: string; description: string }[] = [
+	{ value: "LOW", label: "Low", description: "General questions, non-urgent" },
+	{ value: "MEDIUM", label: "Medium", description: "Standard support request" },
+	{ value: "HIGH", label: "High", description: "Important issue affecting service" },
+	{ value: "URGENT", label: "Urgent", description: "Critical issue, service down" },
+];
 
 export default function TicketForm() {
-	const [formData, setFormData] = useState<TicketFormData>({
-		subject: "",
-		category: "",
-		priority: "medium",
-		description: "",
-		images: [],
-		contexts: [],
-	});
-
-	const [submissionStep, setSubmissionStep] = useState<SubmissionStep>("idle");
-	const [submissionProgress, setSubmissionProgress] = useState(0);
-	const [errors, setErrors] = useState<Record<string, string>>({});
+	const router = useRouter();
 	const [ticketId, setTicketId] = useState<string>("");
 
-	const categories = [
-		{ value: "technical", label: "Technical Support" },
-		{ value: "billing", label: "Billing & Payment" },
-		{ value: "account", label: "Account Issues" },
-		{ value: "service", label: "Service Request" },
-		{ value: "refund", label: "Refund Request" },
-		{ value: "general", label: "General Inquiry" },
-	];
+	const { mutateAsync, isIdle, isError, isPending } = useMutation<{ data: Ticket }, void, TicketInput>({
+		mutationFn: async (data: TicketInput) => {
+			const response = await axiosInstance.post<{ data: Ticket }>("/ticket", data);
+			return response.data;
+		},
+		onSuccess: (res) => {
+			toast({
+				title: "Success",
+				description: "Created ticket",
+				variant: "default",
+			});
 
-	const priorities = [
-		{ value: "low", label: "Low", description: "General questions, non-urgent" },
-		{ value: "medium", label: "Medium", description: "Standard support request" },
-		{ value: "high", label: "High", description: "Important issue affecting service" },
-		{ value: "urgent", label: "Urgent", description: "Critical issue, service down" },
-	];
+			setTicketId(res.data.id || `TKT-${Date.now().toString().slice(-6)}`);
 
-	const validateForm = (): boolean => {
-		const newErrors: Record<string, string> = {};
+			setTimeout(() => {
+				router.push(`/profile/tickets/${res.data.id}`);
+			}, 250);
+		},
+		onError: (error: unknown) => {
+			const axiosError = error as IAxiosError;
+			const message = axiosError?.response?.data?.message;
+			toast({
+				title: "Error",
+				description: typeof message === "string" ? message : "An error occurred during creating",
+				variant: "destructive",
+			});
+		},
+	});
 
-		if (!formData.subject.trim()) {
-			newErrors.subject = "Subject is required";
-		} else if (formData.subject.length < 5) {
-			newErrors.subject = "Subject must be at least 5 characters";
-		}
-
-		if (!formData.category) {
-			newErrors.category = "Please select a category";
-		}
-
-		if (!formData.description.trim()) {
-			newErrors.description = "Description is required";
-		} else if (formData.description.length < 20) {
-			newErrors.description = "Description must be at least 20 characters";
-		}
-
-		if (formData.images.length > 5) {
-			newErrors.images = "Maximum 5 images allowed";
-		}
-
-		setErrors(newErrors);
-		return Object.keys(newErrors).length === 0;
-	};
-
-	const simulateSubmission = async (): Promise<void> => {
-		// Simulate validation
-		setSubmissionStep("validating");
-		setSubmissionProgress(10);
-		await new Promise((resolve) => setTimeout(resolve, 500));
-
-		if (!validateForm()) {
-			setSubmissionStep("error");
-			return;
-		}
-
-		// Simulate image upload
-		if (formData.images.length > 0) {
-			setSubmissionStep("uploading");
-			setSubmissionProgress(30);
-
-			for (let i = 0; i < formData.images.length; i++) {
-				await new Promise((resolve) => setTimeout(resolve, 800));
-				setSubmissionProgress(30 + ((i + 1) / formData.images.length) * 40);
-			}
-		}
-
-		// Simulate ticket submission
-		setSubmissionStep("submitting");
-		setSubmissionProgress(80);
-		await new Promise((resolve) => setTimeout(resolve, 1000));
-
-		setSubmissionProgress(100);
-		setTicketId(`TKT-${Date.now().toString().slice(-6)}`);
-		setSubmissionStep("success");
-	};
-
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		setErrors({});
-		await simulateSubmission();
-	};
-
-	const resetForm = () => {
-		setFormData({
-			subject: "",
-			category: "",
-			priority: "medium",
+	const form = useForm<TicketInput>({
+		resolver: zodResolver(ticketSchema),
+		defaultValues: {
+			title: "",
+			category: undefined,
+			priority: "MEDIUM",
 			description: "",
-			images: [],
-			contexts: [],
-		});
-		setSubmissionStep("idle");
-		setSubmissionProgress(0);
-		setErrors({});
-		setTicketId("");
-	};
+			referenceContext: [],
+		},
+	});
 
-	const getStepMessage = (): string => {
-		switch (submissionStep) {
-			case "validating":
-				return "Validating ticket information...";
-			case "uploading":
-				return "Uploading images...";
-			case "submitting":
-				return "Submitting your ticket...";
-			case "success":
-				return "Ticket submitted successfully!";
-			case "error":
-				return "Please fix the errors and try again";
-			default:
-				return "";
-		}
-	};
-
-	if (submissionStep === "success") {
-		return (
-			<motion.div
-				initial={{ opacity: 0, scale: 0.95 }}
-				animate={{ opacity: 1, scale: 1 }}
-				transition={{ duration: 0.5 }}
-			>
-				<Card className="text-center">
-					<CardContent className="p-8">
-						<CheckCircle className="mx-auto mb-4 h-16 w-16 text-green-600" />
-						<h2 className="mb-2 text-2xl font-bold text-gray-900">Ticket Submitted Successfully!</h2>
-						<p className="mb-4 text-gray-600">
-							Your support ticket has been created with ID: <strong>{ticketId}</strong>
-						</p>
-						<p className="mb-6 text-sm text-gray-500">
-							You will receive an email confirmation shortly. Our support team will respond within 2
-							hours.
-						</p>
-						<div className="flex justify-center gap-4">
-							<Button onClick={resetForm} variant="outline">
-								Submit Another Ticket
-							</Button>
-							<Button onClick={() => (window.location.href = "/profile")}>View My Tickets</Button>
-						</div>
-					</CardContent>
-				</Card>
-			</motion.div>
-		);
-	}
+	const onSubmit = form.handleSubmit(async (data) => {
+		await mutateAsync(data);
+	});
 
 	return (
 		<motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
@@ -197,69 +97,83 @@ export default function TicketForm() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<form onSubmit={handleSubmit} className="space-y-6">
+					<form onSubmit={onSubmit} className="space-y-6">
 						{/* Basic Information */}
 						<div className="grid gap-6 md:grid-cols-2">
 							<div className="space-y-2">
-								<Label htmlFor="subject">
-									Subject <span className="text-red-500">*</span>
+								<Label htmlFor="title">
+									Title <span className="text-red-500">*</span>
 								</Label>
 								<Input
-									id="subject"
-									placeholder="Brief description of your issue"
-									value={formData.subject}
-									onChange={(e) => setFormData((prev) => ({ ...prev, subject: e.target.value }))}
-									className={errors.subject ? "border-red-500" : ""}
-									disabled={submissionStep !== "idle"}
+									id="title"
+									placeholder="Brief title of your issue"
+									{...form.register("title")}
+									aria-invalid={!!form.formState.errors.title}
+									aria-describedby={form.formState.errors.title ? "title-error" : undefined}
 								/>
-								{errors.subject && <p className="text-sm text-red-600">{errors.subject}</p>}
+								{form.formState.errors.title && (
+									<p className="text-sm text-red-600">{form.formState.errors.title.message}</p>
+								)}
 							</div>
 
 							<div className="space-y-2">
 								<Label htmlFor="category">
 									Category <span className="text-red-500">*</span>
 								</Label>
-								<Select
-									value={formData.category}
-									onValueChange={(value) => setFormData((prev) => ({ ...prev, category: value }))}
-									disabled={submissionStep !== "idle"}
-								>
-									<SelectTrigger className={errors.category ? "border-red-500" : ""}>
-										<SelectValue placeholder="Select category" />
-									</SelectTrigger>
-									<SelectContent>
-										{categories.map((category) => (
-											<SelectItem key={category.value} value={category.value}>
-												{category.label}
-											</SelectItem>
-										))}
-									</SelectContent>
-								</Select>
-								{errors.category && <p className="text-sm text-red-600">{errors.category}</p>}
+								<Controller
+									control={form.control}
+									name="category"
+									render={({ field, fieldState }) => (
+										<Select value={field.value} onValueChange={field.onChange} disabled={isPending}>
+											<SelectTrigger className={fieldState.error ? "border-red-500" : ""}>
+												<SelectValue placeholder="Select category" />
+											</SelectTrigger>
+											<SelectContent>
+												{categories.map((category) => (
+													<SelectItem key={category.value} value={category.value}>
+														{category.label}
+													</SelectItem>
+												))}
+											</SelectContent>
+										</Select>
+									)}
+								/>
+								{form.formState.errors.category && (
+									<p className="text-sm text-red-600">{form.formState.errors.category.message}</p>
+								)}
 							</div>
 						</div>
 
 						{/* Priority Selection */}
 						<div className="space-y-2">
 							<Label>Priority Level</Label>
-							<div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-								{priorities.map((priority) => (
-									<button
-										key={priority.value}
-										type="button"
-										onClick={() => setFormData((prev) => ({ ...prev, priority: priority.value }))}
-										disabled={submissionStep !== "idle"}
-										className={`rounded-lg border p-3 text-left transition-all hover:shadow-sm ${
-											formData.priority === priority.value
-												? "border-blue-500 bg-blue-50"
-												: "border-gray-200 hover:border-gray-300"
-										} ${submissionStep !== "idle" ? "cursor-not-allowed opacity-50" : ""}`}
-									>
-										<div className="text-sm font-medium">{priority.label}</div>
-										<div className="mt-1 text-xs text-gray-600">{priority.description}</div>
-									</button>
-								))}
-							</div>
+							<Controller
+								control={form.control}
+								name="priority"
+								render={({ field }) => (
+									<div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+										{priorities.map((priority) => (
+											<button
+												key={priority.value}
+												type="button"
+												onClick={() => field.onChange(priority.value)}
+												disabled={isPending}
+												className={`rounded-lg border p-3 text-left transition-all hover:shadow-sm ${
+													field.value === priority.value
+														? "border-blue-500 bg-blue-50"
+														: "border-gray-200 hover:border-gray-300"
+												} ${isPending ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
+											>
+												<div className="text-sm font-medium">{priority.label}</div>
+												<div className="mt-1 text-xs text-gray-600">{priority.description}</div>
+											</button>
+										))}
+									</div>
+								)}
+							/>
+							{form.formState.errors.priority && (
+								<p className="text-sm text-red-600">{form.formState.errors.priority.message}</p>
+							)}
 						</div>
 
 						{/* Rich Text Editor */}
@@ -267,41 +181,53 @@ export default function TicketForm() {
 							<Label>
 								Description <span className="text-red-500">*</span>
 							</Label>
-							<RichTextEditor
-								value={formData.description}
-								onChange={(value) => setFormData((prev) => ({ ...prev, description: value }))}
-								placeholder="Describe your issue in detail. Include steps to reproduce, error messages, and any relevant information."
-								disabled={submissionStep !== "idle"}
-								error={errors.description}
+							<Controller
+								control={form.control}
+								name="description"
+								render={({ field, fieldState }) => (
+									<RichTextEditor
+										value={field.value}
+										onChange={field.onChange}
+										placeholder="Describe your issue in detail. Include steps to reproduce, error messages, and any relevant information."
+										disabled={isPending}
+										error={fieldState.error?.message}
+									/>
+								)}
 							/>
-							{errors.description && <p className="text-sm text-red-600">{errors.description}</p>}
+							{form.formState.errors.description && (
+								<p className="text-sm text-red-600">{form.formState.errors.description.message}</p>
+							)}
 						</div>
 
 						{/* Context Selector */}
 						<div className="space-y-2">
 							<Label>Reference Context (Optional)</Label>
-							<ContextSelector
-								selectedContexts={formData.contexts}
-								onContextsChange={(contexts) => setFormData((prev) => ({ ...prev, contexts }))}
-								disabled={submissionStep !== "idle"}
+							<Controller
+								control={form.control}
+								name="referenceContext"
+								render={({ field }) => (
+									<ContextSelector
+										selectedContexts={(field.value ?? []).map((id: string) => ({
+											id,
+											label: id,
+											type: "custom",
+										}))}
+										onContextsChange={(contexts) => field.onChange(contexts.map((c) => c.id))}
+										disabled={isPending}
+									/>
+								)}
 							/>
 						</div>
 
 						{/* Image Upload */}
 						<div className="space-y-2">
 							<Label>Attachments (Optional)</Label>
-							<ImageUpload
-								images={formData.images}
-								onImagesChange={(images) => setFormData((prev) => ({ ...prev, images }))}
-								disabled={submissionStep !== "idle"}
-								error={errors.images}
-							/>
-							{errors.images && <p className="text-sm text-red-600">{errors.images}</p>}
+							<ImageUpload images={[]} onImagesChange={() => {}} disabled={isPending} />
 						</div>
 
 						{/* Submission Progress */}
 						<AnimatePresence>
-							{!["idle", "success"].includes(submissionStep) && (
+							{isPending && (
 								<motion.div
 									initial={{ opacity: 0, height: 0 }}
 									animate={{ opacity: 1, height: "auto" }}
@@ -309,22 +235,16 @@ export default function TicketForm() {
 									className="space-y-3"
 								>
 									<div className="flex items-center gap-2">
-										{submissionStep === "error" ? (
-											<AlertTriangle className="h-5 w-5 text-red-600" />
-										) : (
-											<Loader2 className="h-5 w-5 animate-spin text-blue-600" />
-										)}
-										<span className="text-sm font-medium">{getStepMessage()}</span>
+										<Loader2 className="h-5 w-5 animate-spin text-blue-600" />
+										<span className="text-sm font-medium">Submitting...</span>
 									</div>
-									{submissionStep !== "error" && (
-										<Progress value={submissionProgress} className="h-2" />
-									)}
+									<Progress value={80} className="h-2" />
 								</motion.div>
 							)}
 						</AnimatePresence>
 
 						{/* Error Alert */}
-						{Object.keys(errors).length > 0 && submissionStep === "error" && (
+						{isError && (
 							<Alert className="border-red-200 bg-red-50">
 								<AlertTriangle className="h-4 w-4" />
 								<AlertDescription className="text-red-700">
@@ -335,21 +255,16 @@ export default function TicketForm() {
 
 						{/* Submit Button */}
 						<div className="flex justify-end pt-4">
-							<Button
-								type="submit"
-								size="lg"
-								disabled={submissionStep !== "idle"}
-								className="flex items-center gap-2"
-							>
-								{submissionStep === "idle" ? (
-									<>
-										<Send className="h-4 w-4" />
-										Submit Ticket
-									</>
-								) : (
+							<Button type="submit" size="lg" disabled={isPending} className="flex items-center gap-2">
+								{isPending ? (
 									<>
 										<Loader2 className="h-4 w-4 animate-spin" />
 										Processing...
+									</>
+								) : (
+									<>
+										<Send className="h-4 w-4" />
+										Submit Ticket
 									</>
 								)}
 							</Button>

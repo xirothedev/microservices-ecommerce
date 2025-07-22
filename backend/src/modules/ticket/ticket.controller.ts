@@ -1,12 +1,13 @@
 import { MediasInterceptor } from '@/common/interceptors/media.interceptor';
 import { Body, Controller, Get, Param, Post, Put, Query, Req, UseInterceptors } from '@nestjs/common';
+import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { CreateTicketMessageDto } from './dto/create-ticket-message.dto';
 import { CreateTicketDto } from './dto/create-ticket.dto';
+import { FindAllTicketMessageDto } from './dto/find-all-ticket-message.dto';
 import { FindAllTicketDto } from './dto/find-all-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { TicketService } from './ticket.service';
-import { ApiTags, ApiOperation, ApiBody, ApiParam, ApiQuery } from '@nestjs/swagger';
 
 @ApiTags('Ticket')
 @Controller('ticket')
@@ -61,5 +62,15 @@ export class TicketController {
     attachments: Express.Multer.File[],
   ) {
     return this.ticketService.createMessage(req, ticketId, body, attachments);
+  }
+
+  @Get(':id/messages')
+  @ApiOperation({ summary: 'Get messages for a ticket with infinite loading' })
+  @ApiParam({ name: 'id', required: true })
+  @ApiQuery({ name: 'page', required: false })
+  @ApiQuery({ name: 'limit', required: false })
+  @ApiQuery({ name: 'cursor', required: false })
+  findMessages(@Param('id') ticketId: string, @Query() query: FindAllTicketMessageDto) {
+    return this.ticketService.findMessages(ticketId, query);
   }
 }

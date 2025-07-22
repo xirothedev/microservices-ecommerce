@@ -86,6 +86,11 @@ export type Ticket = $Result.DefaultSelection<Prisma.$TicketPayload>;
  *
  */
 export type TicketMessage = $Result.DefaultSelection<Prisma.$TicketMessagePayload>;
+/**
+ * Model TicketContext
+ *
+ */
+export type TicketContext = $Result.DefaultSelection<Prisma.$TicketContextPayload>;
 
 /**
  * Enums
@@ -201,6 +206,15 @@ export namespace $Enums {
   };
 
   export type TicketPriority = (typeof TicketPriority)[keyof typeof TicketPriority];
+
+  export const TicketContextType: {
+    ORDER: 'ORDER';
+    PRODUCT: 'PRODUCT';
+    TRANSACTION: 'TRANSACTION';
+    ACCOUNT: 'ACCOUNT';
+  };
+
+  export type TicketContextType = (typeof TicketContextType)[keyof typeof TicketContextType];
 }
 
 export type AuthType = $Enums.AuthType;
@@ -250,6 +264,10 @@ export const TicketCategory: typeof $Enums.TicketCategory;
 export type TicketPriority = $Enums.TicketPriority;
 
 export const TicketPriority: typeof $Enums.TicketPriority;
+
+export type TicketContextType = $Enums.TicketContextType;
+
+export const TicketContextType: typeof $Enums.TicketContextType;
 
 /**
  * ##  Prisma Client ʲˢ
@@ -544,6 +562,16 @@ export class PrismaClient<
    * ```
    */
   get ticketMessage(): Prisma.TicketMessageDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.ticketContext`: Exposes CRUD operations for the **TicketContext** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more TicketContexts
+   * const ticketContexts = await prisma.ticketContext.findMany()
+   * ```
+   */
+  get ticketContext(): Prisma.TicketContextDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -975,6 +1003,7 @@ export namespace Prisma {
     CartItem: 'CartItem';
     Ticket: 'Ticket';
     TicketMessage: 'TicketMessage';
+    TicketContext: 'TicketContext';
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName];
@@ -1011,7 +1040,8 @@ export namespace Prisma {
         | 'bill'
         | 'cartItem'
         | 'ticket'
-        | 'ticketMessage';
+        | 'ticketMessage'
+        | 'ticketContext';
       txIsolationLevel: Prisma.TransactionIsolationLevel;
     };
     model: {
@@ -2125,6 +2155,80 @@ export namespace Prisma {
           };
         };
       };
+      TicketContext: {
+        payload: Prisma.$TicketContextPayload<ExtArgs>;
+        fields: Prisma.TicketContextFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.TicketContextFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TicketContextPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.TicketContextFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TicketContextPayload>;
+          };
+          findFirst: {
+            args: Prisma.TicketContextFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TicketContextPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.TicketContextFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TicketContextPayload>;
+          };
+          findMany: {
+            args: Prisma.TicketContextFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TicketContextPayload>[];
+          };
+          create: {
+            args: Prisma.TicketContextCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TicketContextPayload>;
+          };
+          createMany: {
+            args: Prisma.TicketContextCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.TicketContextCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TicketContextPayload>[];
+          };
+          delete: {
+            args: Prisma.TicketContextDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TicketContextPayload>;
+          };
+          update: {
+            args: Prisma.TicketContextUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TicketContextPayload>;
+          };
+          deleteMany: {
+            args: Prisma.TicketContextDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.TicketContextUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateManyAndReturn: {
+            args: Prisma.TicketContextUpdateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TicketContextPayload>[];
+          };
+          upsert: {
+            args: Prisma.TicketContextUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$TicketContextPayload>;
+          };
+          aggregate: {
+            args: Prisma.TicketContextAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateTicketContext>;
+          };
+          groupBy: {
+            args: Prisma.TicketContextGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<TicketContextGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.TicketContextCountArgs<ExtArgs>;
+            result: $Utils.Optional<TicketContextCountAggregateOutputType> | number;
+          };
+        };
+      };
     };
   } & {
     other: {
@@ -2224,6 +2328,7 @@ export namespace Prisma {
     cartItem?: CartItemOmit;
     ticket?: TicketOmit;
     ticketMessage?: TicketMessageOmit;
+    ticketContext?: TicketContextOmit;
   };
 
   /* Types for Logging */
@@ -2582,10 +2687,12 @@ export namespace Prisma {
    */
 
   export type TicketCountOutputType = {
+    contexts: number;
     messages: number;
   };
 
   export type TicketCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contexts?: boolean | TicketCountOutputTypeCountContextsArgs;
     messages?: boolean | TicketCountOutputTypeCountMessagesArgs;
   };
 
@@ -2598,6 +2705,15 @@ export namespace Prisma {
      * Select specific fields to fetch from the TicketCountOutputType
      */
     select?: TicketCountOutputTypeSelect<ExtArgs> | null;
+  };
+
+  /**
+   * TicketCountOutputType without action
+   */
+  export type TicketCountOutputTypeCountContextsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: TicketContextWhereInput;
   };
 
   /**
@@ -19362,7 +19478,6 @@ export namespace Prisma {
     status: $Enums.TicketStatus | null;
     category: $Enums.TicketCategory | null;
     priority: $Enums.TicketPriority | null;
-    referenceContext: string | null;
     authorId: string | null;
     assignedId: string | null;
   };
@@ -19377,7 +19492,6 @@ export namespace Prisma {
     status: $Enums.TicketStatus | null;
     category: $Enums.TicketCategory | null;
     priority: $Enums.TicketPriority | null;
-    referenceContext: string | null;
     authorId: string | null;
     assignedId: string | null;
   };
@@ -19392,7 +19506,6 @@ export namespace Prisma {
     status: number;
     category: number;
     priority: number;
-    referenceContext: number;
     attachments: number;
     authorId: number;
     assignedId: number;
@@ -19417,7 +19530,6 @@ export namespace Prisma {
     status?: true;
     category?: true;
     priority?: true;
-    referenceContext?: true;
     authorId?: true;
     assignedId?: true;
   };
@@ -19432,7 +19544,6 @@ export namespace Prisma {
     status?: true;
     category?: true;
     priority?: true;
-    referenceContext?: true;
     authorId?: true;
     assignedId?: true;
   };
@@ -19447,7 +19558,6 @@ export namespace Prisma {
     status?: true;
     category?: true;
     priority?: true;
-    referenceContext?: true;
     attachments?: true;
     authorId?: true;
     assignedId?: true;
@@ -19547,7 +19657,6 @@ export namespace Prisma {
     status: $Enums.TicketStatus;
     category: $Enums.TicketCategory;
     priority: $Enums.TicketPriority;
-    referenceContext: string | null;
     attachments: string[];
     authorId: string;
     assignedId: string | null;
@@ -19581,10 +19690,10 @@ export namespace Prisma {
       status?: boolean;
       category?: boolean;
       priority?: boolean;
-      referenceContext?: boolean;
       attachments?: boolean;
       authorId?: boolean;
       assignedId?: boolean;
+      contexts?: boolean | Ticket$contextsArgs<ExtArgs>;
       author?: boolean | UserDefaultArgs<ExtArgs>;
       assigned?: boolean | Ticket$assignedArgs<ExtArgs>;
       messages?: boolean | Ticket$messagesArgs<ExtArgs>;
@@ -19605,7 +19714,6 @@ export namespace Prisma {
         status?: boolean;
         category?: boolean;
         priority?: boolean;
-        referenceContext?: boolean;
         attachments?: boolean;
         authorId?: boolean;
         assignedId?: boolean;
@@ -19627,7 +19735,6 @@ export namespace Prisma {
         status?: boolean;
         category?: boolean;
         priority?: boolean;
-        referenceContext?: boolean;
         attachments?: boolean;
         authorId?: boolean;
         assignedId?: boolean;
@@ -19647,7 +19754,6 @@ export namespace Prisma {
     status?: boolean;
     category?: boolean;
     priority?: boolean;
-    referenceContext?: boolean;
     attachments?: boolean;
     authorId?: boolean;
     assignedId?: boolean;
@@ -19663,13 +19769,13 @@ export namespace Prisma {
     | 'status'
     | 'category'
     | 'priority'
-    | 'referenceContext'
     | 'attachments'
     | 'authorId'
     | 'assignedId',
     ExtArgs['result']['ticket']
   >;
   export type TicketInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contexts?: boolean | Ticket$contextsArgs<ExtArgs>;
     author?: boolean | UserDefaultArgs<ExtArgs>;
     assigned?: boolean | Ticket$assignedArgs<ExtArgs>;
     messages?: boolean | Ticket$messagesArgs<ExtArgs>;
@@ -19687,6 +19793,7 @@ export namespace Prisma {
   export type $TicketPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: 'Ticket';
     objects: {
+      contexts: Prisma.$TicketContextPayload<ExtArgs>[];
       author: Prisma.$UserPayload<ExtArgs>;
       assigned: Prisma.$UserPayload<ExtArgs> | null;
       messages: Prisma.$TicketMessagePayload<ExtArgs>[];
@@ -19702,7 +19809,6 @@ export namespace Prisma {
         status: $Enums.TicketStatus;
         category: $Enums.TicketCategory;
         priority: $Enums.TicketPriority;
-        referenceContext: string | null;
         attachments: string[];
         authorId: string;
         assignedId: string | null;
@@ -20182,6 +20288,11 @@ export namespace Prisma {
     GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
+    contexts<T extends Ticket$contextsArgs<ExtArgs> = {}>(
+      args?: Subset<T, Ticket$contextsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$TicketContextPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions> | Null
+    >;
     author<T extends UserDefaultArgs<ExtArgs> = {}>(
       args?: Subset<T, UserDefaultArgs<ExtArgs>>,
     ): Prisma__UserClient<
@@ -20243,7 +20354,6 @@ export namespace Prisma {
     readonly status: FieldRef<'Ticket', 'TicketStatus'>;
     readonly category: FieldRef<'Ticket', 'TicketCategory'>;
     readonly priority: FieldRef<'Ticket', 'TicketPriority'>;
-    readonly referenceContext: FieldRef<'Ticket', 'String'>;
     readonly attachments: FieldRef<'Ticket', 'String[]'>;
     readonly authorId: FieldRef<'Ticket', 'String'>;
     readonly assignedId: FieldRef<'Ticket', 'String'>;
@@ -20648,6 +20758,30 @@ export namespace Prisma {
      * Limit how many Tickets to delete.
      */
     limit?: number;
+  };
+
+  /**
+   * Ticket.contexts
+   */
+  export type Ticket$contextsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketContext
+     */
+    select?: TicketContextSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TicketContext
+     */
+    omit?: TicketContextOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketContextInclude<ExtArgs> | null;
+    where?: TicketContextWhereInput;
+    orderBy?: TicketContextOrderByWithRelationInput | TicketContextOrderByWithRelationInput[];
+    cursor?: TicketContextWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: TicketContextScalarFieldEnum | TicketContextScalarFieldEnum[];
   };
 
   /**
@@ -21937,6 +22071,1165 @@ export namespace Prisma {
   };
 
   /**
+   * Model TicketContext
+   */
+
+  export type AggregateTicketContext = {
+    _count: TicketContextCountAggregateOutputType | null;
+    _min: TicketContextMinAggregateOutputType | null;
+    _max: TicketContextMaxAggregateOutputType | null;
+  };
+
+  export type TicketContextMinAggregateOutputType = {
+    id: string | null;
+    type: $Enums.TicketContextType | null;
+    label: string | null;
+    ticketId: string | null;
+  };
+
+  export type TicketContextMaxAggregateOutputType = {
+    id: string | null;
+    type: $Enums.TicketContextType | null;
+    label: string | null;
+    ticketId: string | null;
+  };
+
+  export type TicketContextCountAggregateOutputType = {
+    id: number;
+    type: number;
+    label: number;
+    ticketId: number;
+    _all: number;
+  };
+
+  export type TicketContextMinAggregateInputType = {
+    id?: true;
+    type?: true;
+    label?: true;
+    ticketId?: true;
+  };
+
+  export type TicketContextMaxAggregateInputType = {
+    id?: true;
+    type?: true;
+    label?: true;
+    ticketId?: true;
+  };
+
+  export type TicketContextCountAggregateInputType = {
+    id?: true;
+    type?: true;
+    label?: true;
+    ticketId?: true;
+    _all?: true;
+  };
+
+  export type TicketContextAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TicketContext to aggregate.
+     */
+    where?: TicketContextWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TicketContexts to fetch.
+     */
+    orderBy?: TicketContextOrderByWithRelationInput | TicketContextOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: TicketContextWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TicketContexts from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TicketContexts.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned TicketContexts
+     **/
+    _count?: true | TicketContextCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: TicketContextMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: TicketContextMaxAggregateInputType;
+  };
+
+  export type GetTicketContextAggregateType<T extends TicketContextAggregateArgs> = {
+    [P in keyof T & keyof AggregateTicketContext]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTicketContext[P]>
+      : GetScalarType<T[P], AggregateTicketContext[P]>;
+  };
+
+  export type TicketContextGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TicketContextWhereInput;
+    orderBy?: TicketContextOrderByWithAggregationInput | TicketContextOrderByWithAggregationInput[];
+    by: TicketContextScalarFieldEnum[] | TicketContextScalarFieldEnum;
+    having?: TicketContextScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: TicketContextCountAggregateInputType | true;
+    _min?: TicketContextMinAggregateInputType;
+    _max?: TicketContextMaxAggregateInputType;
+  };
+
+  export type TicketContextGroupByOutputType = {
+    id: string;
+    type: $Enums.TicketContextType;
+    label: string;
+    ticketId: string;
+    _count: TicketContextCountAggregateOutputType | null;
+    _min: TicketContextMinAggregateOutputType | null;
+    _max: TicketContextMaxAggregateOutputType | null;
+  };
+
+  type GetTicketContextGroupByPayload<T extends TicketContextGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TicketContextGroupByOutputType, T['by']> & {
+        [P in keyof T & keyof TicketContextGroupByOutputType]: P extends '_count'
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], TicketContextGroupByOutputType[P]>
+          : GetScalarType<T[P], TicketContextGroupByOutputType[P]>;
+      }
+    >
+  >;
+
+  export type TicketContextSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    $Extensions.GetSelect<
+      {
+        id?: boolean;
+        type?: boolean;
+        label?: boolean;
+        ticketId?: boolean;
+        ticket?: boolean | TicketDefaultArgs<ExtArgs>;
+      },
+      ExtArgs['result']['ticketContext']
+    >;
+
+  export type TicketContextSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      type?: boolean;
+      label?: boolean;
+      ticketId?: boolean;
+      ticket?: boolean | TicketDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['ticketContext']
+  >;
+
+  export type TicketContextSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      type?: boolean;
+      label?: boolean;
+      ticketId?: boolean;
+      ticket?: boolean | TicketDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['ticketContext']
+  >;
+
+  export type TicketContextSelectScalar = {
+    id?: boolean;
+    type?: boolean;
+    label?: boolean;
+    ticketId?: boolean;
+  };
+
+  export type TicketContextOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    $Extensions.GetOmit<'id' | 'type' | 'label' | 'ticketId', ExtArgs['result']['ticketContext']>;
+  export type TicketContextInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>;
+  };
+  export type TicketContextIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>;
+  };
+  export type TicketContextIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    ticket?: boolean | TicketDefaultArgs<ExtArgs>;
+  };
+
+  export type $TicketContextPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: 'TicketContext';
+    objects: {
+      ticket: Prisma.$TicketPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        type: $Enums.TicketContextType;
+        label: string;
+        ticketId: string;
+      },
+      ExtArgs['result']['ticketContext']
+    >;
+    composites: {};
+  };
+
+  type TicketContextGetPayload<S extends boolean | null | undefined | TicketContextDefaultArgs> = $Result.GetResult<
+    Prisma.$TicketContextPayload,
+    S
+  >;
+
+  type TicketContextCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<
+    TicketContextFindManyArgs,
+    'select' | 'include' | 'distinct' | 'omit' | 'relationLoadStrategy'
+  > & {
+    select?: TicketContextCountAggregateInputType | true;
+  };
+
+  export interface TicketContextDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['TicketContext']; meta: { name: 'TicketContext' } };
+    /**
+     * Find zero or one TicketContext that matches the filter.
+     * @param {TicketContextFindUniqueArgs} args - Arguments to find a TicketContext
+     * @example
+     * // Get one TicketContext
+     * const ticketContext = await prisma.ticketContext.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TicketContextFindUniqueArgs>(
+      args: SelectSubset<T, TicketContextFindUniqueArgs<ExtArgs>>,
+    ): Prisma__TicketContextClient<
+      $Result.GetResult<Prisma.$TicketContextPayload<ExtArgs>, T, 'findUnique', GlobalOmitOptions> | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find one TicketContext that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TicketContextFindUniqueOrThrowArgs} args - Arguments to find a TicketContext
+     * @example
+     * // Get one TicketContext
+     * const ticketContext = await prisma.ticketContext.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TicketContextFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, TicketContextFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__TicketContextClient<
+      $Result.GetResult<Prisma.$TicketContextPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first TicketContext that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TicketContextFindFirstArgs} args - Arguments to find a TicketContext
+     * @example
+     * // Get one TicketContext
+     * const ticketContext = await prisma.ticketContext.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TicketContextFindFirstArgs>(
+      args?: SelectSubset<T, TicketContextFindFirstArgs<ExtArgs>>,
+    ): Prisma__TicketContextClient<
+      $Result.GetResult<Prisma.$TicketContextPayload<ExtArgs>, T, 'findFirst', GlobalOmitOptions> | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first TicketContext that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TicketContextFindFirstOrThrowArgs} args - Arguments to find a TicketContext
+     * @example
+     * // Get one TicketContext
+     * const ticketContext = await prisma.ticketContext.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TicketContextFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, TicketContextFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__TicketContextClient<
+      $Result.GetResult<Prisma.$TicketContextPayload<ExtArgs>, T, 'findFirstOrThrow', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find zero or more TicketContexts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TicketContextFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all TicketContexts
+     * const ticketContexts = await prisma.ticketContext.findMany()
+     *
+     * // Get first 10 TicketContexts
+     * const ticketContexts = await prisma.ticketContext.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const ticketContextWithIdOnly = await prisma.ticketContext.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends TicketContextFindManyArgs>(
+      args?: SelectSubset<T, TicketContextFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketContextPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>>;
+
+    /**
+     * Create a TicketContext.
+     * @param {TicketContextCreateArgs} args - Arguments to create a TicketContext.
+     * @example
+     * // Create one TicketContext
+     * const TicketContext = await prisma.ticketContext.create({
+     *   data: {
+     *     // ... data to create a TicketContext
+     *   }
+     * })
+     *
+     */
+    create<T extends TicketContextCreateArgs>(
+      args: SelectSubset<T, TicketContextCreateArgs<ExtArgs>>,
+    ): Prisma__TicketContextClient<
+      $Result.GetResult<Prisma.$TicketContextPayload<ExtArgs>, T, 'create', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Create many TicketContexts.
+     * @param {TicketContextCreateManyArgs} args - Arguments to create many TicketContexts.
+     * @example
+     * // Create many TicketContexts
+     * const ticketContext = await prisma.ticketContext.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends TicketContextCreateManyArgs>(
+      args?: SelectSubset<T, TicketContextCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many TicketContexts and returns the data saved in the database.
+     * @param {TicketContextCreateManyAndReturnArgs} args - Arguments to create many TicketContexts.
+     * @example
+     * // Create many TicketContexts
+     * const ticketContext = await prisma.ticketContext.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many TicketContexts and only return the `id`
+     * const ticketContextWithIdOnly = await prisma.ticketContext.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends TicketContextCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, TicketContextCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$TicketContextPayload<ExtArgs>, T, 'createManyAndReturn', GlobalOmitOptions>
+    >;
+
+    /**
+     * Delete a TicketContext.
+     * @param {TicketContextDeleteArgs} args - Arguments to delete one TicketContext.
+     * @example
+     * // Delete one TicketContext
+     * const TicketContext = await prisma.ticketContext.delete({
+     *   where: {
+     *     // ... filter to delete one TicketContext
+     *   }
+     * })
+     *
+     */
+    delete<T extends TicketContextDeleteArgs>(
+      args: SelectSubset<T, TicketContextDeleteArgs<ExtArgs>>,
+    ): Prisma__TicketContextClient<
+      $Result.GetResult<Prisma.$TicketContextPayload<ExtArgs>, T, 'delete', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Update one TicketContext.
+     * @param {TicketContextUpdateArgs} args - Arguments to update one TicketContext.
+     * @example
+     * // Update one TicketContext
+     * const ticketContext = await prisma.ticketContext.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends TicketContextUpdateArgs>(
+      args: SelectSubset<T, TicketContextUpdateArgs<ExtArgs>>,
+    ): Prisma__TicketContextClient<
+      $Result.GetResult<Prisma.$TicketContextPayload<ExtArgs>, T, 'update', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Delete zero or more TicketContexts.
+     * @param {TicketContextDeleteManyArgs} args - Arguments to filter TicketContexts to delete.
+     * @example
+     * // Delete a few TicketContexts
+     * const { count } = await prisma.ticketContext.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends TicketContextDeleteManyArgs>(
+      args?: SelectSubset<T, TicketContextDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more TicketContexts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TicketContextUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many TicketContexts
+     * const ticketContext = await prisma.ticketContext.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends TicketContextUpdateManyArgs>(
+      args: SelectSubset<T, TicketContextUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more TicketContexts and returns the data updated in the database.
+     * @param {TicketContextUpdateManyAndReturnArgs} args - Arguments to update many TicketContexts.
+     * @example
+     * // Update many TicketContexts
+     * const ticketContext = await prisma.ticketContext.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more TicketContexts and only return the `id`
+     * const ticketContextWithIdOnly = await prisma.ticketContext.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends TicketContextUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, TicketContextUpdateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$TicketContextPayload<ExtArgs>, T, 'updateManyAndReturn', GlobalOmitOptions>
+    >;
+
+    /**
+     * Create or update one TicketContext.
+     * @param {TicketContextUpsertArgs} args - Arguments to update or create a TicketContext.
+     * @example
+     * // Update or create a TicketContext
+     * const ticketContext = await prisma.ticketContext.upsert({
+     *   create: {
+     *     // ... data to create a TicketContext
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the TicketContext we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TicketContextUpsertArgs>(
+      args: SelectSubset<T, TicketContextUpsertArgs<ExtArgs>>,
+    ): Prisma__TicketContextClient<
+      $Result.GetResult<Prisma.$TicketContextPayload<ExtArgs>, T, 'upsert', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Count the number of TicketContexts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TicketContextCountArgs} args - Arguments to filter TicketContexts to count.
+     * @example
+     * // Count the number of TicketContexts
+     * const count = await prisma.ticketContext.count({
+     *   where: {
+     *     // ... the filter for the TicketContexts we want to count
+     *   }
+     * })
+     **/
+    count<T extends TicketContextCountArgs>(
+      args?: Subset<T, TicketContextCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TicketContextCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a TicketContext.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TicketContextAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends TicketContextAggregateArgs>(
+      args: Subset<T, TicketContextAggregateArgs>,
+    ): Prisma.PrismaPromise<GetTicketContextAggregateType<T>>;
+
+    /**
+     * Group by TicketContext.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TicketContextGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends TicketContextGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TicketContextGroupByArgs['orderBy'] }
+        : { orderBy?: TicketContextGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, TicketContextGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors ? GetTicketContextGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the TicketContext model
+     */
+    readonly fields: TicketContextFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for TicketContext.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TicketContextClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    ticket<T extends TicketDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, TicketDefaultArgs<ExtArgs>>,
+    ): Prisma__TicketClient<
+      $Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the TicketContext model
+   */
+  interface TicketContextFieldRefs {
+    readonly id: FieldRef<'TicketContext', 'String'>;
+    readonly type: FieldRef<'TicketContext', 'TicketContextType'>;
+    readonly label: FieldRef<'TicketContext', 'String'>;
+    readonly ticketId: FieldRef<'TicketContext', 'String'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * TicketContext findUnique
+   */
+  export type TicketContextFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketContext
+     */
+    select?: TicketContextSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TicketContext
+     */
+    omit?: TicketContextOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketContextInclude<ExtArgs> | null;
+    /**
+     * Filter, which TicketContext to fetch.
+     */
+    where: TicketContextWhereUniqueInput;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * TicketContext findUniqueOrThrow
+   */
+  export type TicketContextFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketContext
+     */
+    select?: TicketContextSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TicketContext
+     */
+    omit?: TicketContextOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketContextInclude<ExtArgs> | null;
+    /**
+     * Filter, which TicketContext to fetch.
+     */
+    where: TicketContextWhereUniqueInput;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * TicketContext findFirst
+   */
+  export type TicketContextFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketContext
+     */
+    select?: TicketContextSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TicketContext
+     */
+    omit?: TicketContextOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketContextInclude<ExtArgs> | null;
+    /**
+     * Filter, which TicketContext to fetch.
+     */
+    where?: TicketContextWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TicketContexts to fetch.
+     */
+    orderBy?: TicketContextOrderByWithRelationInput | TicketContextOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for TicketContexts.
+     */
+    cursor?: TicketContextWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TicketContexts from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TicketContexts.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of TicketContexts.
+     */
+    distinct?: TicketContextScalarFieldEnum | TicketContextScalarFieldEnum[];
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * TicketContext findFirstOrThrow
+   */
+  export type TicketContextFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketContext
+     */
+    select?: TicketContextSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TicketContext
+     */
+    omit?: TicketContextOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketContextInclude<ExtArgs> | null;
+    /**
+     * Filter, which TicketContext to fetch.
+     */
+    where?: TicketContextWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TicketContexts to fetch.
+     */
+    orderBy?: TicketContextOrderByWithRelationInput | TicketContextOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for TicketContexts.
+     */
+    cursor?: TicketContextWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TicketContexts from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TicketContexts.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of TicketContexts.
+     */
+    distinct?: TicketContextScalarFieldEnum | TicketContextScalarFieldEnum[];
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * TicketContext findMany
+   */
+  export type TicketContextFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketContext
+     */
+    select?: TicketContextSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TicketContext
+     */
+    omit?: TicketContextOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketContextInclude<ExtArgs> | null;
+    /**
+     * Filter, which TicketContexts to fetch.
+     */
+    where?: TicketContextWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of TicketContexts to fetch.
+     */
+    orderBy?: TicketContextOrderByWithRelationInput | TicketContextOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing TicketContexts.
+     */
+    cursor?: TicketContextWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` TicketContexts from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` TicketContexts.
+     */
+    skip?: number;
+    distinct?: TicketContextScalarFieldEnum | TicketContextScalarFieldEnum[];
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * TicketContext create
+   */
+  export type TicketContextCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketContext
+     */
+    select?: TicketContextSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TicketContext
+     */
+    omit?: TicketContextOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketContextInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a TicketContext.
+     */
+    data: XOR<TicketContextCreateInput, TicketContextUncheckedCreateInput>;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * TicketContext createMany
+   */
+  export type TicketContextCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many TicketContexts.
+     */
+    data: TicketContextCreateManyInput | TicketContextCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * TicketContext createManyAndReturn
+   */
+  export type TicketContextCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    {
+      /**
+       * Select specific fields to fetch from the TicketContext
+       */
+      select?: TicketContextSelectCreateManyAndReturn<ExtArgs> | null;
+      /**
+       * Omit specific fields from the TicketContext
+       */
+      omit?: TicketContextOmit<ExtArgs> | null;
+      /**
+       * The data used to create many TicketContexts.
+       */
+      data: TicketContextCreateManyInput | TicketContextCreateManyInput[];
+      skipDuplicates?: boolean;
+      /**
+       * Choose, which related nodes to fetch as well
+       */
+      include?: TicketContextIncludeCreateManyAndReturn<ExtArgs> | null;
+    };
+
+  /**
+   * TicketContext update
+   */
+  export type TicketContextUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketContext
+     */
+    select?: TicketContextSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TicketContext
+     */
+    omit?: TicketContextOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketContextInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a TicketContext.
+     */
+    data: XOR<TicketContextUpdateInput, TicketContextUncheckedUpdateInput>;
+    /**
+     * Choose, which TicketContext to update.
+     */
+    where: TicketContextWhereUniqueInput;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * TicketContext updateMany
+   */
+  export type TicketContextUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update TicketContexts.
+     */
+    data: XOR<TicketContextUpdateManyMutationInput, TicketContextUncheckedUpdateManyInput>;
+    /**
+     * Filter which TicketContexts to update
+     */
+    where?: TicketContextWhereInput;
+    /**
+     * Limit how many TicketContexts to update.
+     */
+    limit?: number;
+  };
+
+  /**
+   * TicketContext updateManyAndReturn
+   */
+  export type TicketContextUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    {
+      /**
+       * Select specific fields to fetch from the TicketContext
+       */
+      select?: TicketContextSelectUpdateManyAndReturn<ExtArgs> | null;
+      /**
+       * Omit specific fields from the TicketContext
+       */
+      omit?: TicketContextOmit<ExtArgs> | null;
+      /**
+       * The data used to update TicketContexts.
+       */
+      data: XOR<TicketContextUpdateManyMutationInput, TicketContextUncheckedUpdateManyInput>;
+      /**
+       * Filter which TicketContexts to update
+       */
+      where?: TicketContextWhereInput;
+      /**
+       * Limit how many TicketContexts to update.
+       */
+      limit?: number;
+      /**
+       * Choose, which related nodes to fetch as well
+       */
+      include?: TicketContextIncludeUpdateManyAndReturn<ExtArgs> | null;
+    };
+
+  /**
+   * TicketContext upsert
+   */
+  export type TicketContextUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketContext
+     */
+    select?: TicketContextSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TicketContext
+     */
+    omit?: TicketContextOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketContextInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the TicketContext to update in case it exists.
+     */
+    where: TicketContextWhereUniqueInput;
+    /**
+     * In case the TicketContext found by the `where` argument doesn't exist, create a new TicketContext with this data.
+     */
+    create: XOR<TicketContextCreateInput, TicketContextUncheckedCreateInput>;
+    /**
+     * In case the TicketContext was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TicketContextUpdateInput, TicketContextUncheckedUpdateInput>;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * TicketContext delete
+   */
+  export type TicketContextDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketContext
+     */
+    select?: TicketContextSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TicketContext
+     */
+    omit?: TicketContextOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketContextInclude<ExtArgs> | null;
+    /**
+     * Filter which TicketContext to delete.
+     */
+    where: TicketContextWhereUniqueInput;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * TicketContext deleteMany
+   */
+  export type TicketContextDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which TicketContexts to delete
+     */
+    where?: TicketContextWhereInput;
+    /**
+     * Limit how many TicketContexts to delete.
+     */
+    limit?: number;
+  };
+
+  /**
+   * TicketContext without action
+   */
+  export type TicketContextDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TicketContext
+     */
+    select?: TicketContextSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the TicketContext
+     */
+    omit?: TicketContextOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TicketContextInclude<ExtArgs> | null;
+  };
+
+  /**
    * Enums
    */
 
@@ -22142,7 +23435,6 @@ export namespace Prisma {
     status: 'status';
     category: 'category';
     priority: 'priority';
-    referenceContext: 'referenceContext';
     attachments: 'attachments';
     authorId: 'authorId';
     assignedId: 'assignedId';
@@ -22163,6 +23455,16 @@ export namespace Prisma {
 
   export type TicketMessageScalarFieldEnum =
     (typeof TicketMessageScalarFieldEnum)[keyof typeof TicketMessageScalarFieldEnum];
+
+  export const TicketContextScalarFieldEnum: {
+    id: 'id';
+    type: 'type';
+    label: 'label';
+    ticketId: 'ticketId';
+  };
+
+  export type TicketContextScalarFieldEnum =
+    (typeof TicketContextScalarFieldEnum)[keyof typeof TicketContextScalarFieldEnum];
 
   export const SortOrder: {
     asc: 'asc';
@@ -22353,6 +23655,19 @@ export namespace Prisma {
    * Reference to a field of type 'TicketPriority[]'
    */
   export type ListEnumTicketPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TicketPriority[]'>;
+
+  /**
+   * Reference to a field of type 'TicketContextType'
+   */
+  export type EnumTicketContextTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TicketContextType'>;
+
+  /**
+   * Reference to a field of type 'TicketContextType[]'
+   */
+  export type ListEnumTicketContextTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    'TicketContextType[]'
+  >;
 
   /**
    * Reference to a field of type 'Float'
@@ -23437,10 +24752,10 @@ export namespace Prisma {
     status?: EnumTicketStatusFilter<'Ticket'> | $Enums.TicketStatus;
     category?: EnumTicketCategoryFilter<'Ticket'> | $Enums.TicketCategory;
     priority?: EnumTicketPriorityFilter<'Ticket'> | $Enums.TicketPriority;
-    referenceContext?: StringNullableFilter<'Ticket'> | string | null;
     attachments?: StringNullableListFilter<'Ticket'>;
     authorId?: UuidFilter<'Ticket'> | string;
     assignedId?: UuidNullableFilter<'Ticket'> | string | null;
+    contexts?: TicketContextListRelationFilter;
     author?: XOR<UserScalarRelationFilter, UserWhereInput>;
     assigned?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null;
     messages?: TicketMessageListRelationFilter;
@@ -23456,10 +24771,10 @@ export namespace Prisma {
     status?: SortOrder;
     category?: SortOrder;
     priority?: SortOrder;
-    referenceContext?: SortOrderInput | SortOrder;
     attachments?: SortOrder;
     authorId?: SortOrder;
     assignedId?: SortOrderInput | SortOrder;
+    contexts?: TicketContextOrderByRelationAggregateInput;
     author?: UserOrderByWithRelationInput;
     assigned?: UserOrderByWithRelationInput;
     messages?: TicketMessageOrderByRelationAggregateInput;
@@ -23479,10 +24794,10 @@ export namespace Prisma {
       status?: EnumTicketStatusFilter<'Ticket'> | $Enums.TicketStatus;
       category?: EnumTicketCategoryFilter<'Ticket'> | $Enums.TicketCategory;
       priority?: EnumTicketPriorityFilter<'Ticket'> | $Enums.TicketPriority;
-      referenceContext?: StringNullableFilter<'Ticket'> | string | null;
       attachments?: StringNullableListFilter<'Ticket'>;
       authorId?: UuidFilter<'Ticket'> | string;
       assignedId?: UuidNullableFilter<'Ticket'> | string | null;
+      contexts?: TicketContextListRelationFilter;
       author?: XOR<UserScalarRelationFilter, UserWhereInput>;
       assigned?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null;
       messages?: TicketMessageListRelationFilter;
@@ -23500,7 +24815,6 @@ export namespace Prisma {
     status?: SortOrder;
     category?: SortOrder;
     priority?: SortOrder;
-    referenceContext?: SortOrderInput | SortOrder;
     attachments?: SortOrder;
     authorId?: SortOrder;
     assignedId?: SortOrderInput | SortOrder;
@@ -23524,7 +24838,6 @@ export namespace Prisma {
     status?: EnumTicketStatusWithAggregatesFilter<'Ticket'> | $Enums.TicketStatus;
     category?: EnumTicketCategoryWithAggregatesFilter<'Ticket'> | $Enums.TicketCategory;
     priority?: EnumTicketPriorityWithAggregatesFilter<'Ticket'> | $Enums.TicketPriority;
-    referenceContext?: StringNullableWithAggregatesFilter<'Ticket'> | string | null;
     attachments?: StringNullableListFilter<'Ticket'>;
     authorId?: UuidWithAggregatesFilter<'Ticket'> | string;
     assignedId?: UuidNullableWithAggregatesFilter<'Ticket'> | string | null;
@@ -23604,6 +24917,59 @@ export namespace Prisma {
     ticketId?: UuidWithAggregatesFilter<'TicketMessage'> | string;
     senderId?: UuidWithAggregatesFilter<'TicketMessage'> | string;
     attachments?: StringNullableListFilter<'TicketMessage'>;
+  };
+
+  export type TicketContextWhereInput = {
+    AND?: TicketContextWhereInput | TicketContextWhereInput[];
+    OR?: TicketContextWhereInput[];
+    NOT?: TicketContextWhereInput | TicketContextWhereInput[];
+    id?: UuidFilter<'TicketContext'> | string;
+    type?: EnumTicketContextTypeFilter<'TicketContext'> | $Enums.TicketContextType;
+    label?: StringFilter<'TicketContext'> | string;
+    ticketId?: UuidFilter<'TicketContext'> | string;
+    ticket?: XOR<TicketScalarRelationFilter, TicketWhereInput>;
+  };
+
+  export type TicketContextOrderByWithRelationInput = {
+    id?: SortOrder;
+    type?: SortOrder;
+    label?: SortOrder;
+    ticketId?: SortOrder;
+    ticket?: TicketOrderByWithRelationInput;
+  };
+
+  export type TicketContextWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      AND?: TicketContextWhereInput | TicketContextWhereInput[];
+      OR?: TicketContextWhereInput[];
+      NOT?: TicketContextWhereInput | TicketContextWhereInput[];
+      type?: EnumTicketContextTypeFilter<'TicketContext'> | $Enums.TicketContextType;
+      label?: StringFilter<'TicketContext'> | string;
+      ticketId?: UuidFilter<'TicketContext'> | string;
+      ticket?: XOR<TicketScalarRelationFilter, TicketWhereInput>;
+    },
+    'id'
+  >;
+
+  export type TicketContextOrderByWithAggregationInput = {
+    id?: SortOrder;
+    type?: SortOrder;
+    label?: SortOrder;
+    ticketId?: SortOrder;
+    _count?: TicketContextCountOrderByAggregateInput;
+    _max?: TicketContextMaxOrderByAggregateInput;
+    _min?: TicketContextMinOrderByAggregateInput;
+  };
+
+  export type TicketContextScalarWhereWithAggregatesInput = {
+    AND?: TicketContextScalarWhereWithAggregatesInput | TicketContextScalarWhereWithAggregatesInput[];
+    OR?: TicketContextScalarWhereWithAggregatesInput[];
+    NOT?: TicketContextScalarWhereWithAggregatesInput | TicketContextScalarWhereWithAggregatesInput[];
+    id?: UuidWithAggregatesFilter<'TicketContext'> | string;
+    type?: EnumTicketContextTypeWithAggregatesFilter<'TicketContext'> | $Enums.TicketContextType;
+    label?: StringWithAggregatesFilter<'TicketContext'> | string;
+    ticketId?: UuidWithAggregatesFilter<'TicketContext'> | string;
   };
 
   export type AuthenticationCreateInput = {
@@ -24705,8 +26071,8 @@ export namespace Prisma {
     status?: $Enums.TicketStatus;
     category: $Enums.TicketCategory;
     priority: $Enums.TicketPriority;
-    referenceContext?: string | null;
     attachments?: TicketCreateattachmentsInput | string[];
+    contexts?: TicketContextCreateNestedManyWithoutTicketInput;
     author: UserCreateNestedOneWithoutTicketAuthorInput;
     assigned?: UserCreateNestedOneWithoutTicketAssignedInput;
     messages?: TicketMessageCreateNestedManyWithoutTicketInput;
@@ -24722,10 +26088,10 @@ export namespace Prisma {
     status?: $Enums.TicketStatus;
     category: $Enums.TicketCategory;
     priority: $Enums.TicketPriority;
-    referenceContext?: string | null;
     attachments?: TicketCreateattachmentsInput | string[];
     authorId: string;
     assignedId?: string | null;
+    contexts?: TicketContextUncheckedCreateNestedManyWithoutTicketInput;
     messages?: TicketMessageUncheckedCreateNestedManyWithoutTicketInput;
   };
 
@@ -24739,8 +26105,8 @@ export namespace Prisma {
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
     category?: EnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory;
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
-    referenceContext?: NullableStringFieldUpdateOperationsInput | string | null;
     attachments?: TicketUpdateattachmentsInput | string[];
+    contexts?: TicketContextUpdateManyWithoutTicketNestedInput;
     author?: UserUpdateOneRequiredWithoutTicketAuthorNestedInput;
     assigned?: UserUpdateOneWithoutTicketAssignedNestedInput;
     messages?: TicketMessageUpdateManyWithoutTicketNestedInput;
@@ -24756,10 +26122,10 @@ export namespace Prisma {
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
     category?: EnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory;
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
-    referenceContext?: NullableStringFieldUpdateOperationsInput | string | null;
     attachments?: TicketUpdateattachmentsInput | string[];
     authorId?: StringFieldUpdateOperationsInput | string;
     assignedId?: NullableStringFieldUpdateOperationsInput | string | null;
+    contexts?: TicketContextUncheckedUpdateManyWithoutTicketNestedInput;
     messages?: TicketMessageUncheckedUpdateManyWithoutTicketNestedInput;
   };
 
@@ -24773,7 +26139,6 @@ export namespace Prisma {
     status?: $Enums.TicketStatus;
     category: $Enums.TicketCategory;
     priority: $Enums.TicketPriority;
-    referenceContext?: string | null;
     attachments?: TicketCreateattachmentsInput | string[];
     authorId: string;
     assignedId?: string | null;
@@ -24789,7 +26154,6 @@ export namespace Prisma {
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
     category?: EnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory;
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
-    referenceContext?: NullableStringFieldUpdateOperationsInput | string | null;
     attachments?: TicketUpdateattachmentsInput | string[];
   };
 
@@ -24803,7 +26167,6 @@ export namespace Prisma {
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
     category?: EnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory;
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
-    referenceContext?: NullableStringFieldUpdateOperationsInput | string | null;
     attachments?: TicketUpdateattachmentsInput | string[];
     authorId?: StringFieldUpdateOperationsInput | string;
     assignedId?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -24882,6 +26245,54 @@ export namespace Prisma {
     ticketId?: StringFieldUpdateOperationsInput | string;
     senderId?: StringFieldUpdateOperationsInput | string;
     attachments?: TicketMessageUpdateattachmentsInput | string[];
+  };
+
+  export type TicketContextCreateInput = {
+    id?: string;
+    type: $Enums.TicketContextType;
+    label: string;
+    ticket: TicketCreateNestedOneWithoutContextsInput;
+  };
+
+  export type TicketContextUncheckedCreateInput = {
+    id?: string;
+    type: $Enums.TicketContextType;
+    label: string;
+    ticketId: string;
+  };
+
+  export type TicketContextUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?: EnumTicketContextTypeFieldUpdateOperationsInput | $Enums.TicketContextType;
+    label?: StringFieldUpdateOperationsInput | string;
+    ticket?: TicketUpdateOneRequiredWithoutContextsNestedInput;
+  };
+
+  export type TicketContextUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?: EnumTicketContextTypeFieldUpdateOperationsInput | $Enums.TicketContextType;
+    label?: StringFieldUpdateOperationsInput | string;
+    ticketId?: StringFieldUpdateOperationsInput | string;
+  };
+
+  export type TicketContextCreateManyInput = {
+    id?: string;
+    type: $Enums.TicketContextType;
+    label: string;
+    ticketId: string;
+  };
+
+  export type TicketContextUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?: EnumTicketContextTypeFieldUpdateOperationsInput | $Enums.TicketContextType;
+    label?: StringFieldUpdateOperationsInput | string;
+  };
+
+  export type TicketContextUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?: EnumTicketContextTypeFieldUpdateOperationsInput | $Enums.TicketContextType;
+    label?: StringFieldUpdateOperationsInput | string;
+    ticketId?: StringFieldUpdateOperationsInput | string;
   };
 
   export type StringFilter<$PrismaModel = never> = {
@@ -25976,6 +27387,16 @@ export namespace Prisma {
     not?: NestedEnumTicketPriorityFilter<$PrismaModel> | $Enums.TicketPriority;
   };
 
+  export type TicketContextListRelationFilter = {
+    every?: TicketContextWhereInput;
+    some?: TicketContextWhereInput;
+    none?: TicketContextWhereInput;
+  };
+
+  export type TicketContextOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
   export type TicketCountOrderByAggregateInput = {
     id?: SortOrder;
     numericalOrder?: SortOrder;
@@ -25986,7 +27407,6 @@ export namespace Prisma {
     status?: SortOrder;
     category?: SortOrder;
     priority?: SortOrder;
-    referenceContext?: SortOrder;
     attachments?: SortOrder;
     authorId?: SortOrder;
     assignedId?: SortOrder;
@@ -26006,7 +27426,6 @@ export namespace Prisma {
     status?: SortOrder;
     category?: SortOrder;
     priority?: SortOrder;
-    referenceContext?: SortOrder;
     authorId?: SortOrder;
     assignedId?: SortOrder;
   };
@@ -26021,7 +27440,6 @@ export namespace Prisma {
     status?: SortOrder;
     category?: SortOrder;
     priority?: SortOrder;
-    referenceContext?: SortOrder;
     authorId?: SortOrder;
     assignedId?: SortOrder;
   };
@@ -26094,6 +27512,44 @@ export namespace Prisma {
     updatedAt?: SortOrder;
     ticketId?: SortOrder;
     senderId?: SortOrder;
+  };
+
+  export type EnumTicketContextTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketContextType | EnumTicketContextTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.TicketContextType[] | ListEnumTicketContextTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.TicketContextType[] | ListEnumTicketContextTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumTicketContextTypeFilter<$PrismaModel> | $Enums.TicketContextType;
+  };
+
+  export type TicketContextCountOrderByAggregateInput = {
+    id?: SortOrder;
+    type?: SortOrder;
+    label?: SortOrder;
+    ticketId?: SortOrder;
+  };
+
+  export type TicketContextMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    type?: SortOrder;
+    label?: SortOrder;
+    ticketId?: SortOrder;
+  };
+
+  export type TicketContextMinOrderByAggregateInput = {
+    id?: SortOrder;
+    type?: SortOrder;
+    label?: SortOrder;
+    ticketId?: SortOrder;
+  };
+
+  export type EnumTicketContextTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketContextType | EnumTicketContextTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.TicketContextType[] | ListEnumTicketContextTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.TicketContextType[] | ListEnumTicketContextTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumTicketContextTypeWithAggregatesFilter<$PrismaModel> | $Enums.TicketContextType;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumTicketContextTypeFilter<$PrismaModel>;
+    _max?: NestedEnumTicketContextTypeFilter<$PrismaModel>;
   };
 
   export type UserCreateNestedOneWithoutAuthInput = {
@@ -27509,6 +28965,16 @@ export namespace Prisma {
     set: string[];
   };
 
+  export type TicketContextCreateNestedManyWithoutTicketInput = {
+    create?:
+      | XOR<TicketContextCreateWithoutTicketInput, TicketContextUncheckedCreateWithoutTicketInput>
+      | TicketContextCreateWithoutTicketInput[]
+      | TicketContextUncheckedCreateWithoutTicketInput[];
+    connectOrCreate?: TicketContextCreateOrConnectWithoutTicketInput | TicketContextCreateOrConnectWithoutTicketInput[];
+    createMany?: TicketContextCreateManyTicketInputEnvelope;
+    connect?: TicketContextWhereUniqueInput | TicketContextWhereUniqueInput[];
+  };
+
   export type UserCreateNestedOneWithoutTicketAuthorInput = {
     create?: XOR<UserCreateWithoutTicketAuthorInput, UserUncheckedCreateWithoutTicketAuthorInput>;
     connectOrCreate?: UserCreateOrConnectWithoutTicketAuthorInput;
@@ -27529,6 +28995,16 @@ export namespace Prisma {
     connectOrCreate?: TicketMessageCreateOrConnectWithoutTicketInput | TicketMessageCreateOrConnectWithoutTicketInput[];
     createMany?: TicketMessageCreateManyTicketInputEnvelope;
     connect?: TicketMessageWhereUniqueInput | TicketMessageWhereUniqueInput[];
+  };
+
+  export type TicketContextUncheckedCreateNestedManyWithoutTicketInput = {
+    create?:
+      | XOR<TicketContextCreateWithoutTicketInput, TicketContextUncheckedCreateWithoutTicketInput>
+      | TicketContextCreateWithoutTicketInput[]
+      | TicketContextUncheckedCreateWithoutTicketInput[];
+    connectOrCreate?: TicketContextCreateOrConnectWithoutTicketInput | TicketContextCreateOrConnectWithoutTicketInput[];
+    createMany?: TicketContextCreateManyTicketInputEnvelope;
+    connect?: TicketContextWhereUniqueInput | TicketContextWhereUniqueInput[];
   };
 
   export type TicketMessageUncheckedCreateNestedManyWithoutTicketInput = {
@@ -27556,6 +29032,29 @@ export namespace Prisma {
   export type TicketUpdateattachmentsInput = {
     set?: string[];
     push?: string | string[];
+  };
+
+  export type TicketContextUpdateManyWithoutTicketNestedInput = {
+    create?:
+      | XOR<TicketContextCreateWithoutTicketInput, TicketContextUncheckedCreateWithoutTicketInput>
+      | TicketContextCreateWithoutTicketInput[]
+      | TicketContextUncheckedCreateWithoutTicketInput[];
+    connectOrCreate?: TicketContextCreateOrConnectWithoutTicketInput | TicketContextCreateOrConnectWithoutTicketInput[];
+    upsert?:
+      | TicketContextUpsertWithWhereUniqueWithoutTicketInput
+      | TicketContextUpsertWithWhereUniqueWithoutTicketInput[];
+    createMany?: TicketContextCreateManyTicketInputEnvelope;
+    set?: TicketContextWhereUniqueInput | TicketContextWhereUniqueInput[];
+    disconnect?: TicketContextWhereUniqueInput | TicketContextWhereUniqueInput[];
+    delete?: TicketContextWhereUniqueInput | TicketContextWhereUniqueInput[];
+    connect?: TicketContextWhereUniqueInput | TicketContextWhereUniqueInput[];
+    update?:
+      | TicketContextUpdateWithWhereUniqueWithoutTicketInput
+      | TicketContextUpdateWithWhereUniqueWithoutTicketInput[];
+    updateMany?:
+      | TicketContextUpdateManyWithWhereWithoutTicketInput
+      | TicketContextUpdateManyWithWhereWithoutTicketInput[];
+    deleteMany?: TicketContextScalarWhereInput | TicketContextScalarWhereInput[];
   };
 
   export type UserUpdateOneRequiredWithoutTicketAuthorNestedInput = {
@@ -27603,6 +29102,29 @@ export namespace Prisma {
       | TicketMessageUpdateManyWithWhereWithoutTicketInput
       | TicketMessageUpdateManyWithWhereWithoutTicketInput[];
     deleteMany?: TicketMessageScalarWhereInput | TicketMessageScalarWhereInput[];
+  };
+
+  export type TicketContextUncheckedUpdateManyWithoutTicketNestedInput = {
+    create?:
+      | XOR<TicketContextCreateWithoutTicketInput, TicketContextUncheckedCreateWithoutTicketInput>
+      | TicketContextCreateWithoutTicketInput[]
+      | TicketContextUncheckedCreateWithoutTicketInput[];
+    connectOrCreate?: TicketContextCreateOrConnectWithoutTicketInput | TicketContextCreateOrConnectWithoutTicketInput[];
+    upsert?:
+      | TicketContextUpsertWithWhereUniqueWithoutTicketInput
+      | TicketContextUpsertWithWhereUniqueWithoutTicketInput[];
+    createMany?: TicketContextCreateManyTicketInputEnvelope;
+    set?: TicketContextWhereUniqueInput | TicketContextWhereUniqueInput[];
+    disconnect?: TicketContextWhereUniqueInput | TicketContextWhereUniqueInput[];
+    delete?: TicketContextWhereUniqueInput | TicketContextWhereUniqueInput[];
+    connect?: TicketContextWhereUniqueInput | TicketContextWhereUniqueInput[];
+    update?:
+      | TicketContextUpdateWithWhereUniqueWithoutTicketInput
+      | TicketContextUpdateWithWhereUniqueWithoutTicketInput[];
+    updateMany?:
+      | TicketContextUpdateManyWithWhereWithoutTicketInput
+      | TicketContextUpdateManyWithWhereWithoutTicketInput[];
+    deleteMany?: TicketContextScalarWhereInput | TicketContextScalarWhereInput[];
   };
 
   export type TicketMessageUncheckedUpdateManyWithoutTicketNestedInput = {
@@ -27668,6 +29190,27 @@ export namespace Prisma {
     update?: XOR<
       XOR<UserUpdateToOneWithWhereWithoutTicketMessagesSentInput, UserUpdateWithoutTicketMessagesSentInput>,
       UserUncheckedUpdateWithoutTicketMessagesSentInput
+    >;
+  };
+
+  export type TicketCreateNestedOneWithoutContextsInput = {
+    create?: XOR<TicketCreateWithoutContextsInput, TicketUncheckedCreateWithoutContextsInput>;
+    connectOrCreate?: TicketCreateOrConnectWithoutContextsInput;
+    connect?: TicketWhereUniqueInput;
+  };
+
+  export type EnumTicketContextTypeFieldUpdateOperationsInput = {
+    set?: $Enums.TicketContextType;
+  };
+
+  export type TicketUpdateOneRequiredWithoutContextsNestedInput = {
+    create?: XOR<TicketCreateWithoutContextsInput, TicketUncheckedCreateWithoutContextsInput>;
+    connectOrCreate?: TicketCreateOrConnectWithoutContextsInput;
+    upsert?: TicketUpsertWithoutContextsInput;
+    connect?: TicketWhereUniqueInput;
+    update?: XOR<
+      XOR<TicketUpdateToOneWithWhereWithoutContextsInput, TicketUpdateWithoutContextsInput>,
+      TicketUncheckedUpdateWithoutContextsInput
     >;
   };
 
@@ -28073,6 +29616,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>;
     _min?: NestedEnumTicketPriorityFilter<$PrismaModel>;
     _max?: NestedEnumTicketPriorityFilter<$PrismaModel>;
+  };
+
+  export type NestedEnumTicketContextTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketContextType | EnumTicketContextTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.TicketContextType[] | ListEnumTicketContextTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.TicketContextType[] | ListEnumTicketContextTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumTicketContextTypeFilter<$PrismaModel> | $Enums.TicketContextType;
+  };
+
+  export type NestedEnumTicketContextTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TicketContextType | EnumTicketContextTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.TicketContextType[] | ListEnumTicketContextTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.TicketContextType[] | ListEnumTicketContextTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumTicketContextTypeWithAggregatesFilter<$PrismaModel> | $Enums.TicketContextType;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumTicketContextTypeFilter<$PrismaModel>;
+    _max?: NestedEnumTicketContextTypeFilter<$PrismaModel>;
   };
 
   export type UserCreateWithoutAuthInput = {
@@ -30044,8 +31604,8 @@ export namespace Prisma {
     status?: $Enums.TicketStatus;
     category: $Enums.TicketCategory;
     priority: $Enums.TicketPriority;
-    referenceContext?: string | null;
     attachments?: TicketCreateattachmentsInput | string[];
+    contexts?: TicketContextCreateNestedManyWithoutTicketInput;
     assigned?: UserCreateNestedOneWithoutTicketAssignedInput;
     messages?: TicketMessageCreateNestedManyWithoutTicketInput;
   };
@@ -30060,9 +31620,9 @@ export namespace Prisma {
     status?: $Enums.TicketStatus;
     category: $Enums.TicketCategory;
     priority: $Enums.TicketPriority;
-    referenceContext?: string | null;
     attachments?: TicketCreateattachmentsInput | string[];
     assignedId?: string | null;
+    contexts?: TicketContextUncheckedCreateNestedManyWithoutTicketInput;
     messages?: TicketMessageUncheckedCreateNestedManyWithoutTicketInput;
   };
 
@@ -30086,8 +31646,8 @@ export namespace Prisma {
     status?: $Enums.TicketStatus;
     category: $Enums.TicketCategory;
     priority: $Enums.TicketPriority;
-    referenceContext?: string | null;
     attachments?: TicketCreateattachmentsInput | string[];
+    contexts?: TicketContextCreateNestedManyWithoutTicketInput;
     author: UserCreateNestedOneWithoutTicketAuthorInput;
     messages?: TicketMessageCreateNestedManyWithoutTicketInput;
   };
@@ -30102,9 +31662,9 @@ export namespace Prisma {
     status?: $Enums.TicketStatus;
     category: $Enums.TicketCategory;
     priority: $Enums.TicketPriority;
-    referenceContext?: string | null;
     attachments?: TicketCreateattachmentsInput | string[];
     authorId: string;
+    contexts?: TicketContextUncheckedCreateNestedManyWithoutTicketInput;
     messages?: TicketMessageUncheckedCreateNestedManyWithoutTicketInput;
   };
 
@@ -30391,7 +31951,6 @@ export namespace Prisma {
     status?: EnumTicketStatusFilter<'Ticket'> | $Enums.TicketStatus;
     category?: EnumTicketCategoryFilter<'Ticket'> | $Enums.TicketCategory;
     priority?: EnumTicketPriorityFilter<'Ticket'> | $Enums.TicketPriority;
-    referenceContext?: StringNullableFilter<'Ticket'> | string | null;
     attachments?: StringNullableListFilter<'Ticket'>;
     authorId?: UuidFilter<'Ticket'> | string;
     assignedId?: UuidNullableFilter<'Ticket'> | string | null;
@@ -30919,6 +32478,28 @@ export namespace Prisma {
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
   };
 
+  export type TicketContextCreateWithoutTicketInput = {
+    id?: string;
+    type: $Enums.TicketContextType;
+    label: string;
+  };
+
+  export type TicketContextUncheckedCreateWithoutTicketInput = {
+    id?: string;
+    type: $Enums.TicketContextType;
+    label: string;
+  };
+
+  export type TicketContextCreateOrConnectWithoutTicketInput = {
+    where: TicketContextWhereUniqueInput;
+    create: XOR<TicketContextCreateWithoutTicketInput, TicketContextUncheckedCreateWithoutTicketInput>;
+  };
+
+  export type TicketContextCreateManyTicketInputEnvelope = {
+    data: TicketContextCreateManyTicketInput | TicketContextCreateManyTicketInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type UserCreateWithoutTicketAuthorInput = {
     id?: string;
     fullname: string;
@@ -31077,6 +32658,32 @@ export namespace Prisma {
   export type TicketMessageCreateManyTicketInputEnvelope = {
     data: TicketMessageCreateManyTicketInput | TicketMessageCreateManyTicketInput[];
     skipDuplicates?: boolean;
+  };
+
+  export type TicketContextUpsertWithWhereUniqueWithoutTicketInput = {
+    where: TicketContextWhereUniqueInput;
+    update: XOR<TicketContextUpdateWithoutTicketInput, TicketContextUncheckedUpdateWithoutTicketInput>;
+    create: XOR<TicketContextCreateWithoutTicketInput, TicketContextUncheckedCreateWithoutTicketInput>;
+  };
+
+  export type TicketContextUpdateWithWhereUniqueWithoutTicketInput = {
+    where: TicketContextWhereUniqueInput;
+    data: XOR<TicketContextUpdateWithoutTicketInput, TicketContextUncheckedUpdateWithoutTicketInput>;
+  };
+
+  export type TicketContextUpdateManyWithWhereWithoutTicketInput = {
+    where: TicketContextScalarWhereInput;
+    data: XOR<TicketContextUpdateManyMutationInput, TicketContextUncheckedUpdateManyWithoutTicketInput>;
+  };
+
+  export type TicketContextScalarWhereInput = {
+    AND?: TicketContextScalarWhereInput | TicketContextScalarWhereInput[];
+    OR?: TicketContextScalarWhereInput[];
+    NOT?: TicketContextScalarWhereInput | TicketContextScalarWhereInput[];
+    id?: UuidFilter<'TicketContext'> | string;
+    type?: EnumTicketContextTypeFilter<'TicketContext'> | $Enums.TicketContextType;
+    label?: StringFilter<'TicketContext'> | string;
+    ticketId?: UuidFilter<'TicketContext'> | string;
   };
 
   export type UserUpsertWithoutTicketAuthorInput = {
@@ -31247,8 +32854,8 @@ export namespace Prisma {
     status?: $Enums.TicketStatus;
     category: $Enums.TicketCategory;
     priority: $Enums.TicketPriority;
-    referenceContext?: string | null;
     attachments?: TicketCreateattachmentsInput | string[];
+    contexts?: TicketContextCreateNestedManyWithoutTicketInput;
     author: UserCreateNestedOneWithoutTicketAuthorInput;
     assigned?: UserCreateNestedOneWithoutTicketAssignedInput;
   };
@@ -31263,10 +32870,10 @@ export namespace Prisma {
     status?: $Enums.TicketStatus;
     category: $Enums.TicketCategory;
     priority: $Enums.TicketPriority;
-    referenceContext?: string | null;
     attachments?: TicketCreateattachmentsInput | string[];
     authorId: string;
     assignedId?: string | null;
+    contexts?: TicketContextUncheckedCreateNestedManyWithoutTicketInput;
   };
 
   export type TicketCreateOrConnectWithoutMessagesInput = {
@@ -31360,8 +32967,8 @@ export namespace Prisma {
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
     category?: EnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory;
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
-    referenceContext?: NullableStringFieldUpdateOperationsInput | string | null;
     attachments?: TicketUpdateattachmentsInput | string[];
+    contexts?: TicketContextUpdateManyWithoutTicketNestedInput;
     author?: UserUpdateOneRequiredWithoutTicketAuthorNestedInput;
     assigned?: UserUpdateOneWithoutTicketAssignedNestedInput;
   };
@@ -31376,10 +32983,10 @@ export namespace Prisma {
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
     category?: EnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory;
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
-    referenceContext?: NullableStringFieldUpdateOperationsInput | string | null;
     attachments?: TicketUpdateattachmentsInput | string[];
     authorId?: StringFieldUpdateOperationsInput | string;
     assignedId?: NullableStringFieldUpdateOperationsInput | string | null;
+    contexts?: TicketContextUncheckedUpdateManyWithoutTicketNestedInput;
   };
 
   export type UserUpsertWithoutTicketMessagesSentInput = {
@@ -31451,6 +33058,86 @@ export namespace Prisma {
     ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
+  };
+
+  export type TicketCreateWithoutContextsInput = {
+    id?: string;
+    numericalOrder?: number;
+    createAt?: Date | string;
+    updateAt?: Date | string;
+    title: string;
+    description: string;
+    status?: $Enums.TicketStatus;
+    category: $Enums.TicketCategory;
+    priority: $Enums.TicketPriority;
+    attachments?: TicketCreateattachmentsInput | string[];
+    author: UserCreateNestedOneWithoutTicketAuthorInput;
+    assigned?: UserCreateNestedOneWithoutTicketAssignedInput;
+    messages?: TicketMessageCreateNestedManyWithoutTicketInput;
+  };
+
+  export type TicketUncheckedCreateWithoutContextsInput = {
+    id?: string;
+    numericalOrder?: number;
+    createAt?: Date | string;
+    updateAt?: Date | string;
+    title: string;
+    description: string;
+    status?: $Enums.TicketStatus;
+    category: $Enums.TicketCategory;
+    priority: $Enums.TicketPriority;
+    attachments?: TicketCreateattachmentsInput | string[];
+    authorId: string;
+    assignedId?: string | null;
+    messages?: TicketMessageUncheckedCreateNestedManyWithoutTicketInput;
+  };
+
+  export type TicketCreateOrConnectWithoutContextsInput = {
+    where: TicketWhereUniqueInput;
+    create: XOR<TicketCreateWithoutContextsInput, TicketUncheckedCreateWithoutContextsInput>;
+  };
+
+  export type TicketUpsertWithoutContextsInput = {
+    update: XOR<TicketUpdateWithoutContextsInput, TicketUncheckedUpdateWithoutContextsInput>;
+    create: XOR<TicketCreateWithoutContextsInput, TicketUncheckedCreateWithoutContextsInput>;
+    where?: TicketWhereInput;
+  };
+
+  export type TicketUpdateToOneWithWhereWithoutContextsInput = {
+    where?: TicketWhereInput;
+    data: XOR<TicketUpdateWithoutContextsInput, TicketUncheckedUpdateWithoutContextsInput>;
+  };
+
+  export type TicketUpdateWithoutContextsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    numericalOrder?: IntFieldUpdateOperationsInput | number;
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    description?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
+    category?: EnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory;
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
+    attachments?: TicketUpdateattachmentsInput | string[];
+    author?: UserUpdateOneRequiredWithoutTicketAuthorNestedInput;
+    assigned?: UserUpdateOneWithoutTicketAssignedNestedInput;
+    messages?: TicketMessageUpdateManyWithoutTicketNestedInput;
+  };
+
+  export type TicketUncheckedUpdateWithoutContextsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    numericalOrder?: IntFieldUpdateOperationsInput | number;
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    title?: StringFieldUpdateOperationsInput | string;
+    description?: StringFieldUpdateOperationsInput | string;
+    status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
+    category?: EnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory;
+    priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
+    attachments?: TicketUpdateattachmentsInput | string[];
+    authorId?: StringFieldUpdateOperationsInput | string;
+    assignedId?: NullableStringFieldUpdateOperationsInput | string | null;
+    messages?: TicketMessageUncheckedUpdateManyWithoutTicketNestedInput;
   };
 
   export type OrderItemCreateManyOrderInput = {
@@ -31787,7 +33474,6 @@ export namespace Prisma {
     status?: $Enums.TicketStatus;
     category: $Enums.TicketCategory;
     priority: $Enums.TicketPriority;
-    referenceContext?: string | null;
     attachments?: TicketCreateattachmentsInput | string[];
     assignedId?: string | null;
   };
@@ -31802,7 +33488,6 @@ export namespace Prisma {
     status?: $Enums.TicketStatus;
     category: $Enums.TicketCategory;
     priority: $Enums.TicketPriority;
-    referenceContext?: string | null;
     attachments?: TicketCreateattachmentsInput | string[];
     authorId: string;
   };
@@ -32054,8 +33739,8 @@ export namespace Prisma {
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
     category?: EnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory;
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
-    referenceContext?: NullableStringFieldUpdateOperationsInput | string | null;
     attachments?: TicketUpdateattachmentsInput | string[];
+    contexts?: TicketContextUpdateManyWithoutTicketNestedInput;
     assigned?: UserUpdateOneWithoutTicketAssignedNestedInput;
     messages?: TicketMessageUpdateManyWithoutTicketNestedInput;
   };
@@ -32070,9 +33755,9 @@ export namespace Prisma {
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
     category?: EnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory;
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
-    referenceContext?: NullableStringFieldUpdateOperationsInput | string | null;
     attachments?: TicketUpdateattachmentsInput | string[];
     assignedId?: NullableStringFieldUpdateOperationsInput | string | null;
+    contexts?: TicketContextUncheckedUpdateManyWithoutTicketNestedInput;
     messages?: TicketMessageUncheckedUpdateManyWithoutTicketNestedInput;
   };
 
@@ -32086,7 +33771,6 @@ export namespace Prisma {
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
     category?: EnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory;
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
-    referenceContext?: NullableStringFieldUpdateOperationsInput | string | null;
     attachments?: TicketUpdateattachmentsInput | string[];
     assignedId?: NullableStringFieldUpdateOperationsInput | string | null;
   };
@@ -32101,8 +33785,8 @@ export namespace Prisma {
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
     category?: EnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory;
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
-    referenceContext?: NullableStringFieldUpdateOperationsInput | string | null;
     attachments?: TicketUpdateattachmentsInput | string[];
+    contexts?: TicketContextUpdateManyWithoutTicketNestedInput;
     author?: UserUpdateOneRequiredWithoutTicketAuthorNestedInput;
     messages?: TicketMessageUpdateManyWithoutTicketNestedInput;
   };
@@ -32117,9 +33801,9 @@ export namespace Prisma {
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
     category?: EnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory;
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
-    referenceContext?: NullableStringFieldUpdateOperationsInput | string | null;
     attachments?: TicketUpdateattachmentsInput | string[];
     authorId?: StringFieldUpdateOperationsInput | string;
+    contexts?: TicketContextUncheckedUpdateManyWithoutTicketNestedInput;
     messages?: TicketMessageUncheckedUpdateManyWithoutTicketNestedInput;
   };
 
@@ -32133,7 +33817,6 @@ export namespace Prisma {
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
     category?: EnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory;
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
-    referenceContext?: NullableStringFieldUpdateOperationsInput | string | null;
     attachments?: TicketUpdateattachmentsInput | string[];
     authorId?: StringFieldUpdateOperationsInput | string;
   };
@@ -32233,6 +33916,12 @@ export namespace Prisma {
     note?: StringFieldUpdateOperationsInput | string;
   };
 
+  export type TicketContextCreateManyTicketInput = {
+    id?: string;
+    type: $Enums.TicketContextType;
+    label: string;
+  };
+
   export type TicketMessageCreateManyTicketInput = {
     id?: string;
     content: string;
@@ -32241,6 +33930,24 @@ export namespace Prisma {
     updatedAt?: Date | string;
     senderId: string;
     attachments?: TicketMessageCreateattachmentsInput | string[];
+  };
+
+  export type TicketContextUpdateWithoutTicketInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?: EnumTicketContextTypeFieldUpdateOperationsInput | $Enums.TicketContextType;
+    label?: StringFieldUpdateOperationsInput | string;
+  };
+
+  export type TicketContextUncheckedUpdateWithoutTicketInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?: EnumTicketContextTypeFieldUpdateOperationsInput | $Enums.TicketContextType;
+    label?: StringFieldUpdateOperationsInput | string;
+  };
+
+  export type TicketContextUncheckedUpdateManyWithoutTicketInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?: EnumTicketContextTypeFieldUpdateOperationsInput | $Enums.TicketContextType;
+    label?: StringFieldUpdateOperationsInput | string;
   };
 
   export type TicketMessageUpdateWithoutTicketInput = {

@@ -8,6 +8,7 @@ import { FindAllTicketDto } from './dto/find-all-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { CreateTicketMessageDto } from './dto/create-ticket-message.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { FindAllTicketMessageDto } from './dto/find-all-ticket-message.dto';
 
 @Injectable()
 export class TicketService {
@@ -17,28 +18,33 @@ export class TicketService {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  public async create(req: Request, body: CreateTicketDto, attachments: Express.Multer.File[]) {
+  public async create(req: Request, body: CreateTicketDto, attachments?: Express.Multer.File[]) {
     const creater = req.user;
 
     const urls: string[] = [];
 
-    for (let i = 0; i < attachments.length; i++) {
-      const { error, path } = await this.supabaseService.uploadFile(attachments[i], {
-        contentType: attachments[i].mimetype,
-      });
+    if (attachments && attachments.length > 0) {
+      for (let i = 0; i < attachments.length; i++) {
+        const { error, path } = await this.supabaseService.uploadFile(attachments[i], {
+          contentType: attachments[i].mimetype,
+        });
 
-      if (error) {
-        throw new InternalServerErrorException(`Failed to upload file: ${attachments[i].originalname}`);
+        if (error) {
+          throw new InternalServerErrorException(`Failed to upload file: ${attachments[i].originalname}`);
+        }
+
+        urls.push(path);
       }
-
-      urls.push(path);
     }
+
+    const { contexts, ...data } = body;
 
     const ticket = await this.prismaService.ticket.create({
       data: {
-        ...body,
+        ...data,
         authorId: creater.id,
         attachments: urls,
+        contexts: { createMany: { data: contexts, skipDuplicates: true } },
       },
     });
 
@@ -94,7 +100,7 @@ export class TicketService {
         status: true,
         category: true,
         priority: true,
-        referenceContext: true,
+        contexts: true,
         attachments: true,
         author: {
           select: {
@@ -159,7 +165,7 @@ export class TicketService {
           status: true,
           category: true,
           priority: true,
-          referenceContext: true,
+          contexts: true,
           attachments: true,
           author: {
             select: {
@@ -308,5 +314,64 @@ export class TicketService {
 
     this.eventEmitter.emit('ticket.message.created', { message });
     return { message: 'Create ticket message successful', data: message };
+  }
+
+  public async findMessages(ticketId: string, query: FindAllTicketMessageDto) {
+    const { page, limit, cursor } = query;
+    const take = limit ?? 20;
+    let skip: number | undefined = undefined;
+    let cursorObj: Prisma.TicketMessageWhereUniqueInput | undefined = undefined;
+
+    if (cursor) {
+      cursorObj = { id: cursor };
+      skip = 1;
+    } else if (page && page > 1) {
+      skip = (page - 1) * take;
+    }
+
+    const where: Prisma.TicketMessageWhereInput = { ticketId };
+
+    const messages = await this.prismaService.ticketMessage.findMany({
+      where,
+      select: {
+        id: true,
+        content: true,
+        isRead: true,
+        createdAt: true,
+        updatedAt: true,
+        attachments: true,
+        sender: {
+          select: {
+            id: true,
+            fullname: true,
+            email: true,
+            avatarUrl: true,
+          },
+        },
+      },
+      orderBy: { createdAt: 'asc' },
+      take: take + 1,
+      skip,
+      ...(cursorObj && { cursor: cursorObj }),
+    });
+
+    let nextCursor: string | null = null;
+    let hasNextPage = false;
+    let result = messages;
+    if (messages.length > take) {
+      hasNextPage = true;
+      const nextItem = messages[take];
+      nextCursor = nextItem.id;
+      result = messages.slice(0, take);
+    }
+
+    return {
+      message: 'Get ticket messages successful',
+      data: result,
+      '@data': {
+        nextCursor,
+        hasNextPage,
+      },
+    };
   }
 }

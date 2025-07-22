@@ -102,7 +102,7 @@ const tickets = Array.from({ length: 10 }).map((_, i) => ({
     'GENERAL_INQUIRY',
   ]),
   priority: faker.helpers.arrayElement(['URGENT', 'HIGH', 'MEDIUM', 'LOW']),
-  referenceContext: faker.lorem.sentence(),
+  referenceContext: [faker.lorem.sentence()],
   attachments: [faker.image.urlPicsumPhotos({ width: 400, height: 300 })],
   authorId: faker.helpers.arrayElement(userIds),
   assignedId: faker.helpers.arrayElement(userIds),

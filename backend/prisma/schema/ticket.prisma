@@ -1,15 +1,15 @@
 model Ticket {
-  id               String         @id @default(uuid()) @db.Uuid
-  numericalOrder   Int            @default(autoincrement()) @map("numerical_order") @db.Integer
-  createAt         DateTime       @default(now()) @map("create_at") @db.Timestamptz
-  updateAt         DateTime       @updatedAt @map("update_at") @db.Timestamptz
-  title            String         @db.VarChar(255)
-  description      String         @db.Text
-  status           TicketStatus   @default(OPEN)
-  category         TicketCategory
-  priority         TicketPriority
-  referenceContext String?        @map("reference_context") @db.Text
-  attachments      String[]       @db.VarChar(500)
+  id             String          @id @default(uuid()) @db.Uuid
+  numericalOrder Int             @default(autoincrement()) @map("numerical_order") @db.Integer
+  createAt       DateTime        @default(now()) @map("create_at") @db.Timestamptz
+  updateAt       DateTime        @updatedAt @map("update_at") @db.Timestamptz
+  title          String          @db.VarChar(255)
+  description    String          @db.Text
+  status         TicketStatus    @default(OPEN)
+  category       TicketCategory
+  priority       TicketPriority
+  contexts       TicketContext[]
+  attachments    String[]        @db.VarChar(500)
 
   authorId   String          @map("author_id") @db.Uuid
   author     User            @relation(name: "TicketAuthor", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -31,6 +31,15 @@ model TicketMessage {
   sender   User   @relation("TicketMessageSender", fields: [senderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   attachments String[]
+}
+
+model TicketContext {
+  id    String            @id @default(uuid()) @db.Uuid
+  type  TicketContextType
+  label String
+
+  ticketId String @db.Uuid
+  ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 enum TicketStatus {
@@ -55,4 +64,11 @@ enum TicketPriority {
   HIGH
   MEDIUM
   LOW
+}
+
+enum TicketContextType {
+  ORDER
+  PRODUCT
+  TRANSACTION
+  ACCOUNT
 }

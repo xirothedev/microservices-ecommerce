@@ -19,7 +19,7 @@ import { LabelInputContainer } from "../components/label-input-container";
 export default function SignupPage() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [passwordStrength, setPasswordStrength] = useState(0);
-	const signup = useSignup();
+	const { mutateAsync } = useSignup();
 
 	const form = useForm<SignUpForm>({
 		resolver: zodResolver(signUpSchema),
@@ -43,7 +43,7 @@ export default function SignupPage() {
 	const onSubmit = async (data: SignUpForm) => {
 		setIsLoading(true);
 		try {
-			await signup.mutateAsync(data);
+			await mutateAsync(data);
 		} finally {
 			setIsLoading(false);
 		}
