@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useState } from "react";
 import Cart from "./cart";
 import { useUserQuery } from "@/hooks/use-user";
+import { getFallbackString } from "@/lib/utils";
 
 interface NavbarProps {
 	navItems: { name: string; href: string }[];
@@ -17,6 +18,7 @@ export default function Navbar({ navItems }: NavbarProps) {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
 	const { data } = useUserQuery();
+	const fallbackAvatar = getFallbackString(data?.me.fullname ?? "");
 
 	return (
 		<nav className="bg-color-100 fixed top-0 z-50 w-full border-b shadow-md backdrop-blur-sm transition-colors">
@@ -43,7 +45,7 @@ export default function Navbar({ navItems }: NavbarProps) {
 							{data ? (
 								<Avatar>
 									<Link href="/profile">
-										<AvatarFallback>U</AvatarFallback>
+										<AvatarFallback>{fallbackAvatar}</AvatarFallback>
 									</Link>
 								</Avatar>
 							) : (
@@ -84,7 +86,7 @@ export default function Navbar({ navItems }: NavbarProps) {
 								{data ? (
 									<Avatar>
 										<Link href="/profile">
-											<AvatarFallback>U</AvatarFallback>
+											<AvatarFallback>{fallbackAvatar}</AvatarFallback>
 										</Link>
 									</Avatar>
 								) : (

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useUserQuery } from "@/hooks/use-user";
+import { getFallbackString } from "@/lib/utils";
 import { UserQuery } from "@/typings/backend";
 import dayjs from "dayjs";
 import { Edit, Loader2, Save, Upload, X } from "lucide-react";
@@ -18,6 +19,7 @@ export default function PersonalInformation() {
 	const [isEditing, setIsEditing] = useState(false);
 	const { data } = useUserQuery();
 	const [formData, setFormData] = useState<UserQuery | undefined>();
+	const fallbackAvatar = getFallbackString(data?.me.fullname ?? "");
 
 	useEffect(() => {
 		if (data?.me) {
@@ -72,7 +74,7 @@ export default function PersonalInformation() {
 								}
 								alt="Profile"
 							/>
-							<AvatarFallback className="text-2xl">JD</AvatarFallback>
+							<AvatarFallback className="text-2xl">{fallbackAvatar}</AvatarFallback>
 						</Avatar>
 						<div className="space-y-2">
 							<div className="flex items-center gap-2">

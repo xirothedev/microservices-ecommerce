@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useUserQuery } from "@/hooks/use-user";
+import { getFallbackString } from "@/lib/utils";
 
 const navigationItems = [
 	{
@@ -66,6 +67,8 @@ export default function ProfileSidebar({ setSidebarOpen }: ProfileSidebarProps) 
 		);
 	}
 
+	const fallbackAvatar = getFallbackString(data.me.fullname);
+
 	return (
 		<Card className="sticky top-24 h-fit">
 			<CardContent className="p-6">
@@ -79,12 +82,7 @@ export default function ProfileSidebar({ setSidebarOpen }: ProfileSidebarProps) 
 							}
 							alt={data.me.fullname}
 						/>
-						<AvatarFallback className="text-lg">
-							{data.me.fullname
-								.split(" ")
-								.map((n) => n[0])
-								.join("")}
-						</AvatarFallback>
+						<AvatarFallback className="text-lg">{fallbackAvatar}</AvatarFallback>
 					</Avatar>
 					<h2 className="text-xl font-semibold text-gray-900">{data.me.fullname}</h2>
 					<p className="mb-2 text-sm text-gray-600">{data.me.email}</p>
