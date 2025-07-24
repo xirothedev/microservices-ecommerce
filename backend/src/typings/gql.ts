@@ -1,3 +1,4 @@
+import { User } from '@prisma/generated';
 import { Request, Response } from 'express';
 
 export interface GqlContext {

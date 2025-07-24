@@ -1,4 +1,4 @@
-import { Controller, Put, Req, UseInterceptors } from '@nestjs/common';
+import { Controller, Put, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Request } from 'express';
 import { ImageInterceptor } from '@/common/interceptors/image.interceptor';
@@ -15,7 +15,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Change user avatar' })
   @ApiConsumes('multipart/form-data')
   @ApiResponse({ status: 200, description: 'Avatar updated successfully' })
-  changeUserAvatar(@Req() req: Request, avatar: Express.Multer.File) {
+  changeUserAvatar(@Req() req: Request, @UploadedFile() avatar: Express.Multer.File) {
     return this.usersService.updateUserAvatar(req, avatar);
   }
 }

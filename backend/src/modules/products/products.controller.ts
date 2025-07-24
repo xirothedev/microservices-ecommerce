@@ -1,13 +1,25 @@
 import { Public } from '@/common/decorators/public.decorator';
 import { Roles } from '@/common/decorators/role.decorator';
 import { MediasInterceptor } from '@/common/interceptors/media.interceptor';
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  Req,
+  UploadedFiles,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { CreateProductDto } from './dto/create-product.dto';
+import { FindAllProductDto } from './dto/find-all-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsService } from './products.service';
-import { FindAllProductDto } from './dto/find-all-product.dto';
 
 @ApiTags('Products')
 @ApiBearerAuth()
@@ -21,7 +33,7 @@ export class ProductsController {
   @ApiOperation({ summary: 'Create a new product' })
   @ApiResponse({ status: 201, description: 'Product created successfully' })
   @ApiBody({ type: CreateProductDto })
-  create(@Req() req: Request, @Body() body: CreateProductDto, medias: Express.Multer.File[]) {
+  create(@Req() req: Request, @Body() body: CreateProductDto, @UploadedFiles() medias: Express.Multer.File[]) {
     return this.productsService.create(req, body, medias);
   }
 
@@ -59,7 +71,12 @@ export class ProductsController {
   @ApiParam({ name: 'id', type: String })
   @ApiBody({ type: UpdateProductDto })
   @ApiResponse({ status: 200, description: 'Product updated successfully' })
-  update(@Req() req: Request, @Param('id') id: string, @Body() body: UpdateProductDto, medias: Express.Multer.File[]) {
+  update(
+    @Req() req: Request,
+    @Param('id') id: string,
+    @Body() body: UpdateProductDto,
+    @UploadedFiles() medias: Express.Multer.File[],
+  ) {
     return this.productsService.update(req, id, body, medias);
   }
 

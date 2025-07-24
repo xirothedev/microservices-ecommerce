@@ -1,5 +1,5 @@
 import { MediasInterceptor } from '@/common/interceptors/media.interceptor';
-import { Body, Controller, Get, Param, Post, Put, Query, Req, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query, Req, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { CreateTicketMessageDto } from './dto/create-ticket-message.dto';
@@ -18,7 +18,7 @@ export class TicketController {
   @ApiOperation({ summary: 'Create a new ticket' })
   @ApiBody({ type: CreateTicketDto })
   @UseInterceptors(MediasInterceptor('attachments'))
-  create(@Req() req: Request, @Body() body: CreateTicketDto, attachments: Express.Multer.File[]) {
+  create(@Req() req: Request, @Body() body: CreateTicketDto, @UploadedFiles() attachments: Express.Multer.File[]) {
     return this.ticketService.create(req, body, attachments);
   }
 
@@ -59,7 +59,7 @@ export class TicketController {
     @Req() req: Request,
     @Param('id') ticketId: string,
     @Body() body: CreateTicketMessageDto,
-    attachments: Express.Multer.File[],
+    @UploadedFiles() attachments: Express.Multer.File[],
   ) {
     return this.ticketService.createMessage(req, ticketId, body, attachments);
   }

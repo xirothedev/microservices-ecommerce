@@ -54,7 +54,7 @@ import { SupabaseModule } from './supabase/supabase.module';
       },
       formatError: (error) => {
         return {
-          message: error.message,
+          ...(error.extensions?.originalError as any),
           path: error.path,
           extensions: { code: error.extensions?.code },
         };

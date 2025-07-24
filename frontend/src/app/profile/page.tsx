@@ -7,27 +7,42 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useUserQuery } from "@/hooks/use-user";
+import { UpdateUserInput, useUpdateUserAvatarMutation, useUpdateUserMutation, useUserQuery } from "@/hooks/use-user";
 import { getFallbackString } from "@/lib/utils";
-import { UserQuery } from "@/typings/backend";
+import { ProfileForm, profileSchema } from "@/zods/user";
+import { zodResolver } from "@hookform/resolvers/zod";
 import dayjs from "dayjs";
 import { Edit, Loader2, Save, Upload, X } from "lucide-react";
 import { motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useForm } from "react-hook-form";
 
 export default function PersonalInformation() {
 	const [isEditing, setIsEditing] = useState(false);
 	const { data } = useUserQuery();
-	const [formData, setFormData] = useState<UserQuery | undefined>();
+	const { mutateAsync: mutateUpdateUserAvatar } = useUpdateUserAvatarMutation();
+	const [mutateUpdateUser] = useUpdateUserMutation();
 	const fallbackAvatar = getFallbackString(data?.me.fullname ?? "");
+	const fileInputRef = useRef<HTMLInputElement>(null);
+
+	const form = useForm<ProfileForm>({
+		resolver: zodResolver(profileSchema),
+	});
 
 	useEffect(() => {
 		if (data?.me) {
-			setFormData(data.me);
+			form.reset({
+				fullname: data.me.fullname || "",
+				address: data.me.address || "",
+				city: data.me.city || "",
+				state: data.me.state || "",
+				zipCode: data.me.zipCode || "",
+				biography: data.me.biography || "",
+			});
 		}
-	}, [data]);
+	}, [data?.me, form]);
 
-	if (!formData) {
+	if (!data?.me) {
 		return (
 			<div className="flex h-64 items-center justify-center">
 				<Loader2 className="h-10 w-10 animate-spin text-blue-500" />
@@ -35,15 +50,54 @@ export default function PersonalInformation() {
 		);
 	}
 
-	const handleSave = () => {
-		// Here you would typically make an API call to save the data
-		console.log("Saving data:", formData);
+	const handleSave = form.handleSubmit(async (values) => {
+		if (!data?.me) return;
+
+		const changed: UpdateUserInput = {};
+		if (values.fullname !== data.me.fullname) changed.fullname = values.fullname;
+		if ((values.address || null) !== (data.me.address || null))
+			changed.address = values.address === "" ? null : values.address;
+		if ((values.city || null) !== (data.me.city || null)) changed.city = values.city === "" ? null : values.city;
+		if ((values.state || null) !== (data.me.state || null))
+			changed.state = values.state === "" ? null : values.state;
+		if ((values.zipCode || null) !== (data.me.zipCode || null))
+			changed.zipCode = values.zipCode === "" ? null : values.zipCode;
+		if ((values.biography || null) !== (data.me.biography || null))
+			changed.biography = values.biography === "" ? null : values.biography;
+
+		if (Object.keys(changed).length === 0) {
+			setIsEditing(false);
+			return;
+		}
+		await mutateUpdateUser(changed);
+		setIsEditing(false);
+	});
+
+	const handleCancel = () => {
+		if (data?.me) {
+			form.reset({
+				fullname: data.me.fullname,
+				address: data.me.address || "",
+				city: data.me.city || "",
+				state: data.me.state || "",
+				zipCode: data.me.zipCode || "",
+				biography: data.me.biography || "",
+			});
+		}
 		setIsEditing(false);
 	};
 
-	const handleCancel = () => {
-		// Reset form data to original values
-		setIsEditing(false);
+	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		if (!file) return;
+
+		const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+		if (!allowedTypes.includes(file.type)) {
+			alert("Only accept PNG, JPEG, JPG, WEBP.");
+			return;
+		}
+
+		await mutateUpdateUserAvatar(file);
 	};
 
 	return (
@@ -83,108 +137,100 @@ export default function PersonalInformation() {
 							</div>
 							<p className="text-sm text-gray-600">Upload a new profile picture</p>
 							{isEditing && (
-								<Button variant="outline" size="sm" className="flex items-center gap-2 bg-transparent">
-									<Upload className="h-4 w-4" />
-									Upload New Photo
-								</Button>
+								<>
+									<input
+										type="file"
+										accept="image/png, image/jpeg, image/jpg, image/webp"
+										style={{ display: "none" }}
+										ref={fileInputRef}
+										onChange={handleFileChange}
+									/>
+									<Button
+										variant="outline"
+										size="sm"
+										className="flex items-center gap-2 bg-transparent"
+										type="button"
+										onClick={() => {
+											fileInputRef.current?.click();
+										}}
+									>
+										<Upload className="h-4 w-4" />
+										Upload New Photo
+									</Button>
+								</>
 							)}
 						</div>
 					</div>
 
 					{/* Form Fields */}
-					<form className="grid gap-6 md:grid-cols-2">
+					<form className="grid gap-6 md:grid-cols-2" onSubmit={handleSave}>
 						<div className="space-y-2 md:col-span-2">
 							<Label htmlFor="fullname">Full name</Label>
-							<Input
-								id="fullname"
-								value={formData.fullname}
-								onChange={(e) => setFormData({ ...formData, fullname: e.target.value })}
-								disabled={!isEditing}
-							/>
+							<Input id="fullname" {...form.register("fullname")} disabled={!isEditing} />
+							{form.formState.errors.fullname && (
+								<p className="text-sm text-red-600">{form.formState.errors.fullname.message}</p>
+							)}
 						</div>
 						<div className="space-y-2">
 							<Label htmlFor="email">Email Address</Label>
-							<Input
-								id="email"
-								type="email"
-								value={formData.email}
-								onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-								disabled={!isEditing}
-							/>
+							<Input id="email" type="email" disabled />
 						</div>
 						<div className="space-y-2">
 							<Label htmlFor="phone">Phone Number</Label>
-							<Input
-								id="phone"
-								value={formData.phone ?? ""}
-								onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-								disabled={!isEditing}
-							/>
+							<Input id="phone" disabled />
 						</div>
 						<div className="space-y-2 md:col-span-2">
 							<Label htmlFor="address">Address</Label>
-							<Input
-								id="address"
-								value={formData.address ?? ""}
-								onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-								disabled={!isEditing}
-							/>
+							<Input id="address" {...form.register("address")} disabled={!isEditing} />
+							{form.formState.errors.address && (
+								<p className="text-sm text-red-600">{form.formState.errors.address.message}</p>
+							)}
 						</div>
 						<div className="space-y-2">
 							<Label htmlFor="city">City</Label>
-							<Input
-								id="city"
-								value={formData.city ?? ""}
-								onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-								disabled={!isEditing}
-							/>
+							<Input id="city" {...form.register("city")} disabled={!isEditing} />
+							{form.formState.errors.city && (
+								<p className="text-sm text-red-600">{form.formState.errors.city.message}</p>
+							)}
 						</div>
 						<div className="space-y-2">
 							<Label htmlFor="state">State</Label>
-							<Input
-								id="state"
-								value={formData.state ?? ""}
-								onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-								disabled={!isEditing}
-							/>
+							<Input id="state" {...form.register("state")} disabled={!isEditing} />
+							{form.formState.errors.state && (
+								<p className="text-sm text-red-600">{form.formState.errors.state.message}</p>
+							)}
 						</div>
 						<div className="space-y-2">
 							<Label htmlFor="zipCode">ZIP Code</Label>
-							<Input
-								id="zipCode"
-								value={formData.zipCode ?? ""}
-								onChange={(e) => setFormData({ ...formData, zipCode: e.target.value })}
-								disabled={!isEditing}
-							/>
+							<Input id="zipCode" {...form.register("zipCode")} disabled={!isEditing} />
+							{form.formState.errors.zipCode && (
+								<p className="text-sm text-red-600">{form.formState.errors.zipCode.message}</p>
+							)}
 						</div>
 						<div className="space-y-2 md:col-span-2">
 							<Label htmlFor="biography">Biography</Label>
-							<Textarea
-								id="biography"
-								value={formData.biography ?? ""}
-								onChange={(e) => setFormData({ ...formData, biography: e.target.value })}
-								disabled={!isEditing}
-								rows={3}
-							/>
+							<Textarea id="biography" {...form.register("biography")} disabled={!isEditing} rows={3} />
+							{form.formState.errors.biography && (
+								<p className="text-sm text-red-600">{form.formState.errors.biography.message}</p>
+							)}
 						</div>
+						{/* Save Button */}
+						{isEditing && (
+							<motion.div
+								initial={{ opacity: 0, y: 10 }}
+								animate={{ opacity: 1, y: 0 }}
+								className="flex justify-end space-x-2 md:col-span-2"
+							>
+								<Button variant="outline" type="button" onClick={handleCancel}>
+									Cancel
+								</Button>
+								<Button type="submit" className="flex items-center gap-2">
+									<Save className="h-4 w-4" />
+									Save Changes
+								</Button>
+							</motion.div>
+						)}
 					</form>
-
-					{/* Save Button */}
-					{isEditing && (
-						<motion.div
-							initial={{ opacity: 0, y: 10 }}
-							animate={{ opacity: 1, y: 0 }}
-							className="flex justify-end space-x-2"
-						>
-							<Button variant="outline" onClick={handleCancel}>
-								Cancel
-							</Button>
-							<Button onClick={handleSave} className="flex items-center gap-2">
-								<Save className="h-4 w-4" />
-								Save Changes
-							</Button>
-						</motion.div>
-					)}
 				</CardContent>
 			</Card>
 
