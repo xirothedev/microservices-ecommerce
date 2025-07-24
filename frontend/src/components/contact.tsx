@@ -1,13 +1,17 @@
 "use client";
 
+import { LiveChatContext } from "@/app/template";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowRight, Mail, MessageCircle, Phone } from "lucide-react";
 import { motion } from "motion/react";
+import { useContext } from "react";
 
 export default function Contact() {
+	const { setIsOpen } = useContext(LiveChatContext);
+
 	return (
 		<section id="contact" className="bg-gradient-to-br from-blue-50 to-purple-50 py-20 transition-colors">
 			<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -109,7 +113,11 @@ export default function Contact() {
 								<p className="mb-4 text-blue-100">
 									Our support team is available 24/7 to assist with urgent requests.
 								</p>
-								<Button variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100">
+								<Button
+									onClick={() => setIsOpen(true)}
+									variant="secondary"
+									className="bg-white text-blue-600 hover:bg-gray-100"
+								>
 									Start Live Chat
 								</Button>
 							</CardContent>
