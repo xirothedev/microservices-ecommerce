@@ -17,9 +17,8 @@ import { BottomGradient } from "../components/bottom-gradient";
 import { LabelInputContainer } from "../components/label-input-container";
 
 export default function SignupPage() {
-	const [isLoading, setIsLoading] = useState(false);
 	const [passwordStrength, setPasswordStrength] = useState(0);
-	const { mutateAsync } = useSignup();
+	const { mutateAsync, isPending } = useSignup();
 
 	const form = useForm<SignUpForm>({
 		resolver: zodResolver(signUpSchema),
@@ -41,12 +40,7 @@ export default function SignupPage() {
 	};
 
 	const onSubmit = async (data: SignUpForm) => {
-		setIsLoading(true);
-		try {
-			await mutateAsync(data);
-		} finally {
-			setIsLoading(false);
-		}
+		await mutateAsync(data);
 	};
 
 	const handleSocialLogin = async (provider: "github" | "google") => {
@@ -58,8 +52,6 @@ export default function SignupPage() {
 				description: "An error occurred during social login",
 				variant: "destructive",
 			});
-		} finally {
-			setIsLoading(false);
 		}
 	};
 
@@ -139,9 +131,9 @@ export default function SignupPage() {
 				<Button
 					className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
 					type="submit"
-					disabled={isLoading}
+					disabled={isPending}
 				>
-					{isLoading ? "Signing up..." : "Sign up"}
+					{isPending ? "Signing up..." : "Sign up"}
 					<BottomGradient />
 				</Button>
 
@@ -152,7 +144,7 @@ export default function SignupPage() {
 						className="group/btn hover:bg-bg-gray-50 shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626]"
 						type="button"
 						onClick={() => handleSocialLogin("github")}
-						disabled={isLoading}
+						disabled={isPending}
 					>
 						<IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
 						<span className="text-sm text-neutral-700 dark:text-neutral-300">GitHub</span>
@@ -162,12 +154,19 @@ export default function SignupPage() {
 						className="group/btn hover:bg-bg-gray-50 shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626]"
 						type="button"
 						onClick={() => handleSocialLogin("google")}
-						disabled={isLoading}
+						disabled={isPending}
 					>
 						<IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
 						<span className="text-sm text-neutral-700 dark:text-neutral-300">Google</span>
 						<BottomGradient />
 					</Button>
+
+					<div className="mt-6 text-center text-sm text-neutral-600 dark:text-neutral-300">
+						Already have an account?{" "}
+						<Link href="/login" className="text-blue-600 hover:underline dark:text-blue-400">
+							Log in
+						</Link>
+					</div>
 				</div>
 			</form>
 		</div>

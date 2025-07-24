@@ -10,14 +10,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { BottomGradient } from "../components/bottom-gradient";
 import { LabelInputContainer } from "../components/label-input-container";
 
 export default function LoginPage() {
-	const [isLoading, setIsLoading] = useState(false);
-	const { mutateAsync } = useLogin();
+	const { mutateAsync, isPending } = useLogin();
 
 	const form = useForm<LoginForm>({
 		resolver: zodResolver(loginSchema),
@@ -28,12 +26,7 @@ export default function LoginPage() {
 	});
 
 	const onSubmit = async (data: LoginForm) => {
-		setIsLoading(true);
-		try {
-			await mutateAsync(data);
-		} finally {
-			setIsLoading(false);
-		}
+		await mutateAsync(data);
 	};
 
 	const handleSocialLogin = async (provider: "github" | "google") => {
@@ -45,8 +38,6 @@ export default function LoginPage() {
 				description: "An error occurred during social login",
 				variant: "destructive",
 			});
-		} finally {
-			setIsLoading(false);
 		}
 	};
 
@@ -60,7 +51,7 @@ export default function LoginPage() {
 			</div>
 
 			<h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">Welcome to Digital Pro</h2>
-			<p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300">
+			<p className="mt-2 max-w-sm text-sm text-neutral-600">
 				Login if you can because we don&apos;t have a login flow yet
 			</p>
 
@@ -100,9 +91,9 @@ export default function LoginPage() {
 				<Button
 					className="group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
 					type="submit"
-					disabled={isLoading}
+					disabled={isPending}
 				>
-					{isLoading ? "Logging in..." : "Login"}
+					{isPending ? "Logging in..." : "Login"}
 					<BottomGradient />
 				</Button>
 
@@ -110,25 +101,32 @@ export default function LoginPage() {
 
 				<div className="flex flex-col space-y-4">
 					<Button
-						className="group/btn shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626]"
+						className="group/btn hover:bg-bg-gray-50 shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626]"
 						type="button"
 						onClick={() => handleSocialLogin("github")}
-						disabled={isLoading}
+						disabled={isPending}
 					>
 						<IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
 						<span className="text-sm text-neutral-700 dark:text-neutral-300">GitHub</span>
 						<BottomGradient />
 					</Button>
 					<Button
-						className="group/btn shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626]"
+						className="group/btn hover:bg-bg-gray-50 shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626]"
 						type="button"
 						onClick={() => handleSocialLogin("google")}
-						disabled={isLoading}
+						disabled={isPending}
 					>
 						<IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
 						<span className="text-sm text-neutral-700 dark:text-neutral-300">Google</span>
 						<BottomGradient />
 					</Button>
+
+					<div className="mt-6 text-center text-sm text-neutral-600 dark:text-neutral-300">
+						Don&apos;t have an account?{" "}
+						<Link href="/register" className="text-blue-600 hover:underline dark:text-blue-400">
+							Register
+						</Link>
+					</div>
 				</div>
 			</form>
 		</div>
