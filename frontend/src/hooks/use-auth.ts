@@ -17,7 +17,7 @@ export function useLogin() {
 		onSuccess: () => {
 			toast({
 				title: "Success",
-				description: "Login successful, redirecting to dashboard...",
+				description: "Login successful, redirecting to services...",
 				variant: "default",
 			});
 			// Wait for cookies to be set - consider increasing timeout for slower environments

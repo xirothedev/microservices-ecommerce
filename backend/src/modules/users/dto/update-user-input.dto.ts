@@ -4,27 +4,27 @@ import { UserQL } from '../entities/user.entity';
 
 @InputType()
 export class UpdateUserInput implements Partial<UserQL> {
-  @Field()
+  @Field({ nullable: true })
   @MaxLength(50)
-  fullname: string;
+  fullname?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @MaxLength(500)
-  address: string;
+  address?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @MaxLength(50)
-  city: string;
+  city?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @MaxLength(50)
-  state: string;
+  state?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @IsPostalCode()
   @MaxLength(10)
-  zipCode: string;
+  zipCode?: string;
 
-  @Field()
-  biography: string;
+  @Field({ nullable: true })
+  biography?: string;
 }

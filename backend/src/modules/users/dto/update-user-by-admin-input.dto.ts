@@ -13,18 +13,18 @@ export type AssignableUserRole = (typeof AssignableUserRole)[keyof typeof Assign
 
 @InputType()
 export class UpdateUserByAdmin implements Partial<UserQL> {
-  @Field(() => [UserRole])
+  @Field(() => [UserRole], { nullable: true })
   @IsEnum(AssignableUserRole, { each: true })
   @IsArray()
-  roles: AssignableUserRole[];
+  roles?: AssignableUserRole[];
 
-  @Field(() => [UserFlag])
+  @Field(() => [UserFlag], { nullable: true })
   @IsEnum(UserFlag, { each: true })
   @IsArray()
-  flags: UserFlag[];
+  flags?: UserFlag[];
 
-  @Field()
+  @Field({ nullable: true })
   @Min(0)
   @Max(Number.MAX_SAFE_INTEGER)
-  credit: number;
+  credit?: number;
 }

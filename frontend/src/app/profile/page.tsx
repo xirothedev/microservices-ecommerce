@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useUser } from "@/hooks/use-user";
+import { useUserQuery } from "@/hooks/use-user";
 import { UserQuery } from "@/typings/backend";
 import dayjs from "dayjs";
 import { Edit, Loader2, Save, Upload, X } from "lucide-react";
@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 
 export default function PersonalInformation() {
 	const [isEditing, setIsEditing] = useState(false);
-	const { data } = useUser();
+	const { data } = useUserQuery();
 	const [formData, setFormData] = useState<UserQuery | undefined>();
 
 	useEffect(() => {

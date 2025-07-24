@@ -7,5 +7,11 @@ export const apolloClient = new ApolloClient({
 		uri: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
 		credentials: "include",
 	}),
-	cache: new InMemoryCache(),
+	cache: new InMemoryCache({
+		typePolicies: {
+			UserQL: {
+				keyFields: ["id"],
+			},
+		},
+	}),
 });

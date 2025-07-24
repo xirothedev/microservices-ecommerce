@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useUser } from "@/hooks/use-user";
+import { useUserQuery } from "@/hooks/use-user";
 
 const navigationItems = [
 	{
@@ -55,7 +55,7 @@ interface ProfileSidebarProps {
 
 export default function ProfileSidebar({ setSidebarOpen }: ProfileSidebarProps) {
 	const path = usePathname();
-	const { data } = useUser();
+	const { data } = useUserQuery();
 	const activePage = path.split("/")[2] ?? "";
 
 	if (!data) {

@@ -7,7 +7,7 @@ import { Menu, Smartphone } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import Cart from "./cart";
-import { useUser } from "@/hooks/use-user";
+import { useUserQuery } from "@/hooks/use-user";
 
 interface NavbarProps {
 	navItems: { name: string; href: string }[];
@@ -16,7 +16,7 @@ interface NavbarProps {
 export default function Navbar({ navItems }: NavbarProps) {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
-	const { data } = useUser();
+	const { data } = useUserQuery();
 
 	return (
 		<nav className="bg-color-100 fixed top-0 z-50 w-full border-b shadow-md backdrop-blur-sm transition-colors">
