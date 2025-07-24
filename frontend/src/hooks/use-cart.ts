@@ -66,7 +66,5 @@ export function useCart() {
 		},
 	);
 
-	console.log(res.data);
-
 	return res;
 }

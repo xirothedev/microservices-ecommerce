@@ -46,7 +46,6 @@ export function useUser() {
 				try {
 					await axiosInstance.post("/auth/refresh-token");
 
-					console.log("Refreshed");
 					res.refetch();
 				} catch (err) {
 					console.error("Failed to refresh token", err);

@@ -1,7 +1,23 @@
 import { faker } from '@faker-js/faker';
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { BillStatus, BillType, PaymentMethod, PrismaClient, UserRole, UserFlag, ProductFlag } from '@prisma/generated';
+import {
+  BillStatus,
+  BillType,
+  PaymentMethod,
+  PrismaClient,
+  UserRole,
+  UserFlag,
+  ProductFlag,
+  Review,
+  OrderItem,
+  TicketUser,
+  CartItem,
+  Product,
+  MfaSetup,
+  Category,
+} from '@prisma/generated';
 import { hash } from 'argon2';
+import Decimal from 'decimal.js';
 
 // --- Helper functions ---
 const unique = <T>(arr: T[]) => Array.from(new Set(arr));
@@ -13,7 +29,14 @@ void (async () => {
 })();
 
 // --- Generate IDs ---
-const categoryIds = Array.from({ length: 100 }, () => faker.string.uuid());
+const usedCategoryIds = new Set<string>();
+const categoryIds: string[] = [];
+while (categoryIds.length < 100) {
+  const id = faker.string.uuid();
+  if (usedCategoryIds.has(id)) continue;
+  usedCategoryIds.add(id);
+  categoryIds.push(id);
+}
 const userIds = Array.from({ length: 100 }, () => faker.string.uuid());
 const productIds = Array.from({ length: 100 }, () => faker.string.alphanumeric(25));
 const billIds = Array.from({ length: 100 }, () => faker.string.uuid());
@@ -26,22 +49,40 @@ const ticketUserIds = Array.from({ length: 100 }, () => faker.string.uuid());
 const ticketMessageIds = Array.from({ length: 100 }, () => faker.string.uuid());
 const ticketContextIds = Array.from({ length: 100 }, () => faker.string.uuid());
 const orderItemIds = Array.from({ length: 100 }, () => faker.string.uuid());
-const authenticationIds = Array.from({ length: 100 }, () => faker.string.uuid());
+// const authenticationIds = Array.from({ length: 100 }, () => faker.string.uuid());
 const mfaSetupIds = Array.from({ length: 100 }, () => faker.string.uuid());
 const mfaBackupCodeIds = Array.from({ length: 100 }, () => faker.string.uuid());
 const loginSessionIds = Array.from({ length: 100 }, () => faker.string.uuid());
-
 // --- Category ---
-const categories = categoryIds.map((id, i) => ({
-  id,
-  name:
+const usedCategorySlugs = new Set<string>();
+const categories: Category[] = [];
+let categoryIndex = 0;
+while (categories.length < categoryIds.length) {
+  const id = categoryIds[categories.length];
+  const name =
     unique([faker.commerce.department(), faker.commerce.productMaterial(), faker.commerce.productAdjective()]).join(
       ' ',
     ) +
     ' ' +
-    i,
-  slug: faker.helpers.slugify(faker.commerce.department() + '-' + i).slice(0, 100),
-}));
+    categoryIndex;
+  let slug;
+  let tryCount = 0;
+  do {
+    if (tryCount > 20) {
+      slug = faker.string.uuid();
+      break;
+    }
+    slug = faker.helpers.slugify(faker.commerce.department() + '-' + categoryIndex).slice(0, 100);
+    tryCount++;
+  } while (usedCategorySlugs.has(slug));
+  usedCategorySlugs.add(slug);
+  categories.push({
+    id,
+    name,
+    slug,
+  });
+  categoryIndex++;
+}
 
 // --- User ---
 const users = userIds.map((id, i) => ({
@@ -67,18 +108,27 @@ const users = userIds.map((id, i) => ({
 // --- Product ---
 const usedSkus = new Set<string>();
 const usedSlugs = new Set<string>();
-const products = productIds.map((id, i) => {
+const products: Product[] = [];
+let productIndex = 0;
+while (products.length < productIds.length) {
+  const id = productIds[products.length];
   let sku;
   do {
     sku = faker.string.alphanumeric(10).slice(0, 50);
   } while (usedSkus.has(sku));
   usedSkus.add(sku);
   let slug;
+  let tryCount = 0;
   do {
-    slug = faker.helpers.slugify(faker.commerce.productName() + '-' + i).slice(0, 255);
+    if (tryCount > 20) {
+      slug = faker.string.uuid();
+      break;
+    }
+    slug = faker.helpers.slugify(faker.commerce.productName() + '-' + productIndex).slice(0, 255);
+    tryCount++;
   } while (usedSlugs.has(slug));
   usedSlugs.add(slug);
-  return {
+  products.push({
     id,
     createAt: faker.date.past(),
     updateAt: faker.date.recent(),
@@ -96,8 +146,9 @@ const products = productIds.map((id, i) => {
     medias: [faker.image.urlPicsumPhotos({ width: 400, height: 300 }).slice(0, 500)],
     categoryId: faker.helpers.arrayElement(categoryIds),
     sellerId: faker.helpers.arrayElement(userIds),
-  };
-});
+  });
+  productIndex++;
+}
 
 // --- ProductItem ---
 const productItems = productItemIds.map((id) => ({
@@ -109,19 +160,25 @@ const productItems = productItemIds.map((id) => ({
 }));
 
 // --- Review ---
-const reviews = reviewIds.map((id) => {
+const usedReviewPairs = new Set<string>();
+const reviews: Review[] = [];
+while (reviews.length < reviewIds.length) {
+  const id = reviewIds[reviews.length];
   const productId = faker.helpers.arrayElement(productIds);
   const userId = faker.helpers.arrayElement(userIds);
-  return {
+  const pairKey = `${productId}_${userId}`;
+  if (usedReviewPairs.has(pairKey)) continue;
+  usedReviewPairs.add(pairKey);
+  reviews.push({
     id,
     createdAt: faker.date.past(),
     updatedAt: faker.date.recent(),
-    rating: parseFloat(faker.number.float({ min: 1, max: 5, fractionDigits: 1 }).toFixed(1)),
+    rating: new Decimal(faker.number.float({ min: 1, max: 5, fractionDigits: 1 }).toFixed(1)),
     comment: faker.lorem.sentences({ min: 1, max: 3 }),
     productId,
     userId,
-  };
-});
+  });
+}
 
 // --- Bill ---
 const bills = billIds.map((id) => ({
@@ -147,11 +204,18 @@ const orders = orderIds.map((id, i) => ({
 }));
 
 // --- OrderItem ---
-const orderItems = orderItemIds.map((id) => {
+const usedOrderProductItemIds = new Set<string>();
+const orderItems: OrderItem[] = [];
+while (orderItems.length < orderItemIds.length) {
+  const id = orderItemIds[orderItems.length];
   const productId = faker.helpers.arrayElement(productIds);
-  const productItemId = faker.helpers.arrayElement(productItemIds);
+  let productItemId;
+  do {
+    productItemId = faker.helpers.arrayElement(productItemIds);
+  } while (usedOrderProductItemIds.has(productItemId));
+  usedOrderProductItemIds.add(productItemId);
   const orderId = faker.helpers.arrayElement(orderIds);
-  return {
+  orderItems.push({
     id,
     from: faker.helpers.arrayElement(['CART', 'SERVICES']),
     quantity: faker.number.int({ min: 1, max: 5 }),
@@ -159,14 +223,20 @@ const orderItems = orderItemIds.map((id) => {
     productId,
     productItemId,
     orderId,
-  };
-});
+  });
+}
 
 // --- CartItem ---
-const cartItems = cartItemIds.map((id) => {
+const usedCartItemPairs = new Set<string>();
+const cartItems: CartItem[] = [];
+while (cartItems.length < cartItemIds.length) {
+  const id = cartItemIds[cartItems.length];
   const productId = faker.helpers.arrayElement(productIds);
   const userId = faker.helpers.arrayElement(userIds);
-  return {
+  const pairKey = `${productId}_${userId}`;
+  if (usedCartItemPairs.has(pairKey)) continue;
+  usedCartItemPairs.add(pairKey);
+  cartItems.push({
     id,
     createAt: faker.date.past(),
     updateAt: faker.date.recent(),
@@ -174,8 +244,8 @@ const cartItems = cartItemIds.map((id) => {
     unitPrice: faker.number.int({ min: 10, max: 500 }),
     productId,
     userId,
-  };
-});
+  });
+}
 
 // --- Ticket ---
 const tickets = ticketIds.map((id, i) => ({
@@ -201,17 +271,23 @@ const tickets = ticketIds.map((id, i) => ({
 }));
 
 // --- TicketUser ---
-const ticketUsers = ticketUserIds.map((id) => {
+const usedTicketUserPairs = new Set<string>();
+const ticketUsers: TicketUser[] = [];
+while (ticketUsers.length < ticketUserIds.length) {
+  const id = ticketUserIds[ticketUsers.length];
   const ticketId = faker.helpers.arrayElement(ticketIds);
   const userId = faker.helpers.arrayElement(userIds);
-  return {
+  const pairKey = `${ticketId}_${userId}`;
+  if (usedTicketUserPairs.has(pairKey)) continue;
+  usedTicketUserPairs.add(pairKey);
+  ticketUsers.push({
     id,
     lastReadAt: faker.date.past(),
     ticketId,
     userId,
     lastReadMessageId: null,
-  };
-});
+  });
+}
 
 // --- TicketMessage ---
 const ticketMessages = ticketMessageIds.map((id) => {
@@ -241,33 +317,40 @@ const ticketContexts = ticketContextIds.map((id) => {
 });
 
 // --- Authentication ---
-const authentications = authenticationIds.map(() => {
-  const userId = faker.helpers.arrayElement(userIds);
-  return {
-    code: faker.string.numeric(6),
-    type: faker.helpers.arrayElement(['VERIFY_EMAIL', 'MFA_EMAIL', 'MFA_SMS', 'MFA_TOTP', 'PASSWORD_RESET']),
-    retryTime: faker.number.int({ min: 0, max: 5 }),
-    lastSentAt: faker.date.past(),
-    expiresAt: faker.date.future(),
-    userId,
-  };
-});
+// const authentications = authenticationIds.map(() => {
+//   const userId = faker.helpers.arrayElement(userIds);
+//   return {
+//     code: faker.string.numeric(6),
+//     type: faker.helpers.arrayElement(['VERIFY_EMAIL', 'MFA_EMAIL', 'MFA_SMS', 'MFA_TOTP', 'PASSWORD_RESET']),
+//     retryTime: faker.number.int({ min: 0, max: 5 }),
+//     lastSentAt: faker.date.past(),
+//     expiresAt: faker.date.future(),
+//     userId,
+//   };
+// });
 
 // --- MfaSetup ---
-const mfaSetups = mfaSetupIds.map((id) => {
+const usedMfaSetupPairs = new Set<string>();
+const mfaSetups: MfaSetup[] = [];
+while (mfaSetups.length < mfaSetupIds.length) {
+  const id = mfaSetupIds[mfaSetups.length];
   const userId = faker.helpers.arrayElement(userIds);
-  return {
+  const type = faker.helpers.arrayElement(['TOTP', 'SMS', 'EMAIL']);
+  const pairKey = `${userId}_${type}`;
+  if (usedMfaSetupPairs.has(pairKey)) continue;
+  usedMfaSetupPairs.add(pairKey);
+  mfaSetups.push({
     id,
     userId,
-    type: faker.helpers.arrayElement(['TOTP', 'SMS', 'EMAIL']),
+    type,
     isEnabled: faker.datatype.boolean(),
     secret: faker.internet.password(),
     phone: faker.phone.number().slice(0, 20),
     email: faker.internet.email().slice(0, 255),
     createdAt: faker.date.past(),
     updatedAt: faker.date.recent(),
-  };
-});
+  });
+}
 
 // --- MfaBackupCode ---
 const mfaBackupCodes = mfaBackupCodeIds.map((id) => {
@@ -333,7 +416,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
     await this.ticketUser.createMany({ data: ticketUsers });
     await this.ticketMessage.createMany({ data: ticketMessages });
     await this.ticketContext.createMany({ data: ticketContexts });
-    await this.authentication.createMany({ data: authentications });
+    // await this.authentication.createMany({ data: authentications });
     await this.mfaSetup.createMany({ data: mfaSetups });
     await this.mfaBackupCode.createMany({ data: mfaBackupCodes });
     await this.loginSession.createMany({ data: loginSessions });
