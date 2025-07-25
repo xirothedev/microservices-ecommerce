@@ -18420,12 +18420,10 @@ export namespace Prisma {
 
   export type CartItemAvgAggregateOutputType = {
     quantity: number | null;
-    unitPrice: number | null;
   };
 
   export type CartItemSumAggregateOutputType = {
     quantity: number | null;
-    unitPrice: number | null;
   };
 
   export type CartItemMinAggregateOutputType = {
@@ -18433,7 +18431,6 @@ export namespace Prisma {
     createAt: Date | null;
     updateAt: Date | null;
     quantity: number | null;
-    unitPrice: number | null;
     productId: string | null;
     userId: string | null;
   };
@@ -18443,7 +18440,6 @@ export namespace Prisma {
     createAt: Date | null;
     updateAt: Date | null;
     quantity: number | null;
-    unitPrice: number | null;
     productId: string | null;
     userId: string | null;
   };
@@ -18453,7 +18449,6 @@ export namespace Prisma {
     createAt: number;
     updateAt: number;
     quantity: number;
-    unitPrice: number;
     productId: number;
     userId: number;
     _all: number;
@@ -18461,12 +18456,10 @@ export namespace Prisma {
 
   export type CartItemAvgAggregateInputType = {
     quantity?: true;
-    unitPrice?: true;
   };
 
   export type CartItemSumAggregateInputType = {
     quantity?: true;
-    unitPrice?: true;
   };
 
   export type CartItemMinAggregateInputType = {
@@ -18474,7 +18467,6 @@ export namespace Prisma {
     createAt?: true;
     updateAt?: true;
     quantity?: true;
-    unitPrice?: true;
     productId?: true;
     userId?: true;
   };
@@ -18484,7 +18476,6 @@ export namespace Prisma {
     createAt?: true;
     updateAt?: true;
     quantity?: true;
-    unitPrice?: true;
     productId?: true;
     userId?: true;
   };
@@ -18494,7 +18485,6 @@ export namespace Prisma {
     createAt?: true;
     updateAt?: true;
     quantity?: true;
-    unitPrice?: true;
     productId?: true;
     userId?: true;
     _all?: true;
@@ -18588,7 +18578,6 @@ export namespace Prisma {
     createAt: Date;
     updateAt: Date;
     quantity: number;
-    unitPrice: number;
     productId: string;
     userId: string;
     _count: CartItemCountAggregateOutputType | null;
@@ -18617,7 +18606,6 @@ export namespace Prisma {
         createAt?: boolean;
         updateAt?: boolean;
         quantity?: boolean;
-        unitPrice?: boolean;
         productId?: boolean;
         userId?: boolean;
         product?: boolean | ProductDefaultArgs<ExtArgs>;
@@ -18633,7 +18621,6 @@ export namespace Prisma {
         createAt?: boolean;
         updateAt?: boolean;
         quantity?: boolean;
-        unitPrice?: boolean;
         productId?: boolean;
         userId?: boolean;
         product?: boolean | ProductDefaultArgs<ExtArgs>;
@@ -18649,7 +18636,6 @@ export namespace Prisma {
         createAt?: boolean;
         updateAt?: boolean;
         quantity?: boolean;
-        unitPrice?: boolean;
         productId?: boolean;
         userId?: boolean;
         product?: boolean | ProductDefaultArgs<ExtArgs>;
@@ -18663,13 +18649,12 @@ export namespace Prisma {
     createAt?: boolean;
     updateAt?: boolean;
     quantity?: boolean;
-    unitPrice?: boolean;
     productId?: boolean;
     userId?: boolean;
   };
 
   export type CartItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<
-    'id' | 'createAt' | 'updateAt' | 'quantity' | 'unitPrice' | 'productId' | 'userId',
+    'id' | 'createAt' | 'updateAt' | 'quantity' | 'productId' | 'userId',
     ExtArgs['result']['cartItem']
   >;
   export type CartItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18697,7 +18682,6 @@ export namespace Prisma {
         createAt: Date;
         updateAt: Date;
         quantity: number;
-        unitPrice: number;
         productId: string;
         userId: string;
       },
@@ -19227,7 +19211,6 @@ export namespace Prisma {
     readonly createAt: FieldRef<'CartItem', 'DateTime'>;
     readonly updateAt: FieldRef<'CartItem', 'DateTime'>;
     readonly quantity: FieldRef<'CartItem', 'Int'>;
-    readonly unitPrice: FieldRef<'CartItem', 'Int'>;
     readonly productId: FieldRef<'CartItem', 'String'>;
     readonly userId: FieldRef<'CartItem', 'String'>;
   }
@@ -24935,7 +24918,6 @@ export namespace Prisma {
     createAt: 'createAt';
     updateAt: 'updateAt';
     quantity: 'quantity';
-    unitPrice: 'unitPrice';
     productId: 'productId';
     userId: 'userId';
   };
@@ -26211,7 +26193,6 @@ export namespace Prisma {
     createAt?: DateTimeFilter<'CartItem'> | Date | string;
     updateAt?: DateTimeFilter<'CartItem'> | Date | string;
     quantity?: IntFilter<'CartItem'> | number;
-    unitPrice?: IntFilter<'CartItem'> | number;
     productId?: StringFilter<'CartItem'> | string;
     userId?: UuidFilter<'CartItem'> | string;
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>;
@@ -26223,7 +26204,6 @@ export namespace Prisma {
     createAt?: SortOrder;
     updateAt?: SortOrder;
     quantity?: SortOrder;
-    unitPrice?: SortOrder;
     productId?: SortOrder;
     userId?: SortOrder;
     product?: ProductOrderByWithRelationInput;
@@ -26240,7 +26220,6 @@ export namespace Prisma {
       createAt?: DateTimeFilter<'CartItem'> | Date | string;
       updateAt?: DateTimeFilter<'CartItem'> | Date | string;
       quantity?: IntFilter<'CartItem'> | number;
-      unitPrice?: IntFilter<'CartItem'> | number;
       productId?: StringFilter<'CartItem'> | string;
       userId?: UuidFilter<'CartItem'> | string;
       product?: XOR<ProductScalarRelationFilter, ProductWhereInput>;
@@ -26254,7 +26233,6 @@ export namespace Prisma {
     createAt?: SortOrder;
     updateAt?: SortOrder;
     quantity?: SortOrder;
-    unitPrice?: SortOrder;
     productId?: SortOrder;
     userId?: SortOrder;
     _count?: CartItemCountOrderByAggregateInput;
@@ -26272,7 +26250,6 @@ export namespace Prisma {
     createAt?: DateTimeWithAggregatesFilter<'CartItem'> | Date | string;
     updateAt?: DateTimeWithAggregatesFilter<'CartItem'> | Date | string;
     quantity?: IntWithAggregatesFilter<'CartItem'> | number;
-    unitPrice?: IntWithAggregatesFilter<'CartItem'> | number;
     productId?: StringWithAggregatesFilter<'CartItem'> | string;
     userId?: UuidWithAggregatesFilter<'CartItem'> | string;
   };
@@ -27620,7 +27597,6 @@ export namespace Prisma {
     createAt?: Date | string;
     updateAt?: Date | string;
     quantity?: number;
-    unitPrice: number;
     product: ProductCreateNestedOneWithoutCartItemInput;
     user: UserCreateNestedOneWithoutCartInput;
   };
@@ -27630,7 +27606,6 @@ export namespace Prisma {
     createAt?: Date | string;
     updateAt?: Date | string;
     quantity?: number;
-    unitPrice: number;
     productId: string;
     userId: string;
   };
@@ -27640,7 +27615,6 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
-    unitPrice?: IntFieldUpdateOperationsInput | number;
     product?: ProductUpdateOneRequiredWithoutCartItemNestedInput;
     user?: UserUpdateOneRequiredWithoutCartNestedInput;
   };
@@ -27650,7 +27624,6 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
-    unitPrice?: IntFieldUpdateOperationsInput | number;
     productId?: StringFieldUpdateOperationsInput | string;
     userId?: StringFieldUpdateOperationsInput | string;
   };
@@ -27660,7 +27633,6 @@ export namespace Prisma {
     createAt?: Date | string;
     updateAt?: Date | string;
     quantity?: number;
-    unitPrice: number;
     productId: string;
     userId: string;
   };
@@ -27670,7 +27642,6 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
-    unitPrice?: IntFieldUpdateOperationsInput | number;
   };
 
   export type CartItemUncheckedUpdateManyInput = {
@@ -27678,7 +27649,6 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
-    unitPrice?: IntFieldUpdateOperationsInput | number;
     productId?: StringFieldUpdateOperationsInput | string;
     userId?: StringFieldUpdateOperationsInput | string;
   };
@@ -29031,14 +29001,12 @@ export namespace Prisma {
     createAt?: SortOrder;
     updateAt?: SortOrder;
     quantity?: SortOrder;
-    unitPrice?: SortOrder;
     productId?: SortOrder;
     userId?: SortOrder;
   };
 
   export type CartItemAvgOrderByAggregateInput = {
     quantity?: SortOrder;
-    unitPrice?: SortOrder;
   };
 
   export type CartItemMaxOrderByAggregateInput = {
@@ -29046,7 +29014,6 @@ export namespace Prisma {
     createAt?: SortOrder;
     updateAt?: SortOrder;
     quantity?: SortOrder;
-    unitPrice?: SortOrder;
     productId?: SortOrder;
     userId?: SortOrder;
   };
@@ -29056,14 +29023,12 @@ export namespace Prisma {
     createAt?: SortOrder;
     updateAt?: SortOrder;
     quantity?: SortOrder;
-    unitPrice?: SortOrder;
     productId?: SortOrder;
     userId?: SortOrder;
   };
 
   export type CartItemSumOrderByAggregateInput = {
     quantity?: SortOrder;
-    unitPrice?: SortOrder;
   };
 
   export type EnumTicketStatusFilter<$PrismaModel = never> = {
@@ -32787,7 +32752,6 @@ export namespace Prisma {
     createAt?: Date | string;
     updateAt?: Date | string;
     quantity?: number;
-    unitPrice: number;
     user: UserCreateNestedOneWithoutCartInput;
   };
 
@@ -32796,7 +32760,6 @@ export namespace Prisma {
     createAt?: Date | string;
     updateAt?: Date | string;
     quantity?: number;
-    unitPrice: number;
     userId: string;
   };
 
@@ -33012,7 +32975,6 @@ export namespace Prisma {
     createAt?: DateTimeFilter<'CartItem'> | Date | string;
     updateAt?: DateTimeFilter<'CartItem'> | Date | string;
     quantity?: IntFilter<'CartItem'> | number;
-    unitPrice?: IntFilter<'CartItem'> | number;
     productId?: StringFilter<'CartItem'> | string;
     userId?: UuidFilter<'CartItem'> | string;
   };
@@ -33737,7 +33699,6 @@ export namespace Prisma {
     createAt?: Date | string;
     updateAt?: Date | string;
     quantity?: number;
-    unitPrice: number;
     product: ProductCreateNestedOneWithoutCartItemInput;
   };
 
@@ -33746,7 +33707,6 @@ export namespace Prisma {
     createAt?: Date | string;
     updateAt?: Date | string;
     quantity?: number;
-    unitPrice: number;
     productId: string;
   };
 
@@ -35819,7 +35779,6 @@ export namespace Prisma {
     createAt?: Date | string;
     updateAt?: Date | string;
     quantity?: number;
-    unitPrice: number;
     userId: string;
   };
 
@@ -35853,7 +35812,6 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
-    unitPrice?: IntFieldUpdateOperationsInput | number;
     user?: UserUpdateOneRequiredWithoutCartNestedInput;
   };
 
@@ -35862,7 +35820,6 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
-    unitPrice?: IntFieldUpdateOperationsInput | number;
     userId?: StringFieldUpdateOperationsInput | string;
   };
 
@@ -35871,7 +35828,6 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
-    unitPrice?: IntFieldUpdateOperationsInput | number;
     userId?: StringFieldUpdateOperationsInput | string;
   };
 
@@ -36087,7 +36043,6 @@ export namespace Prisma {
     createAt?: Date | string;
     updateAt?: Date | string;
     quantity?: number;
-    unitPrice: number;
     productId: string;
   };
 
@@ -36317,7 +36272,6 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
-    unitPrice?: IntFieldUpdateOperationsInput | number;
     product?: ProductUpdateOneRequiredWithoutCartItemNestedInput;
   };
 
@@ -36326,7 +36280,6 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
-    unitPrice?: IntFieldUpdateOperationsInput | number;
     productId?: StringFieldUpdateOperationsInput | string;
   };
 
@@ -36335,7 +36288,6 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
-    unitPrice?: IntFieldUpdateOperationsInput | number;
     productId?: StringFieldUpdateOperationsInput | string;
   };
 

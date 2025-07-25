@@ -50,7 +50,6 @@ export class CartService {
           productId: body.productId,
           userId: user.id,
           quantity: body.quantity,
-          unitPrice: product.discountPrice,
         },
         include: { product: true },
       });

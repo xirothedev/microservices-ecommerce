@@ -1,385 +1,337 @@
-import { faker } from '@faker-js/faker';
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import {
   BillStatus,
   BillType,
   PaymentMethod,
+  Prisma,
   PrismaClient,
-  UserRole,
-  UserFlag,
   ProductFlag,
-  Review,
-  OrderItem,
-  TicketUser,
-  CartItem,
-  Product,
-  MfaSetup,
-  Category,
+  TicketCategory,
+  TicketContextType,
+  TicketPriority,
+  TicketStatus,
+  UserFlag,
+  UserRole,
 } from '@prisma/generated';
-import { hash } from 'argon2';
-import Decimal from 'decimal.js';
+import { faker } from '@faker-js/faker';
 
 // --- Helper functions ---
 const unique = <T>(arr: T[]) => Array.from(new Set(arr));
 
-let password: string = '';
+const chunk = <T>(array: T[], size: number): T[][] => {
+  return Array.from({ length: Math.ceil(array.length / size) }, (_, i) => array.slice(i * size, i * size + size));
+};
 
-void (async () => {
-  password = await hash('password');
-})();
+function generateSku() {
+  const category = faker.commerce.department().slice(0, 3).toUpperCase();
+  const product = faker.commerce.product().slice(0, 3).toUpperCase();
+  const number = faker.number.int({ min: 1000, max: 9999 });
+  return `${category}-${product}-${number}`;
+}
+
+const generateProductImages = (count = 5): string[] => {
+  return Array.from({ length: count }, () => faker.image.urlPicsumPhotos({ width: 640, height: 480 }));
+};
+
+function generateTicketImages(min = 2, max = 5) {
+  const categories = ['technology', 'computer', 'error', 'screen', 'code'];
+  const imageCount = faker.number.int({ min, max });
+
+  return Array.from({ length: imageCount }, () =>
+    faker.image.urlLoremFlickr({
+      category: faker.helpers.arrayElement(categories),
+      width: 800,
+      height: 600,
+    }),
+  );
+}
 
 // --- Generate IDs ---
-const usedCategoryIds = new Set<string>();
-const categoryIds: string[] = [];
-while (categoryIds.length < 100) {
-  const id = faker.string.uuid();
-  if (usedCategoryIds.has(id)) continue;
-  usedCategoryIds.add(id);
-  categoryIds.push(id);
-}
-const userIds = Array.from({ length: 100 }, () => faker.string.uuid());
-const productIds = Array.from({ length: 100 }, () => faker.string.alphanumeric(25));
-const billIds = Array.from({ length: 100 }, () => faker.string.uuid());
-const orderIds = Array.from({ length: 100 }, () => faker.string.uuid());
-const ticketIds = Array.from({ length: 100 }, () => faker.string.uuid());
-const productItemIds = Array.from({ length: 100 }, () => faker.string.alphanumeric(25));
-const reviewIds = Array.from({ length: 100 }, () => faker.string.alphanumeric(25));
-const cartItemIds = Array.from({ length: 100 }, () => faker.string.alphanumeric(25));
-const ticketUserIds = Array.from({ length: 100 }, () => faker.string.uuid());
-const ticketMessageIds = Array.from({ length: 100 }, () => faker.string.uuid());
-const ticketContextIds = Array.from({ length: 100 }, () => faker.string.uuid());
-const orderItemIds = Array.from({ length: 100 }, () => faker.string.uuid());
-// const authenticationIds = Array.from({ length: 100 }, () => faker.string.uuid());
-const mfaSetupIds = Array.from({ length: 100 }, () => faker.string.uuid());
-const mfaBackupCodeIds = Array.from({ length: 100 }, () => faker.string.uuid());
-const loginSessionIds = Array.from({ length: 100 }, () => faker.string.uuid());
-// --- Category ---
-const usedCategorySlugs = new Set<string>();
-const categories: Category[] = [];
-let categoryIndex = 0;
-while (categories.length < categoryIds.length) {
-  const id = categoryIds[categories.length];
-  const name =
-    unique([faker.commerce.department(), faker.commerce.productMaterial(), faker.commerce.productAdjective()]).join(
-      ' ',
-    ) +
-    ' ' +
-    categoryIndex;
-  let slug;
-  let tryCount = 0;
-  do {
-    if (tryCount > 20) {
-      slug = faker.string.uuid();
-      break;
-    }
-    slug = faker.helpers.slugify(faker.commerce.department() + '-' + categoryIndex).slice(0, 100);
-    tryCount++;
-  } while (usedCategorySlugs.has(slug));
-  usedCategorySlugs.add(slug);
-  categories.push({
-    id,
-    name,
-    slug,
-  });
-  categoryIndex++;
-}
+const userIds = unique(Array.from({ length: 100 }, () => faker.string.uuid()));
+const categoryIds = unique(Array.from({ length: 10 }, () => faker.string.uuid()));
+const cartItemIds = unique(Array.from({ length: 2000 }, () => faker.string.alphanumeric(25)));
+const productIds = unique(Array.from({ length: 100 }, () => faker.string.alphanumeric(25)));
+const productItemIds = unique(Array.from({ length: 1000 }, () => faker.string.alphanumeric(25)));
+const reviewIds = unique(Array.from({ length: 1000 }, () => faker.string.alphanumeric(25)));
+const billIds = unique(Array.from({ length: 5000 }, () => faker.string.uuid()));
+const orderIds = unique(Array.from({ length: 5000 }, () => faker.string.uuid()));
+const orderItemIds = unique(Array.from({ length: 50000 }, () => faker.string.uuid()));
+const ticketIds = unique(Array.from({ length: 2000 }, () => faker.string.uuid()));
 
-// --- User ---
-const users = userIds.map((id, i) => ({
+const users: Prisma.UserCreateManyInput[] = userIds.map((id, i) => ({
   id,
   fullname: faker.person.fullName().slice(0, 50),
   email: `user${i}_${faker.internet.email().slice(0, 200)}`.slice(0, 255),
   phone: faker.phone.number().slice(0, 20),
-  isVerified: faker.datatype.boolean(),
-  hashedPassword: password,
   avatarUrl: faker.image.avatar().slice(0, 500),
   address: faker.location.streetAddress().slice(0, 500),
   city: faker.location.city().slice(0, 50),
   state: faker.location.state().slice(0, 50),
   zipCode: faker.location.zipCode().slice(0, 10),
   biography: faker.lorem.sentence(),
-  roles: [faker.helpers.arrayElement(Object.values(UserRole))],
+  roles: ['USER', faker.helpers.arrayElement(Object.values(UserRole))],
   flags: [faker.helpers.arrayElement(Object.values(UserFlag))],
-  createAt: faker.date.past(),
-  updateAt: faker.date.recent(),
   credit: faker.number.int({ min: 0, max: 1000 }),
+  isVerified: true,
 }));
 
-// --- Product ---
-const usedSkus = new Set<string>();
-const usedSlugs = new Set<string>();
-const products: Product[] = [];
-let productIndex = 0;
-while (products.length < productIds.length) {
-  const id = productIds[products.length];
-  let sku;
-  do {
-    sku = faker.string.alphanumeric(10).slice(0, 50);
-  } while (usedSkus.has(sku));
-  usedSkus.add(sku);
-  let slug;
-  let tryCount = 0;
-  do {
-    if (tryCount > 20) {
-      slug = faker.string.uuid();
-      break;
-    }
-    slug = faker.helpers.slugify(faker.commerce.productName() + '-' + productIndex).slice(0, 255);
-    tryCount++;
-  } while (usedSlugs.has(slug));
-  usedSlugs.add(slug);
-  products.push({
+const categories: Prisma.CategoryCreateManyInput[] = categoryIds.map((id) => {
+  const name = unique([
+    faker.commerce.department(),
+    faker.commerce.productMaterial(),
+    faker.commerce.productAdjective(),
+  ]).join(' ');
+
+  return {
     id,
-    createAt: faker.date.past(),
-    updateAt: faker.date.recent(),
-    sku,
-    isActive: faker.datatype.boolean(),
-    slug,
-    name: faker.commerce.productName().slice(0, 255),
-    description: faker.commerce.productDescription(),
-    stock: faker.number.int({ min: 0, max: 100 }),
-    sold: faker.number.int({ min: 0, max: 100 }),
-    flags: [faker.helpers.arrayElement(Object.values(ProductFlag))],
-    originalPrice: faker.number.int({ min: 10, max: 500 }),
-    discountPrice: faker.number.int({ min: 5, max: 400 }),
-    tags: [faker.commerce.productAdjective().slice(0, 100), faker.commerce.productMaterial().slice(0, 100)],
-    medias: [faker.image.urlPicsumPhotos({ width: 400, height: 300 }).slice(0, 500)],
+    name,
+    slug: faker.helpers.slugify(name),
+  };
+});
+
+const products: Prisma.ProductCreateManyInput[] = productIds.map((id, i) => {
+  const name = faker.commerce.productName().slice(0, 255);
+  const originalPrice = faker.number.float({ min: 10, max: 1000 });
+  const discountRate = faker.number.int({ min: 10, max: 50 });
+  const discountPrice = +(originalPrice * (1 - discountRate / 100)).toFixed(2);
+
+  return {
+    id,
     categoryId: faker.helpers.arrayElement(categoryIds),
     sellerId: faker.helpers.arrayElement(userIds),
-  });
-  productIndex++;
+    name,
+    sku: generateSku(),
+    description: faker.commerce.productDescription(),
+    originalPrice,
+    discountPrice,
+    slug: faker.helpers.slugify(name + i),
+    stock: faker.number.int({ min: 10, max: 50 }),
+    sold: faker.number.int({ min: 0, max: 100 }),
+    flags: [faker.helpers.arrayElement(Object.values(ProductFlag))],
+    tags: [faker.commerce.productAdjective().slice(0, 100), faker.commerce.productMaterial().slice(0, 100)],
+    isActive: faker.datatype.boolean(),
+    medias: generateProductImages(),
+  };
+});
+
+const cartItemPairSet = new Set<string>();
+const cartItems: Prisma.CartItemCreateManyInput[] = [];
+for (const id of cartItemIds) {
+  let productId = faker.helpers.arrayElement(productIds);
+  let userId = faker.helpers.arrayElement(userIds);
+  let pairKey = `${productId}_${userId}`;
+  let tries = 0;
+  while (cartItemPairSet.has(pairKey) && tries < 10) {
+    productId = faker.helpers.arrayElement(productIds);
+    userId = faker.helpers.arrayElement(userIds);
+    pairKey = `${productId}_${userId}`;
+    tries++;
+  }
+  if (!cartItemPairSet.has(pairKey)) {
+    cartItemPairSet.add(pairKey);
+    cartItems.push({
+      id,
+      productId,
+      userId,
+      quantity: faker.number.int({ min: 1, max: 10 }),
+    });
+  }
 }
 
-// --- ProductItem ---
-const productItems = productItemIds.map((id) => ({
-  id,
-  productId: faker.helpers.arrayElement(productIds),
-  data: faker.lorem.paragraph(),
-  isSold: faker.datatype.boolean(),
-  soldAt: faker.datatype.boolean() ? faker.date.past() : null,
-}));
+const productItems: Prisma.ProductItemCreateManyInput[] = productItemIds.map((id) => {
+  const isSold = faker.datatype.boolean();
 
-// --- Review ---
-const usedReviewPairs = new Set<string>();
-const reviews: Review[] = [];
-while (reviews.length < reviewIds.length) {
-  const id = reviewIds[reviews.length];
-  const productId = faker.helpers.arrayElement(productIds);
-  const userId = faker.helpers.arrayElement(userIds);
-  const pairKey = `${productId}_${userId}`;
-  if (usedReviewPairs.has(pairKey)) continue;
-  usedReviewPairs.add(pairKey);
-  reviews.push({
+  return {
     id,
-    createdAt: faker.date.past(),
-    updatedAt: faker.date.recent(),
-    rating: new Decimal(faker.number.float({ min: 1, max: 5, fractionDigits: 1 }).toFixed(1)),
-    comment: faker.lorem.sentences({ min: 1, max: 3 }),
-    productId,
-    userId,
-  });
+    productId: faker.helpers.arrayElement(productIds),
+    data: faker.string.sample(10),
+    isSold,
+    soldAt: isSold ? faker.date.past() : null,
+  };
+});
+
+const reviewPairSet = new Set<string>();
+const reviews: Prisma.ReviewCreateManyInput[] = [];
+for (const id of reviewIds) {
+  let productId = faker.helpers.arrayElement(productIds);
+  let userId = faker.helpers.arrayElement(userIds);
+  let pairKey = `${productId}_${userId}`;
+  let tries = 0;
+  while (reviewPairSet.has(pairKey) && tries < 10) {
+    productId = faker.helpers.arrayElement(productIds);
+    userId = faker.helpers.arrayElement(userIds);
+    pairKey = `${productId}_${userId}`;
+    tries++;
+  }
+  if (!reviewPairSet.has(pairKey)) {
+    reviewPairSet.add(pairKey);
+    reviews.push({
+      id,
+      userId,
+      productId,
+      comment: faker.lorem.sentence({ min: 5, max: 15 }),
+      rating: faker.number.float({ min: 1, max: 5, fractionDigits: 1 }).toFixed(1),
+    });
+  }
 }
 
-// --- Bill ---
-const bills = billIds.map((id) => ({
+const bills: Prisma.BillCreateManyInput[] = billIds.map((id) => ({
   id,
-  createAt: faker.date.past(),
-  updateAt: faker.date.recent(),
+  userId: faker.helpers.arrayElement(userIds),
   transactionId: faker.string.alphanumeric(12),
   paymentMethod: faker.helpers.arrayElement(Object.values(PaymentMethod)),
   type: faker.helpers.arrayElement(Object.values(BillType)),
   status: faker.helpers.arrayElement(Object.values(BillStatus)),
   amount: faker.number.int({ min: 20, max: 1000 }),
   note: faker.lorem.sentence(),
-  userId: faker.helpers.arrayElement(userIds),
 }));
 
-// --- Order ---
-const orders = orderIds.map((id, i) => ({
-  id,
-  createAt: faker.date.past(),
-  updateAt: faker.date.recent(),
-  totalPrice: faker.number.int({ min: 20, max: 1000 }),
-  billId: billIds[i],
-}));
+const orders: Prisma.OrderCreateManyInput[] = orderIds.map((id, i) => {
+  const bill = bills[i];
+  return {
+    id,
+    userId: faker.helpers.arrayElement(userIds),
+    billId: bill.id!,
+    totalPrice: faker.number.int({ min: 100, max: 2000 }),
+  };
+});
 
-// --- OrderItem ---
-const usedOrderProductItemIds = new Set<string>();
-const orderItems: OrderItem[] = [];
-while (orderItems.length < orderItemIds.length) {
-  const id = orderItemIds[orderItems.length];
-  const productId = faker.helpers.arrayElement(productIds);
-  let productItemId;
-  do {
+const usedProductItemIds = new Set<string>();
+const orderItems: Prisma.OrderItemCreateManyInput[] = [];
+for (const id of orderItemIds) {
+  let productItemId = faker.helpers.arrayElement(productItemIds);
+  let tries = 0;
+  while (usedProductItemIds.has(productItemId) && tries < 10) {
     productItemId = faker.helpers.arrayElement(productItemIds);
-  } while (usedOrderProductItemIds.has(productItemId));
-  usedOrderProductItemIds.add(productItemId);
-  const orderId = faker.helpers.arrayElement(orderIds);
-  orderItems.push({
-    id,
-    from: faker.helpers.arrayElement(['CART', 'SERVICES']),
-    quantity: faker.number.int({ min: 1, max: 5 }),
-    price: faker.number.int({ min: 10, max: 500 }),
-    productId,
-    productItemId,
-    orderId,
-  });
+    tries++;
+  }
+  if (!usedProductItemIds.has(productItemId)) {
+    usedProductItemIds.add(productItemId);
+    orderItems.push({
+      id,
+      from: faker.helpers.arrayElement(['CART', 'SERVICES']),
+      quantity: faker.number.int({ min: 1, max: 10 }),
+      price: faker.number.int({ min: 10, max: 500 }),
+      productId: faker.helpers.arrayElement(productIds),
+      productItemId,
+      orderId: faker.helpers.arrayElement(orderIds),
+    });
+  }
 }
 
-// --- CartItem ---
-const usedCartItemPairs = new Set<string>();
-const cartItems: CartItem[] = [];
-while (cartItems.length < cartItemIds.length) {
-  const id = cartItemIds[cartItems.length];
-  const productId = faker.helpers.arrayElement(productIds);
-  const userId = faker.helpers.arrayElement(userIds);
-  const pairKey = `${productId}_${userId}`;
-  if (usedCartItemPairs.has(pairKey)) continue;
-  usedCartItemPairs.add(pairKey);
-  cartItems.push({
-    id,
-    createAt: faker.date.past(),
-    updateAt: faker.date.recent(),
-    quantity: faker.number.int({ min: 1, max: 5 }),
-    unitPrice: faker.number.int({ min: 10, max: 500 }),
-    productId,
-    userId,
-  });
-}
+const tickets: Prisma.TicketCreateManyInput[] = ticketIds.map((id, i) => {
+  const assignableUsers = users.filter((user) => Array.isArray(user.roles) && user.roles.includes('SUPPORTER'));
+  const authorId = faker.helpers.arrayElement(userIds);
+  let assignedId: string | undefined;
 
-// --- Ticket ---
-const tickets = ticketIds.map((id, i) => ({
-  id,
-  numericalOrder: i + 1,
-  createAt: faker.date.past(),
-  updateAt: faker.date.recent(),
-  title: faker.lorem.sentence().slice(0, 255),
-  description: faker.lorem.paragraph(),
-  status: faker.helpers.arrayElement(['RESOLVED', 'IN_PROGRESS', 'WAITING', 'OPEN', 'CLOSED']),
-  category: faker.helpers.arrayElement([
-    'TECHNICAL_SUPPORT',
-    'BILLING_PAYMENT',
-    'ACCOUNT_ISSUE',
-    'SERVICE_REQUEST',
-    'REFUND_REQUEST',
-    'GENERAL_INQUIRY',
-  ]),
-  priority: faker.helpers.arrayElement(['URGENT', 'HIGH', 'MEDIUM', 'LOW']),
-  attachments: [faker.image.urlPicsumPhotos({ width: 400, height: 300 })],
-  authorId: faker.helpers.arrayElement(userIds),
-  assignedId: faker.helpers.arrayElement(userIds),
-}));
+  if (assignableUsers.length > 0) {
+    let assignedUser = faker.helpers.arrayElement(assignableUsers);
+    while (assignedUser.id === authorId && assignableUsers.length > 1) {
+      assignedUser = faker.helpers.arrayElement(assignableUsers);
+    }
+    assignedId = assignedUser.id;
+  }
 
-// --- TicketUser ---
-const usedTicketUserPairs = new Set<string>();
-const ticketUsers: TicketUser[] = [];
-while (ticketUsers.length < ticketUserIds.length) {
-  const id = ticketUserIds[ticketUsers.length];
-  const ticketId = faker.helpers.arrayElement(ticketIds);
-  const userId = faker.helpers.arrayElement(userIds);
-  const pairKey = `${ticketId}_${userId}`;
-  if (usedTicketUserPairs.has(pairKey)) continue;
-  usedTicketUserPairs.add(pairKey);
-  ticketUsers.push({
+  return {
     id,
-    lastReadAt: faker.date.past(),
-    ticketId,
+    numericalOrder: i + 1,
+    title: faker.helpers.arrayElement([
+      `Cannot ${faker.hacker.verb()} ${faker.hacker.noun()}`,
+      `${faker.company.buzzAdjective()} ${faker.commerce.productName()} not working`,
+      `${faker.hacker.ingverb()} issue with ${faker.internet.domainWord()}`,
+      `Error when trying to ${faker.hacker.verb()} ${faker.system.fileExt()} file`,
+    ]),
+    description: faker.lorem.paragraphs({ min: 1, max: 2 }),
+    authorId,
+    assignedId,
+    category: faker.helpers.arrayElement(Object.values(TicketCategory)),
+    priority: faker.helpers.arrayElement(Object.values(TicketPriority)),
+    status: faker.helpers.arrayElement(Object.values(TicketStatus)),
+    attachments: generateTicketImages(),
+  };
+});
+
+const ticketUsers: Prisma.TicketUserCreateManyInput[] = tickets.flatMap((ticket) => {
+  const participants = new Set<string>([ticket.authorId]);
+  if (ticket.assignedId) participants.add(ticket.assignedId);
+
+  return Array.from(participants).map((userId) => ({
+    id: faker.string.uuid(),
+    ticketId: ticket.id!,
     userId,
+    lastReadAt: faker.date.recent({ days: 7 }),
     lastReadMessageId: null,
-  });
+  }));
+});
+
+const ticketUserMap = new Map<string, Prisma.TicketUserCreateManyInput[]>();
+
+for (const tu of ticketUsers) {
+  const list = ticketUserMap.get(tu.ticketId) ?? [];
+  list.push(tu);
+  ticketUserMap.set(tu.ticketId, list);
 }
 
-// --- TicketMessage ---
-const ticketMessages = ticketMessageIds.map((id) => {
-  const ticketId = faker.helpers.arrayElement(ticketIds);
-  const senderId = faker.helpers.arrayElement(ticketUserIds);
-  return {
-    id,
-    content: faker.lorem.sentences({ min: 1, max: 3 }),
-    isRead: faker.datatype.boolean(),
-    createdAt: faker.date.past(),
-    updatedAt: faker.date.recent(),
-    ticketId,
-    senderId,
-    attachments: [faker.image.urlPicsumPhotos({ width: 400, height: 300 })],
-  };
-});
+const ticketMessages: Prisma.TicketMessageCreateManyInput[] = [];
 
-// --- TicketContext ---
-const ticketContexts = ticketContextIds.map((id) => {
-  const ticketId = faker.helpers.arrayElement(ticketIds);
-  return {
-    id,
-    type: faker.helpers.arrayElement(['ORDER', 'PRODUCT', 'TRANSACTION', 'ACCOUNT']),
-    label: faker.lorem.words(3),
-    ticketId,
-  };
-});
+for (const ticket of tickets) {
+  const participants = ticketUserMap.get(ticket.id!);
+  if (!participants || participants.length === 0) continue;
 
-// --- Authentication ---
-// const authentications = authenticationIds.map(() => {
-//   const userId = faker.helpers.arrayElement(userIds);
-//   return {
-//     code: faker.string.numeric(6),
-//     type: faker.helpers.arrayElement(['VERIFY_EMAIL', 'MFA_EMAIL', 'MFA_SMS', 'MFA_TOTP', 'PASSWORD_RESET']),
-//     retryTime: faker.number.int({ min: 0, max: 5 }),
-//     lastSentAt: faker.date.past(),
-//     expiresAt: faker.date.future(),
-//     userId,
-//   };
-// });
+  const messageCount = faker.number.int({ min: 50, max: 300 });
 
-// --- MfaSetup ---
-const usedMfaSetupPairs = new Set<string>();
-const mfaSetups: MfaSetup[] = [];
-while (mfaSetups.length < mfaSetupIds.length) {
-  const id = mfaSetupIds[mfaSetups.length];
-  const userId = faker.helpers.arrayElement(userIds);
-  const type = faker.helpers.arrayElement(['TOTP', 'SMS', 'EMAIL']);
-  const pairKey = `${userId}_${type}`;
-  if (usedMfaSetupPairs.has(pairKey)) continue;
-  usedMfaSetupPairs.add(pairKey);
-  mfaSetups.push({
-    id,
-    userId,
-    type,
-    isEnabled: faker.datatype.boolean(),
-    secret: faker.internet.password(),
-    phone: faker.phone.number().slice(0, 20),
-    email: faker.internet.email().slice(0, 255),
-    createdAt: faker.date.past(),
-    updatedAt: faker.date.recent(),
-  });
+  for (let i = 0; i < messageCount; i++) {
+    const sender = faker.helpers.arrayElement(participants);
+
+    ticketMessages.push({
+      id: faker.string.uuid(),
+      content: faker.lorem.sentences({ min: 1, max: 3 }),
+      isRead: faker.datatype.boolean(),
+      createdAt: faker.date.recent({ days: 10 }),
+      updatedAt: new Date(),
+      attachments: generateTicketImages(0, 2),
+      ticketId: ticket.id!,
+      senderId: sender.id!,
+    });
+  }
 }
 
-// --- MfaBackupCode ---
-const mfaBackupCodes = mfaBackupCodeIds.map((id) => {
-  const userId = faker.helpers.arrayElement(userIds);
-  return {
-    id,
-    code: faker.string.alphanumeric(10),
-    isUsed: faker.datatype.boolean(),
-    usedAt: faker.datatype.boolean() ? faker.date.past() : null,
-    createdAt: faker.date.past(),
-    userId,
-  };
-});
+const contextTypes = Object.values(TicketContextType);
+const ticketContexts: Prisma.TicketContextCreateManyInput[] = [];
 
-// --- LoginSession ---
-const loginSessions = loginSessionIds.map((id) => {
-  const userId = faker.helpers.arrayElement(userIds);
-  return {
-    id,
-    sessionId: faker.string.alphanumeric(32),
-    refreshToken: faker.string.alphanumeric(64),
-    ipAddress: faker.internet.ip(),
-    userAgent: faker.internet.userAgent(),
-    isActive: faker.datatype.boolean(),
-    createdAt: faker.date.past(),
-    lastUsedAt: faker.date.recent(),
-    userId,
-  };
-});
+for (const ticket of tickets) {
+  const count = faker.number.int({ min: 1, max: contextTypes.length });
+  const selectedTypes = faker.helpers.shuffle(contextTypes).slice(0, count);
+
+  for (const type of selectedTypes) {
+    let label: string;
+
+    switch (type) {
+      case 'PRODUCT':
+        label = faker.commerce.productName();
+        break;
+      case 'ORDER':
+        label = `ORDER-${faker.number.int({ min: 1000, max: 9999 })}`;
+        break;
+      case 'TRANSACTION':
+        label = `TXN-${faker.string.alphanumeric({ length: 8, casing: 'upper' })}`;
+        break;
+      case 'ACCOUNT':
+        label = faker.internet.email();
+        break;
+      default:
+        label = 'Unknown';
+        break;
+    }
+
+    ticketContexts.push({
+      id: faker.string.uuid(),
+      ticketId: ticket.id!,
+      type,
+      label,
+    });
+  }
+}
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
@@ -403,23 +355,28 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   }
 
   async seed() {
-    await this.category.createMany({ data: categories });
     await this.user.createMany({ data: users });
+    await this.category.createMany({ data: categories });
     await this.product.createMany({ data: products });
+    await this.cartItem.createMany({ data: cartItems });
     await this.productItem.createMany({ data: productItems });
     await this.review.createMany({ data: reviews });
     await this.bill.createMany({ data: bills });
     await this.order.createMany({ data: orders });
     await this.orderItem.createMany({ data: orderItems });
-    await this.cartItem.createMany({ data: cartItems });
     await this.ticket.createMany({ data: tickets });
     await this.ticketUser.createMany({ data: ticketUsers });
-    await this.ticketMessage.createMany({ data: ticketMessages });
-    await this.ticketContext.createMany({ data: ticketContexts });
-    // await this.authentication.createMany({ data: authentications });
-    await this.mfaSetup.createMany({ data: mfaSetups });
-    await this.mfaBackupCode.createMany({ data: mfaBackupCodes });
-    await this.loginSession.createMany({ data: loginSessions });
-    console.log('Seeded all tables with at least 100 records each.');
+
+    for (const chunked of chunk(ticketMessages, 500)) {
+      await this.ticketMessage.createMany({
+        data: chunked,
+        skipDuplicates: true,
+      });
+    }
+
+    for (const batch of chunk(ticketContexts, 500)) {
+      await this.ticketContext.createMany({ data: batch });
+    }
+    console.log('Seeded');
   }
 }
