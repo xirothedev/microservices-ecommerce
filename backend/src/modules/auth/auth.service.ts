@@ -251,6 +251,10 @@ export class AuthService {
   public async refreshToken(tokenFromCookie: string, tokenFromBody: string, req: Request, res: Response) {
     const token = tokenFromCookie ?? tokenFromBody ?? req.header?.['Authentication'];
 
+    if (!token) {
+      throw new UnauthorizedException('Invalid credientials');
+    }
+
     const isValidToken = this.jwtService.verify(token, {
       secret: this.configService.getOrThrow<string>('REFRESH_TOKEN_SECRET_KEY'),
     });

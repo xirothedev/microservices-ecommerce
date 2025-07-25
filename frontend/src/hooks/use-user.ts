@@ -52,8 +52,7 @@ export function useUserQuery() {
 }
 
 export function useUpdateUserMutation() {
-	const router = useRouter();
-	const { data, called, loading: userLoading } = useUserQuery();
+	const { data } = useUserQuery();
 
 	const [mutate, mutationState] = useMutationGql<{ updateUser: UserQuery }>(
 		gql`
@@ -79,6 +78,7 @@ export function useUpdateUserMutation() {
 			}
 		`,
 		{
+			context: { handleAuthError: true },
 			errorPolicy: "all",
 			onCompleted: (data) => {
 				if (data?.updateUser) {

@@ -44,7 +44,7 @@ const corsConfig = {
 };
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, { cors: corsConfig });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { cors: corsConfig, logger: false });
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 

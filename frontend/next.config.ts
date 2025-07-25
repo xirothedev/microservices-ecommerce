@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
 	output: "standalone",
 	experimental: {
 		viewTransition: true,
+		authInterrupts: true,
 	},
 	images: {
 		unoptimized: process.env.NODE_ENV === "development",

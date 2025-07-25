@@ -1,10 +1,8 @@
 "use client";
 
-import { ApolloClient, InMemoryCache, HttpLink, from } from "@apollo/client";
-import { onError } from "@apollo/client/link/error";
 import { refreshToken } from "@/lib/refresh-token";
-import { fromPromise } from "@apollo/client";
-import { Observable } from "@apollo/client/utilities";
+import { ApolloClient, HttpLink, InMemoryCache, from, fromPromise } from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
 
 let isRefreshing = false;
 let pendingRequests: (() => void)[] = [];
@@ -15,6 +13,8 @@ function resolvePendingRequests() {
 }
 
 const authErrorLink = onError(({ graphQLErrors, operation, forward }) => {
+	if (!operation.getContext().handleAuthError) return forward(operation);
+
 	const unauthenticated = graphQLErrors?.some((err) => err.extensions?.code === "UNAUTHENTICATED");
 
 	if (!unauthenticated) return;

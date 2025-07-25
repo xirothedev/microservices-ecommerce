@@ -202,11 +202,11 @@ export default function PersonalInformation() {
 							</div>
 							<div className="space-y-2">
 								<Label htmlFor="email">Email Address</Label>
-								<Input id="email" type="email" disabled />
+								<Input id="email" value={data.me.email} type="email" disabled />
 							</div>
 							<div className="space-y-2">
 								<Label htmlFor="phone">Phone Number</Label>
-								<Input id="phone" disabled />
+								<Input id="phone" value={data.me.phone ?? undefined} disabled />
 							</div>
 							<div className="space-y-2 md:col-span-2">
 								<Label htmlFor="address">Address</Label>
