@@ -137,7 +137,7 @@ export default function ServicesList() {
 				hasMore={!!hasNextPage}
 				loader={<div className="py-4 text-center text-gray-500">Loading...</div>}
 				endMessage={<div className="py-4 text-center text-gray-500">End</div>}
-				scrollThreshold={0.8}
+				scrollThreshold={0.75}
 			>
 				<motion.div
 					className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
@@ -147,10 +147,10 @@ export default function ServicesList() {
 				>
 					{filteredServices.map((service, index) => (
 						<motion.div
-							key={service.id}
+							key={index}
 							initial={{ opacity: 0, y: 20 }}
 							animate={{ opacity: 1, y: 0 }}
-							transition={{ duration: 0.6, delay: index * 0.1 }}
+							transition={{ duration: 0.3, delay: index * 0.1 }}
 						>
 							<ServiceCard service={service} />
 						</motion.div>
