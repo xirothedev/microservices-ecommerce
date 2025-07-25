@@ -11,6 +11,7 @@ import 'reflect-metadata';
 import { AppModule } from './app.module';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import * as session from 'express-session';
+import { LoggerService } from './logger/logger.service';
 
 // Swagger config
 const swaggerConfig = new DocumentBuilder()
@@ -52,6 +53,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
+  app.useLogger(new LoggerService());
   app.useGlobalInterceptors(new ResponseInterceptor());
 
   // Swagger

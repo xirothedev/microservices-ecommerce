@@ -173,6 +173,7 @@ generator client {
   previewFeatures = ["postgresqlExtensions", "relationJoins"]
   binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
   engineType      = "library"
+  relationMode    = "prisma"
 }
 
 datasource db {

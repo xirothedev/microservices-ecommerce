@@ -43,10 +43,12 @@
     "@prisma/client": "6.12.0",
     "@supabase/supabase-js": "2.50.5",
     "argon2": "0.43.0",
+    "chalk": "^5.4.1",
     "class-transformer": "0.5.1",
     "class-validator": "0.14.2",
     "compression": "1.8.0",
     "cookie-parser": "1.4.7",
+    "dayjs": "^1.11.13",
     "discord.js": "^14.21.0",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
@@ -62,7 +64,9 @@
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.2",
     "socket.io": "^4.8.1",
-    "ts-morph": "^26.0.0"
+    "ts-morph": "^26.0.0",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.3.1",
