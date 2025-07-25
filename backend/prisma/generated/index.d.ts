@@ -2656,6 +2656,7 @@ export namespace Prisma {
     ticketUser: number;
     reviews: number;
     bills: number;
+    orders: number;
   };
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2670,6 +2671,7 @@ export namespace Prisma {
     ticketUser?: boolean | UserCountOutputTypeCountTicketUserArgs;
     reviews?: boolean | UserCountOutputTypeCountReviewsArgs;
     bills?: boolean | UserCountOutputTypeCountBillsArgs;
+    orders?: boolean | UserCountOutputTypeCountOrdersArgs;
   };
 
   // Custom InputTypes
@@ -2772,6 +2774,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountBillsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BillWhereInput;
+  };
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OrderWhereInput;
   };
 
   /**
@@ -7758,6 +7767,7 @@ export namespace Prisma {
     createAt: Date | null;
     updateAt: Date | null;
     totalPrice: number | null;
+    userId: string | null;
     billId: string | null;
   };
 
@@ -7766,6 +7776,7 @@ export namespace Prisma {
     createAt: Date | null;
     updateAt: Date | null;
     totalPrice: number | null;
+    userId: string | null;
     billId: string | null;
   };
 
@@ -7774,6 +7785,7 @@ export namespace Prisma {
     createAt: number;
     updateAt: number;
     totalPrice: number;
+    userId: number;
     billId: number;
     _all: number;
   };
@@ -7791,6 +7803,7 @@ export namespace Prisma {
     createAt?: true;
     updateAt?: true;
     totalPrice?: true;
+    userId?: true;
     billId?: true;
   };
 
@@ -7799,6 +7812,7 @@ export namespace Prisma {
     createAt?: true;
     updateAt?: true;
     totalPrice?: true;
+    userId?: true;
     billId?: true;
   };
 
@@ -7807,6 +7821,7 @@ export namespace Prisma {
     createAt?: true;
     updateAt?: true;
     totalPrice?: true;
+    userId?: true;
     billId?: true;
     _all?: true;
   };
@@ -7899,6 +7914,7 @@ export namespace Prisma {
     createAt: Date;
     updateAt: Date;
     totalPrice: number;
+    userId: string;
     billId: string;
     _count: OrderCountAggregateOutputType | null;
     _avg: OrderAvgAggregateOutputType | null;
@@ -7925,7 +7941,9 @@ export namespace Prisma {
       createAt?: boolean;
       updateAt?: boolean;
       totalPrice?: boolean;
+      userId?: boolean;
       billId?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
       bill?: boolean | BillDefaultArgs<ExtArgs>;
       items?: boolean | Order$itemsArgs<ExtArgs>;
       _count?: boolean | OrderCountOutputTypeDefaultArgs<ExtArgs>;
@@ -7940,7 +7958,9 @@ export namespace Prisma {
         createAt?: boolean;
         updateAt?: boolean;
         totalPrice?: boolean;
+        userId?: boolean;
         billId?: boolean;
+        user?: boolean | UserDefaultArgs<ExtArgs>;
         bill?: boolean | BillDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['order']
@@ -7953,7 +7973,9 @@ export namespace Prisma {
         createAt?: boolean;
         updateAt?: boolean;
         totalPrice?: boolean;
+        userId?: boolean;
         billId?: boolean;
+        user?: boolean | UserDefaultArgs<ExtArgs>;
         bill?: boolean | BillDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['order']
@@ -7964,28 +7986,33 @@ export namespace Prisma {
     createAt?: boolean;
     updateAt?: boolean;
     totalPrice?: boolean;
+    userId?: boolean;
     billId?: boolean;
   };
 
   export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<
-    'id' | 'createAt' | 'updateAt' | 'totalPrice' | 'billId',
+    'id' | 'createAt' | 'updateAt' | 'totalPrice' | 'userId' | 'billId',
     ExtArgs['result']['order']
   >;
   export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
     bill?: boolean | BillDefaultArgs<ExtArgs>;
     items?: boolean | Order$itemsArgs<ExtArgs>;
     _count?: boolean | OrderCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type OrderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
     bill?: boolean | BillDefaultArgs<ExtArgs>;
   };
   export type OrderIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
     bill?: boolean | BillDefaultArgs<ExtArgs>;
   };
 
   export type $OrderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: 'Order';
     objects: {
+      user: Prisma.$UserPayload<ExtArgs>;
       bill: Prisma.$BillPayload<ExtArgs>;
       items: Prisma.$OrderItemPayload<ExtArgs>[];
     };
@@ -7995,6 +8022,7 @@ export namespace Prisma {
         createAt: Date;
         updateAt: Date;
         totalPrice: number;
+        userId: string;
         billId: string;
       },
       ExtArgs['result']['order']
@@ -8472,6 +8500,14 @@ export namespace Prisma {
     GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
     bill<T extends BillDefaultArgs<ExtArgs> = {}>(
       args?: Subset<T, BillDefaultArgs<ExtArgs>>,
     ): Prisma__BillClient<
@@ -8520,6 +8556,7 @@ export namespace Prisma {
     readonly createAt: FieldRef<'Order', 'DateTime'>;
     readonly updateAt: FieldRef<'Order', 'DateTime'>;
     readonly totalPrice: FieldRef<'Order', 'Int'>;
+    readonly userId: FieldRef<'Order', 'String'>;
     readonly billId: FieldRef<'Order', 'String'>;
   }
 
@@ -15625,6 +15662,7 @@ export namespace Prisma {
       ticketUser?: boolean | User$ticketUserArgs<ExtArgs>;
       reviews?: boolean | User$reviewsArgs<ExtArgs>;
       bills?: boolean | User$billsArgs<ExtArgs>;
+      orders?: boolean | User$ordersArgs<ExtArgs>;
       _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
     },
     ExtArgs['result']['user']
@@ -15730,6 +15768,7 @@ export namespace Prisma {
     ticketUser?: boolean | User$ticketUserArgs<ExtArgs>;
     reviews?: boolean | User$reviewsArgs<ExtArgs>;
     bills?: boolean | User$billsArgs<ExtArgs>;
+    orders?: boolean | User$ordersArgs<ExtArgs>;
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {};
@@ -15749,6 +15788,7 @@ export namespace Prisma {
       ticketUser: Prisma.$TicketUserPayload<ExtArgs>[];
       reviews: Prisma.$ReviewPayload<ExtArgs>[];
       bills: Prisma.$BillPayload<ExtArgs>[];
+      orders: Prisma.$OrderPayload<ExtArgs>[];
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -16292,6 +16332,9 @@ export namespace Prisma {
     bills<T extends User$billsArgs<ExtArgs> = {}>(
       args?: Subset<T, User$billsArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BillPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions> | Null>;
+    orders<T extends User$ordersArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$ordersArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions> | Null>;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -16997,6 +17040,30 @@ export namespace Prisma {
     take?: number;
     skip?: number;
     distinct?: BillScalarFieldEnum | BillScalarFieldEnum[];
+  };
+
+  /**
+   * User.orders
+   */
+  export type User$ordersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Order
+     */
+    select?: OrderSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Order
+     */
+    omit?: OrderOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OrderInclude<ExtArgs> | null;
+    where?: OrderWhereInput;
+    orderBy?: OrderOrderByWithRelationInput | OrderOrderByWithRelationInput[];
+    cursor?: OrderWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: OrderScalarFieldEnum | OrderScalarFieldEnum[];
   };
 
   /**
@@ -24756,6 +24823,7 @@ export namespace Prisma {
     createAt: 'createAt';
     updateAt: 'updateAt';
     totalPrice: 'totalPrice';
+    userId: 'userId';
     billId: 'billId';
   };
 
@@ -25437,7 +25505,9 @@ export namespace Prisma {
     createAt?: DateTimeFilter<'Order'> | Date | string;
     updateAt?: DateTimeFilter<'Order'> | Date | string;
     totalPrice?: IntFilter<'Order'> | number;
+    userId?: UuidFilter<'Order'> | string;
     billId?: UuidFilter<'Order'> | string;
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>;
     bill?: XOR<BillScalarRelationFilter, BillWhereInput>;
     items?: OrderItemListRelationFilter;
   };
@@ -25447,7 +25517,9 @@ export namespace Prisma {
     createAt?: SortOrder;
     updateAt?: SortOrder;
     totalPrice?: SortOrder;
+    userId?: SortOrder;
     billId?: SortOrder;
+    user?: UserOrderByWithRelationInput;
     bill?: BillOrderByWithRelationInput;
     items?: OrderItemOrderByRelationAggregateInput;
   };
@@ -25462,6 +25534,8 @@ export namespace Prisma {
       createAt?: DateTimeFilter<'Order'> | Date | string;
       updateAt?: DateTimeFilter<'Order'> | Date | string;
       totalPrice?: IntFilter<'Order'> | number;
+      userId?: UuidFilter<'Order'> | string;
+      user?: XOR<UserScalarRelationFilter, UserWhereInput>;
       bill?: XOR<BillScalarRelationFilter, BillWhereInput>;
       items?: OrderItemListRelationFilter;
     },
@@ -25473,6 +25547,7 @@ export namespace Prisma {
     createAt?: SortOrder;
     updateAt?: SortOrder;
     totalPrice?: SortOrder;
+    userId?: SortOrder;
     billId?: SortOrder;
     _count?: OrderCountOrderByAggregateInput;
     _avg?: OrderAvgOrderByAggregateInput;
@@ -25489,6 +25564,7 @@ export namespace Prisma {
     createAt?: DateTimeWithAggregatesFilter<'Order'> | Date | string;
     updateAt?: DateTimeWithAggregatesFilter<'Order'> | Date | string;
     totalPrice?: IntWithAggregatesFilter<'Order'> | number;
+    userId?: UuidWithAggregatesFilter<'Order'> | string;
     billId?: UuidWithAggregatesFilter<'Order'> | string;
   };
 
@@ -25918,6 +25994,7 @@ export namespace Prisma {
     ticketUser?: TicketUserListRelationFilter;
     reviews?: ReviewListRelationFilter;
     bills?: BillListRelationFilter;
+    orders?: OrderListRelationFilter;
   };
 
   export type UserOrderByWithRelationInput = {
@@ -25949,6 +26026,7 @@ export namespace Prisma {
     ticketUser?: TicketUserOrderByRelationAggregateInput;
     reviews?: ReviewOrderByRelationAggregateInput;
     bills?: BillOrderByRelationAggregateInput;
+    orders?: OrderOrderByRelationAggregateInput;
   };
 
   export type UserWhereUniqueInput = Prisma.AtLeast<
@@ -25984,6 +26062,7 @@ export namespace Prisma {
       ticketUser?: TicketUserListRelationFilter;
       reviews?: ReviewListRelationFilter;
       bills?: BillListRelationFilter;
+      orders?: OrderListRelationFilter;
     },
     'id' | 'email' | 'phone'
   >;
@@ -26800,6 +26879,7 @@ export namespace Prisma {
     createAt?: Date | string;
     updateAt?: Date | string;
     totalPrice: number;
+    user: UserCreateNestedOneWithoutOrdersInput;
     bill: BillCreateNestedOneWithoutOrderInput;
     items?: OrderItemCreateNestedManyWithoutOrderInput;
   };
@@ -26809,6 +26889,7 @@ export namespace Prisma {
     createAt?: Date | string;
     updateAt?: Date | string;
     totalPrice: number;
+    userId: string;
     billId: string;
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput;
   };
@@ -26818,6 +26899,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     totalPrice?: IntFieldUpdateOperationsInput | number;
+    user?: UserUpdateOneRequiredWithoutOrdersNestedInput;
     bill?: BillUpdateOneRequiredWithoutOrderNestedInput;
     items?: OrderItemUpdateManyWithoutOrderNestedInput;
   };
@@ -26827,6 +26909,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     totalPrice?: IntFieldUpdateOperationsInput | number;
+    userId?: StringFieldUpdateOperationsInput | string;
     billId?: StringFieldUpdateOperationsInput | string;
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput;
   };
@@ -26836,6 +26919,7 @@ export namespace Prisma {
     createAt?: Date | string;
     updateAt?: Date | string;
     totalPrice: number;
+    userId: string;
     billId: string;
   };
 
@@ -26851,6 +26935,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     totalPrice?: IntFieldUpdateOperationsInput | number;
+    userId?: StringFieldUpdateOperationsInput | string;
     billId?: StringFieldUpdateOperationsInput | string;
   };
 
@@ -27277,6 +27362,7 @@ export namespace Prisma {
     ticketUser?: TicketUserCreateNestedManyWithoutUserInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
+    orders?: OrderCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateInput = {
@@ -27308,6 +27394,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUncheckedCreateNestedManyWithoutUserInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserUpdateInput = {
@@ -27339,6 +27426,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
+    orders?: OrderUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateInput = {
@@ -27370,6 +27458,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserCreateManyInput = {
@@ -28289,6 +28378,7 @@ export namespace Prisma {
     createAt?: SortOrder;
     updateAt?: SortOrder;
     totalPrice?: SortOrder;
+    userId?: SortOrder;
     billId?: SortOrder;
   };
 
@@ -28301,6 +28391,7 @@ export namespace Prisma {
     createAt?: SortOrder;
     updateAt?: SortOrder;
     totalPrice?: SortOrder;
+    userId?: SortOrder;
     billId?: SortOrder;
   };
 
@@ -28309,6 +28400,7 @@ export namespace Prisma {
     createAt?: SortOrder;
     updateAt?: SortOrder;
     totalPrice?: SortOrder;
+    userId?: SortOrder;
     billId?: SortOrder;
   };
 
@@ -28692,6 +28784,12 @@ export namespace Prisma {
     none?: BillWhereInput;
   };
 
+  export type OrderListRelationFilter = {
+    every?: OrderWhereInput;
+    some?: OrderWhereInput;
+    none?: OrderWhereInput;
+  };
+
   export type AuthenticationOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
@@ -28717,6 +28815,10 @@ export namespace Prisma {
   };
 
   export type BillOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type OrderOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
 
@@ -29308,6 +29410,12 @@ export namespace Prisma {
     >;
   };
 
+  export type UserCreateNestedOneWithoutOrdersInput = {
+    create?: XOR<UserCreateWithoutOrdersInput, UserUncheckedCreateWithoutOrdersInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutOrdersInput;
+    connect?: UserWhereUniqueInput;
+  };
+
   export type BillCreateNestedOneWithoutOrderInput = {
     create?: XOR<BillCreateWithoutOrderInput, BillUncheckedCreateWithoutOrderInput>;
     connectOrCreate?: BillCreateOrConnectWithoutOrderInput;
@@ -29332,6 +29440,17 @@ export namespace Prisma {
     connectOrCreate?: OrderItemCreateOrConnectWithoutOrderInput | OrderItemCreateOrConnectWithoutOrderInput[];
     createMany?: OrderItemCreateManyOrderInputEnvelope;
     connect?: OrderItemWhereUniqueInput | OrderItemWhereUniqueInput[];
+  };
+
+  export type UserUpdateOneRequiredWithoutOrdersNestedInput = {
+    create?: XOR<UserCreateWithoutOrdersInput, UserUncheckedCreateWithoutOrdersInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutOrdersInput;
+    upsert?: UserUpsertWithoutOrdersInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<UserUpdateToOneWithWhereWithoutOrdersInput, UserUpdateWithoutOrdersInput>,
+      UserUncheckedUpdateWithoutOrdersInput
+    >;
   };
 
   export type BillUpdateOneRequiredWithoutOrderNestedInput = {
@@ -29992,6 +30111,16 @@ export namespace Prisma {
     connect?: BillWhereUniqueInput | BillWhereUniqueInput[];
   };
 
+  export type OrderCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput>
+      | OrderCreateWithoutUserInput[]
+      | OrderUncheckedCreateWithoutUserInput[];
+    connectOrCreate?: OrderCreateOrConnectWithoutUserInput | OrderCreateOrConnectWithoutUserInput[];
+    createMany?: OrderCreateManyUserInputEnvelope;
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[];
+  };
+
   export type AuthenticationUncheckedCreateNestedManyWithoutUserInput = {
     create?:
       | XOR<AuthenticationCreateWithoutUserInput, AuthenticationUncheckedCreateWithoutUserInput>
@@ -30100,6 +30229,16 @@ export namespace Prisma {
     connectOrCreate?: BillCreateOrConnectWithoutUserInput | BillCreateOrConnectWithoutUserInput[];
     createMany?: BillCreateManyUserInputEnvelope;
     connect?: BillWhereUniqueInput | BillWhereUniqueInput[];
+  };
+
+  export type OrderUncheckedCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput>
+      | OrderCreateWithoutUserInput[]
+      | OrderUncheckedCreateWithoutUserInput[];
+    connectOrCreate?: OrderCreateOrConnectWithoutUserInput | OrderCreateOrConnectWithoutUserInput[];
+    createMany?: OrderCreateManyUserInputEnvelope;
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[];
   };
 
   export type UserUpdaterolesInput = {
@@ -30305,6 +30444,23 @@ export namespace Prisma {
     deleteMany?: BillScalarWhereInput | BillScalarWhereInput[];
   };
 
+  export type OrderUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput>
+      | OrderCreateWithoutUserInput[]
+      | OrderUncheckedCreateWithoutUserInput[];
+    connectOrCreate?: OrderCreateOrConnectWithoutUserInput | OrderCreateOrConnectWithoutUserInput[];
+    upsert?: OrderUpsertWithWhereUniqueWithoutUserInput | OrderUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: OrderCreateManyUserInputEnvelope;
+    set?: OrderWhereUniqueInput | OrderWhereUniqueInput[];
+    disconnect?: OrderWhereUniqueInput | OrderWhereUniqueInput[];
+    delete?: OrderWhereUniqueInput | OrderWhereUniqueInput[];
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[];
+    update?: OrderUpdateWithWhereUniqueWithoutUserInput | OrderUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?: OrderUpdateManyWithWhereWithoutUserInput | OrderUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[];
+  };
+
   export type AuthenticationUncheckedUpdateManyWithoutUserNestedInput = {
     create?:
       | XOR<AuthenticationCreateWithoutUserInput, AuthenticationUncheckedCreateWithoutUserInput>
@@ -30496,6 +30652,23 @@ export namespace Prisma {
     update?: BillUpdateWithWhereUniqueWithoutUserInput | BillUpdateWithWhereUniqueWithoutUserInput[];
     updateMany?: BillUpdateManyWithWhereWithoutUserInput | BillUpdateManyWithWhereWithoutUserInput[];
     deleteMany?: BillScalarWhereInput | BillScalarWhereInput[];
+  };
+
+  export type OrderUncheckedUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput>
+      | OrderCreateWithoutUserInput[]
+      | OrderUncheckedCreateWithoutUserInput[];
+    connectOrCreate?: OrderCreateOrConnectWithoutUserInput | OrderCreateOrConnectWithoutUserInput[];
+    upsert?: OrderUpsertWithWhereUniqueWithoutUserInput | OrderUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: OrderCreateManyUserInputEnvelope;
+    set?: OrderWhereUniqueInput | OrderWhereUniqueInput[];
+    disconnect?: OrderWhereUniqueInput | OrderWhereUniqueInput[];
+    delete?: OrderWhereUniqueInput | OrderWhereUniqueInput[];
+    connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[];
+    update?: OrderUpdateWithWhereUniqueWithoutUserInput | OrderUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?: OrderUpdateManyWithWhereWithoutUserInput | OrderUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[];
   };
 
   export type OrderCreateNestedOneWithoutBillInput = {
@@ -31520,6 +31693,7 @@ export namespace Prisma {
     ticketUser?: TicketUserCreateNestedManyWithoutUserInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
+    orders?: OrderCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutAuthInput = {
@@ -31550,6 +31724,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUncheckedCreateNestedManyWithoutUserInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutAuthInput = {
@@ -31596,6 +31771,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
+    orders?: OrderUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutAuthInput = {
@@ -31626,6 +31802,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserCreateWithoutMfaSetupsInput = {
@@ -31656,6 +31833,7 @@ export namespace Prisma {
     ticketUser?: TicketUserCreateNestedManyWithoutUserInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
+    orders?: OrderCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutMfaSetupsInput = {
@@ -31686,6 +31864,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUncheckedCreateNestedManyWithoutUserInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutMfaSetupsInput = {
@@ -31732,6 +31911,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
+    orders?: OrderUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutMfaSetupsInput = {
@@ -31762,6 +31942,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserCreateWithoutBackupCodesInput = {
@@ -31792,6 +31973,7 @@ export namespace Prisma {
     ticketUser?: TicketUserCreateNestedManyWithoutUserInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
+    orders?: OrderCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutBackupCodesInput = {
@@ -31822,6 +32004,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUncheckedCreateNestedManyWithoutUserInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutBackupCodesInput = {
@@ -31868,6 +32051,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
+    orders?: OrderUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutBackupCodesInput = {
@@ -31898,6 +32082,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserCreateWithoutLoginSessionsInput = {
@@ -31928,6 +32113,7 @@ export namespace Prisma {
     ticketUser?: TicketUserCreateNestedManyWithoutUserInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
+    orders?: OrderCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutLoginSessionsInput = {
@@ -31958,6 +32144,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUncheckedCreateNestedManyWithoutUserInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutLoginSessionsInput = {
@@ -32004,6 +32191,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
+    orders?: OrderUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutLoginSessionsInput = {
@@ -32034,6 +32222,74 @@ export namespace Prisma {
     ticketUser?: TicketUserUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserCreateWithoutOrdersInput = {
+    id?: string;
+    fullname: string;
+    email: string;
+    phone?: string | null;
+    isVerified?: boolean;
+    hashedPassword?: string | null;
+    avatarUrl?: string | null;
+    address?: string | null;
+    city?: string | null;
+    state?: string | null;
+    zipCode?: string | null;
+    biography?: string | null;
+    roles?: UserCreaterolesInput | $Enums.UserRole[];
+    flags?: UserCreateflagsInput | $Enums.UserFlag[];
+    createAt?: Date | string;
+    updateAt?: Date | string;
+    credit?: number;
+    auth?: AuthenticationCreateNestedManyWithoutUserInput;
+    backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
+    loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
+    products?: ProductCreateNestedManyWithoutSellerInput;
+    cart?: CartItemCreateNestedManyWithoutUserInput;
+    mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
+    ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
+    ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
+    ticketUser?: TicketUserCreateNestedManyWithoutUserInput;
+    reviews?: ReviewCreateNestedManyWithoutUserInput;
+    bills?: BillCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutOrdersInput = {
+    id?: string;
+    fullname: string;
+    email: string;
+    phone?: string | null;
+    isVerified?: boolean;
+    hashedPassword?: string | null;
+    avatarUrl?: string | null;
+    address?: string | null;
+    city?: string | null;
+    state?: string | null;
+    zipCode?: string | null;
+    biography?: string | null;
+    roles?: UserCreaterolesInput | $Enums.UserRole[];
+    flags?: UserCreateflagsInput | $Enums.UserFlag[];
+    createAt?: Date | string;
+    updateAt?: Date | string;
+    credit?: number;
+    auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
+    backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
+    loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
+    cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
+    mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
+    ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
+    ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
+    ticketUser?: TicketUserUncheckedCreateNestedManyWithoutUserInput;
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
+    bills?: BillUncheckedCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutOrdersInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<UserCreateWithoutOrdersInput, UserUncheckedCreateWithoutOrdersInput>;
   };
 
   export type BillCreateWithoutOrderInput = {
@@ -32093,6 +32349,79 @@ export namespace Prisma {
   export type OrderItemCreateManyOrderInputEnvelope = {
     data: OrderItemCreateManyOrderInput | OrderItemCreateManyOrderInput[];
     skipDuplicates?: boolean;
+  };
+
+  export type UserUpsertWithoutOrdersInput = {
+    update: XOR<UserUpdateWithoutOrdersInput, UserUncheckedUpdateWithoutOrdersInput>;
+    create: XOR<UserCreateWithoutOrdersInput, UserUncheckedCreateWithoutOrdersInput>;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutOrdersInput = {
+    where?: UserWhereInput;
+    data: XOR<UserUpdateWithoutOrdersInput, UserUncheckedUpdateWithoutOrdersInput>;
+  };
+
+  export type UserUpdateWithoutOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    fullname?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    address?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    state?: NullableStringFieldUpdateOperationsInput | string | null;
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null;
+    biography?: NullableStringFieldUpdateOperationsInput | string | null;
+    roles?: UserUpdaterolesInput | $Enums.UserRole[];
+    flags?: UserUpdateflagsInput | $Enums.UserFlag[];
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    credit?: IntFieldUpdateOperationsInput | number;
+    auth?: AuthenticationUpdateManyWithoutUserNestedInput;
+    backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
+    loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
+    products?: ProductUpdateManyWithoutSellerNestedInput;
+    cart?: CartItemUpdateManyWithoutUserNestedInput;
+    mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
+    ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
+    ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
+    ticketUser?: TicketUserUpdateManyWithoutUserNestedInput;
+    reviews?: ReviewUpdateManyWithoutUserNestedInput;
+    bills?: BillUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutOrdersInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    fullname?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    address?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    state?: NullableStringFieldUpdateOperationsInput | string | null;
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null;
+    biography?: NullableStringFieldUpdateOperationsInput | string | null;
+    roles?: UserUpdaterolesInput | $Enums.UserRole[];
+    flags?: UserUpdateflagsInput | $Enums.UserFlag[];
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    credit?: IntFieldUpdateOperationsInput | number;
+    auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
+    backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
+    loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
+    cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
+    mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
+    ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
+    ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
+    ticketUser?: TicketUserUncheckedUpdateManyWithoutUserNestedInput;
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
+    bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type BillUpsertWithoutOrderInput = {
@@ -32238,6 +32567,7 @@ export namespace Prisma {
     createAt?: Date | string;
     updateAt?: Date | string;
     totalPrice: number;
+    user: UserCreateNestedOneWithoutOrdersInput;
     bill: BillCreateNestedOneWithoutOrderInput;
   };
 
@@ -32246,6 +32576,7 @@ export namespace Prisma {
     createAt?: Date | string;
     updateAt?: Date | string;
     totalPrice: number;
+    userId: string;
     billId: string;
   };
 
@@ -32354,6 +32685,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     totalPrice?: IntFieldUpdateOperationsInput | number;
+    user?: UserUpdateOneRequiredWithoutOrdersNestedInput;
     bill?: BillUpdateOneRequiredWithoutOrderNestedInput;
   };
 
@@ -32362,6 +32694,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     totalPrice?: IntFieldUpdateOperationsInput | number;
+    userId?: StringFieldUpdateOperationsInput | string;
     billId?: StringFieldUpdateOperationsInput | string;
   };
 
@@ -32410,6 +32743,7 @@ export namespace Prisma {
     ticketUser?: TicketUserCreateNestedManyWithoutUserInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
+    orders?: OrderCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutProductsInput = {
@@ -32440,6 +32774,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUncheckedCreateNestedManyWithoutUserInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutProductsInput = {
@@ -32619,6 +32954,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
+    orders?: OrderUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutProductsInput = {
@@ -32649,6 +32985,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type CartItemUpsertWithWhereUniqueWithoutProductInput = {
@@ -33086,6 +33423,7 @@ export namespace Prisma {
     ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
     ticketUser?: TicketUserCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
+    orders?: OrderCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutReviewsInput = {
@@ -33116,6 +33454,7 @@ export namespace Prisma {
     ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
     ticketUser?: TicketUserUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutReviewsInput = {
@@ -33219,6 +33558,7 @@ export namespace Prisma {
     ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
     ticketUser?: TicketUserUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
+    orders?: OrderUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutReviewsInput = {
@@ -33249,6 +33589,7 @@ export namespace Prisma {
     ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
     ticketUser?: TicketUserUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type AuthenticationCreateWithoutUserInput = {
@@ -33629,6 +33970,34 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
+  export type OrderCreateWithoutUserInput = {
+    id?: string;
+    createAt?: Date | string;
+    updateAt?: Date | string;
+    totalPrice: number;
+    bill: BillCreateNestedOneWithoutOrderInput;
+    items?: OrderItemCreateNestedManyWithoutOrderInput;
+  };
+
+  export type OrderUncheckedCreateWithoutUserInput = {
+    id?: string;
+    createAt?: Date | string;
+    updateAt?: Date | string;
+    totalPrice: number;
+    billId: string;
+    items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput;
+  };
+
+  export type OrderCreateOrConnectWithoutUserInput = {
+    where: OrderWhereUniqueInput;
+    create: XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput>;
+  };
+
+  export type OrderCreateManyUserInputEnvelope = {
+    data: OrderCreateManyUserInput | OrderCreateManyUserInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type AuthenticationUpsertWithWhereUniqueWithoutUserInput = {
     where: AuthenticationWhereUniqueInput;
     update: XOR<AuthenticationUpdateWithoutUserInput, AuthenticationUncheckedUpdateWithoutUserInput>;
@@ -33904,11 +34273,40 @@ export namespace Prisma {
     userId?: UuidNullableFilter<'Bill'> | string | null;
   };
 
+  export type OrderUpsertWithWhereUniqueWithoutUserInput = {
+    where: OrderWhereUniqueInput;
+    update: XOR<OrderUpdateWithoutUserInput, OrderUncheckedUpdateWithoutUserInput>;
+    create: XOR<OrderCreateWithoutUserInput, OrderUncheckedCreateWithoutUserInput>;
+  };
+
+  export type OrderUpdateWithWhereUniqueWithoutUserInput = {
+    where: OrderWhereUniqueInput;
+    data: XOR<OrderUpdateWithoutUserInput, OrderUncheckedUpdateWithoutUserInput>;
+  };
+
+  export type OrderUpdateManyWithWhereWithoutUserInput = {
+    where: OrderScalarWhereInput;
+    data: XOR<OrderUpdateManyMutationInput, OrderUncheckedUpdateManyWithoutUserInput>;
+  };
+
+  export type OrderScalarWhereInput = {
+    AND?: OrderScalarWhereInput | OrderScalarWhereInput[];
+    OR?: OrderScalarWhereInput[];
+    NOT?: OrderScalarWhereInput | OrderScalarWhereInput[];
+    id?: UuidFilter<'Order'> | string;
+    createAt?: DateTimeFilter<'Order'> | Date | string;
+    updateAt?: DateTimeFilter<'Order'> | Date | string;
+    totalPrice?: IntFilter<'Order'> | number;
+    userId?: UuidFilter<'Order'> | string;
+    billId?: UuidFilter<'Order'> | string;
+  };
+
   export type OrderCreateWithoutBillInput = {
     id?: string;
     createAt?: Date | string;
     updateAt?: Date | string;
     totalPrice: number;
+    user: UserCreateNestedOneWithoutOrdersInput;
     items?: OrderItemCreateNestedManyWithoutOrderInput;
   };
 
@@ -33917,6 +34315,7 @@ export namespace Prisma {
     createAt?: Date | string;
     updateAt?: Date | string;
     totalPrice: number;
+    userId: string;
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput;
   };
 
@@ -33953,6 +34352,7 @@ export namespace Prisma {
     ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
     ticketUser?: TicketUserCreateNestedManyWithoutUserInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
+    orders?: OrderCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutBillsInput = {
@@ -33983,6 +34383,7 @@ export namespace Prisma {
     ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
     ticketUser?: TicketUserUncheckedCreateNestedManyWithoutUserInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutBillsInput = {
@@ -34006,6 +34407,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     totalPrice?: IntFieldUpdateOperationsInput | number;
+    user?: UserUpdateOneRequiredWithoutOrdersNestedInput;
     items?: OrderItemUpdateManyWithoutOrderNestedInput;
   };
 
@@ -34014,6 +34416,7 @@ export namespace Prisma {
     createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     totalPrice?: IntFieldUpdateOperationsInput | number;
+    userId?: StringFieldUpdateOperationsInput | string;
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput;
   };
 
@@ -34056,6 +34459,7 @@ export namespace Prisma {
     ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
     ticketUser?: TicketUserUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
+    orders?: OrderUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutBillsInput = {
@@ -34086,6 +34490,7 @@ export namespace Prisma {
     ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
     ticketUser?: TicketUserUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type ProductCreateWithoutCartItemInput = {
@@ -34167,6 +34572,7 @@ export namespace Prisma {
     ticketUser?: TicketUserCreateNestedManyWithoutUserInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
+    orders?: OrderCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutCartInput = {
@@ -34197,6 +34603,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUncheckedCreateNestedManyWithoutUserInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutCartInput = {
@@ -34300,6 +34707,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
+    orders?: OrderUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutCartInput = {
@@ -34330,6 +34738,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TicketContextCreateWithoutTicketInput = {
@@ -34382,6 +34791,7 @@ export namespace Prisma {
     ticketUser?: TicketUserCreateNestedManyWithoutUserInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
+    orders?: OrderCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutTicketAuthorInput = {
@@ -34412,6 +34822,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUncheckedCreateNestedManyWithoutUserInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutTicketAuthorInput = {
@@ -34447,6 +34858,7 @@ export namespace Prisma {
     ticketUser?: TicketUserCreateNestedManyWithoutUserInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
+    orders?: OrderCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutTicketAssignedInput = {
@@ -34477,6 +34889,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUncheckedCreateNestedManyWithoutUserInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutTicketAssignedInput = {
@@ -34607,6 +35020,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
+    orders?: OrderUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutTicketAuthorInput = {
@@ -34637,6 +35051,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUpsertWithoutTicketAssignedInput = {
@@ -34678,6 +35093,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
+    orders?: OrderUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutTicketAssignedInput = {
@@ -34708,6 +35124,7 @@ export namespace Prisma {
     ticketUser?: TicketUserUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TicketMessageUpsertWithWhereUniqueWithoutTicketInput = {
@@ -34823,6 +35240,7 @@ export namespace Prisma {
     ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
+    orders?: OrderCreateNestedManyWithoutUserInput;
   };
 
   export type UserUncheckedCreateWithoutTicketUserInput = {
@@ -34853,6 +35271,7 @@ export namespace Prisma {
     ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
   };
 
   export type UserCreateOrConnectWithoutTicketUserInput = {
@@ -35003,6 +35422,7 @@ export namespace Prisma {
     ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
+    orders?: OrderUpdateManyWithoutUserNestedInput;
   };
 
   export type UserUncheckedUpdateWithoutTicketUserInput = {
@@ -35033,6 +35453,7 @@ export namespace Prisma {
     ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type TicketMessageUpsertWithoutTicketUserInput = {
@@ -35737,6 +36158,14 @@ export namespace Prisma {
     note: string;
   };
 
+  export type OrderCreateManyUserInput = {
+    id?: string;
+    createAt?: Date | string;
+    updateAt?: Date | string;
+    totalPrice: number;
+    billId: string;
+  };
+
   export type AuthenticationUpdateWithoutUserInput = {
     code?: StringFieldUpdateOperationsInput | string;
     type?: EnumAuthTypeFieldUpdateOperationsInput | $Enums.AuthType;
@@ -36125,6 +36554,32 @@ export namespace Prisma {
     status?: EnumBillStatusFieldUpdateOperationsInput | $Enums.BillStatus;
     amount?: IntFieldUpdateOperationsInput | number;
     note?: StringFieldUpdateOperationsInput | string;
+  };
+
+  export type OrderUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    totalPrice?: IntFieldUpdateOperationsInput | number;
+    bill?: BillUpdateOneRequiredWithoutOrderNestedInput;
+    items?: OrderItemUpdateManyWithoutOrderNestedInput;
+  };
+
+  export type OrderUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    totalPrice?: IntFieldUpdateOperationsInput | number;
+    billId?: StringFieldUpdateOperationsInput | string;
+    items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput;
+  };
+
+  export type OrderUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    totalPrice?: IntFieldUpdateOperationsInput | number;
+    billId?: StringFieldUpdateOperationsInput | string;
   };
 
   export type TicketContextCreateManyTicketInput = {

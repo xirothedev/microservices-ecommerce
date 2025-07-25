@@ -49,6 +49,7 @@ model User {
   ticketUser     TicketUser[]
   reviews        Review[]
   bills          Bill[]
+  orders         Order[]
 }
 
 model Bill {

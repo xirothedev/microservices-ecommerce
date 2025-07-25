@@ -4,6 +4,8 @@ model Order {
   updateAt   DateTime @updatedAt @map("update_at") @db.Timestamptz
   totalPrice Int      @map("total_price") @db.Integer
 
+  userId String      @db.Uuid
+  user   User        @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   billId String      @unique @map("bill_id") @db.Uuid
   bill   Bill        @relation(fields: [billId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   items  OrderItem[]
