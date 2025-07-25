@@ -30,7 +30,7 @@ function generateSku() {
 }
 
 const generateProductImages = (count = 5): string[] => {
-  return Array.from({ length: count }, () => faker.image.urlPicsumPhotos({ width: 640, height: 480 }));
+  return Array.from({ length: count }, () => faker.image.urlPicsumPhotos({ width: 400, height: 300 }).slice(0, 500));
 };
 
 function generateTicketImages(min = 2, max = 5) {
@@ -38,11 +38,13 @@ function generateTicketImages(min = 2, max = 5) {
   const imageCount = faker.number.int({ min, max });
 
   return Array.from({ length: imageCount }, () =>
-    faker.image.urlLoremFlickr({
-      category: faker.helpers.arrayElement(categories),
-      width: 800,
-      height: 600,
-    }),
+    faker.image
+      .urlLoremFlickr({
+        category: faker.helpers.arrayElement(categories),
+        width: 800,
+        height: 600,
+      })
+      .slice(0, 500),
   );
 }
 
