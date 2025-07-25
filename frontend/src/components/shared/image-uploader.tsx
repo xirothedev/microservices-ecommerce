@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Upload, X, ImageIcon, FileText, AlertCircle, Crop } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import ImageCropModal from "./image-crop-modal";
+import ImageCropModal from "../../app/profile/components/image-crop-modal";
 
 interface ImageUploadProps {
 	images: File[];

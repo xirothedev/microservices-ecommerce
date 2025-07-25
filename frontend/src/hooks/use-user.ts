@@ -1,13 +1,13 @@
 "use client";
 
 import axiosInstance from "@/lib/axios";
-import { refreshToken } from "@/lib/refresh-token";
 import { UserQuery } from "@/typings/backend";
 import { gql, useMutation as useMutationGql, useQuery as useQueryGql } from "@apollo/client";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { toast } from "./use-toast";
+import { apolloClient } from "@/lib/apollo-client";
 
 export interface UpdateUserInput {
 	fullname?: string;
@@ -80,22 +80,21 @@ export function useUpdateUserMutation() {
 		`,
 		{
 			errorPolicy: "all",
-			update(cache, { data }) {
-				if (!data?.updateUser) return;
+			onCompleted: (data) => {
+				if (data?.updateUser) {
+					apolloClient.cache.writeQuery({
+						query: ME_QUERY,
+						data: {
+							me: data.updateUser,
+						},
+					});
 
-				cache.writeQuery({
-					query: ME_QUERY,
-					data: {
-						me: data.updateUser,
-					},
-				});
-			},
-			onCompleted: () => {
-				toast({
-					title: "Success",
-					description: "Updated your data",
-					variant: "default",
-				});
+					toast({
+						title: "Success",
+						description: "Updated your data",
+						variant: "default",
+					});
+				}
 			},
 			onError: () => {
 				toast({
