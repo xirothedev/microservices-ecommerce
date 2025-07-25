@@ -1,12 +1,13 @@
 "use client";
 
 import axiosInstance from "@/lib/axios";
+import { refreshToken } from "@/lib/refresh-token";
 import { UserQuery } from "@/typings/backend";
 import { gql, useMutation as useMutationGql, useQuery as useQueryGql } from "@apollo/client";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import { toast } from "./use-toast";
-import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
 
 export interface UpdateUserInput {
 	fullname?: string;
@@ -46,26 +47,6 @@ export function useUserQuery() {
 		errorPolicy: "all",
 		ssr: true,
 	});
-
-	useEffect(() => {
-		const handleUnauthenticated = async () => {
-			const isUnauthenticated = res.error?.graphQLErrors?.some(
-				(err) => err.extensions?.code === "UNAUTHENTICATED",
-			);
-
-			if (isUnauthenticated) {
-				try {
-					await axiosInstance.post("/auth/refresh-token");
-
-					res.refetch();
-				} catch (err) {
-					console.error("Failed to refresh token", err);
-				}
-			}
-		};
-
-		handleUnauthenticated();
-	}, [res]);
 
 	return res;
 }
@@ -125,13 +106,6 @@ export function useUpdateUserMutation() {
 			},
 		},
 	);
-
-	// Redirect safely using useEffect
-	useEffect(() => {
-		if (called && !userLoading && !data?.me) {
-			router.push("/login");
-		}
-	}, [called, data?.me, userLoading, router]);
 
 	// Return no-op while waiting or not logged in
 	const wrappedMutate = useCallback(
