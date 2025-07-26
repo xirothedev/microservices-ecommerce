@@ -47,3 +47,6 @@ export interface TicketResponse {
 		messages: number;
 	};
 }
+
+export interface Context extends Omit<TicketContext, "ticketId"> {}
+export interface ContextInput extends Omit<TicketContext, "ticketId" | "id"> {}

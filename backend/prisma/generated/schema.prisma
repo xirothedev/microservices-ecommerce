@@ -341,9 +341,10 @@ model TicketMessage {
 }
 
 model TicketContext {
-  id    String            @id @default(uuid()) @db.Uuid
-  type  TicketContextType
-  label String
+  id      String            @id @default(uuid()) @db.Uuid
+  type    TicketContextType
+  labelId String
+  label   String
 
   ticketId String @db.Uuid
   ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade, onUpdate: Cascade)

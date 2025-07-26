@@ -9,6 +9,11 @@ export class TicketContextDto {
   @IsNotEmpty()
   label: string;
 
+  @ApiProperty({ example: 'cujsmsyuuwhjshu', description: 'Reference id' })
+  @IsString()
+  @IsNotEmpty()
+  labelId: string;
+
   @ApiProperty({ example: 'order', description: 'Reference type' })
   @IsNotEmpty()
   @IsEnum(TicketContextType)

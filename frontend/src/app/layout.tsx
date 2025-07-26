@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 			<body className={inter.className}>
 				<QueryProvider>
 					<ViewTransition>
-						<ClickSpark sparkColor="#fff" sparkSize={10} sparkRadius={15} sparkCount={8} duration={400}>
+						<ClickSpark sparkColor="#f9fafb" sparkSize={10} sparkRadius={15} sparkCount={8} duration={400}>
 							{children}
 							<CookieConsent />
 							<Toaster />

@@ -7,21 +7,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast } from "@/hooks/use-toast";
+import axiosInstance from "@/lib/axios";
+import { IAxiosError } from "@/typings";
+import { Ticket, TicketCategory, TicketPriority } from "@/typings/backend";
 import { TicketInput, ticketSchema } from "@/zods/ticket";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertTriangle, CheckCircle, Loader2, Send } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { AlertTriangle, Loader2, Send } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import ContextSelector from "./context-selector";
 import ImageUpload from "./image-upload";
 import RichTextEditor from "./rich-text-editor";
-import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
-import { Ticket, TicketCategory, TicketPriority } from "@/typings/backend";
-import axiosInstance from "@/lib/axios";
-import { toast } from "@/hooks/use-toast";
-import { IAxiosError } from "@/typings";
 
 const categories: { value: TicketCategory; label: string }[] = [
 	{ value: "TECHNICAL_SUPPORT", label: "Technical Support" },
@@ -41,9 +40,7 @@ const priorities: { value: TicketPriority; label: string; description: string }[
 
 export default function TicketForm() {
 	const router = useRouter();
-	const [ticketId, setTicketId] = useState<string>("");
-
-	const { mutateAsync, isIdle, isError, isPending } = useMutation<{ data: Ticket }, void, TicketInput>({
+	const { mutateAsync, isError, isPending } = useMutation<{ data: Ticket }, void, TicketInput>({
 		mutationFn: async (data: TicketInput) => {
 			const response = await axiosInstance.post<{ data: Ticket }>("/ticket", data);
 			return response.data;
@@ -54,8 +51,6 @@ export default function TicketForm() {
 				description: "Created ticket",
 				variant: "default",
 			});
-
-			setTicketId(res.data.id || `TKT-${Date.now().toString().slice(-6)}`);
 
 			setTimeout(() => {
 				router.push(`/profile/tickets/${res.data.id}`);
@@ -79,7 +74,7 @@ export default function TicketForm() {
 			category: undefined,
 			priority: "MEDIUM",
 			description: "",
-			referenceContext: [],
+			contexts: [],
 		},
 	});
 
@@ -201,18 +196,14 @@ export default function TicketForm() {
 
 						{/* Context Selector */}
 						<div className="space-y-2">
-							<Label>Reference Context (Optional)</Label>
+							<Label>Reference Contexts (Optional)</Label>
 							<Controller
 								control={form.control}
-								name="referenceContext"
+								name="contexts"
 								render={({ field }) => (
 									<ContextSelector
-										selectedContexts={(field.value ?? []).map((id: string) => ({
-											id,
-											label: id,
-											type: "custom",
-										}))}
-										onContextsChange={(contexts) => field.onChange(contexts.map((c) => c.id))}
+										selectedContexts={field.value ?? []}
+										onContextsChange={(contexts) => field.onChange(contexts.map((c) => c.label))}
 										disabled={isPending}
 									/>
 								)}

@@ -330,6 +330,7 @@ for (const ticket of tickets) {
       id: faker.string.uuid(),
       ticketId: ticket.id!,
       type,
+      labelId: faker.string.uuid(),
       label,
     });
   }

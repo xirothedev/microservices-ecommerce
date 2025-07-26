@@ -23582,6 +23582,7 @@ export namespace Prisma {
   export type TicketContextMinAggregateOutputType = {
     id: string | null;
     type: $Enums.TicketContextType | null;
+    labelId: string | null;
     label: string | null;
     ticketId: string | null;
   };
@@ -23589,6 +23590,7 @@ export namespace Prisma {
   export type TicketContextMaxAggregateOutputType = {
     id: string | null;
     type: $Enums.TicketContextType | null;
+    labelId: string | null;
     label: string | null;
     ticketId: string | null;
   };
@@ -23596,6 +23598,7 @@ export namespace Prisma {
   export type TicketContextCountAggregateOutputType = {
     id: number;
     type: number;
+    labelId: number;
     label: number;
     ticketId: number;
     _all: number;
@@ -23604,6 +23607,7 @@ export namespace Prisma {
   export type TicketContextMinAggregateInputType = {
     id?: true;
     type?: true;
+    labelId?: true;
     label?: true;
     ticketId?: true;
   };
@@ -23611,6 +23615,7 @@ export namespace Prisma {
   export type TicketContextMaxAggregateInputType = {
     id?: true;
     type?: true;
+    labelId?: true;
     label?: true;
     ticketId?: true;
   };
@@ -23618,6 +23623,7 @@ export namespace Prisma {
   export type TicketContextCountAggregateInputType = {
     id?: true;
     type?: true;
+    labelId?: true;
     label?: true;
     ticketId?: true;
     _all?: true;
@@ -23695,6 +23701,7 @@ export namespace Prisma {
   export type TicketContextGroupByOutputType = {
     id: string;
     type: $Enums.TicketContextType;
+    labelId: string;
     label: string;
     ticketId: string;
     _count: TicketContextCountAggregateOutputType | null;
@@ -23719,6 +23726,7 @@ export namespace Prisma {
       {
         id?: boolean;
         type?: boolean;
+        labelId?: boolean;
         label?: boolean;
         ticketId?: boolean;
         ticket?: boolean | TicketDefaultArgs<ExtArgs>;
@@ -23732,6 +23740,7 @@ export namespace Prisma {
     {
       id?: boolean;
       type?: boolean;
+      labelId?: boolean;
       label?: boolean;
       ticketId?: boolean;
       ticket?: boolean | TicketDefaultArgs<ExtArgs>;
@@ -23745,6 +23754,7 @@ export namespace Prisma {
     {
       id?: boolean;
       type?: boolean;
+      labelId?: boolean;
       label?: boolean;
       ticketId?: boolean;
       ticket?: boolean | TicketDefaultArgs<ExtArgs>;
@@ -23755,12 +23765,13 @@ export namespace Prisma {
   export type TicketContextSelectScalar = {
     id?: boolean;
     type?: boolean;
+    labelId?: boolean;
     label?: boolean;
     ticketId?: boolean;
   };
 
   export type TicketContextOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    $Extensions.GetOmit<'id' | 'type' | 'label' | 'ticketId', ExtArgs['result']['ticketContext']>;
+    $Extensions.GetOmit<'id' | 'type' | 'labelId' | 'label' | 'ticketId', ExtArgs['result']['ticketContext']>;
   export type TicketContextInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ticket?: boolean | TicketDefaultArgs<ExtArgs>;
   };
@@ -23784,6 +23795,7 @@ export namespace Prisma {
       {
         id: string;
         type: $Enums.TicketContextType;
+        labelId: string;
         label: string;
         ticketId: string;
       },
@@ -24303,6 +24315,7 @@ export namespace Prisma {
   interface TicketContextFieldRefs {
     readonly id: FieldRef<'TicketContext', 'String'>;
     readonly type: FieldRef<'TicketContext', 'TicketContextType'>;
+    readonly labelId: FieldRef<'TicketContext', 'String'>;
     readonly label: FieldRef<'TicketContext', 'String'>;
     readonly ticketId: FieldRef<'TicketContext', 'String'>;
   }
@@ -24968,6 +24981,7 @@ export namespace Prisma {
   export const TicketContextScalarFieldEnum: {
     id: 'id';
     type: 'type';
+    labelId: 'labelId';
     label: 'label';
     ticketId: 'ticketId';
   };
@@ -26514,6 +26528,7 @@ export namespace Prisma {
     NOT?: TicketContextWhereInput | TicketContextWhereInput[];
     id?: UuidFilter<'TicketContext'> | string;
     type?: EnumTicketContextTypeFilter<'TicketContext'> | $Enums.TicketContextType;
+    labelId?: StringFilter<'TicketContext'> | string;
     label?: StringFilter<'TicketContext'> | string;
     ticketId?: UuidFilter<'TicketContext'> | string;
     ticket?: XOR<TicketScalarRelationFilter, TicketWhereInput>;
@@ -26522,6 +26537,7 @@ export namespace Prisma {
   export type TicketContextOrderByWithRelationInput = {
     id?: SortOrder;
     type?: SortOrder;
+    labelId?: SortOrder;
     label?: SortOrder;
     ticketId?: SortOrder;
     ticket?: TicketOrderByWithRelationInput;
@@ -26534,6 +26550,7 @@ export namespace Prisma {
       OR?: TicketContextWhereInput[];
       NOT?: TicketContextWhereInput | TicketContextWhereInput[];
       type?: EnumTicketContextTypeFilter<'TicketContext'> | $Enums.TicketContextType;
+      labelId?: StringFilter<'TicketContext'> | string;
       label?: StringFilter<'TicketContext'> | string;
       ticketId?: UuidFilter<'TicketContext'> | string;
       ticket?: XOR<TicketScalarRelationFilter, TicketWhereInput>;
@@ -26544,6 +26561,7 @@ export namespace Prisma {
   export type TicketContextOrderByWithAggregationInput = {
     id?: SortOrder;
     type?: SortOrder;
+    labelId?: SortOrder;
     label?: SortOrder;
     ticketId?: SortOrder;
     _count?: TicketContextCountOrderByAggregateInput;
@@ -26557,6 +26575,7 @@ export namespace Prisma {
     NOT?: TicketContextScalarWhereWithAggregatesInput | TicketContextScalarWhereWithAggregatesInput[];
     id?: UuidWithAggregatesFilter<'TicketContext'> | string;
     type?: EnumTicketContextTypeWithAggregatesFilter<'TicketContext'> | $Enums.TicketContextType;
+    labelId?: StringWithAggregatesFilter<'TicketContext'> | string;
     label?: StringWithAggregatesFilter<'TicketContext'> | string;
     ticketId?: UuidWithAggregatesFilter<'TicketContext'> | string;
   };
@@ -27907,6 +27926,7 @@ export namespace Prisma {
   export type TicketContextCreateInput = {
     id?: string;
     type: $Enums.TicketContextType;
+    labelId: string;
     label: string;
     ticket: TicketCreateNestedOneWithoutContextsInput;
   };
@@ -27914,6 +27934,7 @@ export namespace Prisma {
   export type TicketContextUncheckedCreateInput = {
     id?: string;
     type: $Enums.TicketContextType;
+    labelId: string;
     label: string;
     ticketId: string;
   };
@@ -27921,6 +27942,7 @@ export namespace Prisma {
   export type TicketContextUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
     type?: EnumTicketContextTypeFieldUpdateOperationsInput | $Enums.TicketContextType;
+    labelId?: StringFieldUpdateOperationsInput | string;
     label?: StringFieldUpdateOperationsInput | string;
     ticket?: TicketUpdateOneRequiredWithoutContextsNestedInput;
   };
@@ -27928,6 +27950,7 @@ export namespace Prisma {
   export type TicketContextUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
     type?: EnumTicketContextTypeFieldUpdateOperationsInput | $Enums.TicketContextType;
+    labelId?: StringFieldUpdateOperationsInput | string;
     label?: StringFieldUpdateOperationsInput | string;
     ticketId?: StringFieldUpdateOperationsInput | string;
   };
@@ -27935,6 +27958,7 @@ export namespace Prisma {
   export type TicketContextCreateManyInput = {
     id?: string;
     type: $Enums.TicketContextType;
+    labelId: string;
     label: string;
     ticketId: string;
   };
@@ -27942,12 +27966,14 @@ export namespace Prisma {
   export type TicketContextUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string;
     type?: EnumTicketContextTypeFieldUpdateOperationsInput | $Enums.TicketContextType;
+    labelId?: StringFieldUpdateOperationsInput | string;
     label?: StringFieldUpdateOperationsInput | string;
   };
 
   export type TicketContextUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string;
     type?: EnumTicketContextTypeFieldUpdateOperationsInput | $Enums.TicketContextType;
+    labelId?: StringFieldUpdateOperationsInput | string;
     label?: StringFieldUpdateOperationsInput | string;
     ticketId?: StringFieldUpdateOperationsInput | string;
   };
@@ -29243,6 +29269,7 @@ export namespace Prisma {
   export type TicketContextCountOrderByAggregateInput = {
     id?: SortOrder;
     type?: SortOrder;
+    labelId?: SortOrder;
     label?: SortOrder;
     ticketId?: SortOrder;
   };
@@ -29250,6 +29277,7 @@ export namespace Prisma {
   export type TicketContextMaxOrderByAggregateInput = {
     id?: SortOrder;
     type?: SortOrder;
+    labelId?: SortOrder;
     label?: SortOrder;
     ticketId?: SortOrder;
   };
@@ -29257,6 +29285,7 @@ export namespace Prisma {
   export type TicketContextMinOrderByAggregateInput = {
     id?: SortOrder;
     type?: SortOrder;
+    labelId?: SortOrder;
     label?: SortOrder;
     ticketId?: SortOrder;
   };
@@ -34704,12 +34733,14 @@ export namespace Prisma {
   export type TicketContextCreateWithoutTicketInput = {
     id?: string;
     type: $Enums.TicketContextType;
+    labelId: string;
     label: string;
   };
 
   export type TicketContextUncheckedCreateWithoutTicketInput = {
     id?: string;
     type: $Enums.TicketContextType;
+    labelId: string;
     label: string;
   };
 
@@ -34937,6 +34968,7 @@ export namespace Prisma {
     NOT?: TicketContextScalarWhereInput | TicketContextScalarWhereInput[];
     id?: UuidFilter<'TicketContext'> | string;
     type?: EnumTicketContextTypeFilter<'TicketContext'> | $Enums.TicketContextType;
+    labelId?: StringFilter<'TicketContext'> | string;
     label?: StringFilter<'TicketContext'> | string;
     ticketId?: UuidFilter<'TicketContext'> | string;
   };
@@ -36537,6 +36569,7 @@ export namespace Prisma {
   export type TicketContextCreateManyTicketInput = {
     id?: string;
     type: $Enums.TicketContextType;
+    labelId: string;
     label: string;
   };
 
@@ -36560,18 +36593,21 @@ export namespace Prisma {
   export type TicketContextUpdateWithoutTicketInput = {
     id?: StringFieldUpdateOperationsInput | string;
     type?: EnumTicketContextTypeFieldUpdateOperationsInput | $Enums.TicketContextType;
+    labelId?: StringFieldUpdateOperationsInput | string;
     label?: StringFieldUpdateOperationsInput | string;
   };
 
   export type TicketContextUncheckedUpdateWithoutTicketInput = {
     id?: StringFieldUpdateOperationsInput | string;
     type?: EnumTicketContextTypeFieldUpdateOperationsInput | $Enums.TicketContextType;
+    labelId?: StringFieldUpdateOperationsInput | string;
     label?: StringFieldUpdateOperationsInput | string;
   };
 
   export type TicketContextUncheckedUpdateManyWithoutTicketInput = {
     id?: StringFieldUpdateOperationsInput | string;
     type?: EnumTicketContextTypeFieldUpdateOperationsInput | $Enums.TicketContextType;
+    labelId?: StringFieldUpdateOperationsInput | string;
     label?: StringFieldUpdateOperationsInput | string;
   };
 

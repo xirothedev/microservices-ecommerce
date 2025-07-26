@@ -298,6 +298,7 @@ exports.Prisma.TicketMessageScalarFieldEnum = {
 exports.Prisma.TicketContextScalarFieldEnum = {
   id: 'id',
   type: 'type',
+  labelId: 'labelId',
   label: 'label',
   ticketId: 'ticketId',
 };

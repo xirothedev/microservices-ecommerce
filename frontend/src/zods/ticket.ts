@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const ticketSchema = z.object({
-	title: z.string().min(1, "Title is required").min(5, "Title must be at least 5 characters"),
-	description: z.string().min(1, "Description is required").min(20, "Description must be at least 20 characters"),
+	title: z.string().min(1, "Title is required").max(255, "Title must be at most 255 characters"),
+	description: z.string().min(1, "Description is required"),
 	category: z.enum(
 		[
 			"TECHNICAL_SUPPORT",
@@ -14,7 +14,15 @@ export const ticketSchema = z.object({
 		],
 		"Ticket category is required",
 	),
-	priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"], "Ticket priority is required"),
-	referenceContext: z.array(z.string()).optional(),
+	priority: z.enum(["URGENT", "HIGH", "MEDIUM", "LOW"], "Ticket priority is required"),
+	contexts: z
+		.array(
+			z.object({
+				type: z.enum(["ORDER", "PRODUCT", "TRANSACTION", "ACCOUNT"]),
+				labelId: z.string().min(1, "Context label id is required"),
+				label: z.string().min(1, "Context label is required"),
+			}),
+		)
+		.optional(),
 });
 export type TicketInput = z.infer<typeof ticketSchema>;

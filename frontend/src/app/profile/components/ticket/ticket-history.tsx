@@ -124,7 +124,7 @@ export default function TicketHistory() {
 						</div>
 						<div className="flex gap-2">
 							<Select value={statusFilter} onValueChange={setStatusFilter}>
-								<SelectTrigger className="w-32">
+								<SelectTrigger className="w-32 cursor-pointer">
 									<SelectValue placeholder="Status" />
 								</SelectTrigger>
 								<SelectContent>
@@ -137,7 +137,7 @@ export default function TicketHistory() {
 								</SelectContent>
 							</Select>
 							<Select value={priorityFilter} onValueChange={setPriorityFilter}>
-								<SelectTrigger className="w-32">
+								<SelectTrigger className="w-32 cursor-pointer">
 									<SelectValue placeholder="Priority" />
 								</SelectTrigger>
 								<SelectContent>

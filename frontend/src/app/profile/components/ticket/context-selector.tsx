@@ -2,46 +2,20 @@
 
 import type React from "react";
 
-import { useState, useRef, useEffect } from "react";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { X, Search, Package, ShoppingBag, User, CreditCard } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
-
-interface Context {
-	type: string;
-	id: string;
-	label: string;
-}
+import { Input } from "@/components/ui/input";
+import { Context, ContextInput } from "@/typings/backend";
+import { CreditCard, Package, Search, ShoppingBag, User, X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 
 interface ContextSelectorProps {
-	selectedContexts: Context[];
-	onContextsChange: (contexts: Context[]) => void;
+	selectedContexts: ContextInput[];
+	onContextsChange: (contexts: ContextInput[]) => void;
 	disabled?: boolean;
 }
-
-// Mock data for different context types
-const mockContexts = {
-	order: [
-		{ id: "ORD-001", label: "Order #ORD-001 - Apple ID Premium Setup ($49.99)" },
-		{ id: "ORD-002", label: "Order #ORD-002 - Facebook Business Account ($79.99)" },
-		{ id: "ORD-003", label: "Order #ORD-003 - YouTube Premium Family ($29.99)" },
-	],
-	product: [
-		{ id: "PROD-001", label: "Apple ID Premium Setup" },
-		{ id: "PROD-002", label: "Facebook Business Account" },
-		{ id: "PROD-003", label: "Instagram Growth Package" },
-		{ id: "PROD-004", label: "YouTube Premium Family" },
-	],
-	transaction: [
-		{ id: "TXN-001", label: "Transaction #TXN-ABC123 - $49.99" },
-		{ id: "TXN-002", label: "Transaction #TXN-DEF456 - $79.99" },
-		{ id: "TXN-003", label: "Transaction #TXN-GHI789 - $29.99" },
-	],
-	account: [{ id: "ACC-001", label: "My Account - john.doe@example.com" }],
-};
 
 export default function ContextSelector({
 	selectedContexts,
@@ -50,7 +24,7 @@ export default function ContextSelector({
 }: ContextSelectorProps) {
 	const [inputValue, setInputValue] = useState("");
 	const [showSuggestions, setShowSuggestions] = useState(false);
-	const [filteredSuggestions, setFilteredSuggestions] = useState<Array<Context & { type: string }>>([]);
+	const [filteredSuggestions, setFilteredSuggestions] = useState<Array<Context>>([]);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const suggestionsRef = useRef<HTMLDivElement>(null);
 
@@ -71,18 +45,18 @@ export default function ContextSelector({
 	useEffect(() => {
 		if (inputValue.length > 0) {
 			const query = inputValue.toLowerCase();
-			const suggestions: Array<Context & { type: string }> = [];
+			const suggestions: Array<Context> = [];
 
-			Object.entries(mockContexts).forEach(([type, items]) => {
-				items.forEach((item) => {
-					if (
-						item.label.toLowerCase().includes(query) &&
-						!selectedContexts.some((selected) => selected.id === item.id && selected.type === type)
-					) {
-						suggestions.push({ ...item, type });
-					}
-				});
-			});
+			// Object.entries(mockContexts).forEach(([type, items]) => {
+			// 	items.forEach((item) => {
+			// 		if (
+			// 			item.label.toLowerCase().includes(query) &&
+			// 			!selectedContexts.some((selected) => selected.id === item.id && selected.type === type)
+			// 		) {
+			// 			suggestions.push({ ...item, type });
+			// 		}
+			// 	});
+			// });
 
 			setFilteredSuggestions(suggestions.slice(0, 8)); // Limit to 8 suggestions
 			setShowSuggestions(suggestions.length > 0);
@@ -109,9 +83,9 @@ export default function ContextSelector({
 	const selectContext = (context: Context & { type: string }) => {
 		if (disabled) return;
 
-		const newContext: Context = {
+		const newContext: ContextInput = {
 			type: context.type,
-			id: context.id,
+			labelId: context.id,
 			label: context.label,
 		};
 
