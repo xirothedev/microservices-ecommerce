@@ -23,7 +23,7 @@ export default function ProtectedProvider({
 				forbidden();
 			}
 		}
-	}, [data, loading]);
+	}, [data, loading, roles, router]);
 
 	return <>{children}</>;
 }

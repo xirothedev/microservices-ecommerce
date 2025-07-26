@@ -25,7 +25,7 @@ import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import ChatInterface from "./chat-interface";
 import { formatDate } from "@/lib/format";
 
@@ -75,7 +75,7 @@ interface TicketDetail {
 
 const statusConfig = {
 	OPEN: { icon: AlertCircle, color: "text-red-600", bg: "bg-red-100", label: "Open" },
-	"IN-PROGRESS": { icon: Clock, color: "text-blue-600", bg: "bg-blue-100", label: "In Progress" },
+	IN_PROGRESS: { icon: Clock, color: "text-blue-600", bg: "bg-blue-100", label: "In Progress" },
 	WAITING: { icon: Clock, color: "text-yellow-600", bg: "bg-yellow-100", label: "Waiting" },
 	RESOLVED: { icon: CheckCircle, color: "text-green-600", bg: "bg-green-100", label: "Resolved" },
 	CLOSED: { icon: XCircle, color: "text-gray-600", bg: "bg-gray-100", label: "Closed" },
@@ -110,20 +110,20 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 		if (isError && error.response?.status === 404) {
 			router.replace("/profile/tickets");
 		}
-	}, [error, router]);
+	}, [error, router, isError]);
 
 	const getStatusIcon = (status: string) => {
 		const config = statusConfig[status as keyof typeof statusConfig];
-		const IconComponent = config.icon;
-		return <IconComponent className={`h-4 w-4 ${config.color}`} />;
+		const IconComponent = config?.icon ?? Fragment;
+		return <IconComponent className={`h-4 w-4 ${config?.color}`} />;
 	};
 
 	const getStatusBadge = (status: string) => {
 		const config = statusConfig[status as keyof typeof statusConfig];
 		return (
-			<Badge variant="secondary" className={`${config.bg} ${config.color} border-0`}>
+			<Badge variant="secondary" className={`${config?.bg} ${config?.color} border-0`}>
 				{getStatusIcon(status)}
-				<span className="ml-1">{config.label}</span>
+				<span className="ml-1">{config?.label}</span>
 			</Badge>
 		);
 	};
@@ -131,7 +131,7 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 	const getPriorityBadge = (priority: string) => {
 		const config = priorityConfig[priority as keyof typeof priorityConfig];
 		return (
-			<Badge variant="outline" className={`${config.bg} ${config.color} border-0 capitalize`}>
+			<Badge variant="outline" className={`${config?.bg} ${config?.color} border-0 capitalize`}>
 				{priority}
 			</Badge>
 		);
@@ -355,7 +355,12 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 									</div>
 									<div>
 										<p className="font-medium text-gray-900">{data?.assigned.fullname}</p>
-										<p className="text-sm text-gray-600">{data?.assigned.email}</p>
+										<p
+											className="block max-w-[180px] truncate text-sm text-gray-600"
+											title={data?.assigned.email}
+										>
+											{data?.assigned.email}
+										</p>
 										<p className="text-xs text-gray-500 capitalize">
 											{/* {data?.assigned.status} */} Online
 										</p>

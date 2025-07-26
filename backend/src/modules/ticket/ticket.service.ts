@@ -45,6 +45,11 @@ export class TicketService {
         authorId: creater.id,
         attachments: urls,
         contexts: { createMany: { data: contexts, skipDuplicates: true } },
+        members: {
+          create: {
+            userId: creater.id,
+          },
+        },
       },
     });
 
@@ -274,6 +279,30 @@ export class TicketService {
       throw new ForbiddenException('You do not have permission to send message to this ticket');
     }
 
+    // Ensure user is a member of the ticket
+    let ticketMember = await this.prismaService.ticketMember.findUnique({
+      where: {
+        ticketUserId: {
+          ticketId,
+          userId: user.id,
+        },
+      },
+      select: {
+        id: true,
+        ticketId: true,
+        userId: true,
+      },
+    });
+
+    if (!ticketMember) {
+      ticketMember = await this.prismaService.ticketMember.create({
+        data: {
+          ticketId,
+          userId: user.id,
+        },
+      });
+    }
+
     const urls: string[] = [];
 
     for (let i = 0; i < attachments.length; i++) {
@@ -292,7 +321,7 @@ export class TicketService {
     const message = await this.prismaService.ticketMessage.create({
       data: {
         ticketId,
-        senderId: user.id,
+        senderId: ticketMember.id,
         content: body.content,
         isRead: false,
         attachments: urls,
@@ -304,12 +333,19 @@ export class TicketService {
         createdAt: true,
         updatedAt: true,
         attachments: true,
+        ticket: {
+          select: {
+            id: true,
+            author: { select: { fullname: true, id: true, avatarUrl: true } },
+            assigned: { select: { fullname: true, id: true, avatarUrl: true } },
+          },
+        },
         sender: {
           select: {
             user: {
               select: {
+                id: true,
                 fullname: true,
-                email: true,
                 avatarUrl: true,
               },
             },
@@ -346,12 +382,19 @@ export class TicketService {
         createdAt: true,
         updatedAt: true,
         attachments: true,
+        ticket: {
+          select: {
+            id: true,
+            author: { select: { fullname: true, id: true, avatarUrl: true } },
+            assigned: { select: { fullname: true, id: true, avatarUrl: true } },
+          },
+        },
         sender: {
           select: {
             user: {
               select: {
+                id: true,
                 fullname: true,
-                email: true,
                 avatarUrl: true,
               },
             },

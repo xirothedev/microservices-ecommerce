@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import axiosInstance from "@/lib/axios";
 import { IAxiosError } from "@/typings";
-import { TicketCategory, TicketPriority, TicketResponse, TicketStatus } from "@/typings/backend";
+import { TicketResponse } from "@/typings/backend";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import {
 	AlertCircle,
@@ -91,7 +91,7 @@ export default function TicketHistory() {
 	const getStatusBadge = (status: string) => {
 		const config = statusConfig[status as keyof typeof statusConfig];
 		return (
-			<Badge variant="secondary" className={`${config.bg} ${config.color} border-0`}>
+			<Badge variant="secondary" className={`${config?.bg} ${config.color} border-0`}>
 				{getStatusIcon(status)}
 				<span className="ml-1">{config.label}</span>
 			</Badge>
@@ -101,7 +101,7 @@ export default function TicketHistory() {
 	const getPriorityBadge = (priority: string) => {
 		const config = priorityConfig[priority as keyof typeof priorityConfig];
 		return (
-			<Badge variant="outline" className={`${config.bg} ${config.color} border-0 capitalize`}>
+			<Badge variant="outline" className={`${config?.bg} ${config.color} border-0 capitalize`}>
 				{priority.toLowerCase()}
 			</Badge>
 		);
@@ -128,12 +128,24 @@ export default function TicketHistory() {
 									<SelectValue placeholder="Status" />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value="all">All Status</SelectItem>
-									<SelectItem value="OPEN">Open</SelectItem>
-									<SelectItem value="IN_PROGRESS">In Progress</SelectItem>
-									<SelectItem value="WAITING">Waiting</SelectItem>
-									<SelectItem value="RESOLVED">Resolved</SelectItem>
-									<SelectItem value="CLOSED">Closed</SelectItem>
+									<SelectItem className="cursor-pointer" value="all">
+										All Status
+									</SelectItem>
+									<SelectItem className="cursor-pointer" value="OPEN">
+										Open
+									</SelectItem>
+									<SelectItem className="cursor-pointer" value="IN_PROGRESS">
+										In Progress
+									</SelectItem>
+									<SelectItem className="cursor-pointer" value="WAITING">
+										Waiting
+									</SelectItem>
+									<SelectItem className="cursor-pointer" value="RESOLVED">
+										Resolved
+									</SelectItem>
+									<SelectItem className="cursor-pointer" value="CLOSED">
+										Closed
+									</SelectItem>
 								</SelectContent>
 							</Select>
 							<Select value={priorityFilter} onValueChange={setPriorityFilter}>
@@ -141,11 +153,21 @@ export default function TicketHistory() {
 									<SelectValue placeholder="Priority" />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem value="all">All Priority</SelectItem>
-									<SelectItem value="URGENT">Urgent</SelectItem>
-									<SelectItem value="HIGH">High</SelectItem>
-									<SelectItem value="MEDIUM">Medium</SelectItem>
-									<SelectItem value="LOW">Low</SelectItem>
+									<SelectItem className="cursor-pointer" value="all">
+										All Priority
+									</SelectItem>
+									<SelectItem className="cursor-pointer" value="URGENT">
+										Urgent
+									</SelectItem>
+									<SelectItem className="cursor-pointer" value="HIGH">
+										High
+									</SelectItem>
+									<SelectItem className="cursor-pointer" value="MEDIUM">
+										Medium
+									</SelectItem>
+									<SelectItem className="cursor-pointer" value="LOW">
+										Low
+									</SelectItem>
 								</SelectContent>
 							</Select>
 						</div>
@@ -191,7 +213,7 @@ export default function TicketHistory() {
 							) : (
 								tickets.map((ticket, index) => (
 									<motion.div
-										key={ticket.id}
+										key={index}
 										initial={{ opacity: 0, y: 20 }}
 										animate={{ opacity: 1, y: 0 }}
 										exit={{ opacity: 0, y: -20 }}

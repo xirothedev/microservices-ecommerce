@@ -7,7 +7,7 @@ export async function refreshToken() {
 	} catch (err) {
 		console.error("Failed to refresh token", err);
 		// Redirect to login here or throw error for caller to handle
-		// window.location.href = "/login";
+		window.location.reload();
 		return false;
 	}
 }

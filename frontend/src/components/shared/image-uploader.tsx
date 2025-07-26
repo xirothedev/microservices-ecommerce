@@ -181,7 +181,7 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 				}
 			}
 		},
-		[images, onImagesChange, disabled],
+		[images, onImagesChange, disabled, validateFile],
 	);
 
 	const handleDrop = useCallback(

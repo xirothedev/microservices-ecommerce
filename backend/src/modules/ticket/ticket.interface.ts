@@ -7,10 +7,14 @@ export interface TicketMessageResponse {
   createdAt: string;
   updatedAt: string;
   attachments: string[];
+  ticket: {
+    id: string;
+    author: { fullname: string; id: string; avatarUrl: string };
+    assigned: { fullname: string; id: string; avatarUrl: string };
+  };
   sender: {
     id: string;
     fullname: string;
-    email: string;
     avatarUrl: string | null;
   };
 }

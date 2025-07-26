@@ -11,15 +11,15 @@ model Ticket {
   contexts       TicketContext[]
   attachments    String[]        @db.VarChar(500)
 
-  authorId     String          @map("author_id") @db.Uuid
-  author       User            @relation(name: "TicketAuthor", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  assignedId   String?         @map("assigned_id") @db.Uuid
-  assigned     User?           @relation(name: "TicketAssigned", fields: [assignedId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  messages     TicketMessage[]
-  participants TicketUser[]
+  authorId   String          @map("author_id") @db.Uuid
+  author     User            @relation(name: "TicketAuthor", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  assignedId String?         @map("assigned_id") @db.Uuid
+  assigned   User?           @relation(name: "TicketAssigned", fields: [assignedId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  messages   TicketMessage[]
+  members    TicketMember[]
 }
 
-model TicketUser {
+model TicketMember {
   id         String    @id @default(uuid()) @db.Uuid
   lastReadAt DateTime?
 
@@ -42,11 +42,11 @@ model TicketMessage {
   updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
   attachments String[]
 
-  ticketUser TicketUser?
-  ticketId   String      @map("ticket_id") @db.Uuid
-  ticket     Ticket      @relation(fields: [ticketId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  senderId   String      @map("sender_id") @db.Uuid
-  sender     TicketUser  @relation("TicketMessageSender", fields: [senderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  ticketUser TicketMember?
+  ticketId   String        @map("ticket_id") @db.Uuid
+  ticket     Ticket        @relation(fields: [ticketId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  senderId   String        @map("sender_id") @db.Uuid
+  sender     TicketMember  @relation("TicketMessageSender", fields: [senderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model TicketContext {

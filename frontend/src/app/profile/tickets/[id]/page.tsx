@@ -1,5 +1,4 @@
 import TicketDetail from "@/app/profile/components/ticket/ticket-detail";
-import { useQuery } from "@tanstack/react-query";
 import type { Metadata } from "next";
 
 interface TicketDetailPageProps {

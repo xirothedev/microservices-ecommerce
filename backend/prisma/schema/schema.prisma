@@ -46,7 +46,7 @@ model User {
   mfaSetups      MfaSetup[]
   ticketAuthor   Ticket[]         @relation("TicketAuthor")
   ticketAssigned Ticket[]         @relation("TicketAssigned")
-  ticketUser     TicketUser[]
+  ticketMembers  TicketMember[]
   reviews        Review[]
   bills          Bill[]
   orders         Order[]

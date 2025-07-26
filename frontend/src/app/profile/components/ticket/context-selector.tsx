@@ -44,7 +44,7 @@ export default function ContextSelector({
 
 	useEffect(() => {
 		if (inputValue.length > 0) {
-			const query = inputValue.toLowerCase();
+			// const query = inputValue.toLowerCase();
 			const suggestions: Array<Context> = [];
 
 			// Object.entries(mockContexts).forEach(([type, items]) => {

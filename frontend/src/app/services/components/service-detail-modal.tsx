@@ -19,7 +19,6 @@ interface ServiceDetailModalProps {
 }
 
 export default function ServiceDetailModal({ service, isOpen, onClose, isAddingToCart }: ServiceDetailModalProps) {
-	const [currentImageIndex, setCurrentImageIndex] = useState(0);
 	const [isFavorite, setIsFavorite] = useState(false);
 	const [quantity, setQuantity] = useState<number>(1);
 	const { data } = useCart();
@@ -27,15 +26,6 @@ export default function ServiceDetailModal({ service, isOpen, onClose, isAddingT
 	const discount = Math.round(((service.originalPrice - service.discountPrice) / service.originalPrice) * 100);
 	const cartQuantity = data?.cartItems?.find((cartItem) => cartItem.productId === service.id)?.quantity ?? 0;
 	const gallery = service.medias;
-
-	const nextImage = () => {
-		setCurrentImageIndex((prev) => (prev + 1) % gallery.length);
-	};
-
-	const prevImage = () => {
-		setCurrentImageIndex((prev) => (prev - 1 + gallery.length) % gallery.length);
-	};
-
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
 			<DialogContent className="max-h-[90vh] w-full overflow-y-auto lg:max-w-5xl">

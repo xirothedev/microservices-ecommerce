@@ -48,5 +48,26 @@ export interface TicketResponse {
 	};
 }
 
+export interface TicketMessageResponse {
+	id: string;
+	content: string;
+	isRead: boolean;
+	createdAt: string;
+	updatedAt: string;
+	attachments: string[];
+	ticket: {
+		id: string;
+		author: { fullname: string; id: string; avatarUrl: string };
+		assigned: { fullname: string; id: string; avatarUrl: string };
+	};
+	sender: {
+		user: {
+			id: string;
+			fullname: string;
+			avatarUrl: string | null;
+		};
+	};
+}
+
 export interface Context extends Omit<TicketContext, "ticketId"> {}
 export interface ContextInput extends Omit<TicketContext, "ticketId" | "id"> {}

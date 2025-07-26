@@ -34,13 +34,12 @@ const generateProductImages = (count = 5): string[] => {
 };
 
 function generateTicketImages(min = 2, max = 5) {
-  const categories = ['technology', 'computer', 'error', 'screen', 'code'];
+  // const categories = ['technology', 'computer', 'error', 'screen', 'code'];
   const imageCount = faker.number.int({ min, max });
 
   return Array.from({ length: imageCount }, () =>
     faker.image
-      .urlLoremFlickr({
-        category: faker.helpers.arrayElement(categories),
+      .urlPicsumPhotos({
         width: 800,
         height: 600,
       })
@@ -253,7 +252,7 @@ const tickets: Prisma.TicketCreateManyInput[] = ticketIds.map((id, i) => {
   };
 });
 
-const ticketUsers: Prisma.TicketUserCreateManyInput[] = tickets.flatMap((ticket) => {
+const ticketUsers: Prisma.TicketMemberCreateManyInput[] = tickets.flatMap((ticket) => {
   const participants = new Set<string>([ticket.authorId]);
   if (ticket.assignedId) participants.add(ticket.assignedId);
 
@@ -266,7 +265,7 @@ const ticketUsers: Prisma.TicketUserCreateManyInput[] = tickets.flatMap((ticket)
   }));
 });
 
-const ticketUserMap = new Map<string, Prisma.TicketUserCreateManyInput[]>();
+const ticketUserMap = new Map<string, Prisma.TicketMemberCreateManyInput[]>();
 
 for (const tu of ticketUsers) {
   const list = ticketUserMap.get(tu.ticketId) ?? [];
@@ -368,7 +367,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
     await this.order.createMany({ data: orders });
     await this.orderItem.createMany({ data: orderItems });
     await this.ticket.createMany({ data: tickets });
-    await this.ticketUser.createMany({ data: ticketUsers });
+    await this.ticketMember.createMany({ data: ticketUsers });
 
     for (const chunked of chunk(ticketMessages, 500)) {
       await this.ticketMessage.createMany({

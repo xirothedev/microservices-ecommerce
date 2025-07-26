@@ -85,7 +85,9 @@ export default function ProfileSidebar({ setSidebarOpen }: ProfileSidebarProps) 
 						<AvatarFallback className="text-lg">{fallbackAvatar}</AvatarFallback>
 					</Avatar>
 					<h2 className="text-xl font-semibold text-gray-900">{data.me.fullname}</h2>
-					<p className="mb-2 text-sm text-gray-600">{data.me.email}</p>
+					<p className="mb-2 block truncate text-sm text-gray-600" title={data.me.email}>
+						{data.me.email}
+					</p>
 					<Badge variant="secondary" className="bg-blue-100 text-blue-800">
 						Premium
 					</Badge>

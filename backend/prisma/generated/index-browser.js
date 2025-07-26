@@ -276,7 +276,7 @@ exports.Prisma.TicketScalarFieldEnum = {
   assignedId: 'assignedId',
 };
 
-exports.Prisma.TicketUserScalarFieldEnum = {
+exports.Prisma.TicketMemberScalarFieldEnum = {
   id: 'id',
   lastReadAt: 'lastReadAt',
   ticketId: 'ticketId',
@@ -426,7 +426,7 @@ exports.Prisma.ModelName = {
   Bill: 'Bill',
   CartItem: 'CartItem',
   Ticket: 'Ticket',
-  TicketUser: 'TicketUser',
+  TicketMember: 'TicketMember',
   TicketMessage: 'TicketMessage',
   TicketContext: 'TicketContext',
 };
