@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Smartphone } from "lucide-react";
@@ -18,7 +18,8 @@ export default function Navbar({ navItems }: NavbarProps) {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
 	const { data } = useUserQuery();
-	const fallbackAvatar = getFallbackString(data?.me.fullname ?? "");
+	const user = data?.me;
+	const fallbackAvatar = getFallbackString(user?.fullname ?? "");
 
 	return (
 		<nav className="bg-color-100 fixed top-0 z-50 w-full border-b shadow-md backdrop-blur-sm transition-colors">
@@ -42,9 +43,10 @@ export default function Navbar({ navItems }: NavbarProps) {
 						))}
 						<div className="flex items-center space-x-2">
 							<Cart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
-							{data ? (
+							{user ? (
 								<Avatar>
 									<Link href="/profile">
+										<AvatarImage src={user.avatarUrl ?? undefined} alt={fallbackAvatar} />
 										<AvatarFallback>{fallbackAvatar}</AvatarFallback>
 									</Link>
 								</Avatar>
@@ -83,9 +85,10 @@ export default function Navbar({ navItems }: NavbarProps) {
 								<div className="flex items-center justify-center gap-4 py-4">
 									<Cart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
 								</div>
-								{data ? (
+								{user ? (
 									<Avatar>
 										<Link href="/profile">
+											<AvatarImage src={user.avatarUrl ?? undefined} alt={fallbackAvatar} />
 											<AvatarFallback>{fallbackAvatar}</AvatarFallback>
 										</Link>
 									</Avatar>

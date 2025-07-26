@@ -2,11 +2,12 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCart } from "@/hooks/use-cart";
 import { ProductWithAverageRating } from "@/typings/backend";
-import { ArrowLeft, ArrowRight, Check, Heart, Minus, Plus, ShoppingCart, Star } from "lucide-react";
+import { Check, Heart, Minus, Plus, ShoppingCart, Star } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -24,7 +25,7 @@ export default function ServiceDetailModal({ service, isOpen, onClose, isAddingT
 	const { data } = useCart();
 
 	const discount = Math.round(((service.originalPrice - service.discountPrice) / service.originalPrice) * 100);
-	const cartQuantity = data?.me?.cart?.find((cartItem) => cartItem.productId === service.id)?.quantity ?? 0;
+	const cartQuantity = data?.cartItems?.find((cartItem) => cartItem.productId === service.id)?.quantity ?? 0;
 	const gallery = service.medias;
 
 	const nextImage = () => {
@@ -45,65 +46,52 @@ export default function ServiceDetailModal({ service, isOpen, onClose, isAddingT
 				<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
 					{/* Image Gallery */}
 					<div className="space-y-4">
-						<div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100">
-							<Image
-								src={gallery[currentImageIndex] || "/placeholder.svg?height=400&width=400"}
-								alt={service.name}
-								fill
-								className="object-cover"
-							/>
+						<Carousel
+							opts={{
+								align: "start",
+								loop: true,
+							}}
+							className="relative w-full"
+						>
+							<CarouselContent>
+								{gallery.map((image, index) => (
+									<CarouselItem key={index}>
+										<div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100">
+											<Image
+												src={image || "/placeholder.svg?height=400&width=400"}
+												alt={`${service.name} ${index + 1}`}
+												fill
+												className="object-cover"
+											/>
 
+											{/* Badges */}
+											<div className="absolute top-4 left-4 z-10 flex gap-2">
+												{service.flags.includes("POPULAR") && (
+													<Badge className="bg-red-500 text-white">Popular</Badge>
+												)}
+												{discount > 0 && (
+													<Badge className="bg-green-500 text-white">{discount}% OFF</Badge>
+												)}
+											</div>
+										</div>
+									</CarouselItem>
+								))}
+							</CarouselContent>
 							{gallery.length > 1 && (
 								<>
-									<button
-										onClick={prevImage}
-										className="absolute top-1/2 left-2 -translate-y-1/2 rounded-full bg-white/80 p-2 transition-colors hover:bg-white"
-									>
-										<ArrowLeft className="h-4 w-4" />
-									</button>
-									<button
-										onClick={nextImage}
-										className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full bg-white/80 p-2 transition-colors hover:bg-white"
-									>
-										<ArrowRight className="h-4 w-4" />
-									</button>
+									<CarouselPrevious className="absolute top-1/2 left-2 z-10 -translate-y-1/2 rounded-full bg-white/80 p-2 hover:bg-white" />
+									<CarouselNext className="absolute top-1/2 right-2 z-10 -translate-y-1/2 rounded-full bg-white/80 p-2 hover:bg-white" />
 								</>
 							)}
-
-							{/* Image Indicators */}
-							{gallery.length > 1 && (
-								<div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
-									{gallery.map((_, index) => (
-										<button
-											key={index}
-											onClick={() => setCurrentImageIndex(index)}
-											className={`h-2 w-2 rounded-full transition-colors ${
-												index === currentImageIndex ? "bg-white" : "bg-white/50"
-											}`}
-										/>
-									))}
-								</div>
-							)}
-
-							{/* Badges */}
-							<div className="absolute top-4 left-4 flex gap-2">
-								{service.flags.includes("POPULAR") && (
-									<Badge className="bg-red-500 text-white">Popular</Badge>
-								)}
-								{discount > 0 && <Badge className="bg-green-500 text-white">{discount}% OFF</Badge>}
-							</div>
-						</div>
+						</Carousel>
 
 						{/* Thumbnail Gallery */}
 						{gallery.length > 1 && (
 							<div className="flex gap-2 overflow-x-auto">
 								{gallery.map((image, index) => (
-									<button
+									<div
 										key={index}
-										onClick={() => setCurrentImageIndex(index)}
-										className={`h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg border-2 transition-colors ${
-											index === currentImageIndex ? "border-blue-500" : "border-gray-200"
-										}`}
+										className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg border-2 border-gray-200"
 									>
 										<Image
 											src={image || "/placeholder.svg?height=64&width=64"}
@@ -112,7 +100,7 @@ export default function ServiceDetailModal({ service, isOpen, onClose, isAddingT
 											height={64}
 											className="h-full w-full object-cover"
 										/>
-									</button>
+									</div>
 								))}
 							</div>
 						)}

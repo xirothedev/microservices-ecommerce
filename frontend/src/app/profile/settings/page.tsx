@@ -226,7 +226,6 @@ export default function AccountSettings() {
 							<Select
 								value={theme}
 								onValueChange={(value) => {
-									console.log(value);
 									setTheme(value);
 									updateSetting("preferences", "theme", value);
 								}}

@@ -252,7 +252,7 @@ export class AuthService {
     const token = tokenFromCookie ?? tokenFromBody ?? req.header?.['Authentication'];
 
     if (!token) {
-      throw new UnauthorizedException('Invalid credientials');
+      throw new BadRequestException('Credientials must be provided');
     }
 
     const isValidToken = this.jwtService.verify(token, {

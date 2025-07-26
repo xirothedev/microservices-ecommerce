@@ -32,7 +32,7 @@ export default function Cart({ isOpen, setIsOpen }: CartProps) {
 
 	const toggleCart = () => setIsOpen(!isOpen);
 
-	const items = data?.me?.cart ?? [];
+	const items = data?.cartItems ?? [];
 	const totalItems = items.length ?? 0;
 	const totalPrice = items.reduce((sum, cartItem) => sum + cartItem.product.discountPrice * cartItem.quantity, 0);
 
@@ -123,7 +123,7 @@ export default function Cart({ isOpen, setIsOpen }: CartProps) {
 															disabled={removePending}
 															className="h-6 w-6 bg-transparent"
 															onClick={() =>
-																removeMutate({ productId: item.id, quantity: 1 })
+																removeMutate({ productId: item.productId, quantity: 1 })
 															}
 														>
 															<Minus className="h-3 w-3" />

@@ -22,9 +22,6 @@ export class CartItemQL implements Partial<CartItem> {
   @Field(() => Int)
   quantity: number;
 
-  @Field(() => Int)
-  unitPrice: number;
-
   @Field(() => ProductQL, { nullable: true })
   product?: ProductQL;
 }

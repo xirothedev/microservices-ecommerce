@@ -13,8 +13,6 @@ function resolvePendingRequests() {
 }
 
 const authErrorLink = onError(({ graphQLErrors, operation, forward }) => {
-	if (!operation.getContext().handleAuthError) return forward(operation);
-
 	const unauthenticated = graphQLErrors?.some((err) => err.extensions?.code === "UNAUTHENTICATED");
 
 	if (!unauthenticated) return;
@@ -25,15 +23,9 @@ const authErrorLink = onError(({ graphQLErrors, operation, forward }) => {
 		return fromPromise(
 			refreshToken()
 				.then((ok) => {
-					if (!ok) {
-						window.location.href = "/login";
-						return;
-					}
+					if (!ok) return;
 					resolvePendingRequests();
 					return true;
-				})
-				.catch(() => {
-					window.location.href = "/login";
 				})
 				.finally(() => {
 					isRefreshing = false;

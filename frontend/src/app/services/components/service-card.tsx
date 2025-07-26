@@ -22,7 +22,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 	const { mutate, isPending } = useUpdateCart(false, refetch);
 
 	const discount = Math.round(((service.originalPrice - service.discountPrice) / service.originalPrice) * 100);
-	const cartQuantity = data?.me.cart.find((cartItem) => cartItem.productId === service.id)?.quantity ?? 0;
+	const cartQuantity = data?.cartItems.find((cartItem) => cartItem.productId === service.id)?.quantity ?? 0;
 
 	const handleViewDetails = () => {
 		setShowDetailModal(true);

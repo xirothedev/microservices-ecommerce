@@ -6,63 +6,67 @@ import { CartItemWithProduct } from "@/typings/backend";
 import { gql, useQuery } from "@apollo/client";
 import { useMutation } from "@tanstack/react-query";
 
-export function useUpdateCart(isRemove = false, refetch?: () => void) {
-	return useMutation({
-		mutationFn: async ({ productId, quantity }: { productId: string; quantity: number }) => {
-			const res = await axiosInstance.post(`/cart/${isRemove ? "remove" : "add"}`, { productId, quantity });
+export function useUpdateCart(isRemove = false, refetch: () => void) {
+	return useMutation<{ data: CartItemWithProduct }, unknown, { productId: string; quantity: number }>({
+		mutationFn: async ({ productId, quantity }) => {
+			const res = await axiosInstance.post<{ data: CartItemWithProduct }>(
+				`/cart/${isRemove ? "remove" : "add"}`,
+				{ productId, quantity },
+			);
 			return res.data;
 		},
 		onSuccess: () => {
+			refetch();
 			toast({ title: `${isRemove ? "Removed" : "Added"} product to cart` });
-			if (refetch) refetch();
 		},
 	});
 }
 
 export function useCart() {
-	const res = useQuery<{ me: { cart: CartItemWithProduct[] } }>(
+	const res = useQuery<{ cartItems: CartItemWithProduct[] }>(
 		gql`
-			query Me {
-				me {
-					cart {
-						createAt
-						id
-						product {
-							categoryId
-							category {
-								name
-								id
-								slug
-							}
-							createAt
-							description
-							discountPrice
-							flags
+			query CartItems {
+				cartItems {
+					createAt
+					id
+					productId
+					quantity
+					updateAt
+					userId
+					product {
+						averageRating
+						category {
 							id
-							isActive
-							medias
 							name
-							originalPrice
-							sellerId
-							sku
 							slug
-							sold
-							stock
-							tags
-							updateAt
 						}
-						productId
-						quantity
-						unitPrice
+						categoryId
+						createAt
+						description
+						discountPrice
+						flags
+						id
+						isActive
+						medias
+						name
+						originalPrice
+						sellerId
+						sku
+						slug
+						sold
+						stock
+						tags
 						updateAt
-						userId
 					}
 				}
 			}
 		`,
 		{
-			fetchPolicy: "network-only",
+			context: { handleAuthError: true },
+			fetchPolicy: "cache-first",
+			nextFetchPolicy: "cache-first",
 			errorPolicy: "all",
+			ssr: true,
 		},
 	);
 

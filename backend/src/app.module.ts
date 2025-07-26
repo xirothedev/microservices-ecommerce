@@ -17,7 +17,7 @@ import { AuthCookieGuard } from './modules/auth/guards/auth-cookie.guard';
 import { CartModule } from './modules/cart/cart.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { CustomersModule } from './modules/customers/customers.module';
-import { DiscordModule } from './modules/discord/discord.module';
+// import { DiscordModule } from './modules/discord/discord.module';
 import { ProductsModule } from './modules/products/products.module';
 import { TicketModule } from './modules/ticket/ticket.module';
 import { UsersModule } from './modules/users/users.module';
@@ -81,7 +81,7 @@ import { SupabaseModule } from './supabase/supabase.module';
     ProductsModule,
     CategoriesModule,
     CartModule,
-    DiscordModule,
+    // DiscordModule,
     CustomersModule,
     TicketModule,
   ],

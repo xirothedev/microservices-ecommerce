@@ -19,51 +19,33 @@ export class CartService {
       throw new BadRequestException('Product not found');
     }
 
-    let cartItem = await this.prismaService.cartItem.findUnique({
+    const data = await this.prismaService.cartItem.upsert({
       where: {
         productUserId: {
           productId: body.productId,
           userId: user.id,
         },
       },
-      select: { id: true },
+      create: {
+        productId: body.productId,
+        userId: user.id,
+        quantity: body.quantity,
+      },
+      update: {
+        quantity: { increment: body.quantity },
+      },
+      include: { product: true },
     });
-
-    if (cartItem) {
-      // If exists, update the quantity
-      cartItem = await this.prismaService.cartItem.update({
-        where: {
-          productUserId: {
-            productId: body.productId,
-            userId: user.id,
-          },
-        },
-        data: {
-          quantity: { increment: body.quantity },
-        },
-        include: { product: true },
-      });
-    } else {
-      // If not exists, create a new cart item
-      cartItem = await this.prismaService.cartItem.create({
-        data: {
-          productId: body.productId,
-          userId: user.id,
-          quantity: body.quantity,
-        },
-        include: { product: true },
-      });
-    }
 
     return {
       message: 'Add product to cart successful',
-      data: cartItem,
+      data,
     };
   }
 
   public async remove(req: Request, body: RemoveProductCartDto) {
     const user = req.user;
-    let cartItem = await this.prismaService.cartItem.findUnique({
+    const cartItem = await this.prismaService.cartItem.findUnique({
       where: {
         productUserId: {
           productId: body.productId,
@@ -78,7 +60,7 @@ export class CartService {
     }
 
     if (body.quantity >= cartItem.quantity) {
-      await this.prismaService.cartItem.delete({
+      const deletedItem = await this.prismaService.cartItem.delete({
         where: {
           productUserId: {
             productId: body.productId,
@@ -86,12 +68,16 @@ export class CartService {
           },
         },
       });
+
       return {
         message: 'Removed product from cart',
-        data: null,
+        data: {
+          ...deletedItem,
+          quantity: 0,
+        },
       };
     } else {
-      cartItem = await this.prismaService.cartItem.update({
+      const data = await this.prismaService.cartItem.update({
         where: {
           productUserId: {
             productId: body.productId,
@@ -103,9 +89,10 @@ export class CartService {
         },
         include: { product: true },
       });
+
       return {
         message: 'Decreased product quantity in cart',
-        data: cartItem,
+        data,
       };
     }
   }
@@ -116,6 +103,7 @@ export class CartService {
       orderBy: { createAt: 'desc' },
       select: undefined,
     });
+
     return carts;
   }
 }

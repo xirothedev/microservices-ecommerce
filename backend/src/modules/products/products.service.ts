@@ -50,6 +50,10 @@ export class ProductsService {
             createMany: { data: body.productItems, skipDuplicates: false },
           },
         },
+        select: {
+          productItems: true,
+          category: true,
+        },
       });
 
       return {
@@ -136,7 +140,6 @@ export class ProductsService {
         },
         data: updateData,
         include: {
-          productItems: true,
           category: true,
         },
       });
@@ -173,7 +176,6 @@ export class ProductsService {
     const products = await this.prismaService.product.findMany({
       where: { sellerId },
       include: {
-        productItems: true,
         category: true,
       },
       orderBy: {
@@ -224,7 +226,6 @@ export class ProductsService {
     const products = await this.prismaService.product.findMany({
       where,
       include: {
-        productItems: true,
         category: true,
         seller: {
           select: {
@@ -241,16 +242,34 @@ export class ProductsService {
       ...(cursorObj && { cursor: cursorObj }),
     });
 
+    const productsWithAvgRating = await Promise.all(
+      products.map(async (product) => {
+        const avg = await this.prismaService.review.aggregate({
+          where: {
+            productId: product.id,
+          },
+          _avg: {
+            rating: true,
+          },
+        });
+
+        return {
+          ...product,
+          averageRating: avg._avg.rating?.toFixed(1) ?? null,
+        };
+      }),
+    );
+
     const totalItems = await this.prismaService.product.count({ where });
 
     let nextCursor: string | null = null;
     let hasNextPage = false;
-    let result = products;
+    let result = productsWithAvgRating;
     if (products.length > take) {
       hasNextPage = true;
-      const nextItem = products[take];
-      nextCursor = nextItem.id;
-      result = products.slice(0, take);
+      const nextItem = productsWithAvgRating[take];
+      nextCursor = nextItem?.id ?? null;
+      result = productsWithAvgRating.slice(0, take);
     }
 
     return {
@@ -314,7 +333,7 @@ export class ProductsService {
 
       return {
         ...product,
-        averageRating: avgResult._avg.rating ?? 0,
+        averageRating: avgResult._avg.rating?.toFixed(1) ?? 0,
       };
     } catch {
       throw new NotFoundException('Product not found');

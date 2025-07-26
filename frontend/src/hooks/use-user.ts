@@ -1,13 +1,12 @@
 "use client";
 
+import { apolloClient } from "@/lib/apollo-client";
 import axiosInstance from "@/lib/axios";
 import { UserQuery } from "@/typings/backend";
 import { gql, useMutation as useMutationGql, useQuery as useQueryGql } from "@apollo/client";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { toast } from "./use-toast";
-import { apolloClient } from "@/lib/apollo-client";
 
 export interface UpdateUserInput {
 	fullname?: string;
@@ -43,7 +42,8 @@ const ME_QUERY = gql`
 
 export function useUserQuery() {
 	const res = useQueryGql<{ me: UserQuery }>(ME_QUERY, {
-		fetchPolicy: "network-only",
+		fetchPolicy: "cache-and-network",
+		nextFetchPolicy: "cache-first",
 		errorPolicy: "all",
 		ssr: true,
 	});
@@ -78,7 +78,6 @@ export function useUpdateUserMutation() {
 			}
 		`,
 		{
-			context: { handleAuthError: true },
 			errorPolicy: "all",
 			onCompleted: (data) => {
 				if (data?.updateUser) {
