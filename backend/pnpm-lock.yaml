@@ -179,9 +179,6 @@ importers:
       '@types/compression':
         specifier: ^1.8.1
         version: 1.8.1
-      '@types/connect-redis':
-        specifier: ^0.0.23
-        version: 0.0.23
       '@types/cookie-parser':
         specifier: ^1.4.9
         version: 1.4.9(@types/express@5.0.3)
@@ -203,6 +200,9 @@ importers:
       '@types/nodemailer':
         specifier: 6.4.17
         version: 6.4.17
+      '@types/passport':
+        specifier: ^1.0.17
+        version: 1.0.17
       '@types/passport-jwt':
         specifier: 4.0.1
         version: 4.0.1
@@ -1933,10 +1933,6 @@ packages:
     resolution:
       { integrity: sha512-kCFuWS0ebDbmxs0AXYn6e2r2nrGAb5KwQhknjSPSPgJcGd8+HVSILlUyFhGqML2gk39HcG7D1ydW9/qpYkN00Q== }
 
-  '@types/connect-redis@0.0.23':
-    resolution:
-      { integrity: sha512-+yKa9EQJ7YZIWjTKbCdXhqYSpirGf7Cc0o5QTFrkWORneFHVu3QOopRUi6E/ye41QGMom+cj1/kvWFHamHTADA== }
-
   '@types/connect@3.4.38':
     resolution:
       { integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug== }
@@ -2098,10 +2094,6 @@ packages:
   '@types/range-parser@1.2.7':
     resolution:
       { integrity: sha512-hKormJbkJqzQGhziax5PItDUTMAM9uE2XXQmM37dyd4hVM+5aVl7oVxMVUiVQn2oCQFN/LKCZdvSM0pFRqbSmQ== }
-
-  '@types/redis@2.8.32':
-    resolution:
-      { integrity: sha512-7jkMKxcGq9p242exlbsVzuJb57KqHRhNl4dHoQu2Y5v9bCAbtIXXH0R3HleSQW4CTOqpHIYUW3t6tpUj4BVQ+w== }
 
   '@types/send@0.17.5':
     resolution:
@@ -8375,16 +8367,6 @@ snapshots:
       '@types/express': 5.0.3
       '@types/node': 22.16.3
 
-  '@types/connect-redis@0.0.23':
-    dependencies:
-      '@types/express': 5.0.3
-      '@types/express-session': 1.18.2
-      '@types/node': 22.16.3
-      '@types/redis': 2.8.32
-      ioredis: 5.6.1
-    transitivePeerDependencies:
-      - supports-color
-
   '@types/connect@3.4.38':
     dependencies:
       '@types/node': 22.16.3
@@ -8534,10 +8516,6 @@ snapshots:
   '@types/qs@6.14.0': {}
 
   '@types/range-parser@1.2.7': {}
-
-  '@types/redis@2.8.32':
-    dependencies:
-      '@types/node': 22.16.3
 
   '@types/send@0.17.5':
     dependencies:

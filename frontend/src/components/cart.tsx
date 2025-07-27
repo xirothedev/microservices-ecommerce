@@ -5,15 +5,91 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useCart, useUpdateCart } from "@/hooks/use-cart";
+import { CartItemWithProduct } from "@/typings/backend";
 import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, memo, useMemo, useState } from "react";
 
 interface CartProps {
 	isOpen: boolean;
 	setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
+
+// Tách CartItem thành component riêng để tránh re-render không cần thiết
+interface CartItemProps {
+	item: CartItemWithProduct;
+	addMutate: (params: { productId: string; quantity: number }) => Promise<any>;
+	removeMutate: (params: { productId: string; quantity: number }) => Promise<any>;
+	addPending: boolean;
+	removePending: boolean;
+}
+
+const CartItem = memo(({ item, addMutate, removeMutate, addPending, removePending }: CartItemProps) => {
+	return (
+		<motion.div
+			key={item.id}
+			initial={{ opacity: 0, height: 0 }}
+			animate={{ opacity: 1, height: "auto" }}
+			exit={{ opacity: 0, height: 0 }}
+			className="flex gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
+		>
+			{/* Item Image */}
+			<div className="flex-shrink-0">
+				<div className="relative h-16 w-16 overflow-hidden rounded-lg bg-gray-100">
+					<Image
+						src={item.product.medias[0] || "/placeholder.svg?height=64&width=64"}
+						alt={item.product.name}
+						fill
+						className="object-cover"
+					/>
+				</div>
+			</div>
+
+			{/* Item Details */}
+			<div className="min-w-0 flex-1">
+				<h4 className="truncate text-sm font-semibold text-gray-900">{item.product.name}</h4>
+				<p className="mb-2 text-xs text-gray-500">{item.product.category.name}</p>
+				<div className="flex items-center justify-between">
+					<span className="font-bold text-blue-600">${item.product.discountPrice}</span>
+					<div className="flex items-center gap-2">
+						<Button
+							variant="outline"
+							size="icon"
+							disabled={removePending}
+							className="h-6 w-6 bg-transparent"
+							onClick={() => removeMutate({ productId: item.productId, quantity: 1 })}
+						>
+							<Minus className="h-3 w-3" />
+						</Button>
+						<span className="w-8 text-center text-sm font-medium">{item.quantity}</span>
+						<Button
+							variant="outline"
+							size="icon"
+							disabled={addPending}
+							className="h-6 w-6 bg-transparent"
+							onClick={() => addMutate({ productId: item.productId, quantity: 1 })}
+						>
+							<Plus className="h-3 w-3" />
+						</Button>
+					</div>
+				</div>
+			</div>
+
+			{/* Remove Button */}
+			<Button
+				variant="ghost"
+				size="icon"
+				className="h-6 w-6 text-red-500 hover:text-red-700"
+				onClick={() => removeMutate({ productId: item.productId, quantity: item.quantity })}
+			>
+				<Trash2 className="h-3 w-3" />
+			</Button>
+		</motion.div>
+	);
+});
+
+CartItem.displayName = "CartItem";
 
 export default function Cart({ isOpen, setIsOpen }: CartProps) {
 	const [isCheckingOut, setIsCheckingOut] = useState(false);
@@ -32,9 +108,12 @@ export default function Cart({ isOpen, setIsOpen }: CartProps) {
 
 	const toggleCart = () => setIsOpen(!isOpen);
 
-	const items = data?.cartItems ?? [];
-	const totalItems = items.length ?? 0;
-	const totalPrice = items.reduce((sum, cartItem) => sum + cartItem.product.discountPrice * cartItem.quantity, 0);
+	const items = useMemo(() => data?.cartItems ?? [], [data?.cartItems]);
+	const totalItems = useMemo(() => items.length, [items]);
+	const totalPrice = useMemo(
+		() => items.reduce((sum, cartItem) => sum + cartItem.product.discountPrice * cartItem.quantity, 0),
+		[items],
+	);
 
 	return (
 		<Sheet open={isOpen} onOpenChange={toggleCart}>
@@ -79,82 +158,14 @@ export default function Cart({ isOpen, setIsOpen }: CartProps) {
 							<div className="space-y-4">
 								<AnimatePresence>
 									{items.map((item) => (
-										<motion.div
+										<CartItem
 											key={item.id}
-											initial={{ opacity: 0, height: 0 }}
-											animate={{ opacity: 1, height: "auto" }}
-											exit={{ opacity: 0, height: 0 }}
-											className="flex gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
-										>
-											{/* Item Image */}
-											<div className="flex-shrink-0">
-												<div className="relative h-16 w-16 overflow-hidden rounded-lg bg-gray-100">
-													<Image
-														src={
-															item.product.medias[0] ||
-															"/placeholder.svg?height=64&width=64"
-														}
-														alt={item.product.name}
-														fill
-														className="object-cover"
-													/>
-												</div>
-											</div>
-
-											{/* Item Details */}
-											<div className="min-w-0 flex-1">
-												<h4 className="truncate text-sm font-semibold text-gray-900">
-													{item.product.name}
-												</h4>
-												<p className="mb-2 text-xs text-gray-500">
-													{item.product.category.name}
-												</p>
-												<div className="flex items-center justify-between">
-													<span className="font-bold text-blue-600">
-														${item.product.discountPrice}
-													</span>
-													<div className="flex items-center gap-2">
-														<Button
-															variant="outline"
-															size="icon"
-															disabled={removePending}
-															className="h-6 w-6 bg-transparent"
-															onClick={() =>
-																removeMutate({ productId: item.productId, quantity: 1 })
-															}
-														>
-															<Minus className="h-3 w-3" />
-														</Button>
-														<span className="w-8 text-center text-sm font-medium">
-															{item.quantity}
-														</span>
-														<Button
-															variant="outline"
-															size="icon"
-															disabled={addPending}
-															className="h-6 w-6 bg-transparent"
-															onClick={() =>
-																addMutate({ productId: item.productId, quantity: 1 })
-															}
-														>
-															<Plus className="h-3 w-3" />
-														</Button>
-													</div>
-												</div>
-											</div>
-
-											{/* Remove Button */}
-											<Button
-												variant="ghost"
-												size="icon"
-												className="h-6 w-6 text-red-500 hover:text-red-700"
-												onClick={() =>
-													removeMutate({ productId: item.productId, quantity: item.quantity })
-												}
-											>
-												<Trash2 className="h-3 w-3" />
-											</Button>
-										</motion.div>
+											item={item}
+											addMutate={addMutate}
+											removeMutate={removeMutate}
+											addPending={addPending}
+											removePending={removePending}
+										/>
 									))}
 								</AnimatePresence>
 							</div>

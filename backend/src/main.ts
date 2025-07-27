@@ -4,14 +4,14 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
 import * as compression from 'compression';
-import * as connectRedis from 'connect-redis';
 import * as cookieParser from 'cookie-parser';
-import * as session from 'express-session';
 import helmet from 'helmet';
 import * as passport from 'passport';
-import { createClient } from 'redis';
 import 'reflect-metadata';
 import { AppModule } from './app.module';
+import { RedisStore } from 'connect-redis';
+import * as session from 'express-session';
+import { createClient } from 'redis';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { LoggerService } from './logger/logger.service';
 
@@ -67,17 +67,22 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('docs', app, documentFactory);
 
-  const RedisStore = connectRedis(session);
   const redisClient = createClient({
     url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
     password: process.env.REDIS_PASSWORD,
   });
-  await redisClient.connect();
+
+  redisClient.connect().catch(console.error);
+
+  const redisStore = new RedisStore({
+    client: redisClient,
+    prefix: 'myapp:',
+  });
 
   // Middleware
   app.use(
     session({
-      store: new RedisStore({ client: redisClient as any }),
+      store: redisStore,
       secret: process.env.SESSION_SECRET!,
       resave: false,
       saveUninitialized: false,

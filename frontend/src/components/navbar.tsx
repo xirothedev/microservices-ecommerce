@@ -45,12 +45,12 @@ export default function Navbar({ navItems }: NavbarProps) {
 							{user ? (
 								<>
 									<Cart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
-									<Avatar>
-										<Link href="/profile">
+									<Link href="/profile" className="block">
+										<Avatar>
 											<AvatarImage src={user.avatarUrl ?? undefined} alt={fallbackAvatar} />
 											<AvatarFallback>{fallbackAvatar}</AvatarFallback>
-										</Link>
-									</Avatar>
+										</Avatar>
+									</Link>
 								</>
 							) : (
 								<>
@@ -89,18 +89,20 @@ export default function Navbar({ navItems }: NavbarProps) {
 										<div className="flex items-center justify-center gap-4 py-4">
 											<Cart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
 										</div>
-										<Avatar>
-											<Link href="/profile">
+										<Link href="/profile" className="block">
+											<Avatar>
 												<AvatarImage src={user.avatarUrl ?? undefined} alt={fallbackAvatar} />
 												<AvatarFallback>{fallbackAvatar}</AvatarFallback>
-											</Link>
-										</Avatar>
+											</Avatar>
+										</Link>
 									</>
 								) : (
 									<>
-										<Button className="mt-4 bg-blue-600 hover:bg-blue-700">Register</Button>
+										<Button className="mt-4 bg-blue-600 hover:bg-blue-700" type="button">
+											<Link href="/register">Register</Link>
+										</Button>
 										<Button className="mt-4" variant="outline">
-											Login
+											<Link href="/login">Login</Link>
 										</Button>
 									</>
 								)}

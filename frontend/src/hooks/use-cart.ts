@@ -27,43 +27,25 @@ export function useCart() {
 		gql`
 			query CartItems {
 				cartItems {
-					createAt
 					id
 					productId
 					quantity
-					updateAt
-					userId
 					product {
-						averageRating
+						id
+						name
+						discountPrice
+						medias
 						category {
 							id
 							name
-							slug
 						}
-						categoryId
-						createAt
-						description
-						discountPrice
-						flags
-						id
-						isActive
-						medias
-						name
-						originalPrice
-						sellerId
-						sku
-						slug
-						sold
-						stock
-						tags
-						updateAt
 					}
 				}
 			}
 		`,
 		{
 			context: { handleAuthError: true },
-			fetchPolicy: "cache-first",
+			fetchPolicy: "cache-and-network", // Improved fetch policy for better UX
 			nextFetchPolicy: "cache-first",
 			errorPolicy: "all",
 			ssr: true,
