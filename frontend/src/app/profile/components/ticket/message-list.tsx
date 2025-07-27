@@ -10,7 +10,10 @@ import { TicketMessageResponse } from "@/typings/backend";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import Image from "next/image";
+import { useLayoutEffect, useRef } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+
+const PAGE_SIZE = 12;
 
 interface MessageListProps {
 	ticketId: string;
@@ -18,24 +21,51 @@ interface MessageListProps {
 
 export default function MessageList({ ticketId }: MessageListProps) {
 	const { data: user } = useUserQuery();
+	const scrollableRef = useRef<HTMLDivElement>(null);
+	const scrollStateRef = useRef<{ scrollHeight: number; scrollTop: number } | null>(null);
 
-	const { data, fetchNextPage, hasNextPage } = useInfiniteQuery<
+	const { data, fetchPreviousPage, hasPreviousPage, isFetchingPreviousPage } = useInfiniteQuery<
 		{
 			data: TicketMessageResponse[];
-			"@data"?: { totalItems: number; nextCursor?: string; hasNextPage?: boolean };
+			"@data"?: { totalItems: number; prevCursor?: string; hasPrevPage?: boolean };
 		},
 		IAxiosError
 	>({
-		queryKey: ["tickets"],
-		queryFn: async () => {
-			const res = await axiosInstance.get(`/ticket/${ticketId}/messages`);
+		queryKey: ["tickets", ticketId, "messages"],
+		queryFn: async ({ pageParam }) => {
+			const params: Record<string, unknown> = { limit: PAGE_SIZE };
+			if (pageParam) params.cursor = pageParam;
+			const res = await axiosInstance.get(`/ticket/${ticketId}/messages`, { params });
 			return res.data;
 		},
-		getNextPageParam: (lastPage) => lastPage?.["@data"]?.nextCursor || null,
+		getPreviousPageParam: (firstPage) =>
+			firstPage?.["@data"]?.hasPrevPage ? firstPage?.["@data"]?.prevCursor : undefined,
+		getNextPageParam: () => undefined,
 		initialPageParam: undefined,
 	});
 
 	const messages: TicketMessageResponse[] = (data?.pages || []).flatMap((page) => page.data || []);
+
+	const handleFetchPreviousPage = () => {
+		if (scrollableRef.current) {
+			// Before fetching, save the current scroll state
+			scrollStateRef.current = {
+				scrollHeight: scrollableRef.current.scrollHeight,
+				scrollTop: scrollableRef.current.scrollTop,
+			};
+		}
+		fetchPreviousPage();
+	};
+
+	useLayoutEffect(() => {
+		// After data is prepended and DOM is updated, restore scroll position
+		if (scrollStateRef.current && scrollableRef.current && isFetchingPreviousPage === false) {
+			const { scrollHeight: prevScrollHeight, scrollTop: prevScrollTop } = scrollStateRef.current;
+			const newScrollHeight = scrollableRef.current.scrollHeight;
+			scrollableRef.current.scrollTop = prevScrollTop + (newScrollHeight - prevScrollHeight);
+			scrollStateRef.current = null;
+		}
+	}, [messages, isFetchingPreviousPage]);
 
 	const formatTime = (timestamp: string) => {
 		const date = new Date(timestamp);
@@ -62,22 +92,26 @@ export default function MessageList({ ticketId }: MessageListProps) {
 	return (
 		<InfiniteScroll
 			dataLength={messages.length}
-			next={fetchNextPage}
-			hasMore={!!hasNextPage}
-			loader={<div className="py-4 text-center text-gray-500">Loading...</div>}
-			endMessage={<div className="py-4 text-center text-gray-500">End</div>}
+			next={handleFetchPreviousPage}
+			hasMore={!!hasPreviousPage}
+			loader={<MessageLoading />}
+			endMessage={<MessageEnded />}
 			scrollThreshold={0.8}
-			inverse
+			inverse={true}
+			scrollableTarget="scrollableDiv"
+			style={{ display: "flex", flexDirection: "column-reverse" }}
 		>
 			<div className="space-y-4">
 				{messages.map((message, index) => {
 					const isUser = message.sender.user.id === user?.me.id;
-					const showAvatar = index === 0 || messages[index - 1].sender.user.id !== message.sender.user.id;
+					const prevMessage = messages[index + 1];
+					const showAvatar = !prevMessage || prevMessage.sender.user.id !== message.sender.user.id;
+
+					const nextMessage = messages[index - 1];
 					const showTimestamp =
-						index === messages.length - 1 ||
-						messages[index + 1].sender.user.id !== message.sender.user.id ||
-						new Date(messages[index + 1].createdAt).getTime() - new Date(message.createdAt).getTime() >
-							300000; // 5 minutes
+						!nextMessage ||
+						nextMessage.sender.user.id !== message.sender.user.id ||
+						new Date(message.createdAt).getTime() - new Date(nextMessage.createdAt).getTime() > 300000;
 
 					return (
 						<motion.div
@@ -167,5 +201,24 @@ export default function MessageList({ ticketId }: MessageListProps) {
 				})}
 			</div>
 		</InfiniteScroll>
+	);
+}
+
+function MessageLoading() {
+	return (
+		<div className="flex items-center justify-center py-4">
+			<div className="flex items-center gap-2">
+				<div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600"></div>
+				<span className="text-sm text-gray-500">Loading more messages...</span>
+			</div>
+		</div>
+	);
+}
+
+function MessageEnded() {
+	return (
+		<div className="py-4 text-center text-gray-500">
+			<p className="text-sm">No more messages to load</p>
+		</div>
 	);
 }

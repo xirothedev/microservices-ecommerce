@@ -13,9 +13,11 @@ export interface TicketMessageResponse {
     assigned: { fullname: string; id: string; avatarUrl: string };
   };
   sender: {
-    id: string;
-    fullname: string;
-    avatarUrl: string | null;
+    user: {
+      id: string;
+      fullname: string;
+      avatarUrl: string | null;
+    };
   };
 }
 

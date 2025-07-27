@@ -135,13 +135,13 @@ export class TicketService {
 
     const totalItems = await this.prismaService.ticket.count({ where });
 
-    let nextCursor: string | null = null;
-    let hasNextPage = false;
+    let prevCursor: string | null = null;
+    let hasPrevPage = false;
     let result = tickets;
     if (tickets.length > take) {
-      hasNextPage = true;
-      const nextItem = tickets[take];
-      nextCursor = nextItem.id;
+      hasPrevPage = true;
+      const prevItem = tickets[take];
+      prevCursor = prevItem.id;
       result = tickets.slice(0, take);
     }
 
@@ -150,8 +150,8 @@ export class TicketService {
       data: result,
       '@data': {
         totalItems,
-        nextCursor,
-        hasNextPage,
+        prevCursor,
+        hasPrevPage,
       },
     };
   }
@@ -401,28 +401,34 @@ export class TicketService {
           },
         },
       },
-      orderBy: { createdAt: 'asc' },
+      orderBy: { createdAt: 'desc' },
       take: take + 1,
       skip,
       ...(cursorObj && { cursor: cursorObj }),
     });
 
-    let nextCursor: string | null = null;
-    let hasNextPage = false;
+    const totalMessages = await this.prismaService.ticketMember.count({ where: { ticketId } });
+
+    let prevCursor: string | null = null;
+    let hasPrevPage = false;
     let result = messages;
+
     if (messages.length > take) {
-      hasNextPage = true;
-      const nextItem = messages[take];
-      nextCursor = nextItem.id;
+      hasPrevPage = true;
+      const prevItem = messages[take];
+      prevCursor = prevItem.id;
       result = messages.slice(0, take);
     }
+
+    result = result.reverse();
 
     return {
       message: 'Get ticket messages successful',
       data: result,
       '@data': {
-        nextCursor,
-        hasNextPage,
+        totalItems: totalMessages,
+        prevCursor,
+        hasPrevPage,
       },
     };
   }

@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import axiosInstance from "@/lib/axios";
+import { formatDate } from "@/lib/format";
 import { IAxiosError } from "@/typings";
 import { TicketResponse } from "@/typings/backend";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -71,17 +72,6 @@ export default function TicketHistory() {
 
 	const tickets: TicketResponse[] = (data?.pages || []).flatMap((page) => page.data || []);
 
-	const formatDate = (dateString: string) => {
-		const date = new Date(dateString);
-		return date.toLocaleDateString("en-US", {
-			month: "short",
-			day: "numeric",
-			year: "numeric",
-			hour: "2-digit",
-			minute: "2-digit",
-		});
-	};
-
 	const getStatusIcon = (status: string) => {
 		const config = statusConfig[status as keyof typeof statusConfig];
 		const IconComponent = config.icon;
@@ -128,24 +118,18 @@ export default function TicketHistory() {
 									<SelectValue placeholder="Status" />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem className="cursor-pointer" value="all">
-										All Status
-									</SelectItem>
-									<SelectItem className="cursor-pointer" value="OPEN">
-										Open
-									</SelectItem>
-									<SelectItem className="cursor-pointer" value="IN_PROGRESS">
-										In Progress
-									</SelectItem>
-									<SelectItem className="cursor-pointer" value="WAITING">
-										Waiting
-									</SelectItem>
-									<SelectItem className="cursor-pointer" value="RESOLVED">
-										Resolved
-									</SelectItem>
-									<SelectItem className="cursor-pointer" value="CLOSED">
-										Closed
-									</SelectItem>
+									{[
+										{ value: "all", label: "All Status" },
+										{ value: "OPEN", label: "Open" },
+										{ value: "IN_PROGRESS", label: "In Progress" },
+										{ value: "WAITING", label: "Waiting" },
+										{ value: "RESOLVED", label: "Resolved" },
+										{ value: "CLOSED", label: "Closed" },
+									].map(({ value, label }) => (
+										<SelectItem className="cursor-pointer" value={value} key={value}>
+											{label}
+										</SelectItem>
+									))}
 								</SelectContent>
 							</Select>
 							<Select value={priorityFilter} onValueChange={setPriorityFilter}>
@@ -153,21 +137,17 @@ export default function TicketHistory() {
 									<SelectValue placeholder="Priority" />
 								</SelectTrigger>
 								<SelectContent>
-									<SelectItem className="cursor-pointer" value="all">
-										All Priority
-									</SelectItem>
-									<SelectItem className="cursor-pointer" value="URGENT">
-										Urgent
-									</SelectItem>
-									<SelectItem className="cursor-pointer" value="HIGH">
-										High
-									</SelectItem>
-									<SelectItem className="cursor-pointer" value="MEDIUM">
-										Medium
-									</SelectItem>
-									<SelectItem className="cursor-pointer" value="LOW">
-										Low
-									</SelectItem>
+									{[
+										{ value: "all", label: "All Priority" },
+										{ value: "URGENT", label: "Urgent" },
+										{ value: "HIGH", label: "High" },
+										{ value: "MEDIUM", label: "Medium" },
+										{ value: "LOW", label: "Low" },
+									].map(({ value, label }) => (
+										<SelectItem className="cursor-pointer" value={value} key={value}>
+											{label}
+										</SelectItem>
+									))}
 								</SelectContent>
 							</Select>
 						</div>
@@ -191,8 +171,8 @@ export default function TicketHistory() {
 						dataLength={tickets.length}
 						next={fetchNextPage}
 						hasMore={!!hasNextPage}
-						loader={<div className="py-4 text-center text-gray-500">Loading...</div>}
-						endMessage={<div className="py-4 text-center text-gray-500">End</div>}
+						loader={<TicketLoading />}
+						endMessage={<TicketEnded />}
 						scrollThreshold={0.8}
 					>
 						<AnimatePresence>
@@ -238,7 +218,10 @@ export default function TicketHistory() {
 															<span className="font-medium">{ticket.id}</span>
 															<div className="flex items-center gap-1">
 																<Calendar className="h-4 w-4" />
-																{formatDate(ticket.createAt)}
+																{formatDate(ticket.createAt, {
+																	hour: "2-digit",
+																	minute: "2-digit",
+																})}
 															</div>
 															<div className="flex items-center gap-1">
 																<MessageCircle className="h-4 w-4" />
@@ -284,7 +267,11 @@ export default function TicketHistory() {
 
 													<div className="ml-4 flex flex-col items-end gap-2">
 														<div className="text-xs text-gray-500">
-															Updated {formatDate(ticket.updateAt)}
+															Updated{" "}
+															{formatDate(ticket.updateAt, {
+																hour: "2-digit",
+																minute: "2-digit",
+															})}
 														</div>
 														<Link href={`/profile/tickets/${ticket.id}`}>
 															<Button
@@ -326,6 +313,25 @@ export default function TicketHistory() {
 					</CardContent>
 				</Card>
 			)}
+		</div>
+	);
+}
+
+function TicketLoading() {
+	return (
+		<div className="flex items-center justify-center py-4">
+			<div className="flex items-center gap-2">
+				<div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600"></div>
+				<span className="text-sm text-gray-500">Loading more tickets...</span>
+			</div>
+		</div>
+	);
+}
+
+function TicketEnded() {
+	return (
+		<div className="py-4 text-center text-gray-500">
+			<p className="text-sm">No more tickets to load</p>
 		</div>
 	);
 }

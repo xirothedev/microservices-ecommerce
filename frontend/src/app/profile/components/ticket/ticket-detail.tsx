@@ -138,21 +138,7 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 	};
 
 	if (isLoading) {
-		return (
-			<div className="space-y-6">
-				<div className="h-8 w-48 animate-pulse rounded bg-gray-200" />
-				<div className="grid gap-6 lg:grid-cols-3">
-					<div className="space-y-6 lg:col-span-2">
-						<div className="h-64 animate-pulse rounded bg-gray-200" />
-						<div className="h-96 animate-pulse rounded bg-gray-200" />
-					</div>
-					<div className="space-y-6">
-						<div className="h-48 animate-pulse rounded bg-gray-200" />
-						<div className="h-32 animate-pulse rounded bg-gray-200" />
-					</div>
-				</div>
-			</div>
-		);
+		return <SkeletonLoading />;
 	}
 
 	if (isError && error.response?.status === 404) {
@@ -394,5 +380,23 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 				</div>
 			</div>
 		</motion.div>
+	);
+}
+
+function SkeletonLoading() {
+	return (
+		<div className="space-y-6">
+			<div className="h-8 w-48 animate-pulse rounded bg-gray-200" />
+			<div className="grid gap-6 lg:grid-cols-3">
+				<div className="space-y-6 lg:col-span-2">
+					<div className="h-64 animate-pulse rounded bg-gray-200" />
+					<div className="h-96 animate-pulse rounded bg-gray-200" />
+				</div>
+				<div className="space-y-6">
+					<div className="h-48 animate-pulse rounded bg-gray-200" />
+					<div className="h-32 animate-pulse rounded bg-gray-200" />
+				</div>
+			</div>
+		</div>
 	);
 }

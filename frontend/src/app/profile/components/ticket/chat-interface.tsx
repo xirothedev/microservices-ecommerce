@@ -2,7 +2,6 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import axiosInstance from "@/lib/axios";
 import { Wifi, WifiOff } from "lucide-react";
@@ -78,7 +77,11 @@ export default function ChatInterface({ ticketId }: ChatInterfaceProps) {
 			</div>
 
 			{/* Messages Area */}
-			<ScrollArea ref={scrollAreaRef} className="h-96 flex-1 p-4">
+			<div
+				id="scrollableDiv"
+				ref={scrollAreaRef}
+				className="flex h-96 flex-1 flex-col-reverse overflow-y-auto p-4"
+			>
 				<MessageList ticketId={ticketId} />
 
 				{/* Agent Typing Indicator */}
@@ -116,7 +119,7 @@ export default function ChatInterface({ ticketId }: ChatInterfaceProps) {
 				</AnimatePresence>
 
 				<div ref={messagesEndRef} />
-			</ScrollArea>
+			</div>
 
 			<Separator />
 
