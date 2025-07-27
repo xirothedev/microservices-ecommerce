@@ -2,10 +2,13 @@ import { Injectable, Logger, type OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import type { SupabaseConfig } from './supabase.interface';
+import { createHash } from 'node:crypto';
 
 @Injectable()
 export class SupabaseService implements OnModuleInit {
   private readonly logger = new Logger(SupabaseService.name);
+  private readonly uploadCache = new Map<string, string>();
+  private readonly CACHE_MAX_SIZE = 1000;
   private readonly BUCKET_NAME = 'cdn';
   private supabase: SupabaseClient;
   private config: SupabaseConfig;
@@ -49,6 +52,13 @@ export class SupabaseService implements OnModuleInit {
     file: Express.Multer.File,
     options?: { contentType?: string },
   ): Promise<{ data: any; path: string; error: any }> {
+    const fileHash = createHash('md5').update(file.buffer).digest('hex');
+    const cachedPath = this.uploadCache.get(fileHash);
+
+    if (cachedPath) {
+      return { data: null, path: cachedPath, error: null };
+    }
+
     const path = `${Date.now()}-${file.originalname}`;
     const fullPath = this.getPublicUrl(path);
 
@@ -59,6 +69,12 @@ export class SupabaseService implements OnModuleInit {
         this.logger.error('Upload error for bucket:', error);
       } else {
         this.logger.log(`File uploaded successfully to ${path}`);
+
+        if (this.uploadCache.size >= this.CACHE_MAX_SIZE) {
+          const firstKey = this.uploadCache.keys().next().value;
+          this.uploadCache.delete(firstKey);
+        }
+        this.uploadCache.set(fileHash, fullPath);
       }
 
       return { data, path: fullPath, error };

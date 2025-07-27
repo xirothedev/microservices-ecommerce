@@ -18,7 +18,24 @@ export class UsersService {
     try {
       const user = await this.prismaService.user.findUniqueOrThrow({
         where: { id },
-        select: undefined,
+        select: {
+          id: true,
+          fullname: true,
+          email: true,
+          phone: true,
+          avatarUrl: true,
+          address: true,
+          city: true,
+          state: true,
+          zipCode: true,
+          biography: true,
+          roles: true,
+          flags: true,
+          credit: true,
+          isVerified: true,
+          createAt: true,
+          updateAt: true,
+        },
       });
 
       return user;

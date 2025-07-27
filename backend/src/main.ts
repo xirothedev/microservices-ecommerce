@@ -4,13 +4,15 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
 import * as compression from 'compression';
+import * as connectRedis from 'connect-redis';
 import * as cookieParser from 'cookie-parser';
+import * as session from 'express-session';
 import helmet from 'helmet';
 import * as passport from 'passport';
+import { createClient } from 'redis';
 import 'reflect-metadata';
 import { AppModule } from './app.module';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
-import * as session from 'express-session';
 import { LoggerService } from './logger/logger.service';
 
 // Swagger config
@@ -51,6 +53,11 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
   app.useLogger(new LoggerService());
@@ -60,9 +67,17 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('docs', app, documentFactory);
 
+  const RedisStore = connectRedis(session);
+  const redisClient = createClient({
+    url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+    password: process.env.REDIS_PASSWORD,
+  });
+  await redisClient.connect();
+
   // Middleware
   app.use(
     session({
+      store: new RedisStore({ client: redisClient as any }),
       secret: process.env.SESSION_SECRET!,
       resave: false,
       saveUninitialized: false,
@@ -73,6 +88,7 @@ async function bootstrap() {
       },
     }),
   );
+
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(cookieParser(process.env.COOKIE_SECRET));

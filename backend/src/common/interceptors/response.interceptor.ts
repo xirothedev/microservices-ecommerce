@@ -5,20 +5,23 @@ import type { IResponseInterceptor } from '@/typings/interceptor';
 
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<T, any> {
+  // private readonly timestampFormat: string;
+
+  // constructor() {
+  //   this.timestampFormat = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
+  // }
+
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     if (context.getType() === 'http') {
       return next.handle().pipe(
         map((returns: IResponseInterceptor) => {
-          const message = returns?.message || 'Success';
-          delete returns.message;
-          const data = returns?.data || null;
-          delete returns.data;
+          const { message = 'Success', data = null, ...rest } = returns || {};
 
           return {
             message,
             data,
-            ...returns,
-            timestamp: new Date().toISOString(),
+            ...rest,
+            timestamp: Date.now(),
           };
         }),
       );

@@ -16,44 +16,46 @@ export class ProductsService {
 
   public async create(req: Request, body: CreateProductDto, medias: Express.Multer.File[]) {
     const seller = req.user;
-    const urls: Array<string> = [];
 
-    for (let i = 0; i < medias.length; i++) {
-      const media = medias[i];
-
-      const { error, path } = await this.supabaseService.uploadFile(media, {
+    const uploadPromises = medias.map((media) =>
+      this.supabaseService.uploadFile(media, {
         contentType: media.mimetype,
-      });
+      }),
+    );
 
-      if (error) {
-        throw new InternalServerErrorException(`Failed to upload file: ${media.originalname}`);
-      }
+    const uploadResults = await Promise.all(uploadPromises);
+    const failedUploads = uploadResults.filter((result) => result.error);
 
-      urls.push(path);
+    if (failedUploads.length > 0) {
+      throw new InternalServerErrorException(`Failed to upload ${failedUploads.length} files`);
     }
 
+    const urls = uploadResults.map((result) => result.path);
+
     try {
-      const createdProduct = await this.prismaService.product.create({
-        data: {
-          slug: body.slug,
-          name: body.name,
-          description: body.description,
-          flags: body.flags,
-          originalPrice: body.originalPrice,
-          discountPrice: body.discountPrice ?? body.originalPrice,
-          categoryId: body.categoryId,
-          stock: body.productItems.length,
-          tags: body.tags,
-          sellerId: seller.id,
-          medias: urls,
-          productItems: {
-            createMany: { data: body.productItems, skipDuplicates: false },
+      const createdProduct = await this.prismaService.$transaction(async (tx) => {
+        return tx.product.create({
+          data: {
+            slug: body.slug,
+            name: body.name,
+            description: body.description,
+            flags: body.flags,
+            originalPrice: body.originalPrice,
+            discountPrice: body.discountPrice ?? body.originalPrice,
+            categoryId: body.categoryId,
+            stock: body.productItems.length,
+            tags: body.tags,
+            sellerId: seller.id,
+            medias: urls,
+            productItems: {
+              createMany: { data: body.productItems, skipDuplicates: false },
+            },
           },
-        },
-        select: {
-          productItems: true,
-          category: true,
-        },
+          select: {
+            productItems: true,
+            category: true,
+          },
+        });
       });
 
       return {
@@ -61,11 +63,12 @@ export class ProductsService {
         data: createdProduct,
       };
     } catch (error) {
+      await Promise.allSettled(urls.map((url) => this.supabaseService.deleteFile(url)));
+
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
         throw new Error('Slug is exist');
       }
 
-      // Unknown error fallback
       throw error;
     }
   }
