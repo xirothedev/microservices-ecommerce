@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { format } from "date-fns";
+import dayjs from "dayjs";
 import {
 	Calendar,
 	ChevronDown,
@@ -261,7 +261,7 @@ export default function OrdersContent() {
 												<div>
 													<CardTitle className="text-lg">Order {order.id}</CardTitle>
 													<CardDescription>
-														{format(new Date(order.createdAt), "MMM dd, yyyy 'at' HH:mm")}
+														{dayjs(order.createdAt).format("MMM dd, yyyy 'at' HH:mm")}
 													</CardDescription>
 												</div>
 												<Badge className={getStatusColor(order.status)}>{order.status}</Badge>

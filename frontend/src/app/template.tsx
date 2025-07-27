@@ -1,7 +1,11 @@
 "use client";
 
-import { LiveChatWidget } from "@/components/live-chat-widget";
+import dynamic from "next/dynamic";
 import { createContext, Dispatch, SetStateAction, useState } from "react";
+
+const LiveChatWidget = dynamic(() => import("@/components/live-chat-widget").then((comp) => comp.LiveChatWidget), {
+	ssr: false,
+});
 
 interface LiveChatContextType {
 	isOpen: boolean;

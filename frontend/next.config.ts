@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
 		authInterrupts: true,
 	},
 	images: {
-		unoptimized: process.env.NODE_ENV === "development",
+		unoptimized: process.env.NODE_ENV !== "production",
 	},
 };
 

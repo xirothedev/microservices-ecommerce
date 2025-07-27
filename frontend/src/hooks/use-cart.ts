@@ -67,6 +67,15 @@ export function useCart() {
 			nextFetchPolicy: "cache-first",
 			errorPolicy: "all",
 			ssr: true,
+			onError: (error) => {
+				console.error("Error fetching cart items:", error);
+
+				toast({
+					title: "Error",
+					description: "Could not load your cart. Please try again.",
+					variant: "destructive",
+				});
+			},
 		},
 	);
 

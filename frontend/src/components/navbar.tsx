@@ -42,14 +42,16 @@ export default function Navbar({ navItems }: NavbarProps) {
 							</Link>
 						))}
 						<div className="flex items-center space-x-2">
-							<Cart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
 							{user ? (
-								<Avatar>
-									<Link href="/profile">
-										<AvatarImage src={user.avatarUrl ?? undefined} alt={fallbackAvatar} />
-										<AvatarFallback>{fallbackAvatar}</AvatarFallback>
-									</Link>
-								</Avatar>
+								<>
+									<Cart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
+									<Avatar>
+										<Link href="/profile">
+											<AvatarImage src={user.avatarUrl ?? undefined} alt={fallbackAvatar} />
+											<AvatarFallback>{fallbackAvatar}</AvatarFallback>
+										</Link>
+									</Avatar>
+								</>
 							) : (
 								<>
 									<Button className="bg-blue-600 hover:bg-blue-700" type="button">
@@ -82,16 +84,18 @@ export default function Navbar({ navItems }: NavbarProps) {
 										{item.name}
 									</Link>
 								))}
-								<div className="flex items-center justify-center gap-4 py-4">
-									<Cart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
-								</div>
 								{user ? (
-									<Avatar>
-										<Link href="/profile">
-											<AvatarImage src={user.avatarUrl ?? undefined} alt={fallbackAvatar} />
-											<AvatarFallback>{fallbackAvatar}</AvatarFallback>
-										</Link>
-									</Avatar>
+									<>
+										<div className="flex items-center justify-center gap-4 py-4">
+											<Cart isOpen={isCartOpen} setIsOpen={setIsCartOpen} />
+										</div>
+										<Avatar>
+											<Link href="/profile">
+												<AvatarImage src={user.avatarUrl ?? undefined} alt={fallbackAvatar} />
+												<AvatarFallback>{fallbackAvatar}</AvatarFallback>
+											</Link>
+										</Avatar>
+									</>
 								) : (
 									<>
 										<Button className="mt-4 bg-blue-600 hover:bg-blue-700">Register</Button>

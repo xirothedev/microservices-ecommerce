@@ -17,7 +17,7 @@ interface CartProps {
 
 export default function Cart({ isOpen, setIsOpen }: CartProps) {
 	const [isCheckingOut, setIsCheckingOut] = useState(false);
-	const { data, refetch } = useCart();
+	const { data, refetch, loading } = useCart();
 	const { mutateAsync: addMutate, isPending: addPending } = useUpdateCart(false, refetch);
 	const { mutateAsync: removeMutate, isPending: removePending } = useUpdateCart(true, refetch);
 
@@ -53,22 +53,19 @@ export default function Cart({ isOpen, setIsOpen }: CartProps) {
 				<SheetHeader className="shadow-md">
 					<SheetTitle className="flex items-center justify-between">
 						<span>Shopping Cart ({totalItems})</span>
-						{/* {items.length > 0 && (
-							<Button
-								variant="ghost"
-								size="sm"
-								onClick={clearCart}
-								className="text-red-500 hover:text-red-700"
-							>
-								Clear All
-							</Button>
-						)} */}
 					</SheetTitle>
 				</SheetHeader>
 
 				<div className="flex h-full flex-col px-4">
 					{/* Cart Items */}
 					<div className="flex-1 overflow-y-auto py-4 pb-20">
+						{loading && (
+							<div className="flex h-full flex-col items-center justify-center text-center">
+								<div className="h-16 w-16 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
+								<p className="mt-4 text-gray-500">Loading your cart...</p>
+							</div>
+						)}
+
 						{items.length === 0 ? (
 							<div className="flex h-full flex-col items-center justify-center text-center">
 								<ShoppingCart className="mb-4 h-16 w-16 text-gray-300" />

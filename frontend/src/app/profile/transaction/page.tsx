@@ -20,7 +20,7 @@ import {
 	DollarSign,
 } from "lucide-react";
 import { motion } from "motion/react";
-import { format } from "date-fns";
+import dayjs from "dayjs";
 
 interface PaymentTransaction {
 	id: string;
@@ -426,7 +426,7 @@ export default function PaymentContent() {
 											<span>{transaction.paymentMethod}</span>
 											<span className="hidden sm:inline">•</span>
 											<span>
-												{format(new Date(transaction.createdAt), "MMM dd, yyyy 'at' HH:mm")}
+												{dayjs(transaction.createdAt).format("MMM dd, yyyy 'at' HH:mm")}
 											</span>
 										</div>
 									</div>
