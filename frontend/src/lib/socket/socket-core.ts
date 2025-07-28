@@ -21,12 +21,17 @@ export function disconnectSocket(namespace: string) {
 
 export function onSocketEvent<T = any>(namespace: string, event: string, callback: (data: T) => void) {
 	const socket = getOrCreateSocket(namespace);
-	socket.on(event, callback);
+	console.log(`🎧 [${namespace}] Listening for event: ${event}`);
+	socket.on(event, (data) => {
+		console.log(`📡 [${namespace}] Received event: ${event}`, data);
+		callback(data);
+	});
 }
 
 export function offSocketEvent(namespace: string, event: string, callback?: (...args: any[]) => void) {
 	const socket = sockets[namespace];
 	if (!socket) return;
+	console.log(`🔇 [${namespace}] Removing listener for event: ${event}`);
 	if (callback) socket.off(event, callback);
 	else socket.off(event);
 }
@@ -34,5 +39,6 @@ export function offSocketEvent(namespace: string, event: string, callback?: (...
 export function emitSocketEvent<T = any>(namespace: string, event: string, data: T) {
 	const socket = sockets[namespace];
 	if (!socket) return;
+	console.log(`📤 [${namespace}] Emitting event: ${event}`, data);
 	socket.emit(event, data);
 }

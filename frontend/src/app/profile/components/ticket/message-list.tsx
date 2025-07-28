@@ -4,13 +4,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useUserQuery } from "@/hooks/use-user";
 import axiosInstance from "@/lib/axios";
+import { TicketSocketEvents, useTicketSocket } from "@/lib/socket/ticket";
 import { getFallbackString } from "@/lib/utils";
 import { IAxiosError } from "@/typings";
 import { TicketMessageResponse } from "@/typings/backend";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import Image from "next/image";
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const PAGE_SIZE = 12;
@@ -23,6 +24,8 @@ export default function MessageList({ ticketId }: MessageListProps) {
 	const { data: user } = useUserQuery();
 	const scrollableRef = useRef<HTMLDivElement>(null);
 	const scrollStateRef = useRef<{ scrollHeight: number; scrollTop: number } | null>(null);
+	const queryClient = useQueryClient();
+	const ticketSocket = useTicketSocket();
 
 	const { data, fetchPreviousPage, hasPreviousPage, isFetchingPreviousPage } = useInfiniteQuery<
 		{
@@ -66,6 +69,74 @@ export default function MessageList({ ticketId }: MessageListProps) {
 			scrollStateRef.current = null;
 		}
 	}, [messages, isFetchingPreviousPage]);
+
+	useEffect(() => {
+		console.log("🔌 Setting up ticket socket...");
+
+		console.log("🎫 Joining ticket room:", ticketId);
+		ticketSocket.emit(TicketSocketEvents.JOIN_TICKET_ROOM, ticketId);
+
+		function handleNewMessage(message: TicketMessageResponse) {
+			console.log("📨 Received new message:", message);
+			console.log("🎯 Current ticketId:", ticketId);
+			console.log("🎯 Message ticketId:", message.ticket.id);
+			console.log("🔍 Message matches current ticket:", message.ticket.id === ticketId);
+
+			if (message.ticket.id !== ticketId) {
+				console.log("❌ Message ticket ID doesn't match, ignoring");
+				return;
+			}
+
+			queryClient.setQueryData<{ pages: { data: TicketMessageResponse[] }[] }>(
+				["tickets", ticketId, "messages"],
+				(oldData) => {
+					if (!oldData) {
+						console.log("❌ No existing query data found");
+						return oldData;
+					}
+
+					// Check if message already exists (avoid duplicate)
+					const exists = oldData.pages.some((page) => page.data.some((m) => m.id === message.id));
+
+					if (exists) {
+						console.log("❌ Message already exists, skipping duplicate");
+						return oldData;
+					}
+
+					const updatedData = {
+						...oldData,
+						pages:
+							oldData.pages && oldData.pages.length > 0
+								? oldData.pages.map((page: any, index: number) => {
+										if (index === 0) {
+											return {
+												...page,
+												data: [...(page.data || []), message],
+											};
+										}
+										return page;
+									})
+								: [
+										{
+											data: [message],
+											"@data": {},
+										},
+									],
+					};
+
+					return updatedData;
+				},
+			);
+		}
+
+		console.log("👂 Listening for NEW_MESSAGE events");
+		ticketSocket.on(TicketSocketEvents.NEW_MESSAGE, handleNewMessage);
+
+		return () => {
+			console.log("🧹 Cleaning up socket listeners");
+			ticketSocket.off(TicketSocketEvents.NEW_MESSAGE, handleNewMessage);
+		};
+	}, [ticketId, queryClient, ticketSocket]);
 
 	const formatTime = (timestamp: string) => {
 		const date = new Date(timestamp);

@@ -28,6 +28,20 @@ interface CropModalState {
 	originalFile: File | null;
 }
 
+const acceptedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp", "application/pdf"];
+const maxSize = 5 * 1024 * 1024; // 5MB
+const maxFiles = 5;
+
+const validateFile = (file: File): string | null => {
+	if (!acceptedTypes.includes(file.type)) {
+		return `${file.name}: Invalid file type. Please upload images or PDF files.`;
+	}
+	if (file.size > maxSize) {
+		return `${file.name}: File too large. Maximum size is 5MB.`;
+	}
+	return null;
+};
+
 export default function ImageUpload({ images, onImagesChange, disabled = false, error }: ImageUploadProps) {
 	const [isDragOver, setIsDragOver] = useState(false);
 	const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
@@ -38,20 +52,6 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 		originalFile: null,
 	});
 	const fileInputRef = useRef<HTMLInputElement>(null);
-
-	const acceptedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp", "application/pdf"];
-	const maxSize = 5 * 1024 * 1024; // 5MB
-	const maxFiles = 5;
-
-	const validateFile = (file: File): string | null => {
-		if (!acceptedTypes.includes(file.type)) {
-			return `${file.name}: Invalid file type. Please upload images or PDF files.`;
-		}
-		if (file.size > maxSize) {
-			return `${file.name}: File too large. Maximum size is 5MB.`;
-		}
-		return null;
-	};
 
 	const simulateUpload = async (file: File): Promise<void> => {
 		return new Promise((resolve) => {
@@ -181,7 +181,7 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 				}
 			}
 		},
-		[images, onImagesChange, disabled, validateFile],
+		[images, onImagesChange, disabled],
 	);
 
 	const handleDrop = useCallback(

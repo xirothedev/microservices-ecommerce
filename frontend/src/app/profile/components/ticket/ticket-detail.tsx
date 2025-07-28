@@ -262,7 +262,7 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 					</Card>
 
 					{/* Chat Interface */}
-					<Card>
+					<Card className="pb-0">
 						<CardHeader>
 							<CardTitle className="flex items-center gap-2">
 								<MessageCircle className="h-5 w-5" />

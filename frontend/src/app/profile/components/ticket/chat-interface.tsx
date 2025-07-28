@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import axiosInstance from "@/lib/axios";
 import { Wifi, WifiOff } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MessageInput from "./message-input";
 import MessageList from "./message-list";
 
@@ -18,8 +18,16 @@ export default function ChatInterface({ ticketId }: ChatInterfaceProps) {
 	const [isConnected, _setIsConnected] = useState(true);
 	const [isAgentTyping, _setIsAgentTyping] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const scrollAreaRef = useRef<HTMLDivElement>(null);
 	const messagesEndRef = useRef<HTMLDivElement>(null);
+
+	console.log("🔄 ChatInterface render - ticketId:", ticketId);
+
+	useEffect(() => {
+		console.log("🚀 ChatInterface mounted - ticketId:", ticketId);
+		return () => {
+			console.log("🛑 ChatInterface unmounted - ticketId:", ticketId);
+		};
+	}, [ticketId]);
 
 	const handleSendMessage = async (content: string, attachments?: File[]) => {
 		if (!content.trim() && (!attachments || attachments.length === 0)) return;
@@ -42,7 +50,7 @@ export default function ChatInterface({ ticketId }: ChatInterfaceProps) {
 	};
 
 	return (
-		<div className="flex h-[600px] flex-col">
+		<div className="flex h-[800px] flex-col">
 			{/* Connection Status */}
 			<div className="flex items-center justify-between border-b bg-gray-50 p-3">
 				<div className="flex items-center gap-2">
@@ -77,11 +85,7 @@ export default function ChatInterface({ ticketId }: ChatInterfaceProps) {
 			</div>
 
 			{/* Messages Area */}
-			<div
-				id="scrollableDiv"
-				ref={scrollAreaRef}
-				className="flex h-96 flex-1 flex-col-reverse overflow-y-auto p-4"
-			>
+			<div id="scrollableDiv" className="flex flex-1 flex-col-reverse overflow-y-auto p-4">
 				<MessageList ticketId={ticketId} />
 
 				{/* Agent Typing Indicator */}
