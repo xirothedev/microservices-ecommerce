@@ -46,7 +46,7 @@ const corsConfig = {
 };
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, { cors: corsConfig, logger: false });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { cors: corsConfig });
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
@@ -72,11 +72,15 @@ async function bootstrap() {
     password: process.env.REDIS_PASSWORD,
   });
 
-  redisClient.connect().catch(console.error);
+  try {
+    await redisClient.connect();
+  } catch (err) {
+    console.error('❌ Redis connection failed:', err);
+  }
 
   const redisStore = new RedisStore({
     client: redisClient,
-    prefix: 'myapp:',
+    prefix: 'webstore:',
   });
 
   // Middleware

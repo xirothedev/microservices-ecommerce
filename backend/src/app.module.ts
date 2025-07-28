@@ -1,8 +1,8 @@
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ThrottlerStorageRedisService } from '@nest-lab/throttler-storage-redis';
 import { ApolloDriver, type ApolloDriverConfig } from '@nestjs/apollo';
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { Global, Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -18,6 +18,7 @@ import { CartModule } from './modules/cart/cart.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { CustomersModule } from './modules/customers/customers.module';
 // import { DiscordModule } from './modules/discord/discord.module';
+import { JwtModule } from '@nestjs/jwt';
 import { ProductsModule } from './modules/products/products.module';
 import { TicketModule } from './modules/ticket/ticket.module';
 import { UsersModule } from './modules/users/users.module';
@@ -25,6 +26,23 @@ import { PrismaModule } from './prisma/prisma.module';
 import { RedisModule } from './redis/redis.module';
 import { RedisService } from './redis/redis.service';
 import { SupabaseModule } from './supabase/supabase.module';
+
+@Global()
+@Module({
+  imports: [
+    JwtModule.registerAsync({
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('ACCESS_TOKEN_SECRET_KEY'),
+        signOptions: {
+          expiresIn: '1h',
+        },
+      }),
+      inject: [ConfigService],
+    }),
+  ],
+  exports: [JwtModule],
+})
+class GlobalJwtModule {}
 
 @Module({
   imports: [
@@ -74,6 +92,7 @@ import { SupabaseModule } from './supabase/supabase.module';
         storage: new ThrottlerStorageRedisService(redisService.getClient()),
       }),
     }),
+    GlobalJwtModule,
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     UsersModule,
