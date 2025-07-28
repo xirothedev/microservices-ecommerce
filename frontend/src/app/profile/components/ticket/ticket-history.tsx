@@ -11,6 +11,9 @@ import { formatDate } from "@/lib/format";
 import { IAxiosError } from "@/typings";
 import { TicketResponse } from "@/typings/backend";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { TicketSocketEvents, useTicketSocket } from "@/lib/socket/ticket";
 import {
 	AlertCircle,
 	ArrowRight,
@@ -48,6 +51,45 @@ export default function TicketHistory() {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [statusFilter, setStatusFilter] = useState<string>("all");
 	const [priorityFilter, setPriorityFilter] = useState<string>("all");
+
+	const queryClient = useQueryClient();
+	const ticketSocket = useTicketSocket();
+
+	useEffect(() => {
+		function handleNewTicket(newTicket: TicketResponse) {
+			// Chỉ thêm nếu ticket chưa có trong danh sách
+			queryClient.setQueryData<{ pages: { data: TicketResponse[] }[] }>(
+				["tickets", searchQuery, statusFilter, priorityFilter],
+				(oldData) => {
+					if (!oldData) return oldData;
+					const exists = oldData.pages.some((page) => page.data.some((t) => t.id === newTicket.id));
+					if (exists) return oldData;
+					return {
+						...oldData,
+						pages:
+							oldData.pages && oldData.pages.length > 0
+								? [
+										{
+											...oldData.pages[0],
+											data: [newTicket, ...(oldData.pages[0].data || [])],
+										},
+										...oldData.pages.slice(1),
+									]
+								: [
+										{
+											data: [newTicket],
+											"@data": {},
+										},
+									],
+					};
+				},
+			);
+		}
+		ticketSocket.on(TicketSocketEvents.NEW_TICKET, handleNewTicket);
+		return () => {
+			ticketSocket.off(TicketSocketEvents.NEW_TICKET, handleNewTicket);
+		};
+	}, [searchQuery, statusFilter, priorityFilter, queryClient, ticketSocket]);
 
 	const { data, isLoading, isError, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery<
 		{
