@@ -290,7 +290,7 @@ export const TicketContextType: typeof $Enums.TicketContextType;
  */
 export class PrismaClient<
   ClientOptions extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
-  U = 'log' extends keyof ClientOptions
+  const U = 'log' extends keyof ClientOptions
     ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition>
       ? Prisma.GetEvents<ClientOptions['log']>
       : never
@@ -643,8 +643,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact;
 
   /**
-   * Prisma Client JS version: 6.12.0
-   * Query Engine version: 8047c96bbd92db98a2abc7c9323ce77c02c89dbc
+   * Prisma Client JS version: 6.13.0
+   * Query Engine version: 361e86d0ea4987e9f53a565309b3eed797a6bcbd
    */
   export type PrismaVersion = {
     client: string;
@@ -2363,16 +2363,24 @@ export namespace Prisma {
     /**
      * @example
      * ```
-     * // Defaults to stdout
+     * // Shorthand for `emit: 'stdout'`
      * log: ['query', 'info', 'warn', 'error']
      *
-     * // Emit as events
+     * // Emit as events only
      * log: [
-     *   { emit: 'stdout', level: 'query' },
-     *   { emit: 'stdout', level: 'info' },
-     *   { emit: 'stdout', level: 'warn' }
-     *   { emit: 'stdout', level: 'error' }
+     *   { emit: 'event', level: 'query' },
+     *   { emit: 'event', level: 'info' },
+     *   { emit: 'event', level: 'warn' }
+     *   { emit: 'event', level: 'error' }
      * ]
+     *
+     * / Emit as events and log to stdout
+     * og: [
+     *  { emit: 'stdout', level: 'query' },
+     *  { emit: 'stdout', level: 'info' },
+     *  { emit: 'stdout', level: 'warn' }
+     *  { emit: 'stdout', level: 'error' }
+     *
      * ```
      * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
      */
@@ -2430,15 +2438,11 @@ export namespace Prisma {
     emit: 'stdout' | 'event';
   };
 
-  export type GetLogType<T extends LogLevel | LogDefinition> = T extends LogDefinition
-    ? T['emit'] extends 'event'
-      ? T['level']
-      : never
-    : never;
-  export type GetEvents<T extends any> =
-    T extends Array<LogLevel | LogDefinition>
-      ? GetLogType<T[0]> | GetLogType<T[1]> | GetLogType<T[2]> | GetLogType<T[3]>
-      : never;
+  export type CheckIsLogLevel<T> = T extends LogLevel ? T : never;
+
+  export type GetLogType<T> = CheckIsLogLevel<T extends LogDefinition ? T['level'] : T>;
+
+  export type GetEvents<T extends any[]> = T extends Array<LogLevel | LogDefinition> ? GetLogType<T[number]> : never;
 
   export type QueryEvent = {
     timestamp: Date;
@@ -22468,7 +22472,7 @@ export namespace Prisma {
 
   export type TicketMessageGroupByOutputType = {
     id: string;
-    content: string;
+    content: string | null;
     isRead: boolean;
     createdAt: Date;
     updatedAt: Date;
@@ -22590,7 +22594,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<
       {
         id: string;
-        content: string;
+        content: string | null;
         isRead: boolean;
         createdAt: Date;
         updatedAt: Date;
@@ -26458,7 +26462,7 @@ export namespace Prisma {
     OR?: TicketMessageWhereInput[];
     NOT?: TicketMessageWhereInput | TicketMessageWhereInput[];
     id?: UuidFilter<'TicketMessage'> | string;
-    content?: StringFilter<'TicketMessage'> | string;
+    content?: StringNullableFilter<'TicketMessage'> | string | null;
     isRead?: BoolFilter<'TicketMessage'> | boolean;
     createdAt?: DateTimeFilter<'TicketMessage'> | Date | string;
     updatedAt?: DateTimeFilter<'TicketMessage'> | Date | string;
@@ -26472,7 +26476,7 @@ export namespace Prisma {
 
   export type TicketMessageOrderByWithRelationInput = {
     id?: SortOrder;
-    content?: SortOrder;
+    content?: SortOrderInput | SortOrder;
     isRead?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
@@ -26490,7 +26494,7 @@ export namespace Prisma {
       AND?: TicketMessageWhereInput | TicketMessageWhereInput[];
       OR?: TicketMessageWhereInput[];
       NOT?: TicketMessageWhereInput | TicketMessageWhereInput[];
-      content?: StringFilter<'TicketMessage'> | string;
+      content?: StringNullableFilter<'TicketMessage'> | string | null;
       isRead?: BoolFilter<'TicketMessage'> | boolean;
       createdAt?: DateTimeFilter<'TicketMessage'> | Date | string;
       updatedAt?: DateTimeFilter<'TicketMessage'> | Date | string;
@@ -26506,7 +26510,7 @@ export namespace Prisma {
 
   export type TicketMessageOrderByWithAggregationInput = {
     id?: SortOrder;
-    content?: SortOrder;
+    content?: SortOrderInput | SortOrder;
     isRead?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
@@ -26523,7 +26527,7 @@ export namespace Prisma {
     OR?: TicketMessageScalarWhereWithAggregatesInput[];
     NOT?: TicketMessageScalarWhereWithAggregatesInput | TicketMessageScalarWhereWithAggregatesInput[];
     id?: UuidWithAggregatesFilter<'TicketMessage'> | string;
-    content?: StringWithAggregatesFilter<'TicketMessage'> | string;
+    content?: StringNullableWithAggregatesFilter<'TicketMessage'> | string | null;
     isRead?: BoolWithAggregatesFilter<'TicketMessage'> | boolean;
     createdAt?: DateTimeWithAggregatesFilter<'TicketMessage'> | Date | string;
     updatedAt?: DateTimeWithAggregatesFilter<'TicketMessage'> | Date | string;
@@ -27856,7 +27860,7 @@ export namespace Prisma {
 
   export type TicketMessageCreateInput = {
     id?: string;
-    content: string;
+    content?: string | null;
     isRead?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -27868,7 +27872,7 @@ export namespace Prisma {
 
   export type TicketMessageUncheckedCreateInput = {
     id?: string;
-    content: string;
+    content?: string | null;
     isRead?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -27880,7 +27884,7 @@ export namespace Prisma {
 
   export type TicketMessageUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    content?: StringFieldUpdateOperationsInput | string;
+    content?: NullableStringFieldUpdateOperationsInput | string | null;
     isRead?: BoolFieldUpdateOperationsInput | boolean;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -27892,7 +27896,7 @@ export namespace Prisma {
 
   export type TicketMessageUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    content?: StringFieldUpdateOperationsInput | string;
+    content?: NullableStringFieldUpdateOperationsInput | string | null;
     isRead?: BoolFieldUpdateOperationsInput | boolean;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -27904,7 +27908,7 @@ export namespace Prisma {
 
   export type TicketMessageCreateManyInput = {
     id?: string;
-    content: string;
+    content?: string | null;
     isRead?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -27915,7 +27919,7 @@ export namespace Prisma {
 
   export type TicketMessageUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    content?: StringFieldUpdateOperationsInput | string;
+    content?: NullableStringFieldUpdateOperationsInput | string | null;
     isRead?: BoolFieldUpdateOperationsInput | boolean;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -27924,7 +27928,7 @@ export namespace Prisma {
 
   export type TicketMessageUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    content?: StringFieldUpdateOperationsInput | string;
+    content?: NullableStringFieldUpdateOperationsInput | string | null;
     isRead?: BoolFieldUpdateOperationsInput | boolean;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -34915,7 +34919,7 @@ export namespace Prisma {
 
   export type TicketMessageCreateWithoutTicketInput = {
     id?: string;
-    content: string;
+    content?: string | null;
     isRead?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -34926,7 +34930,7 @@ export namespace Prisma {
 
   export type TicketMessageUncheckedCreateWithoutTicketInput = {
     id?: string;
-    content: string;
+    content?: string | null;
     isRead?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -35165,7 +35169,7 @@ export namespace Prisma {
     OR?: TicketMessageScalarWhereInput[];
     NOT?: TicketMessageScalarWhereInput | TicketMessageScalarWhereInput[];
     id?: UuidFilter<'TicketMessage'> | string;
-    content?: StringFilter<'TicketMessage'> | string;
+    content?: StringNullableFilter<'TicketMessage'> | string | null;
     isRead?: BoolFilter<'TicketMessage'> | boolean;
     createdAt?: DateTimeFilter<'TicketMessage'> | Date | string;
     updatedAt?: DateTimeFilter<'TicketMessage'> | Date | string;
@@ -35298,7 +35302,7 @@ export namespace Prisma {
 
   export type TicketMessageCreateWithoutTicketUserInput = {
     id?: string;
-    content: string;
+    content?: string | null;
     isRead?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -35309,7 +35313,7 @@ export namespace Prisma {
 
   export type TicketMessageUncheckedCreateWithoutTicketUserInput = {
     id?: string;
-    content: string;
+    content?: string | null;
     isRead?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -35325,7 +35329,7 @@ export namespace Prisma {
 
   export type TicketMessageCreateWithoutSenderInput = {
     id?: string;
-    content: string;
+    content?: string | null;
     isRead?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -35336,7 +35340,7 @@ export namespace Prisma {
 
   export type TicketMessageUncheckedCreateWithoutSenderInput = {
     id?: string;
-    content: string;
+    content?: string | null;
     isRead?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -35486,7 +35490,7 @@ export namespace Prisma {
 
   export type TicketMessageUpdateWithoutTicketUserInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    content?: StringFieldUpdateOperationsInput | string;
+    content?: NullableStringFieldUpdateOperationsInput | string | null;
     isRead?: BoolFieldUpdateOperationsInput | boolean;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -35497,7 +35501,7 @@ export namespace Prisma {
 
   export type TicketMessageUncheckedUpdateWithoutTicketUserInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    content?: StringFieldUpdateOperationsInput | string;
+    content?: NullableStringFieldUpdateOperationsInput | string | null;
     isRead?: BoolFieldUpdateOperationsInput | boolean;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -36603,7 +36607,7 @@ export namespace Prisma {
 
   export type TicketMessageCreateManyTicketInput = {
     id?: string;
-    content: string;
+    content?: string | null;
     isRead?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -36641,7 +36645,7 @@ export namespace Prisma {
 
   export type TicketMessageUpdateWithoutTicketInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    content?: StringFieldUpdateOperationsInput | string;
+    content?: NullableStringFieldUpdateOperationsInput | string | null;
     isRead?: BoolFieldUpdateOperationsInput | boolean;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -36652,7 +36656,7 @@ export namespace Prisma {
 
   export type TicketMessageUncheckedUpdateWithoutTicketInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    content?: StringFieldUpdateOperationsInput | string;
+    content?: NullableStringFieldUpdateOperationsInput | string | null;
     isRead?: BoolFieldUpdateOperationsInput | boolean;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -36663,7 +36667,7 @@ export namespace Prisma {
 
   export type TicketMessageUncheckedUpdateManyWithoutTicketInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    content?: StringFieldUpdateOperationsInput | string;
+    content?: NullableStringFieldUpdateOperationsInput | string | null;
     isRead?: BoolFieldUpdateOperationsInput | boolean;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -36696,7 +36700,7 @@ export namespace Prisma {
 
   export type TicketMessageCreateManySenderInput = {
     id?: string;
-    content: string;
+    content?: string | null;
     isRead?: boolean;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -36706,7 +36710,7 @@ export namespace Prisma {
 
   export type TicketMessageUpdateWithoutSenderInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    content?: StringFieldUpdateOperationsInput | string;
+    content?: NullableStringFieldUpdateOperationsInput | string | null;
     isRead?: BoolFieldUpdateOperationsInput | boolean;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -36717,7 +36721,7 @@ export namespace Prisma {
 
   export type TicketMessageUncheckedUpdateWithoutSenderInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    content?: StringFieldUpdateOperationsInput | string;
+    content?: NullableStringFieldUpdateOperationsInput | string | null;
     isRead?: BoolFieldUpdateOperationsInput | boolean;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
@@ -36728,7 +36732,7 @@ export namespace Prisma {
 
   export type TicketMessageUncheckedUpdateManyWithoutSenderInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    content?: StringFieldUpdateOperationsInput | string;
+    content?: NullableStringFieldUpdateOperationsInput | string | null;
     isRead?: BoolFieldUpdateOperationsInput | boolean;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;

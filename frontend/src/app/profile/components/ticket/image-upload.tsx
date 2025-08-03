@@ -6,7 +6,9 @@ import { useState, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Upload, X, ImageIcon, FileText, AlertCircle } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
+import axiosInstance from "@/lib/axios";
+import { Upload, X, ImageIcon, FileText, AlertCircle, CheckCircle } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 interface ImageUploadProps {
@@ -20,10 +22,11 @@ interface UploadingFile {
 	file: File;
 	progress: number;
 	status: "uploading" | "success" | "error";
+	uploadedUrl?: string;
 }
 
 const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp", "application/pdf"];
-// const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 const MAX_FILES = 5;
 
 export default function ImageUpload({ images, onImagesChange, disabled = false, error }: ImageUploadProps) {
@@ -31,22 +34,25 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 	const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>([]);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
-	const simulateUpload = async (file: File): Promise<void> => {
-		return new Promise((resolve) => {
-			let progress = 0;
-			const interval = setInterval(() => {
-				progress += Math.random() * 30;
-				if (progress >= 100) {
-					progress = 100;
-					clearInterval(interval);
-					resolve();
-				}
+	const uploadFile = async (file: File, onProgress: (progress: number) => void): Promise<string> => {
+		const formData = new FormData();
+		formData.append("file", file);
 
-				setUploadingFiles((prev) =>
-					prev.map((f) => (f.file === file ? { ...f, progress: Math.min(progress, 100) } : f)),
-				);
-			}, 200);
-		});
+		try {
+			const response = await axiosInstance.postForm("/upload", formData, {
+				onUploadProgress: (progressEvent) => {
+					if (progressEvent.total) {
+						const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+						onProgress(progress);
+					}
+				},
+			});
+
+			return response.data.url || response.data.data?.url;
+		} catch (error) {
+			console.error("Upload failed:", error);
+			throw new Error("Upload failed");
+		}
 	};
 
 	const handleFiles = useCallback(
@@ -57,7 +63,11 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 			const currentTotal = images.length + newFiles.length;
 
 			if (currentTotal > MAX_FILES) {
-				alert(`You can only upload up to ${MAX_FILES} files total.`);
+				toast({
+					title: "Too many files",
+					description: `You can only upload up to ${MAX_FILES} files total.`,
+					variant: "destructive",
+				});
 				return;
 			}
 
@@ -69,7 +79,7 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 				if (!ACCEPTED_TYPES.includes(file.type)) {
 					return `${file.name}: Invalid file type. Please upload images or PDF files.`;
 				}
-				if (file.size > MAX_FILES) {
+				if (file.size > MAX_SIZE) {
 					return `${file.name}: File too large. Maximum size is 5MB.`;
 				}
 				return null;
@@ -85,12 +95,16 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 			}
 
 			if (errors.length > 0) {
-				alert(errors.join("\n"));
+				toast({
+					title: "Invalid files",
+					description: errors.join(", "),
+					variant: "destructive",
+				});
 			}
 
 			if (validFiles.length === 0) return;
 
-			// Start upload simulation
+			// Start upload
 			const uploadingFiles: UploadingFile[] = validFiles.map((file) => ({
 				file,
 				progress: 0,
@@ -99,24 +113,57 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 
 			setUploadingFiles(uploadingFiles);
 
-			// Simulate upload for each file
-			try {
-				for (const uploadingFile of uploadingFiles) {
-					await simulateUpload(uploadingFile.file);
-					setUploadingFiles((prev) =>
-						prev.map((f) => (f.file === uploadingFile.file ? { ...f, status: "success" as const } : f)),
-					);
-				}
+			// Upload each file
+			const uploadPromises = uploadingFiles.map(async (uploadingFile) => {
+				try {
+					const uploadedUrl = await uploadFile(uploadingFile.file, (progress) => {
+						setUploadingFiles((prev) =>
+							prev.map((f) => (f.file === uploadingFile.file ? { ...f, progress } : f)),
+						);
+					});
 
-				// Add to final images list
-				onImagesChange([...images, ...validFiles]);
+					setUploadingFiles((prev) =>
+						prev.map((f) =>
+							f.file === uploadingFile.file ? { ...f, status: "success" as const, uploadedUrl } : f,
+						),
+					);
+
+					return uploadingFile.file;
+				} catch (error) {
+					setUploadingFiles((prev) =>
+						prev.map((f) => (f.file === uploadingFile.file ? { ...f, status: "error" as const } : f)),
+					);
+
+					toast({
+						title: "Upload failed",
+						description: `Failed to upload ${uploadingFile.file.name}`,
+						variant: "destructive",
+					});
+
+					return null;
+				}
+			});
+
+			try {
+				const results = await Promise.all(uploadPromises);
+				const successfulFiles = results.filter((file): file is File => file !== null);
+
+				if (successfulFiles.length > 0) {
+					onImagesChange([...images, ...successfulFiles]);
+
+					toast({
+						title: "Upload successful",
+						description: `${successfulFiles.length} file(s) uploaded successfully`,
+						variant: "default",
+					});
+				}
 
 				// Clear uploading files after a delay
 				setTimeout(() => {
 					setUploadingFiles([]);
-				}, 1000);
-			} catch {
-				setUploadingFiles((prev) => prev.map((f) => ({ ...f, status: "error" as const })));
+				}, 2000);
+			} catch (error) {
+				console.error("Upload error:", error);
 			}
 		},
 		[images, disabled, onImagesChange],
@@ -172,7 +219,11 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 				onDrop={handleDrop}
 				onDragOver={handleDragOver}
 				onDragLeave={handleDragLeave}
-				className={`rounded-lg border-2 border-dashed p-6 text-center transition-colors ${isDragOver ? "border-blue-500 bg-blue-50" : "border-gray-300"} ${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:border-gray-400"} ${error ? "border-red-500" : ""} `}
+				className={`rounded-lg border-2 border-dashed p-6 text-center transition-colors ${
+					isDragOver ? "border-blue-500 bg-blue-50" : "border-gray-300"
+				} ${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:border-gray-400"} ${
+					error ? "border-red-500" : ""
+				}`}
 				onClick={() => !disabled && fileInputRef.current?.click()}
 			>
 				<Upload className="mx-auto mb-2 h-8 w-8 text-gray-400" />
@@ -194,11 +245,18 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 				/>
 			</div>
 
+			{/* Error message */}
+			{error && (
+				<div className="rounded-lg border border-red-200 bg-red-50 p-3">
+					<p className="text-sm text-red-600">{error}</p>
+				</div>
+			)}
+
 			{/* Uploading Files */}
 			<AnimatePresence>
 				{uploadingFiles.map((uploadingFile, index) => (
 					<motion.div
-						key={`uploading-${index}`}
+						key={`uploading-${uploadingFile.file.name}-${index}`}
 						initial={{ opacity: 0, y: 10 }}
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: -10 }}
@@ -207,6 +265,8 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 						<div className="flex-shrink-0">
 							{uploadingFile.status === "error" ? (
 								<AlertCircle className="h-5 w-5 text-red-500" />
+							) : uploadingFile.status === "success" ? (
+								<CheckCircle className="h-5 w-5 text-green-500" />
 							) : (
 								getFileIcon(uploadingFile.file)
 							)}
@@ -214,14 +274,25 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 						<div className="min-w-0 flex-1">
 							<div className="mb-1 flex items-center justify-between">
 								<p className="truncate text-sm font-medium text-gray-900">{uploadingFile.file.name}</p>
-								<Badge variant={uploadingFile.status === "success" ? "default" : "secondary"}>
+								<Badge
+									variant={
+										uploadingFile.status === "success"
+											? "default"
+											: uploadingFile.status === "error"
+												? "destructive"
+												: "secondary"
+									}
+								>
 									{uploadingFile.status === "uploading" && `${Math.round(uploadingFile.progress)}%`}
 									{uploadingFile.status === "success" && "Uploaded"}
 									{uploadingFile.status === "error" && "Failed"}
 								</Badge>
 							</div>
 							<div className="flex items-center gap-2">
-								<Progress value={uploadingFile.progress} className="h-1 flex-1" />
+								<Progress
+									value={uploadingFile.progress}
+									className={`h-1 flex-1 ${uploadingFile.status === "error" ? "bg-red-100" : ""}`}
+								/>
 								<span className="text-xs text-gray-500">{formatFileSize(uploadingFile.file.size)}</span>
 							</div>
 						</div>
@@ -233,7 +304,7 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 			<AnimatePresence>
 				{images.map((file, index) => (
 					<motion.div
-						key={`uploaded-${index}`}
+						key={`uploaded-${file.name}-${index}`}
 						initial={{ opacity: 0, y: 10 }}
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: -10 }}

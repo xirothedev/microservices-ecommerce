@@ -35,6 +35,11 @@ export default function ChatInterface({ ticketId }: ChatInterfaceProps) {
 		try {
 			const formData = new FormData();
 			formData.append("content", content);
+
+			// Add hasAttachments flag
+			const hasAttachments = attachments && attachments.length > 0;
+			formData.append("hasAttachments", hasAttachments?.toString() ?? "false");
+
 			if (attachments) {
 				attachments.forEach((file) => formData.append("attachments", file));
 			}

@@ -1,8 +1,6 @@
 "use client";
 
-import type React from "react";
-
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -19,8 +17,57 @@ export default function MessageInput({ onSendMessage, disabled = false, isLoadin
 	const [message, setMessage] = useState("");
 	const [attachments, setAttachments] = useState<File[]>([]);
 	const [isDragOver, setIsDragOver] = useState(false);
+	const dragCounterRef = useRef(0);
+	const [shouldFocusAfterSend, setShouldFocusAfterSend] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+	// Focus textarea when loading finishes after sending
+	useEffect(() => {
+		if (!isLoading && shouldFocusAfterSend && textareaRef.current) {
+			textareaRef.current.focus();
+			setShouldFocusAfterSend(false);
+		}
+	}, [isLoading, shouldFocusAfterSend]);
+
+	// Handle paste events for clipboard images (screenshots)
+	const handlePaste = async (e: React.ClipboardEvent) => {
+		const items = e.clipboardData?.items;
+		if (!items) return;
+
+		for (let i = 0; i < items.length; i++) {
+			const item = items[i];
+
+			// Check if the item is an image
+			if (item.type.startsWith("image/")) {
+				e.preventDefault();
+
+				const file = item.getAsFile();
+				if (file) {
+					// Check file size and attachment limit
+					if (file.size > maxFileSize) {
+						alert(`Image too large (max ${Math.round(maxFileSize / 1024 / 1024)}MB)`);
+						return;
+					}
+
+					if (attachments.length >= maxFiles) {
+						alert(`Maximum ${maxFiles} files allowed`);
+						return;
+					}
+
+					// Create a new file with a proper name
+					const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+					const newFile = new File([file], `screenshot-${timestamp}.png`, {
+						type: file.type,
+						lastModified: Date.now(),
+					});
+
+					setAttachments((prev) => [...prev, newFile]);
+				}
+				break; // Only handle the first image found
+			}
+		}
+	};
 
 	const maxFiles = 3;
 	const maxFileSize = 5 * 1024 * 1024; // 5MB
@@ -34,6 +81,7 @@ export default function MessageInput({ onSendMessage, disabled = false, isLoadin
 		}
 
 		try {
+			setShouldFocusAfterSend(true);
 			await onSendMessage(message.trim(), attachments);
 			setMessage("");
 			setAttachments([]);
@@ -44,6 +92,7 @@ export default function MessageInput({ onSendMessage, disabled = false, isLoadin
 			}
 		} catch (error) {
 			console.error("Failed to send message:", error);
+			setShouldFocusAfterSend(false);
 		}
 	};
 
@@ -88,6 +137,8 @@ export default function MessageInput({ onSendMessage, disabled = false, isLoadin
 
 	const handleDrop = (e: React.DragEvent) => {
 		e.preventDefault();
+		e.stopPropagation();
+		dragCounterRef.current = 0;
 		setIsDragOver(false);
 
 		if (e.dataTransfer.files.length > 0) {
@@ -95,14 +146,27 @@ export default function MessageInput({ onSendMessage, disabled = false, isLoadin
 		}
 	};
 
+	const handleDragEnter = (e: React.DragEvent) => {
+		e.preventDefault();
+		e.stopPropagation();
+		dragCounterRef.current++;
+		if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+			setIsDragOver(true);
+		}
+	};
+
 	const handleDragOver = (e: React.DragEvent) => {
 		e.preventDefault();
-		setIsDragOver(true);
+		e.stopPropagation();
 	};
 
 	const handleDragLeave = (e: React.DragEvent) => {
 		e.preventDefault();
-		setIsDragOver(false);
+		e.stopPropagation();
+		dragCounterRef.current--;
+		if (dragCounterRef.current === 0) {
+			setIsDragOver(false);
+		}
 	};
 
 	const removeAttachment = (index: number) => {
@@ -181,6 +245,7 @@ export default function MessageInput({ onSendMessage, disabled = false, isLoadin
 						isDragOver ? "border-blue-500 bg-blue-50" : "border-gray-200"
 					} ${disabled ? "opacity-50" : ""}`}
 					onDrop={handleDrop}
+					onDragEnter={handleDragEnter}
 					onDragOver={handleDragOver}
 					onDragLeave={handleDragLeave}
 				>
@@ -245,6 +310,7 @@ export default function MessageInput({ onSendMessage, disabled = false, isLoadin
 							value={message}
 							onChange={handleTextareaChange}
 							onKeyDown={handleKeyDown}
+							onPaste={handlePaste}
 							placeholder={
 								disabled
 									? "Reconnecting..."
@@ -257,7 +323,7 @@ export default function MessageInput({ onSendMessage, disabled = false, isLoadin
 
 						{/* Drag Overlay */}
 						{isDragOver && (
-							<div className="bg-opacity-90 absolute inset-0 flex items-center justify-center rounded border-2 border-dashed border-blue-500 bg-blue-50">
+							<div className="bg-opacity-90 pointer-events-none absolute inset-0 flex items-center justify-center rounded border-2 border-dashed border-blue-500 bg-blue-50">
 								<div className="text-center">
 									<Paperclip className="mx-auto mb-2 h-8 w-8 text-blue-500" />
 									<p className="text-sm font-medium text-blue-700">Drop files here to attach</p>

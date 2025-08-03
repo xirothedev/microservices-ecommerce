@@ -6,10 +6,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import axiosInstance from "@/lib/axios";
 import { Context, ContextInput } from "@/typings/backend";
 import { CreditCard, Package, Search, ShoppingBag, User, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useDebounce } from "@/hooks/use-debounce";
 
 interface ContextSelectorProps {
 	selectedContexts: ContextInput[];
@@ -24,9 +27,11 @@ export default function ContextSelector({
 }: ContextSelectorProps) {
 	const [inputValue, setInputValue] = useState("");
 	const [showSuggestions, setShowSuggestions] = useState(false);
-	const [filteredSuggestions, setFilteredSuggestions] = useState<Array<Context>>([]);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const suggestionsRef = useRef<HTMLDivElement>(null);
+
+	// Debounce search query to avoid too many API calls
+	const debouncedSearchQuery = useDebounce(inputValue, 300);
 
 	const contextIcons = {
 		order: ShoppingBag,
@@ -42,29 +47,43 @@ export default function ContextSelector({
 		account: "bg-orange-100 text-orange-800",
 	};
 
+	// Fetch contexts from API
+	const { data: searchResults, isLoading } = useQuery({
+		queryKey: ["contexts", debouncedSearchQuery],
+		queryFn: async () => {
+			if (!debouncedSearchQuery || debouncedSearchQuery.length < 2) {
+				return [];
+			}
+
+			try {
+				const response = await axiosInstance.get("/contexts/search", {
+					params: {
+						query: debouncedSearchQuery,
+						limit: 8,
+					},
+				});
+				return response.data.data || [];
+			} catch (error) {
+				console.error("Failed to search contexts:", error);
+				return [];
+			}
+		},
+		enabled: debouncedSearchQuery.length >= 2,
+	});
+
+	// Filter out already selected contexts
+	const filteredSuggestions = (searchResults || []).filter(
+		(context: Context & { type: string }) =>
+			!selectedContexts.some((selected) => selected.labelId === context.id && selected.type === context.type),
+	);
+
 	useEffect(() => {
-		if (inputValue.length > 0) {
-			// const query = inputValue.toLowerCase();
-			const suggestions: Array<Context> = [];
-
-			// Object.entries(mockContexts).forEach(([type, items]) => {
-			// 	items.forEach((item) => {
-			// 		if (
-			// 			item.label.toLowerCase().includes(query) &&
-			// 			!selectedContexts.some((selected) => selected.id === item.id && selected.type === type)
-			// 		) {
-			// 			suggestions.push({ ...item, type });
-			// 		}
-			// 	});
-			// });
-
-			setFilteredSuggestions(suggestions.slice(0, 8)); // Limit to 8 suggestions
-			setShowSuggestions(suggestions.length > 0);
+		if (debouncedSearchQuery.length >= 2 && filteredSuggestions.length > 0) {
+			setShowSuggestions(true);
 		} else {
 			setShowSuggestions(false);
-			setFilteredSuggestions([]);
 		}
-	}, [inputValue, selectedContexts]);
+	}, [debouncedSearchQuery, filteredSuggestions.length]);
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (disabled) return;
@@ -142,6 +161,11 @@ export default function ContextSelector({
 						className="pl-10"
 						disabled={disabled}
 					/>
+					{isLoading && (
+						<div className="absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 transform">
+							<div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600"></div>
+						</div>
+					)}
 				</div>
 
 				{/* Suggestions Dropdown */}
@@ -157,25 +181,31 @@ export default function ContextSelector({
 							<Card className="shadow-lg">
 								<CardContent className="p-2">
 									<div className="space-y-1">
-										{filteredSuggestions.map((suggestion) => (
-											<button
-												key={`${suggestion.type}-${suggestion.id}`}
-												onClick={() => selectContext(suggestion)}
-												className="flex w-full items-center gap-2 rounded p-2 text-left transition-colors hover:bg-gray-100"
-											>
-												<div className={`rounded p-1 ${getContextColor(suggestion.type)}`}>
-													{getContextIcon(suggestion.type)}
-												</div>
-												<div className="min-w-0 flex-1">
-													<div className="truncate text-sm font-medium">
-														{suggestion.label}
+										{filteredSuggestions.length === 0 ? (
+											<div className="p-2 text-center text-sm text-gray-500">
+												{isLoading ? "Searching..." : "No results found"}
+											</div>
+										) : (
+											filteredSuggestions.map((suggestion: Context & { type: string }) => (
+												<button
+													key={`${suggestion.type}-${suggestion.id}`}
+													onClick={() => selectContext(suggestion)}
+													className="flex w-full items-center gap-2 rounded p-2 text-left transition-colors hover:bg-gray-100"
+												>
+													<div className={`rounded p-1 ${getContextColor(suggestion.type)}`}>
+														{getContextIcon(suggestion.type)}
 													</div>
-													<div className="text-xs text-gray-500 capitalize">
-														{suggestion.type}
+													<div className="min-w-0 flex-1">
+														<div className="truncate text-sm font-medium">
+															{suggestion.label}
+														</div>
+														<div className="text-xs text-gray-500 capitalize">
+															{suggestion.type}
+														</div>
 													</div>
-												</div>
-											</button>
-										))}
+												</button>
+											))
+										)}
 									</div>
 								</CardContent>
 							</Card>
@@ -197,7 +227,7 @@ export default function ContextSelector({
 						<div className="flex flex-wrap gap-2">
 							{selectedContexts.map((context, index) => (
 								<motion.div
-									key={`selected-${index}`}
+									key={`selected-${context.type}-${context.labelId}-${index}`}
 									initial={{ opacity: 0, scale: 0.8 }}
 									animate={{ opacity: 1, scale: 1 }}
 									exit={{ opacity: 0, scale: 0.8 }}
@@ -229,7 +259,7 @@ export default function ContextSelector({
 			{/* Helper Text */}
 			<div className="text-xs text-gray-500">
 				Tip: Reference your orders, products, or transactions to help our support team understand your issue
-				better.
+				better. Start typing to search for relevant items.
 			</div>
 		</div>
 	);

@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { useUserQuery } from "@/hooks/use-user";
 import axiosInstance from "@/lib/axios";
 import { IAxiosError } from "@/typings";
 import { TicketResponse } from "@/typings/backend";
@@ -97,6 +98,7 @@ const contextIcons = {
 
 export default function TicketDetail({ ticketId }: TicketDetailProps) {
 	const router = useRouter();
+	const { data: currentUser } = useUserQuery();
 	const { data, error, isError, isLoading } = useQuery<TicketResponse, IAxiosError>({
 		queryKey: [ticketId],
 		queryFn: async () => {
@@ -105,6 +107,11 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 			return res.data.data;
 		},
 	});
+
+	// Determine user role and who to display in sidebar
+	const isCurrentUserAssigned = currentUser?.me.id === data?.assigned?.id;
+	const isCurrentUserAuthor = currentUser?.me.id === data?.author?.id;
+	const displayUser = isCurrentUserAssigned ? data?.author : data?.assigned;
 
 	useEffect(() => {
 		if (isError && error.response?.status === 404) {
@@ -304,11 +311,13 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 						</CardContent>
 					</Card>
 
-					{/* Assigned Agent */}
-					{data?.assigned && (
+					{/* User Info - Show appropriate person based on current user role */}
+					{displayUser && (
 						<Card>
 							<CardHeader>
-								<CardTitle className="text-lg">Assigned Agent</CardTitle>
+								<CardTitle className="text-lg">
+									{isCurrentUserAssigned ? "Ticket Author" : "Assigned Agent"}
+								</CardTitle>
 							</CardHeader>
 							<CardContent>
 								<div className="flex items-center gap-3">
@@ -316,12 +325,12 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 										<Avatar className="h-12 w-12">
 											<AvatarImage
 												src={
-													data?.assigned.avatarUrl ||
+													displayUser.avatarUrl ||
 													"https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg"
 												}
 											/>
 											<AvatarFallback>
-												{data?.assigned.fullname
+												{displayUser.fullname
 													.split(" ")
 													.map((n) => n[0])
 													.join("")}
@@ -329,10 +338,10 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 										</Avatar>
 										<div
 											className={`absolute -right-1 -bottom-1 h-4 w-4 rounded-full border-2 border-white ${
-												// data?.assigned.status === "online"
+												// displayUser.status === "online"
 												true
 													? "bg-green-500"
-													: // : ticket.assignedAgent.status === "away"
+													: // : displayUser.status === "away"
 														false
 														? "bg-yellow-500"
 														: "bg-gray-400"
@@ -340,16 +349,26 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 										/>
 									</div>
 									<div>
-										<p className="font-medium text-gray-900">{data?.assigned.fullname}</p>
+										<p className="font-medium text-gray-900">{displayUser.fullname}</p>
 										<p
 											className="block max-w-[180px] truncate text-sm text-gray-600"
-											title={data?.assigned.email}
+											title={displayUser.email}
 										>
-											{data?.assigned.email}
+											{displayUser.email}
 										</p>
-										<p className="text-xs text-gray-500 capitalize">
-											{/* {data?.assigned.status} */} Online
-										</p>
+										<div className="flex items-center gap-2">
+											<p className="text-xs text-gray-500 capitalize">
+												{/* {displayUser.status} */} Online
+											</p>
+											{!isCurrentUserAssigned && (
+												<Badge
+													variant="secondary"
+													className="bg-blue-100 text-xs text-blue-800"
+												>
+													Support Agent
+												</Badge>
+											)}
+										</div>
 									</div>
 								</div>
 							</CardContent>

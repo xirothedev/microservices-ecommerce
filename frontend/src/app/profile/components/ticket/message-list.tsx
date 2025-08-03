@@ -9,7 +9,6 @@ import { getFallbackString } from "@/lib/utils";
 import { IAxiosError } from "@/typings";
 import { TicketMessageResponse } from "@/typings/backend";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
-import { motion } from "motion/react";
 import Image from "next/image";
 import { useEffect, useLayoutEffect, useRef } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -47,7 +46,9 @@ export default function MessageList({ ticketId }: MessageListProps) {
 		initialPageParam: undefined,
 	});
 
-	const messages: TicketMessageResponse[] = (data?.pages || []).flatMap((page) => page.data || []);
+	const messages: TicketMessageResponse[] = (data?.pages || [])
+		.flatMap((page) => page.data || [])
+		.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
 	const handleFetchPreviousPage = () => {
 		if (scrollableRef.current) {
@@ -172,63 +173,70 @@ export default function MessageList({ ticketId }: MessageListProps) {
 			scrollableTarget="scrollableDiv"
 			style={{ display: "flex", flexDirection: "column-reverse" }}
 		>
-			<div className="space-y-4">
+			<div className="space-y-0">
 				{messages.map((message, index) => {
 					const isUser = message.sender.user.id === user?.me.id;
-					const prevMessage = messages[index + 1];
+
+					// Since messages are sorted chronologically, we can use simple index logic
+					const prevMessage = messages[index - 1]; // Previous (older) message
+					const nextMessage = messages[index + 1]; // Next (newer) message
+
+					// Show avatar if this is the first message from this sender or sender changed
 					const showAvatar = !prevMessage || prevMessage.sender.user.id !== message.sender.user.id;
 
-					const nextMessage = messages[index - 1];
-					const showTimestamp =
-						!nextMessage ||
-						nextMessage.sender.user.id !== message.sender.user.id ||
-						new Date(message.createdAt).getTime() - new Date(nextMessage.createdAt).getTime() > 300000;
+					// Add spacing between message groups (when sender changes)
+					const isNewGroup = !prevMessage || prevMessage.sender.user.id !== message.sender.user.id;
 
 					return (
-						<motion.div
+						<div
 							key={message.id}
-							initial={{ opacity: 0, y: 10 }}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{ duration: 0.3 }}
-							className={`flex gap-3 ${isUser ? "flex-row-reverse" : "flex-row"}`}
+							className={`group relative flex gap-4 px-4 transition-colors duration-150 hover:bg-gray-50/50 ${
+								isNewGroup ? "mt-4 py-2" : "py-px"
+							}`}
 						>
-							{/* Avatar */}
-							<div className="flex-shrink-0">
+							{/* Avatar - Always on the left */}
+							<div className="w-10 flex-shrink-0">
 								{showAvatar ? (
-									<Avatar className="h-8 w-8">
+									<Avatar className="h-10 w-10">
 										<AvatarImage src={message.sender.user.avatarUrl ?? undefined} />
-										<AvatarFallback className="text-xs">
+										<AvatarFallback className="text-sm">
 											{getFallbackString(message.sender.user.fullname)}
 										</AvatarFallback>
 									</Avatar>
 								) : (
-									<div className="h-8 w-8" />
+									<div className="h-10 w-10" />
 								)}
 							</div>
 
 							{/* Message Content */}
-							<div className={`max-w-[70%] flex-1 ${isUser ? "items-end" : "items-start"} flex flex-col`}>
-								{/* Sender Name (only show for first message in group) */}
-								{showAvatar && !isUser && (
-									<div className="mb-1 flex items-center gap-2">
-										<span className="text-sm font-medium text-gray-900">
+							<div className="min-w-0 flex-1">
+								{/* Header with sender name and timestamp */}
+								{showAvatar && (
+									<div className="mb-1 flex items-baseline gap-2">
+										<span className="cursor-pointer text-sm font-semibold text-gray-900 hover:underline">
 											{message.sender.user.fullname}
 										</span>
-										<Badge variant="secondary" className="bg-blue-100 text-xs text-blue-800">
-											Support Agent
-										</Badge>
+										{!isUser && (
+											<Badge
+												variant="secondary"
+												className="bg-blue-100 px-1.5 py-0.5 text-xs text-blue-800"
+											>
+												Support Agent
+											</Badge>
+										)}
+										<span className="ml-auto text-xs text-gray-500">
+											{formatTime(message.createdAt)}
+										</span>
 									</div>
 								)}
 
-								{/* Message Bubble */}
-								<div
-									className={`rounded-lg px-4 py-2 ${isUser ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-900"}`}
-								>
-									<p className="text-sm whitespace-pre-wrap">{message.content}</p>
+								{/* Message Content - No bubble, flat design */}
+								<div className="text-sm leading-relaxed text-gray-900">
+									<p className="break-words whitespace-pre-wrap">{message.content}</p>
 
-									{/* Attachments as Bento Grid */}
+									{/* Attachments Grid */}
 									{message.attachments && message.attachments.length > 0 && (
-										<div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
+										<div className="mt-2 grid max-w-md grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
 											{message.attachments.map((attachmentUrl, i) => {
 												const fileName =
 													attachmentUrl.split("/").pop() || `attachment-${i + 1}`;
@@ -236,13 +244,13 @@ export default function MessageList({ ticketId }: MessageListProps) {
 												return (
 													<div
 														key={i}
-														className="group relative aspect-square overflow-hidden rounded-lg bg-gray-200"
+														className="group relative aspect-square cursor-pointer overflow-hidden rounded-md bg-gray-200 transition-opacity hover:opacity-90"
 													>
 														<Image
 															src={attachmentUrl}
 															alt={fileName}
 															fill
-															className="object-cover transition-transform duration-200 hover:scale-105"
+															className="object-cover"
 														/>
 													</div>
 												);
@@ -251,23 +259,16 @@ export default function MessageList({ ticketId }: MessageListProps) {
 									)}
 								</div>
 
-								{/* Timestamp and Read Status */}
-								{showTimestamp && (
-									<div
-										className={`mt-1 flex items-center gap-2 text-xs text-gray-500 ${
-											isUser ? "flex-row-reverse" : "flex-row"
-										}`}
-									>
-										<span>{formatTime(message.createdAt)}</span>
-										{isUser && (
-											<span className={message.isRead ? "text-blue-600" : "text-gray-400"}>
-												{message.isRead ? "✓✓" : "✓"}
-											</span>
-										)}
+								{/* Compact timestamp for grouped messages */}
+								{!showAvatar && (
+									<div className="absolute top-1 right-4 opacity-0 transition-opacity duration-150 group-hover:opacity-100">
+										<span className="rounded bg-white px-1 text-xs text-gray-400">
+											{formatTime(message.createdAt)}
+										</span>
 									</div>
 								)}
 							</div>
-						</motion.div>
+						</div>
 					);
 				})}
 			</div>

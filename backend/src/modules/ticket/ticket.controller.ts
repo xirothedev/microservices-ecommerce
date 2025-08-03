@@ -61,6 +61,8 @@ export class TicketController {
     @Body() body: CreateTicketMessageDto,
     @UploadedFiles() attachments: Express.Multer.File[],
   ) {
+    // Set hasAttachments flag for validation (from frontend or auto-detect)
+    body.hasAttachments = body.hasAttachments === 'true' || (attachments && attachments.length > 0);
     return this.ticketService.createMessage(req, ticketId, body, attachments);
   }
 

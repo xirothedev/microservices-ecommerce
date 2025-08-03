@@ -48,7 +48,7 @@ export default function TicketForm() {
 		onSuccess: (res) => {
 			toast({
 				title: "Success",
-				description: "Created ticket",
+				description: "Ticket created successfully",
 				variant: "default",
 			});
 
@@ -61,7 +61,7 @@ export default function TicketForm() {
 			const message = axiosError?.response?.data?.message;
 			toast({
 				title: "Error",
-				description: typeof message === "string" ? message : "An error occurred during creating",
+				description: typeof message === "string" ? message : "An error occurred while creating ticket",
 				variant: "destructive",
 			});
 		},
@@ -75,6 +75,7 @@ export default function TicketForm() {
 			priority: "MEDIUM",
 			description: "",
 			contexts: [],
+			attachments: [],
 		},
 	});
 
@@ -107,7 +108,9 @@ export default function TicketForm() {
 									aria-describedby={form.formState.errors.title ? "title-error" : undefined}
 								/>
 								{form.formState.errors.title && (
-									<p className="text-sm text-red-600">{form.formState.errors.title.message}</p>
+									<p id="title-error" className="text-sm text-red-600">
+										{form.formState.errors.title.message}
+									</p>
 								)}
 							</div>
 
@@ -213,7 +216,17 @@ export default function TicketForm() {
 						{/* Image Upload */}
 						<div className="space-y-2">
 							<Label>Attachments (Optional)</Label>
-							<ImageUpload images={[]} onImagesChange={() => {}} disabled={isPending} />
+							<Controller
+								control={form.control}
+								name="attachments"
+								render={({ field }) => (
+									<ImageUpload
+										images={field.value ?? []}
+										onImagesChange={field.onChange}
+										disabled={isPending}
+									/>
+								)}
+							/>
 						</div>
 
 						{/* Submission Progress */}
@@ -227,7 +240,7 @@ export default function TicketForm() {
 								>
 									<div className="flex items-center gap-2">
 										<Loader2 className="h-5 w-5 animate-spin text-blue-600" />
-										<span className="text-sm font-medium">Submitting...</span>
+										<span className="text-sm font-medium">Submitting ticket...</span>
 									</div>
 									<Progress value={80} className="h-2" />
 								</motion.div>

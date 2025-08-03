@@ -11,6 +11,9 @@ export class RedisService {
       host: this.configService.get<string>('REDIS_HOST'),
       port: Number(this.configService.get<string>('REDIS_PORT')),
       password: this.configService.get<string>('REDIS_PASSWORD'),
+      lazyConnect: false,
+      connectTimeout: 1000,
+      maxLoadingRetryTime: 1,
     });
   }
 

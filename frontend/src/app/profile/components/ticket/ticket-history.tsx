@@ -10,9 +10,8 @@ import axiosInstance from "@/lib/axios";
 import { formatDate } from "@/lib/format";
 import { IAxiosError } from "@/typings";
 import { TicketResponse } from "@/typings/backend";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { TicketSocketEvents, useTicketSocket } from "@/lib/socket/ticket";
 import {
 	AlertCircle,
@@ -27,7 +26,6 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
-import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const PAGE_SIZE = 10;
@@ -57,7 +55,7 @@ export default function TicketHistory() {
 
 	useEffect(() => {
 		function handleNewTicket(newTicket: TicketResponse) {
-			// Chỉ thêm nếu ticket chưa có trong danh sách
+			// Only add if ticket doesn't exist in the list
 			queryClient.setQueryData<{ pages: { data: TicketResponse[] }[] }>(
 				["tickets", searchQuery, statusFilter, priorityFilter],
 				(oldData) => {
@@ -116,14 +114,16 @@ export default function TicketHistory() {
 
 	const getStatusIcon = (status: string) => {
 		const config = statusConfig[status as keyof typeof statusConfig];
+		if (!config) return null;
 		const IconComponent = config.icon;
 		return <IconComponent className={`h-4 w-4 ${config.color}`} />;
 	};
 
 	const getStatusBadge = (status: string) => {
 		const config = statusConfig[status as keyof typeof statusConfig];
+		if (!config) return null;
 		return (
-			<Badge variant="secondary" className={`${config?.bg} ${config.color} border-0`}>
+			<Badge variant="secondary" className={`${config.bg} ${config.color} border-0`}>
 				{getStatusIcon(status)}
 				<span className="ml-1">{config.label}</span>
 			</Badge>
@@ -132,11 +132,19 @@ export default function TicketHistory() {
 
 	const getPriorityBadge = (priority: string) => {
 		const config = priorityConfig[priority as keyof typeof priorityConfig];
+		if (!config) return null;
 		return (
-			<Badge variant="outline" className={`${config?.bg} ${config.color} border-0 capitalize`}>
+			<Badge variant="outline" className={`${config.bg} ${config.color} border-0 capitalize`}>
 				{priority.toLowerCase()}
 			</Badge>
 		);
+	};
+
+	const isNewTicket = (ticket: TicketResponse) => {
+		const now = new Date();
+		const ticketDate = new Date(ticket.createAt);
+		const diffInHours = (now.getTime() - ticketDate.getTime()) / (1000 * 60 * 60);
+		return diffInHours < 24; // Consider tickets created in last 24 hours as "new"
 	};
 
 	return (
@@ -200,11 +208,11 @@ export default function TicketHistory() {
 			{/* Tickets List */}
 			<div className="space-y-4">
 				{isLoading ? (
-					<div className="text-center text-gray-500">Loading...</div>
+					<div className="text-center text-gray-500">Loading tickets...</div>
 				) : isError ? (
 					<div className="text-center text-red-500">
 						Failed to load tickets
-						<button onClick={() => refetch()} className="ml-2 underline">
+						<button onClick={() => refetch()} className="ml-2 underline hover:no-underline">
 							Try Again
 						</button>
 					</div>
@@ -235,11 +243,11 @@ export default function TicketHistory() {
 							) : (
 								tickets.map((ticket, index) => (
 									<motion.div
-										key={index}
+										key={ticket.id}
 										initial={{ opacity: 0, y: 20 }}
 										animate={{ opacity: 1, y: 0 }}
 										exit={{ opacity: 0, y: -20 }}
-										transition={{ duration: 0.3, delay: index * 0.1 }}
+										transition={{ duration: 0.3, delay: index * 0.05 }}
 									>
 										<Card className="mt-2 transition-shadow hover:shadow-md">
 											<CardContent className="p-6">
@@ -249,7 +257,7 @@ export default function TicketHistory() {
 															<h3 className="truncate text-lg font-semibold text-gray-900">
 																{ticket.title}
 															</h3>
-															{true && (
+															{isNewTicket(ticket) && (
 																<Badge variant="destructive" className="text-xs">
 																	New
 																</Badge>
@@ -257,7 +265,7 @@ export default function TicketHistory() {
 														</div>
 
 														<div className="mb-3 flex items-center gap-4 text-sm text-gray-600">
-															<span className="font-medium">{ticket.id}</span>
+															<span className="font-medium">#{ticket.id}</span>
 															<div className="flex items-center gap-1">
 																<Calendar className="h-4 w-4" />
 																{formatDate(ticket.createAt, {
@@ -267,7 +275,7 @@ export default function TicketHistory() {
 															</div>
 															<div className="flex items-center gap-1">
 																<MessageCircle className="h-4 w-4" />
-																{ticket._count.messages} messages
+																{ticket._count?.messages || 0} messages
 															</div>
 														</div>
 
@@ -279,7 +287,7 @@ export default function TicketHistory() {
 															</Badge>
 														</div>
 
-														{/* ticket.assignedAgent */}
+														{/* Assigned Agent */}
 														{ticket.assigned && (
 															<div className="flex items-center gap-2 text-sm text-gray-600">
 																<User className="h-4 w-4" />
@@ -287,10 +295,8 @@ export default function TicketHistory() {
 																<div className="flex items-center gap-2">
 																	<Avatar className="h-5 w-5">
 																		<AvatarImage
-																			src={
-																				ticket.assigned.avatarUrl ||
-																				"https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg"
-																			}
+																			src={ticket.assigned.avatarUrl || undefined}
+																			alt={ticket.assigned.fullname}
 																		/>
 																		<AvatarFallback className="text-xs">
 																			{ticket.assigned.fullname
