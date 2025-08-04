@@ -1,16 +1,16 @@
-import axiosInstance from "@/lib/axios";
 import { toast } from "@/hooks/use-toast";
+import axiosInstance from "@/lib/axios";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import {
 	ChangePasswordRequest,
 	ChangePasswordResponse,
+	IAxiosError,
 	LoginRequest,
 	LoginResponse,
+	RefreshTokenResponse,
 	RegisterRequest,
 	RegisterResponse,
-	RefreshTokenResponse,
-	IAxiosError,
 } from "./types/auth";
 
 class AuthApi {
@@ -160,6 +160,35 @@ export function useChangePassword() {
 			toast({
 				title: "Error",
 				description: errorMessage,
+				variant: "destructive",
+			});
+		},
+	});
+}
+
+/**
+ * Hook for user logout with React Query
+ */
+export function useLogout() {
+	return useMutation<void, unknown, void>({
+		mutationFn: async () => {
+			await axiosInstance.post("/auth/logout");
+		},
+		onSuccess: () => {
+			toast({
+				title: "Success",
+				description: "Logged out successfully",
+				variant: "default",
+			});
+
+			window.location.href = "/";
+		},
+		onError: (error: unknown) => {
+			const axiosError = error as IAxiosError;
+			const message = axiosError?.response?.data?.message;
+			toast({
+				title: "Error",
+				description: typeof message === "string" ? message : "An error occurred during logout",
 				variant: "destructive",
 			});
 		},

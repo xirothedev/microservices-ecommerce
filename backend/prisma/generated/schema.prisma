@@ -42,7 +42,7 @@ model MfaBackupCode {
 model LoginSession {
   id           String   @id @default(uuid()) @db.Uuid
   sessionId    String   @unique @map("session_id") @db.VarChar(255)
-  refreshToken String   @unique @map("refresh_token") @db.VarChar(512)
+  refreshToken String?  @unique @map("refresh_token") @db.VarChar(512)
   ipAddress    String?  @map("ip_address") @db.VarChar(45)
   userAgent    String?  @map("user_agent") @db.Text
   isActive     Boolean  @default(true) @map("is_active")

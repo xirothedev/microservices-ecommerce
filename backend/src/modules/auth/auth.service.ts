@@ -342,6 +342,50 @@ export class AuthService {
     };
   }
 
+  public async logout(refreshToken: string, sessionId: string, res: Response) {
+    try {
+      // Find and invalidate the session
+      if (sessionId) {
+        await this.prismaService.loginSession.updateMany({
+          where: {
+            sessionId,
+            isActive: true,
+          },
+          data: {
+            isActive: false,
+            refreshToken: null,
+          },
+        });
+      } else if (refreshToken) {
+        // Fallback to refresh token if no session ID
+        await this.prismaService.loginSession.updateMany({
+          where: {
+            refreshToken,
+            isActive: true,
+          },
+          data: {
+            isActive: false,
+            refreshToken: null,
+          },
+        });
+      }
+    } catch (error) {
+      // Log error but don't throw - logout should always succeed from user perspective
+      console.error('Error during logout:', error);
+    }
+
+    // Clear cookies regardless of database operation success
+    res
+      .clearCookie('access_token', { path: '/' })
+      .clearCookie('refresh_token', { path: '/' })
+      .clearCookie('session_id', { path: '/' });
+
+    return {
+      message: 'Logout successful',
+      data: null,
+    };
+  }
+
   // private helper
   private hashing(string: string) {
     return hash(string);

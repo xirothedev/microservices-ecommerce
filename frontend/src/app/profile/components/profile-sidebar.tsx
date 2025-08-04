@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useLogout } from "@/lib/api/auth";
 import { useUserQuery } from "@/lib/api/user";
 import { getFallbackString } from "@/lib/utils";
 import { HelpCircle, ListOrdered, Loader2, Lock, LogOut, Settings, User } from "lucide-react";
@@ -51,7 +52,12 @@ interface ProfileSidebarProps {
 export default function ProfileSidebar({ setSidebarOpen }: ProfileSidebarProps) {
 	const path = usePathname();
 	const { data } = useUserQuery();
+	const logout = useLogout();
 	const activePage = path.split("/")[2] ?? "";
+
+	const handleLogout = () => {
+		logout.mutate();
+	};
 
 	if (!data) {
 		return (
@@ -126,9 +132,15 @@ export default function ProfileSidebar({ setSidebarOpen }: ProfileSidebarProps) 
 					<Button
 						variant="outline"
 						className="w-full justify-start bg-transparent text-red-600 hover:bg-red-50"
+						onClick={handleLogout}
+						disabled={logout.isPending}
 					>
-						<LogOut className="mr-3 h-5 w-5" />
-						Sign Out
+						{logout.isPending ? (
+							<Loader2 className="mr-3 h-5 w-5 animate-spin" />
+						) : (
+							<LogOut className="mr-3 h-5 w-5" />
+						)}
+						{logout.isPending ? "Signing Out..." : "Sign Out"}
 					</Button>
 				</div>
 			</CardContent>

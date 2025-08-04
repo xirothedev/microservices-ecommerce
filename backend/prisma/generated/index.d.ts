@@ -6668,7 +6668,7 @@ export namespace Prisma {
   export type LoginSessionGroupByOutputType = {
     id: string;
     sessionId: string;
-    refreshToken: string;
+    refreshToken: string | null;
     ipAddress: string | null;
     userAgent: string | null;
     isActive: boolean;
@@ -6793,7 +6793,7 @@ export namespace Prisma {
       {
         id: string;
         sessionId: string;
-        refreshToken: string;
+        refreshToken: string | null;
         ipAddress: string | null;
         userAgent: string | null;
         isActive: boolean;
@@ -25435,7 +25435,7 @@ export namespace Prisma {
     NOT?: LoginSessionWhereInput | LoginSessionWhereInput[];
     id?: UuidFilter<'LoginSession'> | string;
     sessionId?: StringFilter<'LoginSession'> | string;
-    refreshToken?: StringFilter<'LoginSession'> | string;
+    refreshToken?: StringNullableFilter<'LoginSession'> | string | null;
     ipAddress?: StringNullableFilter<'LoginSession'> | string | null;
     userAgent?: StringNullableFilter<'LoginSession'> | string | null;
     isActive?: BoolFilter<'LoginSession'> | boolean;
@@ -25448,7 +25448,7 @@ export namespace Prisma {
   export type LoginSessionOrderByWithRelationInput = {
     id?: SortOrder;
     sessionId?: SortOrder;
-    refreshToken?: SortOrder;
+    refreshToken?: SortOrderInput | SortOrder;
     ipAddress?: SortOrderInput | SortOrder;
     userAgent?: SortOrderInput | SortOrder;
     isActive?: SortOrder;
@@ -25480,7 +25480,7 @@ export namespace Prisma {
   export type LoginSessionOrderByWithAggregationInput = {
     id?: SortOrder;
     sessionId?: SortOrder;
-    refreshToken?: SortOrder;
+    refreshToken?: SortOrderInput | SortOrder;
     ipAddress?: SortOrderInput | SortOrder;
     userAgent?: SortOrderInput | SortOrder;
     isActive?: SortOrder;
@@ -25498,7 +25498,7 @@ export namespace Prisma {
     NOT?: LoginSessionScalarWhereWithAggregatesInput | LoginSessionScalarWhereWithAggregatesInput[];
     id?: UuidWithAggregatesFilter<'LoginSession'> | string;
     sessionId?: StringWithAggregatesFilter<'LoginSession'> | string;
-    refreshToken?: StringWithAggregatesFilter<'LoginSession'> | string;
+    refreshToken?: StringNullableWithAggregatesFilter<'LoginSession'> | string | null;
     ipAddress?: StringNullableWithAggregatesFilter<'LoginSession'> | string | null;
     userAgent?: StringNullableWithAggregatesFilter<'LoginSession'> | string | null;
     isActive?: BoolWithAggregatesFilter<'LoginSession'> | boolean;
@@ -26804,7 +26804,7 @@ export namespace Prisma {
   export type LoginSessionCreateInput = {
     id?: string;
     sessionId: string;
-    refreshToken: string;
+    refreshToken?: string | null;
     ipAddress?: string | null;
     userAgent?: string | null;
     isActive?: boolean;
@@ -26816,7 +26816,7 @@ export namespace Prisma {
   export type LoginSessionUncheckedCreateInput = {
     id?: string;
     sessionId: string;
-    refreshToken: string;
+    refreshToken?: string | null;
     ipAddress?: string | null;
     userAgent?: string | null;
     isActive?: boolean;
@@ -26828,7 +26828,7 @@ export namespace Prisma {
   export type LoginSessionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
     sessionId?: StringFieldUpdateOperationsInput | string;
-    refreshToken?: StringFieldUpdateOperationsInput | string;
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null;
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null;
     userAgent?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
@@ -26840,7 +26840,7 @@ export namespace Prisma {
   export type LoginSessionUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
     sessionId?: StringFieldUpdateOperationsInput | string;
-    refreshToken?: StringFieldUpdateOperationsInput | string;
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null;
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null;
     userAgent?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
@@ -26852,7 +26852,7 @@ export namespace Prisma {
   export type LoginSessionCreateManyInput = {
     id?: string;
     sessionId: string;
-    refreshToken: string;
+    refreshToken?: string | null;
     ipAddress?: string | null;
     userAgent?: string | null;
     isActive?: boolean;
@@ -26864,7 +26864,7 @@ export namespace Prisma {
   export type LoginSessionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string;
     sessionId?: StringFieldUpdateOperationsInput | string;
-    refreshToken?: StringFieldUpdateOperationsInput | string;
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null;
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null;
     userAgent?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
@@ -26875,7 +26875,7 @@ export namespace Prisma {
   export type LoginSessionUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string;
     sessionId?: StringFieldUpdateOperationsInput | string;
-    refreshToken?: StringFieldUpdateOperationsInput | string;
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null;
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null;
     userAgent?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
@@ -33667,7 +33667,7 @@ export namespace Prisma {
   export type LoginSessionCreateWithoutUserInput = {
     id?: string;
     sessionId: string;
-    refreshToken: string;
+    refreshToken?: string | null;
     ipAddress?: string | null;
     userAgent?: string | null;
     isActive?: boolean;
@@ -33678,7 +33678,7 @@ export namespace Prisma {
   export type LoginSessionUncheckedCreateWithoutUserInput = {
     id?: string;
     sessionId: string;
-    refreshToken: string;
+    refreshToken?: string | null;
     ipAddress?: string | null;
     userAgent?: string | null;
     isActive?: boolean;
@@ -34094,7 +34094,7 @@ export namespace Prisma {
     NOT?: LoginSessionScalarWhereInput | LoginSessionScalarWhereInput[];
     id?: UuidFilter<'LoginSession'> | string;
     sessionId?: StringFilter<'LoginSession'> | string;
-    refreshToken?: StringFilter<'LoginSession'> | string;
+    refreshToken?: StringNullableFilter<'LoginSession'> | string | null;
     ipAddress?: StringNullableFilter<'LoginSession'> | string | null;
     userAgent?: StringNullableFilter<'LoginSession'> | string | null;
     isActive?: BoolFilter<'LoginSession'> | boolean;
@@ -36075,7 +36075,7 @@ export namespace Prisma {
   export type LoginSessionCreateManyUserInput = {
     id?: string;
     sessionId: string;
-    refreshToken: string;
+    refreshToken?: string | null;
     ipAddress?: string | null;
     userAgent?: string | null;
     isActive?: boolean;
@@ -36236,7 +36236,7 @@ export namespace Prisma {
   export type LoginSessionUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string;
     sessionId?: StringFieldUpdateOperationsInput | string;
-    refreshToken?: StringFieldUpdateOperationsInput | string;
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null;
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null;
     userAgent?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
@@ -36247,7 +36247,7 @@ export namespace Prisma {
   export type LoginSessionUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string;
     sessionId?: StringFieldUpdateOperationsInput | string;
-    refreshToken?: StringFieldUpdateOperationsInput | string;
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null;
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null;
     userAgent?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
@@ -36258,7 +36258,7 @@ export namespace Prisma {
   export type LoginSessionUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string;
     sessionId?: StringFieldUpdateOperationsInput | string;
-    refreshToken?: StringFieldUpdateOperationsInput | string;
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null;
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null;
     userAgent?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;

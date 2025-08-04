@@ -164,4 +164,16 @@ export class AuthController {
   changePassword(@Req() req: Request, @Body() body: ChangePasswordDto) {
     return this.authService.changePassword(req.user.id, body);
   }
+
+  @Post('logout')
+  @Public()
+  @ApiOperation({ summary: 'Logout user' })
+  @ApiResponse({ status: 200, description: 'Logout successful' })
+  logout(
+    @Cookies('refresh_token') refreshToken: string,
+    @Cookies('session_id') sessionId: string,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    return this.authService.logout(refreshToken, sessionId, res);
+  }
 }
