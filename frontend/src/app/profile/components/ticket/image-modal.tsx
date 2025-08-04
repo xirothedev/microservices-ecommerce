@@ -1,6 +1,6 @@
 "use client";
 
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { X, Download, ZoomIn, ZoomOut } from "lucide-react";
 import Image from "next/image";
@@ -40,6 +40,10 @@ export default function ImageModal({ isOpen, onClose, imageUrl, fileName }: Imag
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
 			<DialogContent className="max-h-[90vh] max-w-4xl overflow-hidden p-0">
+				<DialogHeader className="sr-only">
+					<DialogTitle>Image Viewer</DialogTitle>
+					<DialogDescription>View and download image: {fileName}</DialogDescription>
+				</DialogHeader>
 				{/* Header */}
 				<div className="flex items-center justify-between border-b bg-white p-4">
 					<h3 className="truncate text-lg font-semibold">{fileName}</h3>

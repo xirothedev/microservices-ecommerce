@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCart } from "@/hooks/use-cart";
 import { ProductWithAverageRating } from "@/typings/backend";
@@ -31,6 +31,9 @@ export default function ServiceDetailModal({ service, isOpen, onClose, isAddingT
 			<DialogContent className="max-h-[90vh] w-full overflow-y-auto lg:max-w-5xl">
 				<DialogHeader>
 					<DialogTitle className="text-2xl font-bold">{service.name}</DialogTitle>
+					<DialogDescription>
+						View detailed information about {service.name} including images, pricing, and reviews.
+					</DialogDescription>
 				</DialogHeader>
 
 				<div className="grid grid-cols-1 gap-6 lg:grid-cols-2">

@@ -1,4 +1,4 @@
-import ProtectedProvider from "@/components/providers/layout";
+import ProtectedProvider from "@/components/providers/protected-provider";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

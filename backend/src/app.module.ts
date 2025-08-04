@@ -26,6 +26,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { RedisModule } from './redis/redis.module';
 import { RedisService } from './redis/redis.service';
 import { SupabaseModule } from './supabase/supabase.module';
+import { OrdersModule } from './modules/orders/orders.module';
 
 @Global()
 @Module({
@@ -39,6 +40,7 @@ import { SupabaseModule } from './supabase/supabase.module';
       }),
       inject: [ConfigService],
     }),
+    OrdersModule,
   ],
   exports: [JwtModule],
 })

@@ -2,7 +2,14 @@
 
 import { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { RotateCcw, RotateCw, ZoomIn, ZoomOut, Crop, X } from "lucide-react";
@@ -198,6 +205,9 @@ export default function ImageCropModal({
 						<Crop className="h-5 w-5" />
 						Crop Profile Picture
 					</DialogTitle>
+					<DialogDescription>
+						Adjust the crop area, zoom, and rotation to customize your profile picture.
+					</DialogDescription>
 				</DialogHeader>
 
 				<div className="flex flex-1 flex-col gap-4">

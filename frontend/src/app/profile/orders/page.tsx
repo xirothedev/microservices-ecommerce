@@ -1,354 +1,448 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useOrderMutations } from "@/hooks/use-orders";
+import { ordersApi, downloadInvoice } from "@/lib/api/orders";
+import { FindAllOrdersRequest, Order, OrdersListResponse } from "@/lib/api/types/orders";
+import { IAxiosError } from "@/typings";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import {
+	AlertCircle,
 	Calendar,
 	ChevronDown,
-	ChevronUp,
 	DollarSign,
 	Download,
 	Eye,
+	Loader2,
 	Package,
+	RefreshCw,
 	Search,
 	ShoppingBag,
+	X,
 } from "lucide-react";
 import { motion } from "motion/react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { OrderDetailsModal } from "../components/orders/order-details-modal";
+import { OrderStatusBadge } from "../components/orders/order-status-badge";
 
-interface OrderItem {
-	id: string;
-	productName: string;
-	quantity: number;
-	price: number;
-}
-
-interface Order {
-	id: string;
-	createdAt: string;
-	totalPrice: number;
-	status: "pending" | "processing" | "completed" | "cancelled";
-	items: OrderItem[];
-}
+const PAGE_SIZE = 10;
 
 export default function OrdersContent() {
 	const [searchTerm, setSearchTerm] = useState("");
 	const [statusFilter, setStatusFilter] = useState("all");
+	const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+	const [modalOpen, setModalOpen] = useState(false);
 	const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
+	const [downloadingInvoices, setDownloadingInvoices] = useState<Set<string>>(new Set());
 
-	// Mock orders data
-	const orders: Order[] = [
-		{
-			id: "ORD-001",
-			createdAt: "2024-01-15T10:30:00Z",
-			totalPrice: 149.97,
-			status: "completed",
-			items: [
-				{ id: "ITEM-001", productName: "Apple ID Premium Setup", quantity: 1, price: 49.99 },
-				{ id: "ITEM-002", productName: "Facebook Business Account", quantity: 1, price: 79.99 },
-				{ id: "ITEM-003", productName: "Instagram Growth Package", quantity: 1, price: 19.99 },
-			],
-		},
-		{
-			id: "ORD-002",
-			createdAt: "2024-01-12T14:20:00Z",
-			totalPrice: 99.98,
-			status: "processing",
-			items: [
-				{ id: "ITEM-004", productName: "YouTube Premium Family", quantity: 2, price: 29.99 },
-				{ id: "ITEM-005", productName: "LinkedIn Business Profile", quantity: 1, price: 39.99 },
-			],
-		},
-		{
-			id: "ORD-003",
-			createdAt: "2024-01-10T09:15:00Z",
-			totalPrice: 189.97,
-			status: "completed",
-			items: [
-				{ id: "ITEM-006", productName: "Apple Developer Account", quantity: 1, price: 149.99 },
-				{ id: "ITEM-007", productName: "TikTok Business Account", quantity: 1, price: 39.98 },
-			],
-		},
-		{
-			id: "ORD-004",
-			createdAt: "2024-01-08T16:45:00Z",
-			totalPrice: 69.99,
-			status: "cancelled",
-			items: [
-				{ id: "ITEM-008", productName: "Netflix Premium Account", quantity: 1, price: 19.99 },
-				{ id: "ITEM-009", productName: "Spotify Premium Setup", quantity: 1, price: 50.0 },
-			],
-		},
-		{
-			id: "ORD-005",
-			createdAt: "2024-01-05T11:30:00Z",
-			totalPrice: 259.96,
-			status: "completed",
-			items: [
-				{ id: "ITEM-010", productName: "Complete Social Media Package", quantity: 1, price: 199.99 },
-				{ id: "ITEM-011", productName: "Google Ads Setup", quantity: 1, price: 59.97 },
-			],
-		},
-		{
-			id: "ORD-006",
-			createdAt: "2024-01-03T13:10:00Z",
-			totalPrice: 89.99,
-			status: "pending",
-			items: [{ id: "ITEM-012", productName: "WhatsApp Business API", quantity: 1, price: 89.99 }],
-		},
-	];
+	const { cancelOrder, loading: mutationLoading } = useOrderMutations();
 
-	const filteredOrders = orders.filter((order) => {
-		const matchesSearch =
-			order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			order.items.some((item) => item.productName.toLowerCase().includes(searchTerm.toLowerCase()));
-
-		const matchesStatus = statusFilter === "all" || order.status === statusFilter;
-
-		return matchesSearch && matchesStatus;
+	const { data, isLoading, isError, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery<
+		OrdersListResponse,
+		IAxiosError
+	>({
+		queryKey: ["orders", searchTerm, statusFilter],
+		queryFn: async ({ pageParam }) => {
+			const params: FindAllOrdersRequest = { limit: PAGE_SIZE };
+			if (pageParam) params.cursor = pageParam as string;
+			if (searchTerm) params.search = searchTerm;
+			if (statusFilter !== "all") params.status = statusFilter as any;
+			return await ordersApi.getUserOrders(params);
+		},
+		getNextPageParam: (lastPage) => lastPage?.["@data"]?.nextCursor || null,
+		initialPageParam: undefined,
 	});
 
-	const toggleOrderExpansion = (orderId: string) => {
-		const newExpanded = new Set(expandedOrders);
-		if (newExpanded.has(orderId)) {
-			newExpanded.delete(orderId);
-		} else {
-			newExpanded.add(orderId);
+	const orders: Order[] = (data?.pages || []).flatMap((page) => page.data || []);
+
+	const handleCancelOrder = useCallback(
+		async (orderId: string) => {
+			const success = await cancelOrder(orderId);
+			if (success) {
+				refetch();
+			}
+		},
+		[cancelOrder, refetch],
+	);
+
+	const handleViewDetails = useCallback((orderId: string) => {
+		setSelectedOrderId(orderId);
+		setModalOpen(true);
+	}, []);
+
+	const handleModalClose = useCallback(() => {
+		setModalOpen(false);
+		setSelectedOrderId(null);
+	}, []);
+
+	const handleOrderUpdated = useCallback(() => {
+		refetch();
+	}, [refetch]);
+
+	const toggleOrderExpanded = useCallback((orderId: string) => {
+		setExpandedOrders((prev) => {
+			const newSet = new Set(prev);
+			if (newSet.has(orderId)) {
+				newSet.delete(orderId);
+			} else {
+				newSet.add(orderId);
+			}
+			return newSet;
+		});
+	}, []);
+
+	const handleDownloadInvoice = useCallback(async (orderId: string) => {
+		try {
+			setDownloadingInvoices((prev) => new Set(prev).add(orderId));
+			await downloadInvoice(orderId);
+		} catch (error) {
+			console.error("Failed to download invoice:", error);
+			// TODO: Show error toast notification
+		} finally {
+			setDownloadingInvoices((prev) => {
+				const newSet = new Set(prev);
+				newSet.delete(orderId);
+				return newSet;
+			});
 		}
-		setExpandedOrders(newExpanded);
+	}, []);
+
+	const formatPrice = (price: number) => {
+		return new Intl.NumberFormat("vi-VN", {
+			style: "currency",
+			currency: "VND",
+		}).format(price);
 	};
 
-	const getStatusColor = (status: string) => {
-		switch (status) {
-			case "completed":
-				return "bg-green-100 text-green-800";
-			case "processing":
-				return "bg-blue-100 text-blue-800";
-			case "pending":
-				return "bg-yellow-100 text-yellow-800";
-			case "cancelled":
-				return "bg-red-100 text-red-800";
-			default:
-				return "bg-gray-100 text-gray-800";
-		}
-	};
-
-	// Calculate summary statistics
-	const totalOrders = orders.length;
-	const completedOrders = orders.filter((o) => o.status === "completed").length;
-	const totalSpent = orders.filter((o) => o.status === "completed").reduce((sum, o) => sum + o.totalPrice, 0);
-	const pendingOrders = orders.filter((o) => o.status === "pending" || o.status === "processing").length;
+	if (isError) {
+		return (
+			<div className="container mx-auto p-6">
+				<div className="py-12 text-center">
+					<AlertCircle className="mx-auto mb-4 h-12 w-12 text-red-500" />
+					<h3 className="mb-2 text-lg font-semibold text-red-700">Error Loading Orders</h3>
+					<p className="mb-4 text-gray-600">Failed to load orders</p>
+					<Button onClick={() => refetch()} variant="outline">
+						<RefreshCw className="mr-2 h-4 w-4" />
+						Try Again
+					</Button>
+				</div>
+			</div>
+		);
+	}
 
 	return (
-		<div className="space-y-6">
-			{/* Summary Cards */}
-			<div className="grid grid-cols-1 gap-6 md:grid-cols-4">
-				<Card>
-					<CardContent className="p-6">
-						<div className="flex items-center justify-between">
-							<div>
-								<p className="text-sm font-medium text-gray-600">Total Orders</p>
-								<p className="text-2xl font-bold text-blue-600">{totalOrders}</p>
-							</div>
-							<ShoppingBag className="h-8 w-8 text-blue-600" />
-						</div>
-					</CardContent>
-				</Card>
-
-				<Card>
-					<CardContent className="p-6">
-						<div className="flex items-center justify-between">
-							<div>
-								<p className="text-sm font-medium text-gray-600">Completed</p>
-								<p className="text-2xl font-bold text-green-600">{completedOrders}</p>
-							</div>
-							<Package className="h-8 w-8 text-green-600" />
-						</div>
-					</CardContent>
-				</Card>
-
-				<Card>
-					<CardContent className="p-6">
-						<div className="flex items-center justify-between">
-							<div>
-								<p className="text-sm font-medium text-gray-600">Total Spent</p>
-								<p className="text-2xl font-bold text-purple-600">${totalSpent.toFixed(2)}</p>
-							</div>
-							<DollarSign className="h-8 w-8 text-purple-600" />
-						</div>
-					</CardContent>
-				</Card>
-
-				<Card>
-					<CardContent className="p-6">
-						<div className="flex items-center justify-between">
-							<div>
-								<p className="text-sm font-medium text-gray-600">Pending</p>
-								<p className="text-2xl font-bold text-yellow-600">{pendingOrders}</p>
-							</div>
-							<Calendar className="h-8 w-8 text-yellow-600" />
-						</div>
-					</CardContent>
-				</Card>
+		<div className="container mx-auto space-y-6 p-6">
+			{/* Header */}
+			<div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+				<div>
+					<h1 className="text-3xl font-bold text-gray-900">My Orders</h1>
+					<p className="mt-1 text-gray-600">Track and manage your orders</p>
+				</div>
+				<Button onClick={() => refetch()} variant="outline" disabled={isLoading}>
+					<RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
+					Refresh
+				</Button>
 			</div>
 
 			{/* Filters */}
 			<Card>
 				<CardHeader>
-					<CardTitle>Order History</CardTitle>
-					<CardDescription>View and manage your order history</CardDescription>
+					<CardTitle className="flex items-center gap-2">
+						<Search className="h-5 w-5" />
+						Search & Filter Orders
+					</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<div className="flex flex-col gap-4 md:flex-row">
+					<div className="flex flex-col gap-4 sm:flex-row">
 						<div className="flex-1">
-							<div className="relative">
-								<Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
-								<Input
-									placeholder="Search orders..."
-									value={searchTerm}
-									onChange={(e) => setSearchTerm(e.target.value)}
-									className="pl-10"
-								/>
-							</div>
+							<Input
+								placeholder="Search by product name..."
+								value={searchTerm}
+								onChange={(e) => setSearchTerm(e.target.value)}
+								className="w-full"
+							/>
 						</div>
-
-						<div className="flex gap-2">
-							<Select value={statusFilter} onValueChange={setStatusFilter}>
-								<SelectTrigger className="w-40">
-									<SelectValue placeholder="Status" />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem value="all">All Status</SelectItem>
-									<SelectItem value="pending">Pending</SelectItem>
-									<SelectItem value="processing">Processing</SelectItem>
-									<SelectItem value="completed">Completed</SelectItem>
-									<SelectItem value="cancelled">Cancelled</SelectItem>
-								</SelectContent>
-							</Select>
-
-							<Button variant="outline">
-								<Download className="mr-2 h-4 w-4" />
-								Export
-							</Button>
-						</div>
+						<Select value={statusFilter} onValueChange={setStatusFilter}>
+							<SelectTrigger className="w-full sm:w-48">
+								<SelectValue placeholder="Filter by status" />
+							</SelectTrigger>
+							<SelectContent>
+								{[
+									{ value: "all", label: "All Orders" },
+									{ value: "PENDING", label: "Pending" },
+									{ value: "DONE", label: "Completed" },
+									{ value: "CANCELLED", label: "Cancelled" },
+									{ value: "REFUNDED", label: "Refunded" },
+									{ value: "FAILED", label: "Failed" },
+								].map((option) => (
+									<SelectItem className="cursor-pointer" key={option.value} value={option.value}>
+										{option.label}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
 					</div>
 				</CardContent>
 			</Card>
 
 			{/* Orders List */}
 			<div className="space-y-4">
-				{filteredOrders.map((order, index) => (
-					<motion.div
-						key={order.id}
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 0.3, delay: index * 0.1 }}
+				{isLoading && orders.length === 0 ? (
+					// Loading skeletons
+					Array.from({ length: 3 }).map((_, index) => (
+						<Card key={index}>
+							<CardHeader>
+								<div className="flex items-start justify-between">
+									<div className="space-y-2">
+										<Skeleton className="h-4 w-24" />
+										<Skeleton className="h-3 w-32" />
+									</div>
+									<Skeleton className="h-6 w-20" />
+								</div>
+							</CardHeader>
+							<CardContent>
+								<div className="flex items-center justify-between">
+									<Skeleton className="h-4 w-16" />
+									<Skeleton className="h-6 w-24" />
+								</div>
+							</CardContent>
+						</Card>
+					))
+				) : (
+					<InfiniteScroll
+						dataLength={orders.length}
+						next={fetchNextPage}
+						hasMore={!!hasNextPage}
+						loader={<OrderLoading />}
+						endMessage={<OrderEnded />}
+						scrollThreshold={0.8}
 					>
-						<Card>
-							<Collapsible
-								open={expandedOrders.has(order.id)}
-								onOpenChange={() => toggleOrderExpansion(order.id)}
-							>
-								<CollapsibleTrigger asChild>
-									<CardHeader className="cursor-pointer transition-colors hover:bg-gray-50">
-										<div className="flex items-center justify-between">
-											<div className="flex items-center gap-4">
-												<div>
-													<CardTitle className="text-lg">Order {order.id}</CardTitle>
-													<CardDescription>
-														{dayjs(order.createdAt).format("MMM dd, yyyy 'at' HH:mm")}
-													</CardDescription>
-												</div>
-												<Badge className={getStatusColor(order.status)}>{order.status}</Badge>
-											</div>
-
-											<div className="flex items-center gap-4">
-												<div className="text-right">
-													<p className="text-lg font-semibold">
-														${order.totalPrice.toFixed(2)}
-													</p>
-													<p className="text-sm text-gray-600">{order.items.length} items</p>
-												</div>
-												{expandedOrders.has(order.id) ? (
-													<ChevronUp className="h-5 w-5 text-gray-400" />
-												) : (
-													<ChevronDown className="h-5 w-5 text-gray-400" />
-												)}
-											</div>
-										</div>
-									</CardHeader>
-								</CollapsibleTrigger>
-
-								<CollapsibleContent>
-									<CardContent className="pt-0">
-										<div className="border-t pt-4">
-											<h4 className="mb-3 font-semibold">Order Items</h4>
-											<div className="space-y-3">
-												{order.items.map((item) => (
-													<div
-														key={item.id}
-														className="flex items-center justify-between rounded-lg bg-gray-50 p-3"
-													>
-														<div className="flex-1">
-															<h5 className="font-medium text-gray-900">
-																{item.productName}
-															</h5>
-															<p className="text-sm text-gray-600">
-																Quantity: {item.quantity}
-															</p>
+						{orders.length === 0 ? (
+							<Card>
+								<CardContent className="py-12 text-center">
+									<ShoppingBag className="mx-auto mb-4 h-12 w-12 text-gray-400" />
+									<h3 className="mb-2 text-lg font-semibold text-gray-700">No Orders Found</h3>
+									<p className="text-gray-500">
+										{searchTerm || statusFilter !== "all"
+											? "Try adjusting your search or filter criteria"
+											: "You haven't placed any orders yet"}
+									</p>
+								</CardContent>
+							</Card>
+						) : (
+							orders.map((order) => (
+								<motion.div
+									key={order.id}
+									initial={{ opacity: 0, y: 20 }}
+									animate={{ opacity: 1, y: 0 }}
+									transition={{ duration: 0.3 }}
+								>
+									<Card className="mt-2 transition-shadow hover:shadow-md">
+										<Collapsible
+											open={expandedOrders.has(order.id)}
+											onOpenChange={() => toggleOrderExpanded(order.id)}
+										>
+											<CollapsibleTrigger asChild>
+												<CardHeader className="cursor-pointer transition-colors hover:bg-gray-50">
+													<div className="flex items-start justify-between">
+														<div className="space-y-2">
+															<div className="flex items-center gap-3">
+																<CardTitle className="text-lg break-all">
+																	Order #{order.id}
+																</CardTitle>
+																<OrderStatusBadge
+																	status={order.bill?.status || "PENDING"}
+																/>
+															</div>
+															<CardDescription className="flex items-center gap-2">
+																<Calendar className="h-4 w-4" />
+																{dayjs(order.createAt).format(
+																	"MMM DD, YYYY [at] HH:mm",
+																)}
+															</CardDescription>
 														</div>
-														<div className="text-right">
-															<p className="font-semibold">${item.price.toFixed(2)}</p>
-															{item.quantity > 1 && (
-																<p className="text-sm text-gray-600">
-																	${(item.price / item.quantity).toFixed(2)} each
-																</p>
-															)}
+														<div className="flex items-center gap-3 text-right">
+															<div className="text-lg font-semibold text-green-600">
+																{formatPrice(order.totalPrice)}
+															</div>
+															<motion.div
+																animate={{
+																	rotate: expandedOrders.has(order.id) ? 180 : 0,
+																}}
+																transition={{ duration: 0.2 }}
+															>
+																<ChevronDown className="h-5 w-5 text-gray-400" />
+															</motion.div>
 														</div>
 													</div>
-												))}
-											</div>
+												</CardHeader>
+											</CollapsibleTrigger>
 
-											<div className="mt-4 flex items-center justify-between border-t pt-4">
-												<div className="flex gap-2">
-													<Button variant="outline" size="sm">
-														<Eye className="mr-2 h-4 w-4" />
-														View Details
-													</Button>
-													{order.status === "completed" && (
-														<Button variant="outline" size="sm">
-															Reorder
-														</Button>
-													)}
-												</div>
-												<div className="text-right">
-													<p className="text-lg font-bold">
-														Total: ${order.totalPrice.toFixed(2)}
-													</p>
-												</div>
-											</div>
-										</div>
-									</CardContent>
-								</CollapsibleContent>
-							</Collapsible>
-						</Card>
-					</motion.div>
-				))}
+											<CollapsibleContent asChild>
+												<motion.div
+													initial={false}
+													animate={{
+														height: expandedOrders.has(order.id) ? "auto" : 0,
+														opacity: expandedOrders.has(order.id) ? 1 : 0,
+													}}
+													transition={{
+														duration: 0.3,
+														ease: "easeInOut",
+													}}
+													style={{ overflow: "hidden" }}
+												>
+													<CardContent className="pt-0">
+														<div className="space-y-4">
+															{/* Order Items */}
+															<div>
+																<h4 className="mb-3 flex items-center gap-2 font-semibold">
+																	<Package className="h-4 w-4" />
+																	Order Items ({order.items.length})
+																</h4>
+																<div className="space-y-2">
+																	{order.items.map((item) => (
+																		<div
+																			key={item.id}
+																			className="flex items-center justify-between rounded-lg bg-gray-50 p-3"
+																		>
+																			<div className="flex-1">
+																				<p className="font-medium">
+																					{item.product?.name || "Product"}
+																				</p>
+																				<p className="text-sm text-gray-600">
+																					Quantity: {item.quantity} | From:{" "}
+																					{item.from}
+																				</p>
+																			</div>
+																			<div className="text-right">
+																				<p className="font-semibold">
+																					{formatPrice(item.price)}
+																				</p>
+																			</div>
+																		</div>
+																	))}
+																</div>
+															</div>
+
+															{/* Payment Info */}
+															<div className="border-t pt-4">
+																<h4 className="mb-3 flex items-center gap-2 font-semibold">
+																	<DollarSign className="h-4 w-4" />
+																	Payment Information
+																</h4>
+																<div className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
+																	<div>
+																		<span className="text-gray-600">
+																			Payment Method:
+																		</span>
+																		<span className="ml-2 font-medium">
+																			{order.bill?.paymentMethod}
+																		</span>
+																	</div>
+																	<div>
+																		<span className="text-gray-600">
+																			Transaction ID:
+																		</span>
+																		<span className="ml-2 font-medium">
+																			{order.bill?.transactionId || "N/A"}
+																		</span>
+																	</div>
+																	{order.bill?.note && (
+																		<div className="sm:col-span-2">
+																			<span className="text-gray-600">Note:</span>
+																			<span className="ml-2">
+																				{order.bill.note}
+																			</span>
+																		</div>
+																	)}
+																</div>
+															</div>
+
+															{/* Actions */}
+															<div className="flex gap-2 border-t pt-4">
+																<Button
+																	variant="outline"
+																	size="sm"
+																	onClick={() => handleViewDetails(order.id)}
+																>
+																	<Eye className="mr-2 h-4 w-4" />
+																	View Details
+																</Button>
+																{order.bill?.status === "DONE" && (
+																	<Button
+																		variant="outline"
+																		size="sm"
+																		onClick={() => handleDownloadInvoice(order.id)}
+																		disabled={downloadingInvoices.has(order.id)}
+																	>
+																		{downloadingInvoices.has(order.id) ? (
+																			<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+																		) : (
+																			<Download className="mr-2 h-4 w-4" />
+																		)}
+																		{downloadingInvoices.has(order.id)
+																			? "Downloading..."
+																			: "Download Invoice"}
+																	</Button>
+																)}
+																{order.bill?.status === "PENDING" && (
+																	<Button
+																		variant="destructive"
+																		size="sm"
+																		onClick={() => handleCancelOrder(order.id)}
+																		disabled={mutationLoading}
+																	>
+																		<X className="mr-2 h-4 w-4" />
+																		Cancel Order
+																	</Button>
+																)}
+															</div>
+														</div>
+													</CardContent>
+												</motion.div>
+											</CollapsibleContent>
+										</Collapsible>
+									</Card>
+								</motion.div>
+							))
+						)}
+					</InfiniteScroll>
+				)}
 			</div>
 
-			{filteredOrders.length === 0 && (
-				<Card>
-					<CardContent className="py-12 text-center">
-						<Package className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-						<p className="text-gray-500">No orders found matching your criteria.</p>
-					</CardContent>
-				</Card>
-			)}
+			{/* Order Details Modal */}
+			<OrderDetailsModal
+				orderId={selectedOrderId}
+				open={modalOpen}
+				onOpenChange={handleModalClose}
+				onOrderUpdated={handleOrderUpdated}
+			/>
+		</div>
+	);
+}
+
+function OrderLoading() {
+	return (
+		<div className="flex items-center justify-center py-4">
+			<div className="flex items-center gap-2">
+				<div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600"></div>
+				<span className="text-sm text-gray-500">Loading more orders...</span>
+			</div>
+		</div>
+	);
+}
+
+function OrderEnded() {
+	return (
+		<div className="py-4 text-center text-gray-500">
+			<p className="text-sm">No more orders to load</p>
 		</div>
 	);
 }

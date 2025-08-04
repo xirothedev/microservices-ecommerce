@@ -135,7 +135,12 @@ export default function ServicesList() {
 				dataLength={filteredServices.length}
 				next={fetchNextPage}
 				hasMore={!!hasNextPage}
-				loader={<div className="py-4 text-center text-gray-500">Loading...</div>}
+				loader={
+					<div className="mt-4 flex items-center justify-center py-4">
+						<div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600"></div>
+						<span className="ml-2 text-gray-500">Loading...</span>
+					</div>
+				}
 				endMessage={<div className="py-4 text-center text-gray-500">End</div>}
 				scrollThreshold={0.75}
 			>
@@ -150,7 +155,7 @@ export default function ServicesList() {
 							key={index}
 							initial={{ opacity: 0, y: 20 }}
 							animate={{ opacity: 1, y: 0 }}
-							transition={{ duration: 0.3, delay: index * 0.1 }}
+							transition={{ duration: 0.2, delay: index * 0.05 }}
 						>
 							<ServiceCard service={service} />
 						</motion.div>

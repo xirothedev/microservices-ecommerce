@@ -125,9 +125,7 @@ export class TicketService {
         },
         _count: { select: { messages: true } },
       },
-      orderBy: {
-        createAt: 'desc',
-      },
+      orderBy: [{ createAt: 'desc' }, { id: 'desc' }],
       take: take + 1,
       skip,
       ...(cursorObj && { cursor: cursorObj }),

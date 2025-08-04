@@ -237,10 +237,8 @@ export class ProductsService {
           },
         },
       },
-      orderBy: {
-        createAt: 'desc',
-      },
-      take: take + 1, // fetch one extra to check if there's a next page
+      orderBy: [{ createAt: 'desc' }, { id: 'desc' }],
+      take: take + 1,
       skip,
       ...(cursorObj && { cursor: cursorObj }),
     });
