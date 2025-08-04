@@ -1,4 +1,4 @@
-import type { UserQuery } from "@/typings/backend";
+import type { UserQuery } from "@/@types/backend";
 
 // Base API response interface
 export interface ApiResponse<T> {

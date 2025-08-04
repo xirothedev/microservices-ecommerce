@@ -11,7 +11,7 @@ import {
 	RefreshTokenResponse,
 	RegisterRequest,
 	RegisterResponse,
-} from "./types/auth";
+} from "@/@types/api/auth";
 
 class AuthApi {
 	/**

@@ -9,8 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useDebounce } from "@/hooks/use-debounce";
 import axiosInstance from "@/lib/axios";
 import { formatDate } from "@/lib/format";
-import { IAxiosError } from "@/typings";
-import { TicketResponse } from "@/typings/backend";
+import { IAxiosError } from "@/@types";
+import { TicketResponse } from "@/@types/backend";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { TicketSocketEvents, useTicketSocket } from "@/lib/websocket/ticket";

@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useCart, useUpdateCart } from "@/lib/api/cart";
-import { ProductWithAverageRating } from "@/typings/backend";
+import { ProductWithAverageRating } from "@/@types/backend";
 import { Eye, ShoppingCart, Star } from "lucide-react";
 import { motion } from "motion/react";
 import Image from "next/image";

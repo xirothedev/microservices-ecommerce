@@ -7,8 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { useUserQuery } from "@/lib/api/user";
 import axiosInstance from "@/lib/axios";
-import { IAxiosError } from "@/typings";
-import { TicketResponse } from "@/typings/backend";
+import { IAxiosError } from "@/@types";
+import { TicketResponse } from "@/@types/backend";
 import { useQuery } from "@tanstack/react-query";
 import {
 	AlertCircle,

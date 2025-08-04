@@ -9,8 +9,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useOrderMutations } from "@/lib/api/orders";
 import { ordersApi, downloadInvoice } from "@/lib/api/orders";
-import { FindAllOrdersRequest, Order, OrdersListResponse } from "@/lib/api/types/orders";
-import { IAxiosError } from "@/typings";
+import { FindAllOrdersRequest, Order, OrdersListResponse } from "@/@types/api/orders";
+import { IAxiosError } from "@/@types";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import {

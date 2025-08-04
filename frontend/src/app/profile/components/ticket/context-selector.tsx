@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import axiosInstance from "@/lib/axios";
-import { Context, ContextInput } from "@/typings/backend";
+import { Context, ContextInput } from "@/@types/backend";
 import { CreditCard, Package, Search, ShoppingBag, User, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";

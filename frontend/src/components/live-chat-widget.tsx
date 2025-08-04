@@ -8,6 +8,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { sendChatMessage, getChatStatus, type ChatMessage } from "@/lib/api/chat";
 
 interface Message {
 	id: string;
@@ -43,6 +44,8 @@ export function LiveChatWidget() {
 	const [messages, setMessages] = useState<Message[]>(initialMessages);
 	const [inputValue, setInputValue] = useState("");
 	const [isTyping, setIsTyping] = useState(false);
+	const [conversationHistory, setConversationHistory] = useState<ChatMessage[]>([]);
+	const [isAiEnabled, setIsAiEnabled] = useState(false);
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -57,58 +60,93 @@ export function LiveChatWidget() {
 		}
 	}, [isOpen]);
 
-	const handleSendMessage = () => {
+	// Check if AI is enabled on component mount
+	useEffect(() => {
+		const checkAiStatus = async () => {
+			try {
+				const status = await getChatStatus();
+				setIsAiEnabled(status.aiEnabled);
+			} catch (error) {
+				console.error("Failed to check AI status:", error);
+				setIsAiEnabled(false);
+			}
+		};
+
+		checkAiStatus();
+	}, []);
+
+	// Generate fallback response using the original logic
+	const generateFallbackResponse = (userInput: string): string => {
+		const lowercaseInput = userInput.toLowerCase();
+
+		if (lowercaseInput.includes("pricing") || lowercaseInput.includes("cost") || lowercaseInput.includes("price")) {
+			return autoResponses.pricing;
+		} else if (
+			lowercaseInput.includes("feature") ||
+			lowercaseInput.includes("offer") ||
+			lowercaseInput.includes("provide")
+		) {
+			return autoResponses.features;
+		} else if (
+			lowercaseInput.includes("support") ||
+			lowercaseInput.includes("help") ||
+			lowercaseInput.includes("assistance")
+		) {
+			return autoResponses.support;
+		} else if (
+			lowercaseInput.includes("trial") ||
+			lowercaseInput.includes("free") ||
+			lowercaseInput.includes("try")
+		) {
+			return autoResponses.trial;
+		} else if (
+			lowercaseInput.includes("demo") ||
+			lowercaseInput.includes("demonstration") ||
+			lowercaseInput.includes("show")
+		) {
+			return autoResponses.demo;
+		}
+
+		return autoResponses.default;
+	};
+
+	const handleSendMessage = async () => {
 		if (!inputValue.trim()) return;
+
+		const currentInput = inputValue;
 
 		// Add user message
 		const userMessage: Message = {
 			id: Date.now().toString(),
-			content: inputValue,
+			content: currentInput,
 			sender: "user",
 			timestamp: new Date(),
 		};
 		setMessages((prev) => [...prev, userMessage]);
 		setInputValue("");
 
-		// Simulate agent typing
+		// Update conversation history for Gemini
+		const newUserMessage: ChatMessage = {
+			role: "user",
+			content: currentInput,
+		};
+		const updatedHistory = [...conversationHistory, newUserMessage];
+		setConversationHistory(updatedHistory);
+
+		// Show typing indicator
 		setIsTyping(true);
-		setTimeout(() => {
-			setIsTyping(false);
 
-			// Generate auto-response based on keywords
-			let responseContent = autoResponses.default;
-			const lowercaseInput = inputValue.toLowerCase();
+		try {
+			let responseContent: string;
 
-			if (
-				lowercaseInput.includes("pricing") ||
-				lowercaseInput.includes("cost") ||
-				lowercaseInput.includes("price")
-			) {
-				responseContent = autoResponses.pricing;
-			} else if (
-				lowercaseInput.includes("feature") ||
-				lowercaseInput.includes("offer") ||
-				lowercaseInput.includes("provide")
-			) {
-				responseContent = autoResponses.features;
-			} else if (
-				lowercaseInput.includes("support") ||
-				lowercaseInput.includes("help") ||
-				lowercaseInput.includes("assistance")
-			) {
-				responseContent = autoResponses.support;
-			} else if (
-				lowercaseInput.includes("trial") ||
-				lowercaseInput.includes("free") ||
-				lowercaseInput.includes("try")
-			) {
-				responseContent = autoResponses.trial;
-			} else if (
-				lowercaseInput.includes("demo") ||
-				lowercaseInput.includes("demonstration") ||
-				lowercaseInput.includes("show")
-			) {
-				responseContent = autoResponses.demo;
+			// Send message to backend API
+			const response = await sendChatMessage(currentInput, updatedHistory);
+
+			if (response.error) {
+				console.warn("Backend API failed, falling back to auto-responses:", response.error);
+				responseContent = generateFallbackResponse(currentInput);
+			} else {
+				responseContent = response.content;
 			}
 
 			// Add agent response
@@ -118,8 +156,30 @@ export function LiveChatWidget() {
 				sender: "agent",
 				timestamp: new Date(),
 			};
+
 			setMessages((prev) => [...prev, agentMessage]);
-		}, 1500); // Simulate typing delay
+
+			// Update conversation history with agent response
+			const newAgentMessage: ChatMessage = {
+				role: "assistant",
+				content: responseContent,
+			};
+			setConversationHistory((prev) => [...prev, newAgentMessage]);
+		} catch (error) {
+			console.error("Error generating response:", error);
+
+			// Fallback to auto-responses on any error
+			const fallbackResponse = generateFallbackResponse(currentInput);
+			const agentMessage: Message = {
+				id: (Date.now() + 1).toString(),
+				content: fallbackResponse,
+				sender: "agent",
+				timestamp: new Date(),
+			};
+			setMessages((prev) => [...prev, agentMessage]);
+		} finally {
+			setIsTyping(false);
+		}
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -167,7 +227,7 @@ export function LiveChatWidget() {
 								<div>
 									<div className="font-medium">Support Team</div>
 									<div className="text-muted-foreground text-xs">
-										Online | Typically replies in minutes
+										{isAiEnabled ? "AI-Powered" : "Auto-Response"} | Online
 									</div>
 								</div>
 							</div>

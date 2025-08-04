@@ -16,6 +16,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AuthCookieGuard } from './modules/auth/guards/auth-cookie.guard';
 import { CartModule } from './modules/cart/cart.module';
 import { CategoriesModule } from './modules/categories/categories.module';
+import { ChatModule } from './modules/chat/chat.module';
 import { CustomersModule } from './modules/customers/customers.module';
 // import { DiscordModule } from './modules/discord/discord.module';
 import { JwtModule } from '@nestjs/jwt';
@@ -102,6 +103,7 @@ class GlobalJwtModule {}
     ProductsModule,
     CategoriesModule,
     CartModule,
+    ChatModule,
     // DiscordModule,
     CustomersModule,
     TicketModule,

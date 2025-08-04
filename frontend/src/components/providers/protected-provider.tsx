@@ -2,7 +2,7 @@
 
 import { useUserQuery } from "@/lib/api/user";
 import { setProtectedContext } from "@/lib/refresh-token";
-import { UserRole } from "@/typings/backend";
+import { UserRole } from "@/@types/backend";
 import { forbidden, useRouter } from "next/navigation";
 import { useEffect } from "react";
 

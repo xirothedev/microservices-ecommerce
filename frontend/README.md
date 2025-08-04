@@ -2,6 +2,19 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### Environment Setup
+
+Create a `.env.local` file in the frontend directory if you need to configure API endpoints:
+
+```bash
+# Backend API Configuration (optional - defaults to http://localhost:4000)
+NEXT_PUBLIC_API_URL=http://localhost:4000
+```
+
+Note: The Gemini AI configuration is now handled by the backend. See the backend README for setup instructions.
+
+### Development Server
+
 First, run the development server:
 
 ```bash

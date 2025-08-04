@@ -1,4 +1,4 @@
-import type { SafeUser } from "@/typings/backend";
+import type { SafeUser } from "@/@types/backend";
 import type { LoginForm } from "@/zods/login";
 import type { SignUpForm } from "@/zods/signup";
 
