@@ -2,9 +2,9 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { useUserQuery } from "@/hooks/use-user";
+import { useUserQuery } from "@/lib/api/user";
 import axiosInstance from "@/lib/axios";
-import { TicketSocketEvents, useTicketSocket } from "@/lib/socket/ticket";
+import { TicketSocketEvents, useTicketSocket } from "@/lib/websocket/ticket";
 import { getFallbackString } from "@/lib/utils";
 import { IAxiosError } from "@/typings";
 import { TicketMessageResponse } from "@/typings/backend";

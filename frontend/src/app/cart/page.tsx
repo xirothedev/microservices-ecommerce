@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { ShoppingCart, Plus, Minus, Trash2, ArrowLeft, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { useCart } from "@/hooks/use-cart";
+import { useCart } from "@/lib/api/cart";
 
 export default function CartContent() {
 	const { items, updateQuantity, removeFromCart, clearCart, getTotalItems, getTotalPrice } = useCart();
@@ -133,8 +133,6 @@ export default function CartContent() {
 													<Trash2 className="h-4 w-4" />
 												</Button>
 											</div>
-
-											<p className="mb-3 text-sm text-gray-600">Delivery: {item.deliveryTime}</p>
 
 											<div className="flex items-center justify-between">
 												<div className="flex items-center gap-3">

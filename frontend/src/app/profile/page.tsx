@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-import { UpdateUserInput, useUpdateUserAvatarMutation, useUpdateUserMutation, useUserQuery } from "@/hooks/use-user";
+import { UpdateUserInput, useUpdateUserAvatarMutation, useUpdateUserMutation, useUserQuery } from "@/lib/api/user";
 import { getFallbackString } from "@/lib/utils";
 import { ProfileForm, profileSchema } from "@/zods/user";
 import { zodResolver } from "@hookform/resolvers/zod";

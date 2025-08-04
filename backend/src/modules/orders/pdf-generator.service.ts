@@ -93,16 +93,16 @@ export class PdfGeneratorService {
         );
 
         // Right column
-        doc.fillColor('#666666').text('Total Amount:', 360, yPosition);
+        doc.fillColor('#666666').text('Total Amount:', 350, yPosition);
         doc
           .fontSize(12)
           .fillColor('#16a34a')
-          .text(this.formatCurrency(order.totalPrice), 460, yPosition)
+          .text(this.formatCurrency(order.totalPrice), 430, yPosition)
           .fillColor('black')
           .fontSize(10);
 
-        doc.fillColor('#666666').text('Status:', 360, yPosition + 20);
-        doc.fillColor('black').text(order.bill.status, 460, yPosition + 20);
+        doc.fillColor('#666666').text('Status:', 350, yPosition + 20);
+        doc.fillColor('black').text(order.bill.status, 430, yPosition + 20);
 
         yPosition += 70;
 
@@ -110,11 +110,22 @@ export class PdfGeneratorService {
         this.drawSection(doc, 'Customer Information', yPosition);
         yPosition += 25;
 
+        // Customer info in 2 columns
+        doc.fontSize(10);
+
+        // Left column
         doc.fillColor('#666666').text('Name:', 60, yPosition);
-        doc.fillColor('black').text(order.user.fullname, 120, yPosition);
+        doc.fillColor('black').text(order.user.fullname, 150, yPosition);
 
         doc.fillColor('#666666').text('Email:', 60, yPosition + 20);
-        doc.fillColor('black').text(order.user.email, 120, yPosition + 20);
+        doc.fillColor('black').text(order.user.email, 150, yPosition + 20);
+
+        // Right column
+        doc.fillColor('#666666').text('Phone:', 350, yPosition);
+        doc.fillColor('black').text(order.user.phone, 430, yPosition);
+
+        doc.fillColor('#666666').text('Address:', 350, yPosition + 20);
+        doc.fillColor('black').text(order.user.address, 430, yPosition + 20);
 
         yPosition += 50;
 
@@ -178,11 +189,11 @@ export class PdfGeneratorService {
         doc.fillColor('black').text(order.bill.transactionId || 'N/A', 180, yPosition + 20);
 
         // Right column
-        doc.fillColor('#666666').text('Amount:', 360, yPosition);
-        doc.fillColor('black').text(this.formatCurrency(order.bill.amount), 460, yPosition);
+        doc.fillColor('#666666').text('Amount:', 350, yPosition);
+        doc.fillColor('black').text(this.formatCurrency(order.bill.amount), 430, yPosition);
 
-        doc.fillColor('#666666').text('Payment Status:', 360, yPosition + 20);
-        doc.fillColor('black').text(order.bill.status, 460, yPosition + 20);
+        doc.fillColor('#666666').text('Payment Status:', 350, yPosition + 20);
+        doc.fillColor('black').text(order.bill.status, 430, yPosition + 20);
 
         // Note if exists
         if (order.bill.note) {

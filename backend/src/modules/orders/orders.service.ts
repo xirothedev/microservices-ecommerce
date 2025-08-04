@@ -635,6 +635,8 @@ export class OrdersService {
             id: true,
             fullname: true,
             email: true,
+            phone: true,
+            address: true,
           },
         },
       },

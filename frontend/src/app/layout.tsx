@@ -11,7 +11,6 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
 	title: {
-		absolute: "Digital Pro - Premium Digital Services",
 		template: "Digital Pro - %s",
 		default: "Digital Pro",
 	},

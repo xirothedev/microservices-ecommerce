@@ -1,15 +1,15 @@
 "use client";
 
-import { CreditCard, HelpCircle, ListOrdered, Loader2, Lock, LogOut, Settings, User } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Dispatch, SetStateAction } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useUserQuery } from "@/hooks/use-user";
+import { useUserQuery } from "@/lib/api/user";
 import { getFallbackString } from "@/lib/utils";
+import { HelpCircle, ListOrdered, Loader2, Lock, LogOut, Settings, User } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Dispatch, SetStateAction } from "react";
 
 const navigationItems = [
 	{
@@ -23,12 +23,6 @@ const navigationItems = [
 		label: "Orders History",
 		icon: ListOrdered,
 		description: "View your orders history",
-	},
-	{
-		url: "transaction",
-		label: "Transaction History",
-		icon: CreditCard,
-		description: "View your payment history",
 	},
 	{
 		url: "change-password",

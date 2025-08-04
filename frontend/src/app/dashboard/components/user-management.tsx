@@ -3,6 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useDebounce } from "@/hooks/use-debounce";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import UserProfileModal from "./user-profile-modal";
@@ -104,6 +105,8 @@ export default function UserManagement() {
 	const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 	const [loading, setLoading] = useState<boolean>(false);
 
+	const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
 	const handleBanUser = async (userId: string) => {
 		setLoading(true);
 		// Simulate API call
@@ -145,11 +148,11 @@ export default function UserManagement() {
 		let filtered = users;
 
 		// Apply search filter
-		if (searchTerm) {
+		if (debouncedSearchTerm) {
 			filtered = filtered.filter(
 				(user) =>
-					user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-					user.email.toLowerCase().includes(searchTerm.toLowerCase()),
+					user.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+					user.email.toLowerCase().includes(debouncedSearchTerm.toLowerCase()),
 			);
 		}
 
@@ -164,7 +167,7 @@ export default function UserManagement() {
 		}
 
 		setFilteredUsers(filtered);
-	}, [users, searchTerm, statusFilter, roleFilter]);
+	}, [users, debouncedSearchTerm, statusFilter, roleFilter]);
 
 	return (
 		<div className="space-y-6">

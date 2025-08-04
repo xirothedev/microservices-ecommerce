@@ -1,6 +1,6 @@
 "use client";
 
-import { useUserQuery } from "@/hooks/use-user";
+import { useUserQuery } from "@/lib/api/user";
 import { UserRole } from "@/typings/backend";
 import { forbidden, useRouter } from "next/navigation";
 import { useEffect } from "react";

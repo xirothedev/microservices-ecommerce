@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useDebounce } from "@/hooks/use-debounce";
 import { AlertCircle, CheckCircle, Clock, Eye, MoreHorizontal, Search, UserCheck, XCircle } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
@@ -209,16 +210,18 @@ export default function TicketManagement() {
 	const [isChatModalOpen, setIsChatModalOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 
+	const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
 	useEffect(() => {
 		let filtered = tickets;
 
 		// Apply search filter
-		if (searchTerm) {
+		if (debouncedSearchTerm) {
 			filtered = filtered.filter(
 				(ticket) =>
-					ticket.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-					ticket.user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-					ticket.id.toLowerCase().includes(searchTerm.toLowerCase()),
+					ticket.subject.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+					ticket.user.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+					ticket.id.toLowerCase().includes(debouncedSearchTerm.toLowerCase()),
 			);
 		}
 
@@ -238,7 +241,7 @@ export default function TicketManagement() {
 		}
 
 		setFilteredTickets(filtered);
-	}, [tickets, searchTerm, statusFilter, priorityFilter, categoryFilter]);
+	}, [tickets, debouncedSearchTerm, statusFilter, priorityFilter, categoryFilter]);
 
 	const formatDate = (dateString: string) => {
 		const date = new Date(dateString);

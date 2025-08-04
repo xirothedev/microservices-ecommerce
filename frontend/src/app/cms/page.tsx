@@ -5,6 +5,7 @@ import { AnimatePresence } from "motion/react";
 import { Plus, Search, Grid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useDebounce } from "@/hooks/use-debounce";
 import SearchFilters from "@/app/cms/components/search-filters";
 import ProductList from "@/app/cms/components/product-list";
 import PreviewModal from "@/app/cms/components/preview-modal";
@@ -49,6 +50,8 @@ export default function CmsLayout() {
 	const [sortBy, setSortBy] = useState("updatedAt");
 	const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 	const [isLoading, setIsLoading] = useState(true);
+
+	const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
 	// Mock data - In real app, this would come from an API
 	useEffect(() => {
@@ -143,11 +146,11 @@ export default function CmsLayout() {
 	useEffect(() => {
 		let filtered = [...products];
 
-		if (searchQuery) {
+		if (debouncedSearchQuery) {
 			filtered = filtered.filter(
 				(product) =>
-					product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-					product.categories.some((cat) => cat.toLowerCase().includes(searchQuery.toLowerCase())),
+					product.name.toLowerCase().includes(debouncedSearchQuery.toLowerCase()) ||
+					product.categories.some((cat) => cat.toLowerCase().includes(debouncedSearchQuery.toLowerCase())),
 			);
 		}
 
@@ -172,7 +175,7 @@ export default function CmsLayout() {
 		});
 
 		setFilteredProducts(filtered);
-	}, [products, searchQuery, sortBy, sortOrder]);
+	}, [products, debouncedSearchQuery, sortBy, sortOrder]);
 
 	const handleCreateProduct = () => {
 		setSelectedProduct(null);

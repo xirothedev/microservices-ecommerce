@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { useCart, useUpdateCart } from "@/hooks/use-cart";
+import { useCart, useUpdateCart } from "@/lib/api/cart";
 import { CartItemWithProduct } from "@/typings/backend";
 import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";

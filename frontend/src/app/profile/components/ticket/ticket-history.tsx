@@ -6,13 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useDebounce } from "@/hooks/use-debounce";
 import axiosInstance from "@/lib/axios";
 import { formatDate } from "@/lib/format";
 import { IAxiosError } from "@/typings";
 import { TicketResponse } from "@/typings/backend";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { TicketSocketEvents, useTicketSocket } from "@/lib/socket/ticket";
+import { TicketSocketEvents, useTicketSocket } from "@/lib/websocket/ticket";
 import {
 	AlertCircle,
 	ArrowRight,
@@ -50,6 +51,7 @@ export default function TicketHistory() {
 	const [statusFilter, setStatusFilter] = useState<string>("all");
 	const [priorityFilter, setPriorityFilter] = useState<string>("all");
 
+	const debouncedSearchQuery = useDebounce(searchQuery, 500);
 	const queryClient = useQueryClient();
 	const ticketSocket = useTicketSocket();
 
@@ -57,7 +59,7 @@ export default function TicketHistory() {
 		function handleNewTicket(newTicket: TicketResponse) {
 			// Only add if ticket doesn't exist in the list
 			queryClient.setQueryData<{ pages: { data: TicketResponse[] }[] }>(
-				["tickets", searchQuery, statusFilter, priorityFilter],
+				["tickets", debouncedSearchQuery, statusFilter, priorityFilter],
 				(oldData) => {
 					if (!oldData) return oldData;
 					const exists = oldData.pages.some((page) => page.data.some((t) => t.id === newTicket.id));
@@ -87,7 +89,7 @@ export default function TicketHistory() {
 		return () => {
 			ticketSocket.off(TicketSocketEvents.NEW_TICKET, handleNewTicket);
 		};
-	}, [searchQuery, statusFilter, priorityFilter, queryClient, ticketSocket]);
+	}, [debouncedSearchQuery, statusFilter, priorityFilter, queryClient, ticketSocket]);
 
 	const { data, isLoading, isError, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery<
 		{
@@ -96,11 +98,11 @@ export default function TicketHistory() {
 		},
 		IAxiosError
 	>({
-		queryKey: ["tickets", searchQuery, statusFilter, priorityFilter],
+		queryKey: ["tickets", debouncedSearchQuery, statusFilter, priorityFilter],
 		queryFn: async ({ pageParam }) => {
 			const params: Record<string, unknown> = { limit: PAGE_SIZE };
 			if (pageParam) params.cursor = pageParam;
-			if (searchQuery) params.search = searchQuery;
+			if (debouncedSearchQuery) params.search = debouncedSearchQuery;
 			if (statusFilter !== "all") params.status = statusFilter;
 			if (priorityFilter !== "all") params.priority = priorityFilter;
 			const res = await axiosInstance.get("/ticket", { params });

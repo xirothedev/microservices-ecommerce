@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useOrder, useOrderMutations } from "@/hooks/use-orders";
+import { useOrder, useOrderMutations } from "@/lib/api/orders";
 import dayjs from "dayjs";
 import { CreditCard, Loader2, Package, RefreshCw, User, X } from "lucide-react";
 

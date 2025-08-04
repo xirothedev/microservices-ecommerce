@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useCart } from "@/hooks/use-cart";
+import { useCart } from "@/lib/api/cart";
 import { ProductWithAverageRating } from "@/typings/backend";
 import { Check, Heart, Minus, Plus, ShoppingCart, Star } from "lucide-react";
 import Image from "next/image";

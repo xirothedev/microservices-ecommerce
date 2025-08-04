@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useLogin } from "@/hooks/use-auth";
+import { useLogin } from "@/lib/api/auth";
 import { toast } from "@/hooks/use-toast";
 import type { LoginForm } from "@/zods/login";
 import { loginSchema } from "@/zods/login";
@@ -26,7 +26,16 @@ export default function LoginPage() {
 	});
 
 	const onSubmit = async (data: LoginForm) => {
-		await mutateAsync(data);
+		try {
+			await mutateAsync(data);
+		} catch (error) {
+			console.error("Login error:", error);
+			toast({
+				title: "Error",
+				description: "An error occurred during login",
+				variant: "destructive",
+			});
+		}
 	};
 
 	const handleSocialLogin = async (provider: "github" | "google") => {

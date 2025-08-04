@@ -6,7 +6,8 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useOrderMutations } from "@/hooks/use-orders";
+import { useDebounce } from "@/hooks/use-debounce";
+import { useOrderMutations } from "@/lib/api/orders";
 import { ordersApi, downloadInvoice } from "@/lib/api/orders";
 import { FindAllOrdersRequest, Order, OrdersListResponse } from "@/lib/api/types/orders";
 import { IAxiosError } from "@/typings";
@@ -42,17 +43,18 @@ export default function OrdersContent() {
 	const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set());
 	const [downloadingInvoices, setDownloadingInvoices] = useState<Set<string>>(new Set());
 
+	const debouncedSearchTerm = useDebounce(searchTerm, 500);
 	const { cancelOrder, loading: mutationLoading } = useOrderMutations();
 
 	const { data, isLoading, isError, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery<
 		OrdersListResponse,
 		IAxiosError
 	>({
-		queryKey: ["orders", searchTerm, statusFilter],
+		queryKey: ["orders", debouncedSearchTerm, statusFilter],
 		queryFn: async ({ pageParam }) => {
 			const params: FindAllOrdersRequest = { limit: PAGE_SIZE };
 			if (pageParam) params.cursor = pageParam as string;
-			if (searchTerm) params.search = searchTerm;
+			if (debouncedSearchTerm) params.search = debouncedSearchTerm;
 			if (statusFilter !== "all") params.status = statusFilter as any;
 			return await ordersApi.getUserOrders(params);
 		},
@@ -230,7 +232,7 @@ export default function OrdersContent() {
 									<ShoppingBag className="mx-auto mb-4 h-12 w-12 text-gray-400" />
 									<h3 className="mb-2 text-lg font-semibold text-gray-700">No Orders Found</h3>
 									<p className="text-gray-500">
-										{searchTerm || statusFilter !== "all"
+										{debouncedSearchTerm || statusFilter !== "all"
 											? "Try adjusting your search or filter criteria"
 											: "You haven't placed any orders yet"}
 									</p>

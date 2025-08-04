@@ -21,6 +21,7 @@ import { LoginDto } from './dto/login.dto';
 import { MfaVerificationDto, RequestMfaCodeDto } from './dto/mfa-verification.dto';
 import { SetupMfaDto, ToggleMfaDto, VerifyMfaSetupDto } from './dto/setup-mfa.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { MfaService } from './mfa.service';
 
 @ApiTags('Auth')
@@ -151,5 +152,16 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Backup codes regenerated' })
   regenerateBackupCodes(@Req() req: Request) {
     return this.mfaService.regenerateBackupCodes(req.user.id);
+  }
+
+  @Post('change-password')
+  @ApiOperation({ summary: 'Change user password' })
+  @ApiBody({ type: ChangePasswordDto })
+  @ApiResponse({ status: 200, description: 'Password changed successfully' })
+  @ApiResponse({ status: 400, description: 'Bad request - Invalid current password or same password' })
+  @ApiResponse({ status: 401, description: 'Unauthorized - Current password is incorrect' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  changePassword(@Req() req: Request, @Body() body: ChangePasswordDto) {
+    return this.authService.changePassword(req.user.id, body);
   }
 }

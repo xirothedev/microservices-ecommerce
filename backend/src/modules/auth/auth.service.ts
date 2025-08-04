@@ -20,6 +20,7 @@ import { Payload } from './auth.interface';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { LoginDto } from './dto/login.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { MfaService } from './mfa.service';
 
 export const MINIMUM_RETRY_TIME = 60_000;
@@ -295,6 +296,48 @@ export class AuthService {
 
     return {
       message: 'Refreshed',
+      data: null,
+    };
+  }
+
+  public async changePassword(userId: string, body: ChangePasswordDto) {
+    // Get user with current password
+    const user = await this.prismaService.user.findUnique({
+      where: { id: userId },
+      select: { hashedPassword: true, email: true },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (!user.hashedPassword) {
+      throw new BadRequestException('User has no password set');
+    }
+
+    // Verify current password
+    const isValidCurrentPassword = await verify(user.hashedPassword, body.currentPassword);
+    if (!isValidCurrentPassword) {
+      throw new UnauthorizedException('Current password is incorrect');
+    }
+
+    // Check if new password is different from current password
+    const isSamePassword = await verify(user.hashedPassword, body.newPassword);
+    if (isSamePassword) {
+      throw new BadRequestException('New password must be different from current password');
+    }
+
+    // Hash new password
+    const hashedNewPassword = await this.hashing(body.newPassword);
+
+    // Update password in database
+    await this.prismaService.user.update({
+      where: { id: userId },
+      data: { hashedPassword: hashedNewPassword },
+    });
+
+    return {
+      message: 'Password changed successfully',
       data: null,
     };
   }

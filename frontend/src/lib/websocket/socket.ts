@@ -3,6 +3,13 @@ import { io, Socket } from "socket.io-client";
 
 const sockets: Record<string, Socket> = {};
 
+/**
+ * Custom hook for managing WebSocket connections with Socket.IO
+ * Provides a clean interface for connecting, listening, and emitting events
+ *
+ * @param namespace - The Socket.IO namespace to connect to
+ * @returns Object with socket management functions
+ */
 export default function useSocket(namespace: string) {
 	const socketRef = useRef<Socket | null>(null);
 	const listenersRef = useRef<Map<string, Set<Function>>>(new Map());

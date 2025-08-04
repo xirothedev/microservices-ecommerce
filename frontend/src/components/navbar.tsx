@@ -7,7 +7,7 @@ import { Menu, Smartphone } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import Cart from "./cart";
-import { useUserQuery } from "@/hooks/use-user";
+import { useUserQuery } from "@/lib/api/user";
 import { getFallbackString } from "@/lib/utils";
 
 interface NavbarProps {

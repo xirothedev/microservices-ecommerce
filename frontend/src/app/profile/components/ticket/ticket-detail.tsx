@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useUserQuery } from "@/hooks/use-user";
+import { useUserQuery } from "@/lib/api/user";
 import axiosInstance from "@/lib/axios";
 import { IAxiosError } from "@/typings";
 import { TicketResponse } from "@/typings/backend";

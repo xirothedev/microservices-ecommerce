@@ -9,6 +9,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Eye, EyeOff, Shield, Check, X, AlertTriangle, CheckCircle, Lock, Key, Smartphone } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { useChangePassword } from "@/lib/api/auth";
 
 interface PasswordRequirement {
 	rule: string;
@@ -17,6 +18,8 @@ interface PasswordRequirement {
 }
 
 export default function ChangePasswordContent() {
+	const changePasswordMutation = useChangePassword();
+
 	const [showPasswords, setShowPasswords] = useState({
 		current: false,
 		new: false,
@@ -31,7 +34,9 @@ export default function ChangePasswordContent() {
 
 	const [errors, setErrors] = useState<string[]>([]);
 	const [success, setSuccess] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
+
+	// Get loading state from mutation
+	const isLoading = changePasswordMutation.isPending;
 
 	// Password strength requirements
 	const requirements: PasswordRequirement[] = [
@@ -72,7 +77,6 @@ export default function ChangePasswordContent() {
 		e.preventDefault();
 		setErrors([]);
 		setSuccess(false);
-		setIsLoading(true);
 
 		const newErrors: string[] = [];
 
@@ -98,20 +102,26 @@ export default function ChangePasswordContent() {
 
 		if (newErrors.length > 0) {
 			setErrors(newErrors);
-			setIsLoading(false);
 			return;
 		}
 
-		// Simulate API call
-		try {
-			await new Promise((resolve) => setTimeout(resolve, 2000));
-			setSuccess(true);
-			setPasswords({ current: "", new: "", confirm: "" });
-		} catch {
-			setErrors(["Failed to update password. Please try again."]);
-		} finally {
-			setIsLoading(false);
-		}
+		// Call change password API using React Query mutation
+		changePasswordMutation.mutate(
+			{
+				currentPassword: passwords.current,
+				newPassword: passwords.new,
+			},
+			{
+				onSuccess: () => {
+					setSuccess(true);
+					setPasswords({ current: "", new: "", confirm: "" });
+				},
+				onError: () => {
+					// Error handling is done in the hook via toast
+					// We can add additional local error handling here if needed
+				},
+			},
+		);
 	};
 
 	const togglePasswordVisibility = (field: keyof typeof showPasswords) => {
