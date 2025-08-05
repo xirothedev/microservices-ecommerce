@@ -2,6 +2,7 @@ import { Body, Controller, Post, Get, Logger } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { ChatService } from './chat.service';
 import { SendChatMessageDto, ChatResponseDto } from './dto/chat-message.dto';
+import { Public } from '@/common/decorators/public.decorator';
 
 @ApiTags('Chat')
 @Controller('chat')
@@ -32,6 +33,7 @@ export class ChatController {
     description: 'Internal server error',
   })
   @Post('message')
+  @Public()
   async sendMessage(@Body() sendChatMessageDto: SendChatMessageDto): Promise<ChatResponseDto> {
     this.logger.log(`Received chat message: "${sendChatMessageDto.message.substring(0, 50)}..."`);
 
@@ -63,6 +65,7 @@ export class ChatController {
     },
   })
   @Get('status')
+  @Public()
   getStatus(): { aiEnabled: boolean; timestamp: string } {
     return {
       aiEnabled: this.chatService.isAiEnabled(),

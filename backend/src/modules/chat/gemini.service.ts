@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { GoogleGenAI } from '@google/genai';
 import { ChatMessageHistoryDto } from './dto/chat-message.dto';
 
 export interface GeminiResponse {
@@ -11,26 +11,20 @@ export interface GeminiResponse {
 @Injectable()
 export class GeminiService {
   private readonly logger = new Logger(GeminiService.name);
-  private readonly genAI: GoogleGenerativeAI;
-  private readonly model: any;
+  private readonly genAI: GoogleGenAI;
+  private readonly modelName = 'gemini-2.0-flash-001';
 
   constructor(private configService: ConfigService) {
-    const apiKey = this.configService.get<string>('GEMINI_API_KEY');
+    const apiKey = this.configService.getOrThrow<string>('GEMINI_API_KEY');
 
-    if (!apiKey) {
-      this.logger.warn('Gemini API key not configured. Gemini service will not be available.');
-      return;
-    }
-
-    this.genAI = new GoogleGenerativeAI(apiKey);
-    this.model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    this.genAI = new GoogleGenAI({ apiKey });
   }
 
   /**
    * Check if Gemini is properly configured
    */
   isConfigured(): boolean {
-    return !!this.configService.get<string>('GEMINI_API_KEY') && !!this.model;
+    return !!this.genAI;
   }
 
   /**
@@ -41,12 +35,8 @@ export class GeminiService {
     conversationHistory: ChatMessageHistoryDto[] = [],
   ): Promise<GeminiResponse> {
     try {
-      if (!this.isConfigured()) {
-        throw new Error('Gemini API not configured');
-      }
-
-      // Create a context-aware prompt for customer support
-      const systemPrompt = `You are a helpful customer support assistant for a web platform. 
+      // Create system prompt with conversation context
+      let prompt = `You are a helpful customer support assistant for a web platform. 
 Your role is to:
 - Provide friendly, professional customer support
 - Answer questions about pricing, features, support, trials, and demos
@@ -54,24 +44,32 @@ Your role is to:
 - If you don't know something specific, offer to connect them with a human agent
 - Be conversational and empathetic
 
-Current conversation context:
-${conversationHistory
-  .slice(-4) // Keep last 4 messages for context
-  .map((msg) => `${msg.role}: ${msg.content}`)
-  .join('\n')}
+`;
 
-User's latest message: ${userMessage}
+      // Add conversation history for context
+      if (conversationHistory.length > 0) {
+        prompt += 'Previous conversation:\n';
+        const recentHistory = conversationHistory.slice(-4);
+        for (const msg of recentHistory) {
+          prompt += `${msg.role}: ${msg.content}\n`;
+        }
+        prompt += '\n';
+      }
 
-Please provide a helpful response:`;
+      prompt += `User: ${userMessage}\n\nAssistant:`;
 
-      const result = await this.model.generateContent(systemPrompt);
-      const response = await result.response;
-      const text = response.text();
+      // Generate content using the new API structure
+      const response = await this.genAI.models.generateContent({
+        model: this.modelName,
+        contents: prompt,
+      });
+
+      const text = response.text;
 
       this.logger.log(`Generated response for user message: "${userMessage.substring(0, 50)}..."`);
 
       return {
-        content: text.trim(),
+        content: text?.trim() || '',
       };
     } catch (error) {
       this.logger.error('Gemini API error:', error);
