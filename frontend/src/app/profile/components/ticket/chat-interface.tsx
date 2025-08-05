@@ -20,8 +20,6 @@ export default function ChatInterface({ ticketId }: ChatInterfaceProps) {
 	const [isLoading, setIsLoading] = useState(false);
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 
-	console.log("🔄 ChatInterface render - ticketId:", ticketId);
-
 	const handleSendMessage = async (content: string, attachments?: File[]) => {
 		if (!content.trim() && (!attachments || attachments.length === 0)) return;
 		setIsLoading(true);

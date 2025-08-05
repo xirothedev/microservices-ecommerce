@@ -10,14 +10,17 @@ import {
 } from '@nestjs/websockets';
 import { User } from '@prisma/generated';
 import { Server, Socket } from 'socket.io';
-import { WsUser } from './decorators/ws-user.decorator';
 import { WsAuthGuard } from './guards/ws-auth.guard';
 import { TicketMessageResponse, TicketResponse } from './ticket.interface';
+import { WsUser } from '@/common/decorators/ws-user.decorator';
+import { TicketGatewayService } from './services/ticket-gateway.service';
 
 @WebSocketGateway({ namespace: 'ticket', transports: ['websocket'] })
 @UseGuards(WsAuthGuard)
 export class TicketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private logger = new Logger(TicketGateway.name);
+
+  constructor(private readonly ticketGatewayService: TicketGatewayService) {}
 
   @WebSocketServer()
   server: Server;
@@ -32,15 +35,12 @@ export class TicketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('join.ticket.room')
   async handleJoinTicketRoom(@MessageBody() ticketId: string, @ConnectedSocket() client: Socket, @WsUser() user: User) {
-    const room = `ticket:${ticketId}`;
-    this.logger.log(`User ${user.id} (${client.id}) joined room ${room}`);
-    await client.join(room);
+    return this.ticketGatewayService.handleJoinTicketRoom(ticketId, client, user);
   }
 
   @SubscribeMessage('leave.ticket.room')
   async handleLeaveTicketRoom(@MessageBody() ticketId: string, @ConnectedSocket() client: Socket) {
-    const room = `ticket:${ticketId}`;
-    await client.leave(room);
+    return this.ticketGatewayService.handleLeaveTicketRoom(ticketId, client);
   }
 
   broadcastNewTicket(ticket: TicketResponse) {
@@ -51,12 +51,7 @@ export class TicketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   broadcastNewMessage(message: TicketMessageResponse) {
     const room = `ticket:${message.ticket.id}`;
     this.logger.debug(`📢 Broadcasting new message to room ${room}:`, message.id);
-    this.logger.debug('📋 Message details:', {
-      id: message.id,
-      content: message.content,
-      ticketId: message.ticket.id,
-      sender: message.sender.user.fullname,
-    });
+    this.logger.debug('📋 Message details:', JSON.stringify(message, null, 2));
     this.server.to(room).emit('ticket.message.new', message);
   }
 }

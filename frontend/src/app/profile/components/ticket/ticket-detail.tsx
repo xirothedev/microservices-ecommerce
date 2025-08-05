@@ -108,11 +108,9 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 		},
 	});
 
-	console.log(data);
-
 	// Determine user role and who to display in sidebar
 	const isCurrentUserAssign = currentUser?.me.id === data?.assign?.id;
-	const isCurrentUserAuthor = currentUser?.me.id === data?.author?.id;
+	// const isCurrentUserAuthor = currentUser?.me.id === data?.author?.id;
 	const displayUser = isCurrentUserAssign ? data?.author : data?.assign;
 
 	useEffect(() => {
