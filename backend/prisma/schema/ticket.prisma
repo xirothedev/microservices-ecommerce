@@ -17,6 +17,8 @@ model Ticket {
   assign     User?           @relation(name: "TicketAssign", fields: [assignId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   messages   TicketMessage[]
   members    TicketMember[]
+
+  @@map("ticket")
 }
 
 model TicketMember {
@@ -32,6 +34,7 @@ model TicketMember {
   ticketMessagesSent TicketMessage[] @relation("TicketMessageSender")
 
   @@unique([ticketId, userId], name: "ticketUserId", map: "ticket_user_id")
+  @@map("ticket_member")
 }
 
 model TicketMessage {
@@ -47,6 +50,8 @@ model TicketMessage {
   ticket     Ticket        @relation(fields: [ticketId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   senderId   String        @map("sender_id") @db.Uuid
   sender     TicketMember  @relation("TicketMessageSender", fields: [senderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("ticket_message")
 }
 
 model TicketContext {
@@ -57,6 +62,8 @@ model TicketContext {
 
   ticketId String @db.Uuid
   ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("ticket_context")
 }
 
 enum TicketStatus {
@@ -65,6 +72,8 @@ enum TicketStatus {
   WAITING
   OPEN
   CLOSED
+
+  @@map("ticket_status")
 }
 
 enum TicketCategory {
@@ -74,6 +83,8 @@ enum TicketCategory {
   SERVICE_REQUEST
   REFUND_REQUEST
   GENERAL_INQUIRY
+
+  @@map("ticket_category")
 }
 
 enum TicketPriority {
@@ -81,6 +92,8 @@ enum TicketPriority {
   HIGH
   MEDIUM
   LOW
+
+  @@map("ticket_priority")
 }
 
 enum TicketContextType {
@@ -88,4 +101,6 @@ enum TicketContextType {
   PRODUCT
   TRANSACTION
   ACCOUNT
+
+  @@map("ticket_context_type")
 }

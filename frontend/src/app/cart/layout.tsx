@@ -1,8 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "",
-	description: "",
+	title: "Cart",
 };
 
 export default function CartLayout({ children }: { children: React.ReactElement }) {

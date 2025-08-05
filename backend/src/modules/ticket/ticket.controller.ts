@@ -43,7 +43,7 @@ export class TicketController {
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Update a ticket (author: all fields, assigned: status only)' })
+  @ApiOperation({ summary: 'Update a ticket (author: all fields, assign: status only)' })
   @ApiParam({ name: 'id', required: true })
   @ApiBody({ type: UpdateTicketDto })
   update(@Req() req: Request, @Param('id') id: string, @Body() body: UpdateTicketDto) {

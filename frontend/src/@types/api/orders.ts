@@ -106,15 +106,6 @@ export interface OrderData extends Omit<Order, "items"> {
 	};
 }
 
-export interface ProductItemWithProduct extends ProductItem {
-	product: {
-		id: string;
-		name: string;
-		medias: string[];
-		discountPrice: number;
-	};
-}
-
 export interface OrderListData extends Omit<Order, "items"> {
 	product: {
 		id: string;
@@ -124,10 +115,18 @@ export interface OrderListData extends Omit<Order, "items"> {
 	};
 	items: {
 		id: string;
+		from: "CART" | "SERVICES";
 		quantity: number;
 		price: number;
-		from: "CART" | "SERVICES";
-		productItem: ProductItemWithProduct;
+		productId: string;
+		productItemId: string;
+		orderId: string;
+		product: {
+			id: string;
+			name: string;
+			medias: string[];
+			discountPrice: number;
+		};
 	}[];
 }
 

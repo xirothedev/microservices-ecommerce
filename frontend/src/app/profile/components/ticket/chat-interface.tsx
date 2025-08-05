@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import axiosInstance from "@/lib/axios";
 import { Wifi, WifiOff } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import MessageInput from "./message-input";
 import MessageList from "./message-list";
 
@@ -21,13 +21,6 @@ export default function ChatInterface({ ticketId }: ChatInterfaceProps) {
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 
 	console.log("🔄 ChatInterface render - ticketId:", ticketId);
-
-	useEffect(() => {
-		console.log("🚀 ChatInterface mounted - ticketId:", ticketId);
-		return () => {
-			console.log("🛑 ChatInterface unmounted - ticketId:", ticketId);
-		};
-	}, [ticketId]);
 
 	const handleSendMessage = async (content: string, attachments?: File[]) => {
 		if (!content.trim() && (!attachments || attachments.length === 0)) return;

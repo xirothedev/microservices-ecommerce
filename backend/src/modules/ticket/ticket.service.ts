@@ -229,10 +229,10 @@ export class TicketService {
 
     if (!ticket) throw new NotFoundException('Ticket not found');
     // Only author can update all fields
-    // Assigned user can only update status
+    // Assign user can only update status
     const isAuthor = ticket.authorId === user.id;
-    const isAssigned = ticket.assignId === user.id;
-    if (!isAuthor && !isAssigned) {
+    const isAssign = ticket.assignId === user.id;
+    if (!isAuthor && !isAssign) {
       throw new ForbiddenException('You do not have permission to update this ticket');
     }
     // Build update data
@@ -240,12 +240,12 @@ export class TicketService {
     if (isAuthor) {
       // Author can update all fields
       updateData = { ...body };
-    } else if (isAssigned) {
-      // Assigned can only update status
+    } else if (isAssign) {
+      // Assign can only update status
       if (body.status) {
         updateData.status = body.status;
       } else {
-        throw new ForbiddenException('Assigned user can only update status');
+        throw new ForbiddenException('Assign user can only update status');
       }
     }
     // Remove id from updateData if present
@@ -272,8 +272,8 @@ export class TicketService {
     });
     if (!ticket) throw new NotFoundException('Ticket not found');
     const isAuthor = ticket.authorId === user.id;
-    const isAssigned = ticket.assignId === user.id;
-    if (!isAuthor && !isAssigned) {
+    const isAssign = ticket.assignId === user.id;
+    if (!isAuthor && !isAssign) {
       throw new ForbiddenException('You do not have permission to send message to this ticket');
     }
 

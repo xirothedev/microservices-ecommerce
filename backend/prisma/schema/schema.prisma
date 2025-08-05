@@ -55,6 +55,8 @@ model User {
   reviews          Review[]
   bills            Bill[]
   orders           Order[]
+
+  @@map("user")
 }
 
 model UserSecurity {
@@ -75,6 +77,8 @@ model UserSecurity {
   mfaSetups        MfaSetup[]
   backupCodes      MfaBackupCode[]
   user             User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("user_security")
 }
 
 model ExternalAccount {
@@ -94,6 +98,8 @@ model ExternalAccount {
 
   userId String @map("user_id") @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("external_account")
 }
 
 model Bill {
@@ -110,6 +116,8 @@ model Bill {
   order  Order?
   userId String? @map("user_id") @db.Uuid
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("bill")
 }
 
 model CartItem {
@@ -124,6 +132,7 @@ model CartItem {
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([productId, userId], name: "productUserId")
+  @@map("cart_item")
 }
 
 enum UserRole {
@@ -133,6 +142,8 @@ enum UserRole {
   COLLABORATOR
   SELLER
   USER
+
+  @@map("user_role")
 }
 
 enum UserFlag {
@@ -142,16 +153,22 @@ enum UserFlag {
   SILVER_CUSTOMER
   COPPER_CUSTOMER
   CUSTOMER
+
+  @@map("user_flag")
 }
 
 enum ProviderPlatform {
   GOOGLE
   DISCORD
+
+  @@map("provider_platform")
 }
 
 enum BillType {
   MONEY_OUT
   MONEY_IN
+
+  @@map("bill_type")
 }
 
 enum BillStatus {
@@ -160,14 +177,20 @@ enum BillStatus {
   REFUNDED
   CANCELLED
   FAILED
+
+  @@map("bill_status")
 }
 
 enum PaymentMethod {
   MOMO
   VIETQR_PAYOS
+
+  @@map("payment_method")
 }
 
 enum SelectFrom {
   CART
   SERVICES
+
+  @@map("select_from")
 }

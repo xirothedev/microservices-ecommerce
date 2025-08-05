@@ -9,6 +9,7 @@ model Authentication {
   userId String @db.Uuid
 
   @@unique([type, userId], name: "id")
+  @@map("authentication")
 }
 
 model MfaSetup {
@@ -24,6 +25,7 @@ model MfaSetup {
   userId    String   @db.Uuid
 
   @@unique([userId, type], name: "userMfaType", map: "user_mfa_type")
+  @@map("mfa_setup")
 }
 
 model MfaBackupCode {
@@ -37,6 +39,7 @@ model MfaBackupCode {
   userId String @db.Uuid
 
   @@unique([userId, code], name: "userBackupCode", map: "user_backup_code")
+  @@map("mfa_backup_code")
 }
 
 model LoginSession {
@@ -51,6 +54,8 @@ model LoginSession {
 
   userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("login_session")
 }
 
 enum AuthType {
@@ -59,10 +64,14 @@ enum AuthType {
   MFA_SMS
   MFA_TOTP
   PASSWORD_RESET
+
+  @@map("auth_type")
 }
 
 enum MfaType {
   TOTP
   SMS
   EMAIL
+
+  @@map("mfa_type")
 }

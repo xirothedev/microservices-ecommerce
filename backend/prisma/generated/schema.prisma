@@ -9,6 +9,7 @@ model Authentication {
   userId String @db.Uuid
 
   @@unique([type, userId], name: "id")
+  @@map("authentication")
 }
 
 model MfaSetup {
@@ -24,6 +25,7 @@ model MfaSetup {
   userId String       @db.Uuid
 
   @@unique([userId, type], name: "userMfaType", map: "user_mfa_type")
+  @@map("mfa_setup")
 }
 
 model MfaBackupCode {
@@ -37,6 +39,7 @@ model MfaBackupCode {
   userId String       @db.Uuid
 
   @@unique([userId, code], name: "userBackupCode", map: "user_backup_code")
+  @@map("mfa_backup_code")
 }
 
 model LoginSession {
@@ -51,6 +54,8 @@ model LoginSession {
 
   userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("login_session")
 }
 
 enum AuthType {
@@ -59,12 +64,16 @@ enum AuthType {
   MFA_SMS
   MFA_TOTP
   PASSWORD_RESET
+
+  @@map("auth_type")
 }
 
 enum MfaType {
   TOTP
   SMS
   EMAIL
+
+  @@map("mfa_type")
 }
 
 model Order {
@@ -78,6 +87,8 @@ model Order {
   billId String      @unique @map("bill_id") @db.Uuid
   bill   Bill        @relation(fields: [billId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   items  OrderItem[]
+
+  @@map("order")
 }
 
 model OrderItem {
@@ -92,6 +103,8 @@ model OrderItem {
   productItem   ProductItem @relation(fields: [productItemId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   orderId       String      @map("order_id") @db.Uuid
   order         Order       @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("order_item")
 }
 
 model Product {
@@ -119,6 +132,8 @@ model Product {
   productItems ProductItem[]
   orderItem    OrderItem[]
   reviews      Review[]
+
+  @@map("product")
 }
 
 model ProductItem {
@@ -131,6 +146,8 @@ model ProductItem {
   soldAt DateTime? @map("sold_at") @db.Timestamptz
 
   order OrderItem?
+
+  @@map("product_item")
 }
 
 model Category {
@@ -138,6 +155,8 @@ model Category {
   name     String    @db.VarChar(100)
   slug     String    @db.VarChar(100)
   products Product[]
+
+  @@map("category")
 }
 
 model Review {
@@ -154,6 +173,7 @@ model Review {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([productId, userId], name: "productUserId", map: "product_user_id")
+  @@map("review")
 }
 
 enum ProductFlag {
@@ -161,6 +181,8 @@ enum ProductFlag {
   BEST_SELLER
   BEST_CHEAP
   POPULAR
+
+  @@map("product_flag")
 }
 
 // This is your Prisma schema file,
@@ -220,6 +242,8 @@ model User {
   reviews          Review[]
   bills            Bill[]
   orders           Order[]
+
+  @@map("user")
 }
 
 model UserSecurity {
@@ -240,6 +264,8 @@ model UserSecurity {
   mfaSetups   MfaSetup[]
   backupCodes MfaBackupCode[]
   user        User            @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("user_security")
 }
 
 model ExternalAccount {
@@ -259,6 +285,8 @@ model ExternalAccount {
 
   userId String @map("user_id") @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("external_account")
 }
 
 model Bill {
@@ -275,6 +303,8 @@ model Bill {
   order  Order?
   userId String? @map("user_id") @db.Uuid
   user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("bill")
 }
 
 model CartItem {
@@ -289,6 +319,7 @@ model CartItem {
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([productId, userId], name: "productUserId")
+  @@map("cart_item")
 }
 
 enum UserRole {
@@ -298,6 +329,8 @@ enum UserRole {
   COLLABORATOR
   SELLER
   USER
+
+  @@map("user_role")
 }
 
 enum UserFlag {
@@ -307,16 +340,22 @@ enum UserFlag {
   SILVER_CUSTOMER
   COPPER_CUSTOMER
   CUSTOMER
+
+  @@map("user_flag")
 }
 
 enum ProviderPlatform {
   GOOGLE
   DISCORD
+
+  @@map("provider_platform")
 }
 
 enum BillType {
   MONEY_OUT
   MONEY_IN
+
+  @@map("bill_type")
 }
 
 enum BillStatus {
@@ -325,16 +364,22 @@ enum BillStatus {
   REFUNDED
   CANCELLED
   FAILED
+
+  @@map("bill_status")
 }
 
 enum PaymentMethod {
   MOMO
   VIETQR_PAYOS
+
+  @@map("payment_method")
 }
 
 enum SelectFrom {
   CART
   SERVICES
+
+  @@map("select_from")
 }
 
 model Ticket {
@@ -356,6 +401,8 @@ model Ticket {
   assign   User?           @relation(name: "TicketAssign", fields: [assignId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   messages TicketMessage[]
   members  TicketMember[]
+
+  @@map("ticket")
 }
 
 model TicketMember {
@@ -371,6 +418,7 @@ model TicketMember {
   ticketMessagesSent TicketMessage[] @relation("TicketMessageSender")
 
   @@unique([ticketId, userId], name: "ticketUserId", map: "ticket_user_id")
+  @@map("ticket_member")
 }
 
 model TicketMessage {
@@ -386,6 +434,8 @@ model TicketMessage {
   ticket     Ticket        @relation(fields: [ticketId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   senderId   String        @map("sender_id") @db.Uuid
   sender     TicketMember  @relation("TicketMessageSender", fields: [senderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("ticket_message")
 }
 
 model TicketContext {
@@ -396,6 +446,8 @@ model TicketContext {
 
   ticketId String @db.Uuid
   ticket   Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("ticket_context")
 }
 
 enum TicketStatus {
@@ -404,6 +456,8 @@ enum TicketStatus {
   WAITING
   OPEN
   CLOSED
+
+  @@map("ticket_status")
 }
 
 enum TicketCategory {
@@ -413,6 +467,8 @@ enum TicketCategory {
   SERVICE_REQUEST
   REFUND_REQUEST
   GENERAL_INQUIRY
+
+  @@map("ticket_category")
 }
 
 enum TicketPriority {
@@ -420,6 +476,8 @@ enum TicketPriority {
   HIGH
   MEDIUM
   LOW
+
+  @@map("ticket_priority")
 }
 
 enum TicketContextType {
@@ -427,4 +485,6 @@ enum TicketContextType {
   PRODUCT
   TRANSACTION
   ACCOUNT
+
+  @@map("ticket_context_type")
 }

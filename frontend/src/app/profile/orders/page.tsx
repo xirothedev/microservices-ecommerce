@@ -316,12 +316,13 @@ export default function OrdersContent() {
 																		>
 																			<div className="flex-1">
 																				<p className="font-medium">
-																					{item.productItem.product.name ||
-																						"Product"}
+																					{item.product.name}
 																				</p>
 																				<p className="text-sm text-gray-600">
 																					Quantity: {item.quantity} | From:{" "}
-																					{item.from}
+																					{item.from === "CART"
+																						? "Cart"
+																						: "Services"}
 																				</p>
 																			</div>
 																			<div className="text-right">

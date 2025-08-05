@@ -134,6 +134,7 @@ for (const id of cartItemIds) {
       id,
       productId,
       userId,
+      createdAt: faker.date.recent({ days: 10 }),
       quantity: faker.number.int({ min: 1, max: 10 }),
     });
   }
@@ -226,11 +227,11 @@ const tickets: Prisma.TicketCreateManyInput[] = ticketIds.map((id, i) => {
   let assignId: string | undefined;
 
   if (assignableUsers.length > 0) {
-    let assignedUser = faker.helpers.arrayElement(assignableUsers);
-    while (assignedUser.id === authorId && assignableUsers.length > 1) {
-      assignedUser = faker.helpers.arrayElement(assignableUsers);
+    let assignUser = faker.helpers.arrayElement(assignableUsers);
+    while (assignUser.id === authorId && assignableUsers.length > 1) {
+      assignUser = faker.helpers.arrayElement(assignableUsers);
     }
-    assignId = assignedUser.id;
+    assignId = assignUser.id;
   }
 
   return {

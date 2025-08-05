@@ -9,6 +9,8 @@ model Order {
   billId String      @unique @map("bill_id") @db.Uuid
   bill   Bill        @relation(fields: [billId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   items  OrderItem[]
+
+  @@map("order")
 }
 
 model OrderItem {
@@ -23,4 +25,6 @@ model OrderItem {
   productItem   ProductItem @relation(fields: [productItemId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   orderId       String      @map("order_id") @db.Uuid
   order         Order       @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("order_item")
 }

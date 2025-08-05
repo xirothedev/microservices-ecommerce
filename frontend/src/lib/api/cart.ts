@@ -82,7 +82,7 @@ export function useCart() {
 					productId
 					quantity
 					createdAt
-					updateAt
+					updatedAt
 					product {
 						id
 						name

@@ -23,6 +23,8 @@ model Product {
   productItems ProductItem[]
   orderItem    OrderItem[]
   reviews      Review[]
+
+  @@map("product")
 }
 
 model ProductItem {
@@ -35,6 +37,8 @@ model ProductItem {
   soldAt DateTime? @map("sold_at") @db.Timestamptz
 
   order OrderItem?
+
+  @@map("product_item")
 }
 
 model Category {
@@ -42,6 +46,8 @@ model Category {
   name     String    @db.VarChar(100)
   slug     String    @db.VarChar(100)
   products Product[]
+
+  @@map("category")
 }
 
 model Review {
@@ -58,6 +64,7 @@ model Review {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([productId, userId], name: "productUserId", map: "product_user_id")
+  @@map("review")
 }
 
 enum ProductFlag {
@@ -65,4 +72,6 @@ enum ProductFlag {
   BEST_SELLER
   BEST_CHEAP
   POPULAR
+
+  @@map("product_flag")
 }

@@ -52,7 +52,7 @@ interface TicketDetail {
 		email: string;
 		avatarUrl: string;
 	};
-	assigned: {
+	assign: {
 		id: string;
 		fullname: string;
 		email: string;
@@ -108,10 +108,12 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 		},
 	});
 
+	console.log(data);
+
 	// Determine user role and who to display in sidebar
-	const isCurrentUserAssigned = currentUser?.me.id === data?.assigned?.id;
+	const isCurrentUserAssign = currentUser?.me.id === data?.assign?.id;
 	const isCurrentUserAuthor = currentUser?.me.id === data?.author?.id;
-	const displayUser = isCurrentUserAssigned ? data?.author : data?.assigned;
+	const displayUser = isCurrentUserAssign ? data?.author : data?.assign;
 
 	useEffect(() => {
 		if (isError && error.response?.status === 404) {
@@ -316,7 +318,7 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 						<Card>
 							<CardHeader>
 								<CardTitle className="text-lg">
-									{isCurrentUserAssigned ? "Ticket Author" : "Assigned Agent"}
+									{isCurrentUserAssign ? "Ticket Author" : "Assigned Agent"}
 								</CardTitle>
 							</CardHeader>
 							<CardContent>
@@ -360,7 +362,7 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 											<p className="text-xs text-gray-500 capitalize">
 												{/* {displayUser.status} */} Online
 											</p>
-											{!isCurrentUserAssigned && (
+											{!isCurrentUserAssign && (
 												<Badge
 													variant="secondary"
 													className="bg-blue-100 text-xs text-blue-800"

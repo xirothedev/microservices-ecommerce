@@ -28,6 +28,7 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { getFallbackString } from "@/lib/utils";
 
 const PAGE_SIZE = 10;
 
@@ -290,25 +291,22 @@ export default function TicketHistory() {
 														</div>
 
 														{/* Assigned Agent */}
-														{ticket.assigned && (
+														{ticket.assign && (
 															<div className="flex items-center gap-2 text-sm text-gray-600">
 																<User className="h-4 w-4" />
 																<span>Assigned to:</span>
 																<div className="flex items-center gap-2">
 																	<Avatar className="h-5 w-5">
 																		<AvatarImage
-																			src={ticket.assigned.avatarUrl || undefined}
-																			alt={ticket.assigned.fullname}
+																			src={ticket.assign.avatarUrl || undefined}
+																			alt={ticket.assign.fullname}
 																		/>
 																		<AvatarFallback className="text-xs">
-																			{ticket.assigned.fullname
-																				.split(" ")
-																				.map((n) => n[0])
-																				.join("")}
+																			{getFallbackString(ticket.assign.fullname)}
 																		</AvatarFallback>
 																	</Avatar>
 																	<span className="font-medium">
-																		{ticket.assigned.fullname}
+																		{ticket.assign.fullname}
 																	</span>
 																</div>
 															</div>
