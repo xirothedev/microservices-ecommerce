@@ -14,10 +14,10 @@ export class CartItemQL implements Partial<CartItem> {
   productId: string;
 
   @Field()
-  createAt: Date;
+  createdAt: Date;
 
   @Field()
-  updateAt: Date;
+  updatedAt: Date;
 
   @Field(() => Int)
   quantity: number;

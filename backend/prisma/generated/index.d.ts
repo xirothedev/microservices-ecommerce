@@ -67,6 +67,16 @@ export type Review = $Result.DefaultSelection<Prisma.$ReviewPayload>;
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>;
 /**
+ * Model UserSecurity
+ *
+ */
+export type UserSecurity = $Result.DefaultSelection<Prisma.$UserSecurityPayload>;
+/**
+ * Model ExternalAccount
+ *
+ */
+export type ExternalAccount = $Result.DefaultSelection<Prisma.$ExternalAccountPayload>;
+/**
  * Model Bill
  *
  */
@@ -146,10 +156,16 @@ export namespace $Enums {
     SILVER_CUSTOMER: 'SILVER_CUSTOMER';
     COPPER_CUSTOMER: 'COPPER_CUSTOMER';
     CUSTOMER: 'CUSTOMER';
-    BANNED: 'BANNED';
   };
 
   export type UserFlag = (typeof UserFlag)[keyof typeof UserFlag];
+
+  export const ProviderPlatform: {
+    GOOGLE: 'GOOGLE';
+    DISCORD: 'DISCORD';
+  };
+
+  export type ProviderPlatform = (typeof ProviderPlatform)[keyof typeof ProviderPlatform];
 
   export const BillType: {
     MONEY_OUT: 'MONEY_OUT';
@@ -241,6 +257,10 @@ export const UserRole: typeof $Enums.UserRole;
 export type UserFlag = $Enums.UserFlag;
 
 export const UserFlag: typeof $Enums.UserFlag;
+
+export type ProviderPlatform = $Enums.ProviderPlatform;
+
+export const ProviderPlatform: typeof $Enums.ProviderPlatform;
 
 export type BillType = $Enums.BillType;
 
@@ -527,6 +547,26 @@ export class PrismaClient<
    * ```
    */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userSecurity`: Exposes CRUD operations for the **UserSecurity** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more UserSecurities
+   * const userSecurities = await prisma.userSecurity.findMany()
+   * ```
+   */
+  get userSecurity(): Prisma.UserSecurityDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.externalAccount`: Exposes CRUD operations for the **ExternalAccount** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more ExternalAccounts
+   * const externalAccounts = await prisma.externalAccount.findMany()
+   * ```
+   */
+  get externalAccount(): Prisma.ExternalAccountDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.bill`: Exposes CRUD operations for the **Bill** model.
@@ -1014,6 +1054,8 @@ export namespace Prisma {
     Category: 'Category';
     Review: 'Review';
     User: 'User';
+    UserSecurity: 'UserSecurity';
+    ExternalAccount: 'ExternalAccount';
     Bill: 'Bill';
     CartItem: 'CartItem';
     Ticket: 'Ticket';
@@ -1053,6 +1095,8 @@ export namespace Prisma {
         | 'category'
         | 'review'
         | 'user'
+        | 'userSecurity'
+        | 'externalAccount'
         | 'bill'
         | 'cartItem'
         | 'ticket'
@@ -1876,6 +1920,154 @@ export namespace Prisma {
           };
         };
       };
+      UserSecurity: {
+        payload: Prisma.$UserSecurityPayload<ExtArgs>;
+        fields: Prisma.UserSecurityFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.UserSecurityFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSecurityPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.UserSecurityFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSecurityPayload>;
+          };
+          findFirst: {
+            args: Prisma.UserSecurityFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSecurityPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.UserSecurityFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSecurityPayload>;
+          };
+          findMany: {
+            args: Prisma.UserSecurityFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSecurityPayload>[];
+          };
+          create: {
+            args: Prisma.UserSecurityCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSecurityPayload>;
+          };
+          createMany: {
+            args: Prisma.UserSecurityCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.UserSecurityCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSecurityPayload>[];
+          };
+          delete: {
+            args: Prisma.UserSecurityDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSecurityPayload>;
+          };
+          update: {
+            args: Prisma.UserSecurityUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSecurityPayload>;
+          };
+          deleteMany: {
+            args: Prisma.UserSecurityDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.UserSecurityUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateManyAndReturn: {
+            args: Prisma.UserSecurityUpdateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSecurityPayload>[];
+          };
+          upsert: {
+            args: Prisma.UserSecurityUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$UserSecurityPayload>;
+          };
+          aggregate: {
+            args: Prisma.UserSecurityAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateUserSecurity>;
+          };
+          groupBy: {
+            args: Prisma.UserSecurityGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<UserSecurityGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.UserSecurityCountArgs<ExtArgs>;
+            result: $Utils.Optional<UserSecurityCountAggregateOutputType> | number;
+          };
+        };
+      };
+      ExternalAccount: {
+        payload: Prisma.$ExternalAccountPayload<ExtArgs>;
+        fields: Prisma.ExternalAccountFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.ExternalAccountFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ExternalAccountPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.ExternalAccountFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ExternalAccountPayload>;
+          };
+          findFirst: {
+            args: Prisma.ExternalAccountFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ExternalAccountPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.ExternalAccountFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ExternalAccountPayload>;
+          };
+          findMany: {
+            args: Prisma.ExternalAccountFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ExternalAccountPayload>[];
+          };
+          create: {
+            args: Prisma.ExternalAccountCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ExternalAccountPayload>;
+          };
+          createMany: {
+            args: Prisma.ExternalAccountCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.ExternalAccountCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ExternalAccountPayload>[];
+          };
+          delete: {
+            args: Prisma.ExternalAccountDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ExternalAccountPayload>;
+          };
+          update: {
+            args: Prisma.ExternalAccountUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ExternalAccountPayload>;
+          };
+          deleteMany: {
+            args: Prisma.ExternalAccountDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.ExternalAccountUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateManyAndReturn: {
+            args: Prisma.ExternalAccountUpdateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ExternalAccountPayload>[];
+          };
+          upsert: {
+            args: Prisma.ExternalAccountUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$ExternalAccountPayload>;
+          };
+          aggregate: {
+            args: Prisma.ExternalAccountAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateExternalAccount>;
+          };
+          groupBy: {
+            args: Prisma.ExternalAccountGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<ExternalAccountGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.ExternalAccountCountArgs<ExtArgs>;
+            result: $Utils.Optional<ExternalAccountCountAggregateOutputType> | number;
+          };
+        };
+      };
       Bill: {
         payload: Prisma.$BillPayload<ExtArgs>;
         fields: Prisma.BillFieldRefs;
@@ -2423,6 +2615,8 @@ export namespace Prisma {
     category?: CategoryOmit;
     review?: ReviewOmit;
     user?: UserOmit;
+    userSecurity?: UserSecurityOmit;
+    externalAccount?: ExternalAccountOmit;
     bill?: BillOmit;
     cartItem?: CartItemOmit;
     ticket?: TicketOmit;
@@ -2649,14 +2843,13 @@ export namespace Prisma {
    */
 
   export type UserCountOutputType = {
+    externalAccounts: number;
     auth: number;
-    backupCodes: number;
     loginSessions: number;
     products: number;
     cart: number;
-    mfaSetups: number;
     ticketAuthor: number;
-    ticketAssigned: number;
+    ticketAssign: number;
     ticketMembers: number;
     reviews: number;
     bills: number;
@@ -2664,14 +2857,13 @@ export namespace Prisma {
   };
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    externalAccounts?: boolean | UserCountOutputTypeCountExternalAccountsArgs;
     auth?: boolean | UserCountOutputTypeCountAuthArgs;
-    backupCodes?: boolean | UserCountOutputTypeCountBackupCodesArgs;
     loginSessions?: boolean | UserCountOutputTypeCountLoginSessionsArgs;
     products?: boolean | UserCountOutputTypeCountProductsArgs;
     cart?: boolean | UserCountOutputTypeCountCartArgs;
-    mfaSetups?: boolean | UserCountOutputTypeCountMfaSetupsArgs;
     ticketAuthor?: boolean | UserCountOutputTypeCountTicketAuthorArgs;
-    ticketAssigned?: boolean | UserCountOutputTypeCountTicketAssignedArgs;
+    ticketAssign?: boolean | UserCountOutputTypeCountTicketAssignArgs;
     ticketMembers?: boolean | UserCountOutputTypeCountTicketMembersArgs;
     reviews?: boolean | UserCountOutputTypeCountReviewsArgs;
     bills?: boolean | UserCountOutputTypeCountBillsArgs;
@@ -2692,17 +2884,17 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountAuthArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AuthenticationWhereInput;
+  export type UserCountOutputTypeCountExternalAccountsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: ExternalAccountWhereInput;
   };
 
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountBackupCodesArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    where?: MfaBackupCodeWhereInput;
+  export type UserCountOutputTypeCountAuthArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AuthenticationWhereInput;
   };
 
   /**
@@ -2732,15 +2924,6 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountMfaSetupsArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    where?: MfaSetupWhereInput;
-  };
-
-  /**
-   * UserCountOutputType without action
-   */
   export type UserCountOutputTypeCountTicketAuthorArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
@@ -2750,7 +2933,7 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
-  export type UserCountOutputTypeCountTicketAssignedArgs<
+  export type UserCountOutputTypeCountTicketAssignArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: TicketWhereInput;
@@ -2785,6 +2968,51 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountOrdersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: OrderWhereInput;
+  };
+
+  /**
+   * Count Type UserSecurityCountOutputType
+   */
+
+  export type UserSecurityCountOutputType = {
+    mfaSetups: number;
+    backupCodes: number;
+  };
+
+  export type UserSecurityCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mfaSetups?: boolean | UserSecurityCountOutputTypeCountMfaSetupsArgs;
+    backupCodes?: boolean | UserSecurityCountOutputTypeCountBackupCodesArgs;
+  };
+
+  // Custom InputTypes
+  /**
+   * UserSecurityCountOutputType without action
+   */
+  export type UserSecurityCountOutputTypeDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the UserSecurityCountOutputType
+     */
+    select?: UserSecurityCountOutputTypeSelect<ExtArgs> | null;
+  };
+
+  /**
+   * UserSecurityCountOutputType without action
+   */
+  export type UserSecurityCountOutputTypeCountMfaSetupsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: MfaSetupWhereInput;
+  };
+
+  /**
+   * UserSecurityCountOutputType without action
+   */
+  export type UserSecurityCountOutputTypeCountBackupCodesArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: MfaBackupCodeWhereInput;
   };
 
   /**
@@ -2901,8 +3129,8 @@ export namespace Prisma {
 
   export type AuthenticationMinAggregateOutputType = {
     code: string | null;
-    type: $Enums.AuthType | null;
     retryTime: number | null;
+    type: $Enums.AuthType | null;
     lastSentAt: Date | null;
     expiresAt: Date | null;
     userId: string | null;
@@ -2910,8 +3138,8 @@ export namespace Prisma {
 
   export type AuthenticationMaxAggregateOutputType = {
     code: string | null;
-    type: $Enums.AuthType | null;
     retryTime: number | null;
+    type: $Enums.AuthType | null;
     lastSentAt: Date | null;
     expiresAt: Date | null;
     userId: string | null;
@@ -2919,8 +3147,8 @@ export namespace Prisma {
 
   export type AuthenticationCountAggregateOutputType = {
     code: number;
-    type: number;
     retryTime: number;
+    type: number;
     lastSentAt: number;
     expiresAt: number;
     userId: number;
@@ -2937,8 +3165,8 @@ export namespace Prisma {
 
   export type AuthenticationMinAggregateInputType = {
     code?: true;
-    type?: true;
     retryTime?: true;
+    type?: true;
     lastSentAt?: true;
     expiresAt?: true;
     userId?: true;
@@ -2946,8 +3174,8 @@ export namespace Prisma {
 
   export type AuthenticationMaxAggregateInputType = {
     code?: true;
-    type?: true;
     retryTime?: true;
+    type?: true;
     lastSentAt?: true;
     expiresAt?: true;
     userId?: true;
@@ -2955,8 +3183,8 @@ export namespace Prisma {
 
   export type AuthenticationCountAggregateInputType = {
     code?: true;
-    type?: true;
     retryTime?: true;
+    type?: true;
     lastSentAt?: true;
     expiresAt?: true;
     userId?: true;
@@ -3048,8 +3276,8 @@ export namespace Prisma {
 
   export type AuthenticationGroupByOutputType = {
     code: string;
-    type: $Enums.AuthType;
     retryTime: number;
+    type: $Enums.AuthType;
     lastSentAt: Date;
     expiresAt: Date;
     userId: string;
@@ -3076,8 +3304,8 @@ export namespace Prisma {
     $Extensions.GetSelect<
       {
         code?: boolean;
-        type?: boolean;
         retryTime?: boolean;
+        type?: boolean;
         lastSentAt?: boolean;
         expiresAt?: boolean;
         userId?: boolean;
@@ -3091,8 +3319,8 @@ export namespace Prisma {
   > = $Extensions.GetSelect<
     {
       code?: boolean;
-      type?: boolean;
       retryTime?: boolean;
+      type?: boolean;
       lastSentAt?: boolean;
       expiresAt?: boolean;
       userId?: boolean;
@@ -3106,8 +3334,8 @@ export namespace Prisma {
   > = $Extensions.GetSelect<
     {
       code?: boolean;
-      type?: boolean;
       retryTime?: boolean;
+      type?: boolean;
       lastSentAt?: boolean;
       expiresAt?: boolean;
       userId?: boolean;
@@ -3118,8 +3346,8 @@ export namespace Prisma {
 
   export type AuthenticationSelectScalar = {
     code?: boolean;
-    type?: boolean;
     retryTime?: boolean;
+    type?: boolean;
     lastSentAt?: boolean;
     expiresAt?: boolean;
     userId?: boolean;
@@ -3127,7 +3355,7 @@ export namespace Prisma {
 
   export type AuthenticationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
     $Extensions.GetOmit<
-      'code' | 'type' | 'retryTime' | 'lastSentAt' | 'expiresAt' | 'userId',
+      'code' | 'retryTime' | 'type' | 'lastSentAt' | 'expiresAt' | 'userId',
       ExtArgs['result']['authentication']
     >;
   export type AuthenticationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3152,8 +3380,8 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<
       {
         code: string;
-        type: $Enums.AuthType;
         retryTime: number;
+        type: $Enums.AuthType;
         lastSentAt: Date;
         expiresAt: Date;
         userId: string;
@@ -3675,8 +3903,8 @@ export namespace Prisma {
    */
   interface AuthenticationFieldRefs {
     readonly code: FieldRef<'Authentication', 'String'>;
-    readonly type: FieldRef<'Authentication', 'AuthType'>;
     readonly retryTime: FieldRef<'Authentication', 'Int'>;
+    readonly type: FieldRef<'Authentication', 'AuthType'>;
     readonly lastSentAt: FieldRef<'Authentication', 'DateTime'>;
     readonly expiresAt: FieldRef<'Authentication', 'DateTime'>;
     readonly userId: FieldRef<'Authentication', 'String'>;
@@ -4118,75 +4346,69 @@ export namespace Prisma {
 
   export type MfaSetupMinAggregateOutputType = {
     id: string | null;
-    userId: string | null;
     type: $Enums.MfaType | null;
-    isEnabled: boolean | null;
     secret: string | null;
     phone: string | null;
     email: string | null;
     createdAt: Date | null;
     updatedAt: Date | null;
+    userId: string | null;
   };
 
   export type MfaSetupMaxAggregateOutputType = {
     id: string | null;
-    userId: string | null;
     type: $Enums.MfaType | null;
-    isEnabled: boolean | null;
     secret: string | null;
     phone: string | null;
     email: string | null;
     createdAt: Date | null;
     updatedAt: Date | null;
+    userId: string | null;
   };
 
   export type MfaSetupCountAggregateOutputType = {
     id: number;
-    userId: number;
     type: number;
-    isEnabled: number;
     secret: number;
     phone: number;
     email: number;
     createdAt: number;
     updatedAt: number;
+    userId: number;
     _all: number;
   };
 
   export type MfaSetupMinAggregateInputType = {
     id?: true;
-    userId?: true;
     type?: true;
-    isEnabled?: true;
     secret?: true;
     phone?: true;
     email?: true;
     createdAt?: true;
     updatedAt?: true;
+    userId?: true;
   };
 
   export type MfaSetupMaxAggregateInputType = {
     id?: true;
-    userId?: true;
     type?: true;
-    isEnabled?: true;
     secret?: true;
     phone?: true;
     email?: true;
     createdAt?: true;
     updatedAt?: true;
+    userId?: true;
   };
 
   export type MfaSetupCountAggregateInputType = {
     id?: true;
-    userId?: true;
     type?: true;
-    isEnabled?: true;
     secret?: true;
     phone?: true;
     email?: true;
     createdAt?: true;
     updatedAt?: true;
+    userId?: true;
     _all?: true;
   };
 
@@ -4261,14 +4483,13 @@ export namespace Prisma {
 
   export type MfaSetupGroupByOutputType = {
     id: string;
-    userId: string;
     type: $Enums.MfaType;
-    isEnabled: boolean;
     secret: string | null;
     phone: string | null;
     email: string | null;
     createdAt: Date;
     updatedAt: Date;
+    userId: string;
     _count: MfaSetupCountAggregateOutputType | null;
     _min: MfaSetupMinAggregateOutputType | null;
     _max: MfaSetupMaxAggregateOutputType | null;
@@ -4290,15 +4511,14 @@ export namespace Prisma {
     $Extensions.GetSelect<
       {
         id?: boolean;
-        userId?: boolean;
         type?: boolean;
-        isEnabled?: boolean;
         secret?: boolean;
         phone?: boolean;
         email?: boolean;
         createdAt?: boolean;
         updatedAt?: boolean;
-        user?: boolean | UserDefaultArgs<ExtArgs>;
+        userId?: boolean;
+        user?: boolean | UserSecurityDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['mfaSetup']
     >;
@@ -4307,15 +4527,14 @@ export namespace Prisma {
     $Extensions.GetSelect<
       {
         id?: boolean;
-        userId?: boolean;
         type?: boolean;
-        isEnabled?: boolean;
         secret?: boolean;
         phone?: boolean;
         email?: boolean;
         createdAt?: boolean;
         updatedAt?: boolean;
-        user?: boolean | UserDefaultArgs<ExtArgs>;
+        userId?: boolean;
+        user?: boolean | UserSecurityDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['mfaSetup']
     >;
@@ -4324,61 +4543,58 @@ export namespace Prisma {
     $Extensions.GetSelect<
       {
         id?: boolean;
-        userId?: boolean;
         type?: boolean;
-        isEnabled?: boolean;
         secret?: boolean;
         phone?: boolean;
         email?: boolean;
         createdAt?: boolean;
         updatedAt?: boolean;
-        user?: boolean | UserDefaultArgs<ExtArgs>;
+        userId?: boolean;
+        user?: boolean | UserSecurityDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['mfaSetup']
     >;
 
   export type MfaSetupSelectScalar = {
     id?: boolean;
-    userId?: boolean;
     type?: boolean;
-    isEnabled?: boolean;
     secret?: boolean;
     phone?: boolean;
     email?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
+    userId?: boolean;
   };
 
   export type MfaSetupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<
-    'id' | 'userId' | 'type' | 'isEnabled' | 'secret' | 'phone' | 'email' | 'createdAt' | 'updatedAt',
+    'id' | 'type' | 'secret' | 'phone' | 'email' | 'createdAt' | 'updatedAt' | 'userId',
     ExtArgs['result']['mfaSetup']
   >;
   export type MfaSetupInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>;
+    user?: boolean | UserSecurityDefaultArgs<ExtArgs>;
   };
   export type MfaSetupIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>;
+    user?: boolean | UserSecurityDefaultArgs<ExtArgs>;
   };
   export type MfaSetupIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>;
+    user?: boolean | UserSecurityDefaultArgs<ExtArgs>;
   };
 
   export type $MfaSetupPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: 'MfaSetup';
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>;
+      user: Prisma.$UserSecurityPayload<ExtArgs>;
     };
     scalars: $Extensions.GetPayloadResult<
       {
         id: string;
-        userId: string;
         type: $Enums.MfaType;
-        isEnabled: boolean;
         secret: string | null;
         phone: string | null;
         email: string | null;
         createdAt: Date;
         updatedAt: Date;
+        userId: string;
       },
       ExtArgs['result']['mfaSetup']
     >;
@@ -4855,10 +5071,10 @@ export namespace Prisma {
     GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(
-      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
-    ): Prisma__UserClient<
-      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | Null,
+    user<T extends UserSecurityDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserSecurityDefaultArgs<ExtArgs>>,
+    ): Prisma__UserSecurityClient<
+      $Result.GetResult<Prisma.$UserSecurityPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | Null,
       Null,
       ExtArgs,
       GlobalOmitOptions
@@ -4895,14 +5111,13 @@ export namespace Prisma {
    */
   interface MfaSetupFieldRefs {
     readonly id: FieldRef<'MfaSetup', 'String'>;
-    readonly userId: FieldRef<'MfaSetup', 'String'>;
     readonly type: FieldRef<'MfaSetup', 'MfaType'>;
-    readonly isEnabled: FieldRef<'MfaSetup', 'Boolean'>;
     readonly secret: FieldRef<'MfaSetup', 'String'>;
     readonly phone: FieldRef<'MfaSetup', 'String'>;
     readonly email: FieldRef<'MfaSetup', 'String'>;
     readonly createdAt: FieldRef<'MfaSetup', 'DateTime'>;
     readonly updatedAt: FieldRef<'MfaSetup', 'DateTime'>;
+    readonly userId: FieldRef<'MfaSetup', 'String'>;
   }
 
   // Custom InputTypes
@@ -5492,7 +5707,7 @@ export namespace Prisma {
         usedAt?: boolean;
         createdAt?: boolean;
         userId?: boolean;
-        user?: boolean | UserDefaultArgs<ExtArgs>;
+        user?: boolean | UserSecurityDefaultArgs<ExtArgs>;
       },
       ExtArgs['result']['mfaBackupCode']
     >;
@@ -5507,7 +5722,7 @@ export namespace Prisma {
       usedAt?: boolean;
       createdAt?: boolean;
       userId?: boolean;
-      user?: boolean | UserDefaultArgs<ExtArgs>;
+      user?: boolean | UserSecurityDefaultArgs<ExtArgs>;
     },
     ExtArgs['result']['mfaBackupCode']
   >;
@@ -5522,7 +5737,7 @@ export namespace Prisma {
       usedAt?: boolean;
       createdAt?: boolean;
       userId?: boolean;
-      user?: boolean | UserDefaultArgs<ExtArgs>;
+      user?: boolean | UserSecurityDefaultArgs<ExtArgs>;
     },
     ExtArgs['result']['mfaBackupCode']
   >;
@@ -5542,23 +5757,23 @@ export namespace Prisma {
       ExtArgs['result']['mfaBackupCode']
     >;
   export type MfaBackupCodeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    user?: boolean | UserDefaultArgs<ExtArgs>;
+    user?: boolean | UserSecurityDefaultArgs<ExtArgs>;
   };
   export type MfaBackupCodeIncludeCreateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
-    user?: boolean | UserDefaultArgs<ExtArgs>;
+    user?: boolean | UserSecurityDefaultArgs<ExtArgs>;
   };
   export type MfaBackupCodeIncludeUpdateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
-    user?: boolean | UserDefaultArgs<ExtArgs>;
+    user?: boolean | UserSecurityDefaultArgs<ExtArgs>;
   };
 
   export type $MfaBackupCodePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: 'MfaBackupCode';
     objects: {
-      user: Prisma.$UserPayload<ExtArgs>;
+      user: Prisma.$UserSecurityPayload<ExtArgs>;
     };
     scalars: $Extensions.GetPayloadResult<
       {
@@ -6044,10 +6259,10 @@ export namespace Prisma {
     GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
-    user<T extends UserDefaultArgs<ExtArgs> = {}>(
-      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
-    ): Prisma__UserClient<
-      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | Null,
+    user<T extends UserSecurityDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserSecurityDefaultArgs<ExtArgs>>,
+    ): Prisma__UserSecurityClient<
+      $Result.GetResult<Prisma.$UserSecurityPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | Null,
       Null,
       ExtArgs,
       GlobalOmitOptions
@@ -7769,8 +7984,8 @@ export namespace Prisma {
 
   export type OrderMinAggregateOutputType = {
     id: string | null;
-    createAt: Date | null;
-    updateAt: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
     totalPrice: number | null;
     userId: string | null;
     billId: string | null;
@@ -7778,8 +7993,8 @@ export namespace Prisma {
 
   export type OrderMaxAggregateOutputType = {
     id: string | null;
-    createAt: Date | null;
-    updateAt: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
     totalPrice: number | null;
     userId: string | null;
     billId: string | null;
@@ -7787,8 +8002,8 @@ export namespace Prisma {
 
   export type OrderCountAggregateOutputType = {
     id: number;
-    createAt: number;
-    updateAt: number;
+    createdAt: number;
+    updatedAt: number;
     totalPrice: number;
     userId: number;
     billId: number;
@@ -7805,8 +8020,8 @@ export namespace Prisma {
 
   export type OrderMinAggregateInputType = {
     id?: true;
-    createAt?: true;
-    updateAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
     totalPrice?: true;
     userId?: true;
     billId?: true;
@@ -7814,8 +8029,8 @@ export namespace Prisma {
 
   export type OrderMaxAggregateInputType = {
     id?: true;
-    createAt?: true;
-    updateAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
     totalPrice?: true;
     userId?: true;
     billId?: true;
@@ -7823,8 +8038,8 @@ export namespace Prisma {
 
   export type OrderCountAggregateInputType = {
     id?: true;
-    createAt?: true;
-    updateAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
     totalPrice?: true;
     userId?: true;
     billId?: true;
@@ -7916,8 +8131,8 @@ export namespace Prisma {
 
   export type OrderGroupByOutputType = {
     id: string;
-    createAt: Date;
-    updateAt: Date;
+    createdAt: Date;
+    updatedAt: Date;
     totalPrice: number;
     userId: string;
     billId: string;
@@ -7943,8 +8158,8 @@ export namespace Prisma {
   export type OrderSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<
     {
       id?: boolean;
-      createAt?: boolean;
-      updateAt?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
       totalPrice?: boolean;
       userId?: boolean;
       billId?: boolean;
@@ -7960,8 +8175,8 @@ export namespace Prisma {
     $Extensions.GetSelect<
       {
         id?: boolean;
-        createAt?: boolean;
-        updateAt?: boolean;
+        createdAt?: boolean;
+        updatedAt?: boolean;
         totalPrice?: boolean;
         userId?: boolean;
         billId?: boolean;
@@ -7975,8 +8190,8 @@ export namespace Prisma {
     $Extensions.GetSelect<
       {
         id?: boolean;
-        createAt?: boolean;
-        updateAt?: boolean;
+        createdAt?: boolean;
+        updatedAt?: boolean;
         totalPrice?: boolean;
         userId?: boolean;
         billId?: boolean;
@@ -7988,15 +8203,15 @@ export namespace Prisma {
 
   export type OrderSelectScalar = {
     id?: boolean;
-    createAt?: boolean;
-    updateAt?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
     totalPrice?: boolean;
     userId?: boolean;
     billId?: boolean;
   };
 
   export type OrderOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<
-    'id' | 'createAt' | 'updateAt' | 'totalPrice' | 'userId' | 'billId',
+    'id' | 'createdAt' | 'updatedAt' | 'totalPrice' | 'userId' | 'billId',
     ExtArgs['result']['order']
   >;
   export type OrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8024,8 +8239,8 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<
       {
         id: string;
-        createAt: Date;
-        updateAt: Date;
+        createdAt: Date;
+        updatedAt: Date;
         totalPrice: number;
         userId: string;
         billId: string;
@@ -8558,8 +8773,8 @@ export namespace Prisma {
    */
   interface OrderFieldRefs {
     readonly id: FieldRef<'Order', 'String'>;
-    readonly createAt: FieldRef<'Order', 'DateTime'>;
-    readonly updateAt: FieldRef<'Order', 'DateTime'>;
+    readonly createdAt: FieldRef<'Order', 'DateTime'>;
+    readonly updatedAt: FieldRef<'Order', 'DateTime'>;
     readonly totalPrice: FieldRef<'Order', 'Int'>;
     readonly userId: FieldRef<'Order', 'String'>;
     readonly billId: FieldRef<'Order', 'String'>;
@@ -10298,8 +10513,8 @@ export namespace Prisma {
 
   export type ProductMinAggregateOutputType = {
     id: string | null;
-    createAt: Date | null;
-    updateAt: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
     sku: string | null;
     isActive: boolean | null;
     slug: string | null;
@@ -10315,8 +10530,8 @@ export namespace Prisma {
 
   export type ProductMaxAggregateOutputType = {
     id: string | null;
-    createAt: Date | null;
-    updateAt: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
     sku: string | null;
     isActive: boolean | null;
     slug: string | null;
@@ -10332,8 +10547,8 @@ export namespace Prisma {
 
   export type ProductCountAggregateOutputType = {
     id: number;
-    createAt: number;
-    updateAt: number;
+    createdAt: number;
+    updatedAt: number;
     sku: number;
     isActive: number;
     slug: number;
@@ -10367,8 +10582,8 @@ export namespace Prisma {
 
   export type ProductMinAggregateInputType = {
     id?: true;
-    createAt?: true;
-    updateAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
     sku?: true;
     isActive?: true;
     slug?: true;
@@ -10384,8 +10599,8 @@ export namespace Prisma {
 
   export type ProductMaxAggregateInputType = {
     id?: true;
-    createAt?: true;
-    updateAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
     sku?: true;
     isActive?: true;
     slug?: true;
@@ -10401,8 +10616,8 @@ export namespace Prisma {
 
   export type ProductCountAggregateInputType = {
     id?: true;
-    createAt?: true;
-    updateAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
     sku?: true;
     isActive?: true;
     slug?: true;
@@ -10505,8 +10720,8 @@ export namespace Prisma {
 
   export type ProductGroupByOutputType = {
     id: string;
-    createAt: Date;
-    updateAt: Date;
+    createdAt: Date;
+    updatedAt: Date;
     sku: string | null;
     isActive: boolean;
     slug: string;
@@ -10543,8 +10758,8 @@ export namespace Prisma {
   export type ProductSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<
     {
       id?: boolean;
-      createAt?: boolean;
-      updateAt?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
       sku?: boolean;
       isActive?: boolean;
       slug?: boolean;
@@ -10574,8 +10789,8 @@ export namespace Prisma {
     $Extensions.GetSelect<
       {
         id?: boolean;
-        createAt?: boolean;
-        updateAt?: boolean;
+        createdAt?: boolean;
+        updatedAt?: boolean;
         sku?: boolean;
         isActive?: boolean;
         slug?: boolean;
@@ -10600,8 +10815,8 @@ export namespace Prisma {
     $Extensions.GetSelect<
       {
         id?: boolean;
-        createAt?: boolean;
-        updateAt?: boolean;
+        createdAt?: boolean;
+        updatedAt?: boolean;
         sku?: boolean;
         isActive?: boolean;
         slug?: boolean;
@@ -10624,8 +10839,8 @@ export namespace Prisma {
 
   export type ProductSelectScalar = {
     id?: boolean;
-    createAt?: boolean;
-    updateAt?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
     sku?: boolean;
     isActive?: boolean;
     slug?: boolean;
@@ -10644,8 +10859,8 @@ export namespace Prisma {
 
   export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<
     | 'id'
-    | 'createAt'
-    | 'updateAt'
+    | 'createdAt'
+    | 'updatedAt'
     | 'sku'
     | 'isActive'
     | 'slug'
@@ -10693,8 +10908,8 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<
       {
         id: string;
-        createAt: Date;
-        updateAt: Date;
+        createdAt: Date;
+        updatedAt: Date;
         sku: string | null;
         isActive: boolean;
         slug: string;
@@ -11251,8 +11466,8 @@ export namespace Prisma {
    */
   interface ProductFieldRefs {
     readonly id: FieldRef<'Product', 'String'>;
-    readonly createAt: FieldRef<'Product', 'DateTime'>;
-    readonly updateAt: FieldRef<'Product', 'DateTime'>;
+    readonly createdAt: FieldRef<'Product', 'DateTime'>;
+    readonly updatedAt: FieldRef<'Product', 'DateTime'>;
     readonly sku: FieldRef<'Product', 'String'>;
     readonly isActive: FieldRef<'Product', 'Boolean'>;
     readonly slug: FieldRef<'Product', 'String'>;
@@ -15400,7 +15615,8 @@ export namespace Prisma {
     fullname: string | null;
     email: string | null;
     phone: string | null;
-    isVerified: boolean | null;
+    web3Wallet: string | null;
+    passwordEnabled: boolean | null;
     hashedPassword: string | null;
     avatarUrl: string | null;
     address: string | null;
@@ -15408,9 +15624,13 @@ export namespace Prisma {
     state: string | null;
     zipCode: string | null;
     biography: string | null;
-    createAt: Date | null;
-    updateAt: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
     credit: number | null;
+    isBanned: boolean | null;
+    isLocked: boolean | null;
+    isVerified: boolean | null;
+    lastActiveAt: Date | null;
   };
 
   export type UserMaxAggregateOutputType = {
@@ -15418,7 +15638,8 @@ export namespace Prisma {
     fullname: string | null;
     email: string | null;
     phone: string | null;
-    isVerified: boolean | null;
+    web3Wallet: string | null;
+    passwordEnabled: boolean | null;
     hashedPassword: string | null;
     avatarUrl: string | null;
     address: string | null;
@@ -15426,9 +15647,13 @@ export namespace Prisma {
     state: string | null;
     zipCode: string | null;
     biography: string | null;
-    createAt: Date | null;
-    updateAt: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
     credit: number | null;
+    isBanned: boolean | null;
+    isLocked: boolean | null;
+    isVerified: boolean | null;
+    lastActiveAt: Date | null;
   };
 
   export type UserCountAggregateOutputType = {
@@ -15436,7 +15661,8 @@ export namespace Prisma {
     fullname: number;
     email: number;
     phone: number;
-    isVerified: number;
+    web3Wallet: number;
+    passwordEnabled: number;
     hashedPassword: number;
     avatarUrl: number;
     address: number;
@@ -15446,9 +15672,13 @@ export namespace Prisma {
     biography: number;
     roles: number;
     flags: number;
-    createAt: number;
-    updateAt: number;
+    createdAt: number;
+    updatedAt: number;
     credit: number;
+    isBanned: number;
+    isLocked: number;
+    isVerified: number;
+    lastActiveAt: number;
     _all: number;
   };
 
@@ -15465,7 +15695,8 @@ export namespace Prisma {
     fullname?: true;
     email?: true;
     phone?: true;
-    isVerified?: true;
+    web3Wallet?: true;
+    passwordEnabled?: true;
     hashedPassword?: true;
     avatarUrl?: true;
     address?: true;
@@ -15473,9 +15704,13 @@ export namespace Prisma {
     state?: true;
     zipCode?: true;
     biography?: true;
-    createAt?: true;
-    updateAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
     credit?: true;
+    isBanned?: true;
+    isLocked?: true;
+    isVerified?: true;
+    lastActiveAt?: true;
   };
 
   export type UserMaxAggregateInputType = {
@@ -15483,7 +15718,8 @@ export namespace Prisma {
     fullname?: true;
     email?: true;
     phone?: true;
-    isVerified?: true;
+    web3Wallet?: true;
+    passwordEnabled?: true;
     hashedPassword?: true;
     avatarUrl?: true;
     address?: true;
@@ -15491,9 +15727,13 @@ export namespace Prisma {
     state?: true;
     zipCode?: true;
     biography?: true;
-    createAt?: true;
-    updateAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
     credit?: true;
+    isBanned?: true;
+    isLocked?: true;
+    isVerified?: true;
+    lastActiveAt?: true;
   };
 
   export type UserCountAggregateInputType = {
@@ -15501,7 +15741,8 @@ export namespace Prisma {
     fullname?: true;
     email?: true;
     phone?: true;
-    isVerified?: true;
+    web3Wallet?: true;
+    passwordEnabled?: true;
     hashedPassword?: true;
     avatarUrl?: true;
     address?: true;
@@ -15511,9 +15752,13 @@ export namespace Prisma {
     biography?: true;
     roles?: true;
     flags?: true;
-    createAt?: true;
-    updateAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
     credit?: true;
+    isBanned?: true;
+    isLocked?: true;
+    isVerified?: true;
+    lastActiveAt?: true;
     _all?: true;
   };
 
@@ -15605,7 +15850,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone: string | null;
-    isVerified: boolean;
+    web3Wallet: string | null;
+    passwordEnabled: boolean;
     hashedPassword: string | null;
     avatarUrl: string | null;
     address: string | null;
@@ -15615,9 +15861,13 @@ export namespace Prisma {
     biography: string | null;
     roles: $Enums.UserRole[];
     flags: $Enums.UserFlag[];
-    createAt: Date;
-    updateAt: Date;
+    createdAt: Date;
+    updatedAt: Date;
     credit: number;
+    isBanned: boolean;
+    isLocked: boolean;
+    isVerified: boolean;
+    lastActiveAt: Date | null;
     _count: UserCountAggregateOutputType | null;
     _avg: UserAvgAggregateOutputType | null;
     _sum: UserSumAggregateOutputType | null;
@@ -15643,7 +15893,8 @@ export namespace Prisma {
       fullname?: boolean;
       email?: boolean;
       phone?: boolean;
-      isVerified?: boolean;
+      web3Wallet?: boolean;
+      passwordEnabled?: boolean;
       hashedPassword?: boolean;
       avatarUrl?: boolean;
       address?: boolean;
@@ -15653,17 +15904,21 @@ export namespace Prisma {
       biography?: boolean;
       roles?: boolean;
       flags?: boolean;
-      createAt?: boolean;
-      updateAt?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
       credit?: boolean;
+      isBanned?: boolean;
+      isLocked?: boolean;
+      isVerified?: boolean;
+      lastActiveAt?: boolean;
+      security?: boolean | User$securityArgs<ExtArgs>;
+      externalAccounts?: boolean | User$externalAccountsArgs<ExtArgs>;
       auth?: boolean | User$authArgs<ExtArgs>;
-      backupCodes?: boolean | User$backupCodesArgs<ExtArgs>;
       loginSessions?: boolean | User$loginSessionsArgs<ExtArgs>;
       products?: boolean | User$productsArgs<ExtArgs>;
       cart?: boolean | User$cartArgs<ExtArgs>;
-      mfaSetups?: boolean | User$mfaSetupsArgs<ExtArgs>;
       ticketAuthor?: boolean | User$ticketAuthorArgs<ExtArgs>;
-      ticketAssigned?: boolean | User$ticketAssignedArgs<ExtArgs>;
+      ticketAssign?: boolean | User$ticketAssignArgs<ExtArgs>;
       ticketMembers?: boolean | User$ticketMembersArgs<ExtArgs>;
       reviews?: boolean | User$reviewsArgs<ExtArgs>;
       bills?: boolean | User$billsArgs<ExtArgs>;
@@ -15680,7 +15935,8 @@ export namespace Prisma {
         fullname?: boolean;
         email?: boolean;
         phone?: boolean;
-        isVerified?: boolean;
+        web3Wallet?: boolean;
+        passwordEnabled?: boolean;
         hashedPassword?: boolean;
         avatarUrl?: boolean;
         address?: boolean;
@@ -15690,9 +15946,13 @@ export namespace Prisma {
         biography?: boolean;
         roles?: boolean;
         flags?: boolean;
-        createAt?: boolean;
-        updateAt?: boolean;
+        createdAt?: boolean;
+        updatedAt?: boolean;
         credit?: boolean;
+        isBanned?: boolean;
+        isLocked?: boolean;
+        isVerified?: boolean;
+        lastActiveAt?: boolean;
       },
       ExtArgs['result']['user']
     >;
@@ -15704,7 +15964,8 @@ export namespace Prisma {
         fullname?: boolean;
         email?: boolean;
         phone?: boolean;
-        isVerified?: boolean;
+        web3Wallet?: boolean;
+        passwordEnabled?: boolean;
         hashedPassword?: boolean;
         avatarUrl?: boolean;
         address?: boolean;
@@ -15714,9 +15975,13 @@ export namespace Prisma {
         biography?: boolean;
         roles?: boolean;
         flags?: boolean;
-        createAt?: boolean;
-        updateAt?: boolean;
+        createdAt?: boolean;
+        updatedAt?: boolean;
         credit?: boolean;
+        isBanned?: boolean;
+        isLocked?: boolean;
+        isVerified?: boolean;
+        lastActiveAt?: boolean;
       },
       ExtArgs['result']['user']
     >;
@@ -15726,7 +15991,8 @@ export namespace Prisma {
     fullname?: boolean;
     email?: boolean;
     phone?: boolean;
-    isVerified?: boolean;
+    web3Wallet?: boolean;
+    passwordEnabled?: boolean;
     hashedPassword?: boolean;
     avatarUrl?: boolean;
     address?: boolean;
@@ -15736,9 +16002,13 @@ export namespace Prisma {
     biography?: boolean;
     roles?: boolean;
     flags?: boolean;
-    createAt?: boolean;
-    updateAt?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
     credit?: boolean;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: boolean;
   };
 
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<
@@ -15746,7 +16016,8 @@ export namespace Prisma {
     | 'fullname'
     | 'email'
     | 'phone'
-    | 'isVerified'
+    | 'web3Wallet'
+    | 'passwordEnabled'
     | 'hashedPassword'
     | 'avatarUrl'
     | 'address'
@@ -15756,20 +16027,24 @@ export namespace Prisma {
     | 'biography'
     | 'roles'
     | 'flags'
-    | 'createAt'
-    | 'updateAt'
-    | 'credit',
+    | 'createdAt'
+    | 'updatedAt'
+    | 'credit'
+    | 'isBanned'
+    | 'isLocked'
+    | 'isVerified'
+    | 'lastActiveAt',
     ExtArgs['result']['user']
   >;
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    security?: boolean | User$securityArgs<ExtArgs>;
+    externalAccounts?: boolean | User$externalAccountsArgs<ExtArgs>;
     auth?: boolean | User$authArgs<ExtArgs>;
-    backupCodes?: boolean | User$backupCodesArgs<ExtArgs>;
     loginSessions?: boolean | User$loginSessionsArgs<ExtArgs>;
     products?: boolean | User$productsArgs<ExtArgs>;
     cart?: boolean | User$cartArgs<ExtArgs>;
-    mfaSetups?: boolean | User$mfaSetupsArgs<ExtArgs>;
     ticketAuthor?: boolean | User$ticketAuthorArgs<ExtArgs>;
-    ticketAssigned?: boolean | User$ticketAssignedArgs<ExtArgs>;
+    ticketAssign?: boolean | User$ticketAssignArgs<ExtArgs>;
     ticketMembers?: boolean | User$ticketMembersArgs<ExtArgs>;
     reviews?: boolean | User$reviewsArgs<ExtArgs>;
     bills?: boolean | User$billsArgs<ExtArgs>;
@@ -15782,14 +16057,14 @@ export namespace Prisma {
   export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: 'User';
     objects: {
+      security: Prisma.$UserSecurityPayload<ExtArgs> | null;
+      externalAccounts: Prisma.$ExternalAccountPayload<ExtArgs>[];
       auth: Prisma.$AuthenticationPayload<ExtArgs>[];
-      backupCodes: Prisma.$MfaBackupCodePayload<ExtArgs>[];
       loginSessions: Prisma.$LoginSessionPayload<ExtArgs>[];
       products: Prisma.$ProductPayload<ExtArgs>[];
       cart: Prisma.$CartItemPayload<ExtArgs>[];
-      mfaSetups: Prisma.$MfaSetupPayload<ExtArgs>[];
       ticketAuthor: Prisma.$TicketPayload<ExtArgs>[];
-      ticketAssigned: Prisma.$TicketPayload<ExtArgs>[];
+      ticketAssign: Prisma.$TicketPayload<ExtArgs>[];
       ticketMembers: Prisma.$TicketMemberPayload<ExtArgs>[];
       reviews: Prisma.$ReviewPayload<ExtArgs>[];
       bills: Prisma.$BillPayload<ExtArgs>[];
@@ -15801,7 +16076,8 @@ export namespace Prisma {
         fullname: string;
         email: string;
         phone: string | null;
-        isVerified: boolean;
+        web3Wallet: string | null;
+        passwordEnabled: boolean;
         hashedPassword: string | null;
         avatarUrl: string | null;
         address: string | null;
@@ -15811,9 +16087,13 @@ export namespace Prisma {
         biography: string | null;
         roles: $Enums.UserRole[];
         flags: $Enums.UserFlag[];
-        createAt: Date;
-        updateAt: Date;
+        createdAt: Date;
+        updatedAt: Date;
         credit: number;
+        isBanned: boolean;
+        isLocked: boolean;
+        isVerified: boolean;
+        lastActiveAt: Date | null;
       },
       ExtArgs['result']['user']
     >;
@@ -16290,15 +16570,23 @@ export namespace Prisma {
     GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
+    security<T extends User$securityArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$securityArgs<ExtArgs>>,
+    ): Prisma__UserSecurityClient<
+      $Result.GetResult<Prisma.$UserSecurityPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    externalAccounts<T extends User$externalAccountsArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$externalAccountsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$ExternalAccountPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions> | Null
+    >;
     auth<T extends User$authArgs<ExtArgs> = {}>(
       args?: Subset<T, User$authArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$AuthenticationPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions> | Null
-    >;
-    backupCodes<T extends User$backupCodesArgs<ExtArgs> = {}>(
-      args?: Subset<T, User$backupCodesArgs<ExtArgs>>,
-    ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$MfaBackupCodePayload<ExtArgs>, T, 'findMany', GlobalOmitOptions> | Null
     >;
     loginSessions<T extends User$loginSessionsArgs<ExtArgs> = {}>(
       args?: Subset<T, User$loginSessionsArgs<ExtArgs>>,
@@ -16315,16 +16603,11 @@ export namespace Prisma {
     ): Prisma.PrismaPromise<
       $Result.GetResult<Prisma.$CartItemPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions> | Null
     >;
-    mfaSetups<T extends User$mfaSetupsArgs<ExtArgs> = {}>(
-      args?: Subset<T, User$mfaSetupsArgs<ExtArgs>>,
-    ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$MfaSetupPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions> | Null
-    >;
     ticketAuthor<T extends User$ticketAuthorArgs<ExtArgs> = {}>(
       args?: Subset<T, User$ticketAuthorArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions> | Null>;
-    ticketAssigned<T extends User$ticketAssignedArgs<ExtArgs> = {}>(
-      args?: Subset<T, User$ticketAssignedArgs<ExtArgs>>,
+    ticketAssign<T extends User$ticketAssignArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$ticketAssignArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions> | Null>;
     ticketMembers<T extends User$ticketMembersArgs<ExtArgs> = {}>(
       args?: Subset<T, User$ticketMembersArgs<ExtArgs>>,
@@ -16375,7 +16658,8 @@ export namespace Prisma {
     readonly fullname: FieldRef<'User', 'String'>;
     readonly email: FieldRef<'User', 'String'>;
     readonly phone: FieldRef<'User', 'String'>;
-    readonly isVerified: FieldRef<'User', 'Boolean'>;
+    readonly web3Wallet: FieldRef<'User', 'String'>;
+    readonly passwordEnabled: FieldRef<'User', 'Boolean'>;
     readonly hashedPassword: FieldRef<'User', 'String'>;
     readonly avatarUrl: FieldRef<'User', 'String'>;
     readonly address: FieldRef<'User', 'String'>;
@@ -16385,9 +16669,13 @@ export namespace Prisma {
     readonly biography: FieldRef<'User', 'String'>;
     readonly roles: FieldRef<'User', 'UserRole[]'>;
     readonly flags: FieldRef<'User', 'UserFlag[]'>;
-    readonly createAt: FieldRef<'User', 'DateTime'>;
-    readonly updateAt: FieldRef<'User', 'DateTime'>;
+    readonly createdAt: FieldRef<'User', 'DateTime'>;
+    readonly updatedAt: FieldRef<'User', 'DateTime'>;
     readonly credit: FieldRef<'User', 'Int'>;
+    readonly isBanned: FieldRef<'User', 'Boolean'>;
+    readonly isLocked: FieldRef<'User', 'Boolean'>;
+    readonly isVerified: FieldRef<'User', 'Boolean'>;
+    readonly lastActiveAt: FieldRef<'User', 'DateTime'>;
   }
 
   // Custom InputTypes
@@ -16784,6 +17072,49 @@ export namespace Prisma {
   };
 
   /**
+   * User.security
+   */
+  export type User$securityArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSecurity
+     */
+    select?: UserSecuritySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSecurity
+     */
+    omit?: UserSecurityOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSecurityInclude<ExtArgs> | null;
+    where?: UserSecurityWhereInput;
+  };
+
+  /**
+   * User.externalAccounts
+   */
+  export type User$externalAccountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExternalAccount
+     */
+    select?: ExternalAccountSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ExternalAccount
+     */
+    omit?: ExternalAccountOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExternalAccountInclude<ExtArgs> | null;
+    where?: ExternalAccountWhereInput;
+    orderBy?: ExternalAccountOrderByWithRelationInput | ExternalAccountOrderByWithRelationInput[];
+    cursor?: ExternalAccountWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: ExternalAccountScalarFieldEnum | ExternalAccountScalarFieldEnum[];
+  };
+
+  /**
    * User.auth
    */
   export type User$authArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16805,30 +17136,6 @@ export namespace Prisma {
     take?: number;
     skip?: number;
     distinct?: AuthenticationScalarFieldEnum | AuthenticationScalarFieldEnum[];
-  };
-
-  /**
-   * User.backupCodes
-   */
-  export type User$backupCodesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MfaBackupCode
-     */
-    select?: MfaBackupCodeSelect<ExtArgs> | null;
-    /**
-     * Omit specific fields from the MfaBackupCode
-     */
-    omit?: MfaBackupCodeOmit<ExtArgs> | null;
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MfaBackupCodeInclude<ExtArgs> | null;
-    where?: MfaBackupCodeWhereInput;
-    orderBy?: MfaBackupCodeOrderByWithRelationInput | MfaBackupCodeOrderByWithRelationInput[];
-    cursor?: MfaBackupCodeWhereUniqueInput;
-    take?: number;
-    skip?: number;
-    distinct?: MfaBackupCodeScalarFieldEnum | MfaBackupCodeScalarFieldEnum[];
   };
 
   /**
@@ -16904,30 +17211,6 @@ export namespace Prisma {
   };
 
   /**
-   * User.mfaSetups
-   */
-  export type User$mfaSetupsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the MfaSetup
-     */
-    select?: MfaSetupSelect<ExtArgs> | null;
-    /**
-     * Omit specific fields from the MfaSetup
-     */
-    omit?: MfaSetupOmit<ExtArgs> | null;
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MfaSetupInclude<ExtArgs> | null;
-    where?: MfaSetupWhereInput;
-    orderBy?: MfaSetupOrderByWithRelationInput | MfaSetupOrderByWithRelationInput[];
-    cursor?: MfaSetupWhereUniqueInput;
-    take?: number;
-    skip?: number;
-    distinct?: MfaSetupScalarFieldEnum | MfaSetupScalarFieldEnum[];
-  };
-
-  /**
    * User.ticketAuthor
    */
   export type User$ticketAuthorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -16952,9 +17235,9 @@ export namespace Prisma {
   };
 
   /**
-   * User.ticketAssigned
+   * User.ticketAssign
    */
-  export type User$ticketAssignedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type User$ticketAssignArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Ticket
      */
@@ -17090,6 +17373,2708 @@ export namespace Prisma {
   };
 
   /**
+   * Model UserSecurity
+   */
+
+  export type AggregateUserSecurity = {
+    _count: UserSecurityCountAggregateOutputType | null;
+    _avg: UserSecurityAvgAggregateOutputType | null;
+    _sum: UserSecuritySumAggregateOutputType | null;
+    _min: UserSecurityMinAggregateOutputType | null;
+    _max: UserSecurityMaxAggregateOutputType | null;
+  };
+
+  export type UserSecurityAvgAggregateOutputType = {
+    verificationAttemptsRemaining: number | null;
+  };
+
+  export type UserSecuritySumAggregateOutputType = {
+    verificationAttemptsRemaining: number | null;
+  };
+
+  export type UserSecurityMinAggregateOutputType = {
+    userId: string | null;
+    mfaEnabled: boolean | null;
+    mfaEnabledAt: Date | null;
+    mfaDisabledAt: Date | null;
+    totpEnabled: boolean | null;
+    totpEnabledAt: Date | null;
+    totpDisabledAt: Date | null;
+    backupCodesEnabled: boolean | null;
+    backupCodesEnabledAt: Date | null;
+    backupCodesDisabledAt: Date | null;
+    verificationAttemptsRemaining: number | null;
+    verificationAttemptsResetAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type UserSecurityMaxAggregateOutputType = {
+    userId: string | null;
+    mfaEnabled: boolean | null;
+    mfaEnabledAt: Date | null;
+    mfaDisabledAt: Date | null;
+    totpEnabled: boolean | null;
+    totpEnabledAt: Date | null;
+    totpDisabledAt: Date | null;
+    backupCodesEnabled: boolean | null;
+    backupCodesEnabledAt: Date | null;
+    backupCodesDisabledAt: Date | null;
+    verificationAttemptsRemaining: number | null;
+    verificationAttemptsResetAt: Date | null;
+    updatedAt: Date | null;
+  };
+
+  export type UserSecurityCountAggregateOutputType = {
+    userId: number;
+    mfaEnabled: number;
+    mfaEnabledAt: number;
+    mfaDisabledAt: number;
+    totpEnabled: number;
+    totpEnabledAt: number;
+    totpDisabledAt: number;
+    backupCodesEnabled: number;
+    backupCodesEnabledAt: number;
+    backupCodesDisabledAt: number;
+    verificationAttemptsRemaining: number;
+    verificationAttemptsResetAt: number;
+    updatedAt: number;
+    _all: number;
+  };
+
+  export type UserSecurityAvgAggregateInputType = {
+    verificationAttemptsRemaining?: true;
+  };
+
+  export type UserSecuritySumAggregateInputType = {
+    verificationAttemptsRemaining?: true;
+  };
+
+  export type UserSecurityMinAggregateInputType = {
+    userId?: true;
+    mfaEnabled?: true;
+    mfaEnabledAt?: true;
+    mfaDisabledAt?: true;
+    totpEnabled?: true;
+    totpEnabledAt?: true;
+    totpDisabledAt?: true;
+    backupCodesEnabled?: true;
+    backupCodesEnabledAt?: true;
+    backupCodesDisabledAt?: true;
+    verificationAttemptsRemaining?: true;
+    verificationAttemptsResetAt?: true;
+    updatedAt?: true;
+  };
+
+  export type UserSecurityMaxAggregateInputType = {
+    userId?: true;
+    mfaEnabled?: true;
+    mfaEnabledAt?: true;
+    mfaDisabledAt?: true;
+    totpEnabled?: true;
+    totpEnabledAt?: true;
+    totpDisabledAt?: true;
+    backupCodesEnabled?: true;
+    backupCodesEnabledAt?: true;
+    backupCodesDisabledAt?: true;
+    verificationAttemptsRemaining?: true;
+    verificationAttemptsResetAt?: true;
+    updatedAt?: true;
+  };
+
+  export type UserSecurityCountAggregateInputType = {
+    userId?: true;
+    mfaEnabled?: true;
+    mfaEnabledAt?: true;
+    mfaDisabledAt?: true;
+    totpEnabled?: true;
+    totpEnabledAt?: true;
+    totpDisabledAt?: true;
+    backupCodesEnabled?: true;
+    backupCodesEnabledAt?: true;
+    backupCodesDisabledAt?: true;
+    verificationAttemptsRemaining?: true;
+    verificationAttemptsResetAt?: true;
+    updatedAt?: true;
+    _all?: true;
+  };
+
+  export type UserSecurityAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserSecurity to aggregate.
+     */
+    where?: UserSecurityWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of UserSecurities to fetch.
+     */
+    orderBy?: UserSecurityOrderByWithRelationInput | UserSecurityOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: UserSecurityWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` UserSecurities from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` UserSecurities.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned UserSecurities
+     **/
+    _count?: true | UserSecurityCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: UserSecurityAvgAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: UserSecuritySumAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: UserSecurityMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: UserSecurityMaxAggregateInputType;
+  };
+
+  export type GetUserSecurityAggregateType<T extends UserSecurityAggregateArgs> = {
+    [P in keyof T & keyof AggregateUserSecurity]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserSecurity[P]>
+      : GetScalarType<T[P], AggregateUserSecurity[P]>;
+  };
+
+  export type UserSecurityGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserSecurityWhereInput;
+    orderBy?: UserSecurityOrderByWithAggregationInput | UserSecurityOrderByWithAggregationInput[];
+    by: UserSecurityScalarFieldEnum[] | UserSecurityScalarFieldEnum;
+    having?: UserSecurityScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: UserSecurityCountAggregateInputType | true;
+    _avg?: UserSecurityAvgAggregateInputType;
+    _sum?: UserSecuritySumAggregateInputType;
+    _min?: UserSecurityMinAggregateInputType;
+    _max?: UserSecurityMaxAggregateInputType;
+  };
+
+  export type UserSecurityGroupByOutputType = {
+    userId: string;
+    mfaEnabled: boolean;
+    mfaEnabledAt: Date | null;
+    mfaDisabledAt: Date | null;
+    totpEnabled: boolean;
+    totpEnabledAt: Date | null;
+    totpDisabledAt: Date | null;
+    backupCodesEnabled: boolean;
+    backupCodesEnabledAt: Date | null;
+    backupCodesDisabledAt: Date | null;
+    verificationAttemptsRemaining: number;
+    verificationAttemptsResetAt: Date | null;
+    updatedAt: Date;
+    _count: UserSecurityCountAggregateOutputType | null;
+    _avg: UserSecurityAvgAggregateOutputType | null;
+    _sum: UserSecuritySumAggregateOutputType | null;
+    _min: UserSecurityMinAggregateOutputType | null;
+    _max: UserSecurityMaxAggregateOutputType | null;
+  };
+
+  type GetUserSecurityGroupByPayload<T extends UserSecurityGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserSecurityGroupByOutputType, T['by']> & {
+        [P in keyof T & keyof UserSecurityGroupByOutputType]: P extends '_count'
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], UserSecurityGroupByOutputType[P]>
+          : GetScalarType<T[P], UserSecurityGroupByOutputType[P]>;
+      }
+    >
+  >;
+
+  export type UserSecuritySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    $Extensions.GetSelect<
+      {
+        userId?: boolean;
+        mfaEnabled?: boolean;
+        mfaEnabledAt?: boolean;
+        mfaDisabledAt?: boolean;
+        totpEnabled?: boolean;
+        totpEnabledAt?: boolean;
+        totpDisabledAt?: boolean;
+        backupCodesEnabled?: boolean;
+        backupCodesEnabledAt?: boolean;
+        backupCodesDisabledAt?: boolean;
+        verificationAttemptsRemaining?: boolean;
+        verificationAttemptsResetAt?: boolean;
+        updatedAt?: boolean;
+        mfaSetups?: boolean | UserSecurity$mfaSetupsArgs<ExtArgs>;
+        backupCodes?: boolean | UserSecurity$backupCodesArgs<ExtArgs>;
+        user?: boolean | UserDefaultArgs<ExtArgs>;
+        _count?: boolean | UserSecurityCountOutputTypeDefaultArgs<ExtArgs>;
+      },
+      ExtArgs['result']['userSecurity']
+    >;
+
+  export type UserSecuritySelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      userId?: boolean;
+      mfaEnabled?: boolean;
+      mfaEnabledAt?: boolean;
+      mfaDisabledAt?: boolean;
+      totpEnabled?: boolean;
+      totpEnabledAt?: boolean;
+      totpDisabledAt?: boolean;
+      backupCodesEnabled?: boolean;
+      backupCodesEnabledAt?: boolean;
+      backupCodesDisabledAt?: boolean;
+      verificationAttemptsRemaining?: boolean;
+      verificationAttemptsResetAt?: boolean;
+      updatedAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['userSecurity']
+  >;
+
+  export type UserSecuritySelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      userId?: boolean;
+      mfaEnabled?: boolean;
+      mfaEnabledAt?: boolean;
+      mfaDisabledAt?: boolean;
+      totpEnabled?: boolean;
+      totpEnabledAt?: boolean;
+      totpDisabledAt?: boolean;
+      backupCodesEnabled?: boolean;
+      backupCodesEnabledAt?: boolean;
+      backupCodesDisabledAt?: boolean;
+      verificationAttemptsRemaining?: boolean;
+      verificationAttemptsResetAt?: boolean;
+      updatedAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['userSecurity']
+  >;
+
+  export type UserSecuritySelectScalar = {
+    userId?: boolean;
+    mfaEnabled?: boolean;
+    mfaEnabledAt?: boolean;
+    mfaDisabledAt?: boolean;
+    totpEnabled?: boolean;
+    totpEnabledAt?: boolean;
+    totpDisabledAt?: boolean;
+    backupCodesEnabled?: boolean;
+    backupCodesEnabledAt?: boolean;
+    backupCodesDisabledAt?: boolean;
+    verificationAttemptsRemaining?: boolean;
+    verificationAttemptsResetAt?: boolean;
+    updatedAt?: boolean;
+  };
+
+  export type UserSecurityOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    $Extensions.GetOmit<
+      | 'userId'
+      | 'mfaEnabled'
+      | 'mfaEnabledAt'
+      | 'mfaDisabledAt'
+      | 'totpEnabled'
+      | 'totpEnabledAt'
+      | 'totpDisabledAt'
+      | 'backupCodesEnabled'
+      | 'backupCodesEnabledAt'
+      | 'backupCodesDisabledAt'
+      | 'verificationAttemptsRemaining'
+      | 'verificationAttemptsResetAt'
+      | 'updatedAt',
+      ExtArgs['result']['userSecurity']
+    >;
+  export type UserSecurityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mfaSetups?: boolean | UserSecurity$mfaSetupsArgs<ExtArgs>;
+    backupCodes?: boolean | UserSecurity$backupCodesArgs<ExtArgs>;
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+    _count?: boolean | UserSecurityCountOutputTypeDefaultArgs<ExtArgs>;
+  };
+  export type UserSecurityIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type UserSecurityIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+
+  export type $UserSecurityPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: 'UserSecurity';
+    objects: {
+      mfaSetups: Prisma.$MfaSetupPayload<ExtArgs>[];
+      backupCodes: Prisma.$MfaBackupCodePayload<ExtArgs>[];
+      user: Prisma.$UserPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        userId: string;
+        mfaEnabled: boolean;
+        mfaEnabledAt: Date | null;
+        mfaDisabledAt: Date | null;
+        totpEnabled: boolean;
+        totpEnabledAt: Date | null;
+        totpDisabledAt: Date | null;
+        backupCodesEnabled: boolean;
+        backupCodesEnabledAt: Date | null;
+        backupCodesDisabledAt: Date | null;
+        verificationAttemptsRemaining: number;
+        verificationAttemptsResetAt: Date | null;
+        updatedAt: Date;
+      },
+      ExtArgs['result']['userSecurity']
+    >;
+    composites: {};
+  };
+
+  type UserSecurityGetPayload<S extends boolean | null | undefined | UserSecurityDefaultArgs> = $Result.GetResult<
+    Prisma.$UserSecurityPayload,
+    S
+  >;
+
+  type UserSecurityCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<
+    UserSecurityFindManyArgs,
+    'select' | 'include' | 'distinct' | 'omit' | 'relationLoadStrategy'
+  > & {
+    select?: UserSecurityCountAggregateInputType | true;
+  };
+
+  export interface UserSecurityDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserSecurity']; meta: { name: 'UserSecurity' } };
+    /**
+     * Find zero or one UserSecurity that matches the filter.
+     * @param {UserSecurityFindUniqueArgs} args - Arguments to find a UserSecurity
+     * @example
+     * // Get one UserSecurity
+     * const userSecurity = await prisma.userSecurity.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserSecurityFindUniqueArgs>(
+      args: SelectSubset<T, UserSecurityFindUniqueArgs<ExtArgs>>,
+    ): Prisma__UserSecurityClient<
+      $Result.GetResult<Prisma.$UserSecurityPayload<ExtArgs>, T, 'findUnique', GlobalOmitOptions> | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find one UserSecurity that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserSecurityFindUniqueOrThrowArgs} args - Arguments to find a UserSecurity
+     * @example
+     * // Get one UserSecurity
+     * const userSecurity = await prisma.userSecurity.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserSecurityFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, UserSecurityFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__UserSecurityClient<
+      $Result.GetResult<Prisma.$UserSecurityPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first UserSecurity that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSecurityFindFirstArgs} args - Arguments to find a UserSecurity
+     * @example
+     * // Get one UserSecurity
+     * const userSecurity = await prisma.userSecurity.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserSecurityFindFirstArgs>(
+      args?: SelectSubset<T, UserSecurityFindFirstArgs<ExtArgs>>,
+    ): Prisma__UserSecurityClient<
+      $Result.GetResult<Prisma.$UserSecurityPayload<ExtArgs>, T, 'findFirst', GlobalOmitOptions> | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first UserSecurity that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSecurityFindFirstOrThrowArgs} args - Arguments to find a UserSecurity
+     * @example
+     * // Get one UserSecurity
+     * const userSecurity = await prisma.userSecurity.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserSecurityFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, UserSecurityFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__UserSecurityClient<
+      $Result.GetResult<Prisma.$UserSecurityPayload<ExtArgs>, T, 'findFirstOrThrow', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find zero or more UserSecurities that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSecurityFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserSecurities
+     * const userSecurities = await prisma.userSecurity.findMany()
+     *
+     * // Get first 10 UserSecurities
+     * const userSecurities = await prisma.userSecurity.findMany({ take: 10 })
+     *
+     * // Only select the `userId`
+     * const userSecurityWithUserIdOnly = await prisma.userSecurity.findMany({ select: { userId: true } })
+     *
+     */
+    findMany<T extends UserSecurityFindManyArgs>(
+      args?: SelectSubset<T, UserSecurityFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSecurityPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>>;
+
+    /**
+     * Create a UserSecurity.
+     * @param {UserSecurityCreateArgs} args - Arguments to create a UserSecurity.
+     * @example
+     * // Create one UserSecurity
+     * const UserSecurity = await prisma.userSecurity.create({
+     *   data: {
+     *     // ... data to create a UserSecurity
+     *   }
+     * })
+     *
+     */
+    create<T extends UserSecurityCreateArgs>(
+      args: SelectSubset<T, UserSecurityCreateArgs<ExtArgs>>,
+    ): Prisma__UserSecurityClient<
+      $Result.GetResult<Prisma.$UserSecurityPayload<ExtArgs>, T, 'create', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Create many UserSecurities.
+     * @param {UserSecurityCreateManyArgs} args - Arguments to create many UserSecurities.
+     * @example
+     * // Create many UserSecurities
+     * const userSecurity = await prisma.userSecurity.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends UserSecurityCreateManyArgs>(
+      args?: SelectSubset<T, UserSecurityCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many UserSecurities and returns the data saved in the database.
+     * @param {UserSecurityCreateManyAndReturnArgs} args - Arguments to create many UserSecurities.
+     * @example
+     * // Create many UserSecurities
+     * const userSecurity = await prisma.userSecurity.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many UserSecurities and only return the `userId`
+     * const userSecurityWithUserIdOnly = await prisma.userSecurity.createManyAndReturn({
+     *   select: { userId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends UserSecurityCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, UserSecurityCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$UserSecurityPayload<ExtArgs>, T, 'createManyAndReturn', GlobalOmitOptions>
+    >;
+
+    /**
+     * Delete a UserSecurity.
+     * @param {UserSecurityDeleteArgs} args - Arguments to delete one UserSecurity.
+     * @example
+     * // Delete one UserSecurity
+     * const UserSecurity = await prisma.userSecurity.delete({
+     *   where: {
+     *     // ... filter to delete one UserSecurity
+     *   }
+     * })
+     *
+     */
+    delete<T extends UserSecurityDeleteArgs>(
+      args: SelectSubset<T, UserSecurityDeleteArgs<ExtArgs>>,
+    ): Prisma__UserSecurityClient<
+      $Result.GetResult<Prisma.$UserSecurityPayload<ExtArgs>, T, 'delete', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Update one UserSecurity.
+     * @param {UserSecurityUpdateArgs} args - Arguments to update one UserSecurity.
+     * @example
+     * // Update one UserSecurity
+     * const userSecurity = await prisma.userSecurity.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends UserSecurityUpdateArgs>(
+      args: SelectSubset<T, UserSecurityUpdateArgs<ExtArgs>>,
+    ): Prisma__UserSecurityClient<
+      $Result.GetResult<Prisma.$UserSecurityPayload<ExtArgs>, T, 'update', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Delete zero or more UserSecurities.
+     * @param {UserSecurityDeleteManyArgs} args - Arguments to filter UserSecurities to delete.
+     * @example
+     * // Delete a few UserSecurities
+     * const { count } = await prisma.userSecurity.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends UserSecurityDeleteManyArgs>(
+      args?: SelectSubset<T, UserSecurityDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more UserSecurities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSecurityUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserSecurities
+     * const userSecurity = await prisma.userSecurity.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends UserSecurityUpdateManyArgs>(
+      args: SelectSubset<T, UserSecurityUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more UserSecurities and returns the data updated in the database.
+     * @param {UserSecurityUpdateManyAndReturnArgs} args - Arguments to update many UserSecurities.
+     * @example
+     * // Update many UserSecurities
+     * const userSecurity = await prisma.userSecurity.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more UserSecurities and only return the `userId`
+     * const userSecurityWithUserIdOnly = await prisma.userSecurity.updateManyAndReturn({
+     *   select: { userId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends UserSecurityUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, UserSecurityUpdateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$UserSecurityPayload<ExtArgs>, T, 'updateManyAndReturn', GlobalOmitOptions>
+    >;
+
+    /**
+     * Create or update one UserSecurity.
+     * @param {UserSecurityUpsertArgs} args - Arguments to update or create a UserSecurity.
+     * @example
+     * // Update or create a UserSecurity
+     * const userSecurity = await prisma.userSecurity.upsert({
+     *   create: {
+     *     // ... data to create a UserSecurity
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserSecurity we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserSecurityUpsertArgs>(
+      args: SelectSubset<T, UserSecurityUpsertArgs<ExtArgs>>,
+    ): Prisma__UserSecurityClient<
+      $Result.GetResult<Prisma.$UserSecurityPayload<ExtArgs>, T, 'upsert', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Count the number of UserSecurities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSecurityCountArgs} args - Arguments to filter UserSecurities to count.
+     * @example
+     * // Count the number of UserSecurities
+     * const count = await prisma.userSecurity.count({
+     *   where: {
+     *     // ... the filter for the UserSecurities we want to count
+     *   }
+     * })
+     **/
+    count<T extends UserSecurityCountArgs>(
+      args?: Subset<T, UserSecurityCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserSecurityCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a UserSecurity.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSecurityAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends UserSecurityAggregateArgs>(
+      args: Subset<T, UserSecurityAggregateArgs>,
+    ): Prisma.PrismaPromise<GetUserSecurityAggregateType<T>>;
+
+    /**
+     * Group by UserSecurity.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSecurityGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends UserSecurityGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserSecurityGroupByArgs['orderBy'] }
+        : { orderBy?: UserSecurityGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, UserSecurityGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors ? GetUserSecurityGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the UserSecurity model
+     */
+    readonly fields: UserSecurityFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserSecurity.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserSecurityClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    mfaSetups<T extends UserSecurity$mfaSetupsArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserSecurity$mfaSetupsArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$MfaSetupPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions> | Null
+    >;
+    backupCodes<T extends UserSecurity$backupCodesArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserSecurity$backupCodesArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$MfaBackupCodePayload<ExtArgs>, T, 'findMany', GlobalOmitOptions> | Null
+    >;
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the UserSecurity model
+   */
+  interface UserSecurityFieldRefs {
+    readonly userId: FieldRef<'UserSecurity', 'String'>;
+    readonly mfaEnabled: FieldRef<'UserSecurity', 'Boolean'>;
+    readonly mfaEnabledAt: FieldRef<'UserSecurity', 'DateTime'>;
+    readonly mfaDisabledAt: FieldRef<'UserSecurity', 'DateTime'>;
+    readonly totpEnabled: FieldRef<'UserSecurity', 'Boolean'>;
+    readonly totpEnabledAt: FieldRef<'UserSecurity', 'DateTime'>;
+    readonly totpDisabledAt: FieldRef<'UserSecurity', 'DateTime'>;
+    readonly backupCodesEnabled: FieldRef<'UserSecurity', 'Boolean'>;
+    readonly backupCodesEnabledAt: FieldRef<'UserSecurity', 'DateTime'>;
+    readonly backupCodesDisabledAt: FieldRef<'UserSecurity', 'DateTime'>;
+    readonly verificationAttemptsRemaining: FieldRef<'UserSecurity', 'Int'>;
+    readonly verificationAttemptsResetAt: FieldRef<'UserSecurity', 'DateTime'>;
+    readonly updatedAt: FieldRef<'UserSecurity', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * UserSecurity findUnique
+   */
+  export type UserSecurityFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSecurity
+     */
+    select?: UserSecuritySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSecurity
+     */
+    omit?: UserSecurityOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSecurityInclude<ExtArgs> | null;
+    /**
+     * Filter, which UserSecurity to fetch.
+     */
+    where: UserSecurityWhereUniqueInput;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * UserSecurity findUniqueOrThrow
+   */
+  export type UserSecurityFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSecurity
+     */
+    select?: UserSecuritySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSecurity
+     */
+    omit?: UserSecurityOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSecurityInclude<ExtArgs> | null;
+    /**
+     * Filter, which UserSecurity to fetch.
+     */
+    where: UserSecurityWhereUniqueInput;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * UserSecurity findFirst
+   */
+  export type UserSecurityFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSecurity
+     */
+    select?: UserSecuritySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSecurity
+     */
+    omit?: UserSecurityOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSecurityInclude<ExtArgs> | null;
+    /**
+     * Filter, which UserSecurity to fetch.
+     */
+    where?: UserSecurityWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of UserSecurities to fetch.
+     */
+    orderBy?: UserSecurityOrderByWithRelationInput | UserSecurityOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for UserSecurities.
+     */
+    cursor?: UserSecurityWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` UserSecurities from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` UserSecurities.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of UserSecurities.
+     */
+    distinct?: UserSecurityScalarFieldEnum | UserSecurityScalarFieldEnum[];
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * UserSecurity findFirstOrThrow
+   */
+  export type UserSecurityFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSecurity
+     */
+    select?: UserSecuritySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSecurity
+     */
+    omit?: UserSecurityOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSecurityInclude<ExtArgs> | null;
+    /**
+     * Filter, which UserSecurity to fetch.
+     */
+    where?: UserSecurityWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of UserSecurities to fetch.
+     */
+    orderBy?: UserSecurityOrderByWithRelationInput | UserSecurityOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for UserSecurities.
+     */
+    cursor?: UserSecurityWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` UserSecurities from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` UserSecurities.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of UserSecurities.
+     */
+    distinct?: UserSecurityScalarFieldEnum | UserSecurityScalarFieldEnum[];
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * UserSecurity findMany
+   */
+  export type UserSecurityFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSecurity
+     */
+    select?: UserSecuritySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSecurity
+     */
+    omit?: UserSecurityOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSecurityInclude<ExtArgs> | null;
+    /**
+     * Filter, which UserSecurities to fetch.
+     */
+    where?: UserSecurityWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of UserSecurities to fetch.
+     */
+    orderBy?: UserSecurityOrderByWithRelationInput | UserSecurityOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing UserSecurities.
+     */
+    cursor?: UserSecurityWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` UserSecurities from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` UserSecurities.
+     */
+    skip?: number;
+    distinct?: UserSecurityScalarFieldEnum | UserSecurityScalarFieldEnum[];
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * UserSecurity create
+   */
+  export type UserSecurityCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSecurity
+     */
+    select?: UserSecuritySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSecurity
+     */
+    omit?: UserSecurityOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSecurityInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a UserSecurity.
+     */
+    data: XOR<UserSecurityCreateInput, UserSecurityUncheckedCreateInput>;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * UserSecurity createMany
+   */
+  export type UserSecurityCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserSecurities.
+     */
+    data: UserSecurityCreateManyInput | UserSecurityCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * UserSecurity createManyAndReturn
+   */
+  export type UserSecurityCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    {
+      /**
+       * Select specific fields to fetch from the UserSecurity
+       */
+      select?: UserSecuritySelectCreateManyAndReturn<ExtArgs> | null;
+      /**
+       * Omit specific fields from the UserSecurity
+       */
+      omit?: UserSecurityOmit<ExtArgs> | null;
+      /**
+       * The data used to create many UserSecurities.
+       */
+      data: UserSecurityCreateManyInput | UserSecurityCreateManyInput[];
+      skipDuplicates?: boolean;
+      /**
+       * Choose, which related nodes to fetch as well
+       */
+      include?: UserSecurityIncludeCreateManyAndReturn<ExtArgs> | null;
+    };
+
+  /**
+   * UserSecurity update
+   */
+  export type UserSecurityUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSecurity
+     */
+    select?: UserSecuritySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSecurity
+     */
+    omit?: UserSecurityOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSecurityInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a UserSecurity.
+     */
+    data: XOR<UserSecurityUpdateInput, UserSecurityUncheckedUpdateInput>;
+    /**
+     * Choose, which UserSecurity to update.
+     */
+    where: UserSecurityWhereUniqueInput;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * UserSecurity updateMany
+   */
+  export type UserSecurityUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserSecurities.
+     */
+    data: XOR<UserSecurityUpdateManyMutationInput, UserSecurityUncheckedUpdateManyInput>;
+    /**
+     * Filter which UserSecurities to update
+     */
+    where?: UserSecurityWhereInput;
+    /**
+     * Limit how many UserSecurities to update.
+     */
+    limit?: number;
+  };
+
+  /**
+   * UserSecurity updateManyAndReturn
+   */
+  export type UserSecurityUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    {
+      /**
+       * Select specific fields to fetch from the UserSecurity
+       */
+      select?: UserSecuritySelectUpdateManyAndReturn<ExtArgs> | null;
+      /**
+       * Omit specific fields from the UserSecurity
+       */
+      omit?: UserSecurityOmit<ExtArgs> | null;
+      /**
+       * The data used to update UserSecurities.
+       */
+      data: XOR<UserSecurityUpdateManyMutationInput, UserSecurityUncheckedUpdateManyInput>;
+      /**
+       * Filter which UserSecurities to update
+       */
+      where?: UserSecurityWhereInput;
+      /**
+       * Limit how many UserSecurities to update.
+       */
+      limit?: number;
+      /**
+       * Choose, which related nodes to fetch as well
+       */
+      include?: UserSecurityIncludeUpdateManyAndReturn<ExtArgs> | null;
+    };
+
+  /**
+   * UserSecurity upsert
+   */
+  export type UserSecurityUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSecurity
+     */
+    select?: UserSecuritySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSecurity
+     */
+    omit?: UserSecurityOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSecurityInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the UserSecurity to update in case it exists.
+     */
+    where: UserSecurityWhereUniqueInput;
+    /**
+     * In case the UserSecurity found by the `where` argument doesn't exist, create a new UserSecurity with this data.
+     */
+    create: XOR<UserSecurityCreateInput, UserSecurityUncheckedCreateInput>;
+    /**
+     * In case the UserSecurity was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserSecurityUpdateInput, UserSecurityUncheckedUpdateInput>;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * UserSecurity delete
+   */
+  export type UserSecurityDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSecurity
+     */
+    select?: UserSecuritySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSecurity
+     */
+    omit?: UserSecurityOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSecurityInclude<ExtArgs> | null;
+    /**
+     * Filter which UserSecurity to delete.
+     */
+    where: UserSecurityWhereUniqueInput;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * UserSecurity deleteMany
+   */
+  export type UserSecurityDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserSecurities to delete
+     */
+    where?: UserSecurityWhereInput;
+    /**
+     * Limit how many UserSecurities to delete.
+     */
+    limit?: number;
+  };
+
+  /**
+   * UserSecurity.mfaSetups
+   */
+  export type UserSecurity$mfaSetupsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MfaSetup
+     */
+    select?: MfaSetupSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the MfaSetup
+     */
+    omit?: MfaSetupOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MfaSetupInclude<ExtArgs> | null;
+    where?: MfaSetupWhereInput;
+    orderBy?: MfaSetupOrderByWithRelationInput | MfaSetupOrderByWithRelationInput[];
+    cursor?: MfaSetupWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: MfaSetupScalarFieldEnum | MfaSetupScalarFieldEnum[];
+  };
+
+  /**
+   * UserSecurity.backupCodes
+   */
+  export type UserSecurity$backupCodesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MfaBackupCode
+     */
+    select?: MfaBackupCodeSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the MfaBackupCode
+     */
+    omit?: MfaBackupCodeOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MfaBackupCodeInclude<ExtArgs> | null;
+    where?: MfaBackupCodeWhereInput;
+    orderBy?: MfaBackupCodeOrderByWithRelationInput | MfaBackupCodeOrderByWithRelationInput[];
+    cursor?: MfaBackupCodeWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: MfaBackupCodeScalarFieldEnum | MfaBackupCodeScalarFieldEnum[];
+  };
+
+  /**
+   * UserSecurity without action
+   */
+  export type UserSecurityDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSecurity
+     */
+    select?: UserSecuritySelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the UserSecurity
+     */
+    omit?: UserSecurityOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSecurityInclude<ExtArgs> | null;
+  };
+
+  /**
+   * Model ExternalAccount
+   */
+
+  export type AggregateExternalAccount = {
+    _count: ExternalAccountCountAggregateOutputType | null;
+    _min: ExternalAccountMinAggregateOutputType | null;
+    _max: ExternalAccountMaxAggregateOutputType | null;
+  };
+
+  export type ExternalAccountMinAggregateOutputType = {
+    id: string | null;
+    provider: $Enums.ProviderPlatform | null;
+    providerUserId: string | null;
+    approvedScope: string | null;
+    emailAddress: string | null;
+    phoneNumber: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    fullName: string | null;
+    username: string | null;
+    avatarUrl: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+    userId: string | null;
+  };
+
+  export type ExternalAccountMaxAggregateOutputType = {
+    id: string | null;
+    provider: $Enums.ProviderPlatform | null;
+    providerUserId: string | null;
+    approvedScope: string | null;
+    emailAddress: string | null;
+    phoneNumber: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    fullName: string | null;
+    username: string | null;
+    avatarUrl: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+    userId: string | null;
+  };
+
+  export type ExternalAccountCountAggregateOutputType = {
+    id: number;
+    provider: number;
+    providerUserId: number;
+    approvedScope: number;
+    emailAddress: number;
+    phoneNumber: number;
+    firstName: number;
+    lastName: number;
+    fullName: number;
+    username: number;
+    avatarUrl: number;
+    createdAt: number;
+    updatedAt: number;
+    userId: number;
+    _all: number;
+  };
+
+  export type ExternalAccountMinAggregateInputType = {
+    id?: true;
+    provider?: true;
+    providerUserId?: true;
+    approvedScope?: true;
+    emailAddress?: true;
+    phoneNumber?: true;
+    firstName?: true;
+    lastName?: true;
+    fullName?: true;
+    username?: true;
+    avatarUrl?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    userId?: true;
+  };
+
+  export type ExternalAccountMaxAggregateInputType = {
+    id?: true;
+    provider?: true;
+    providerUserId?: true;
+    approvedScope?: true;
+    emailAddress?: true;
+    phoneNumber?: true;
+    firstName?: true;
+    lastName?: true;
+    fullName?: true;
+    username?: true;
+    avatarUrl?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    userId?: true;
+  };
+
+  export type ExternalAccountCountAggregateInputType = {
+    id?: true;
+    provider?: true;
+    providerUserId?: true;
+    approvedScope?: true;
+    emailAddress?: true;
+    phoneNumber?: true;
+    firstName?: true;
+    lastName?: true;
+    fullName?: true;
+    username?: true;
+    avatarUrl?: true;
+    createdAt?: true;
+    updatedAt?: true;
+    userId?: true;
+    _all?: true;
+  };
+
+  export type ExternalAccountAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ExternalAccount to aggregate.
+     */
+    where?: ExternalAccountWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ExternalAccounts to fetch.
+     */
+    orderBy?: ExternalAccountOrderByWithRelationInput | ExternalAccountOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: ExternalAccountWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ExternalAccounts from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ExternalAccounts.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned ExternalAccounts
+     **/
+    _count?: true | ExternalAccountCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: ExternalAccountMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: ExternalAccountMaxAggregateInputType;
+  };
+
+  export type GetExternalAccountAggregateType<T extends ExternalAccountAggregateArgs> = {
+    [P in keyof T & keyof AggregateExternalAccount]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateExternalAccount[P]>
+      : GetScalarType<T[P], AggregateExternalAccount[P]>;
+  };
+
+  export type ExternalAccountGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ExternalAccountWhereInput;
+    orderBy?: ExternalAccountOrderByWithAggregationInput | ExternalAccountOrderByWithAggregationInput[];
+    by: ExternalAccountScalarFieldEnum[] | ExternalAccountScalarFieldEnum;
+    having?: ExternalAccountScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: ExternalAccountCountAggregateInputType | true;
+    _min?: ExternalAccountMinAggregateInputType;
+    _max?: ExternalAccountMaxAggregateInputType;
+  };
+
+  export type ExternalAccountGroupByOutputType = {
+    id: string;
+    provider: $Enums.ProviderPlatform;
+    providerUserId: string;
+    approvedScope: string;
+    emailAddress: string;
+    phoneNumber: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    fullName: string | null;
+    username: string | null;
+    avatarUrl: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+    userId: string;
+    _count: ExternalAccountCountAggregateOutputType | null;
+    _min: ExternalAccountMinAggregateOutputType | null;
+    _max: ExternalAccountMaxAggregateOutputType | null;
+  };
+
+  type GetExternalAccountGroupByPayload<T extends ExternalAccountGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ExternalAccountGroupByOutputType, T['by']> & {
+        [P in keyof T & keyof ExternalAccountGroupByOutputType]: P extends '_count'
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], ExternalAccountGroupByOutputType[P]>
+          : GetScalarType<T[P], ExternalAccountGroupByOutputType[P]>;
+      }
+    >
+  >;
+
+  export type ExternalAccountSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    $Extensions.GetSelect<
+      {
+        id?: boolean;
+        provider?: boolean;
+        providerUserId?: boolean;
+        approvedScope?: boolean;
+        emailAddress?: boolean;
+        phoneNumber?: boolean;
+        firstName?: boolean;
+        lastName?: boolean;
+        fullName?: boolean;
+        username?: boolean;
+        avatarUrl?: boolean;
+        createdAt?: boolean;
+        updatedAt?: boolean;
+        userId?: boolean;
+        user?: boolean | UserDefaultArgs<ExtArgs>;
+      },
+      ExtArgs['result']['externalAccount']
+    >;
+
+  export type ExternalAccountSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      provider?: boolean;
+      providerUserId?: boolean;
+      approvedScope?: boolean;
+      emailAddress?: boolean;
+      phoneNumber?: boolean;
+      firstName?: boolean;
+      lastName?: boolean;
+      fullName?: boolean;
+      username?: boolean;
+      avatarUrl?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      userId?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['externalAccount']
+  >;
+
+  export type ExternalAccountSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean;
+      provider?: boolean;
+      providerUserId?: boolean;
+      approvedScope?: boolean;
+      emailAddress?: boolean;
+      phoneNumber?: boolean;
+      firstName?: boolean;
+      lastName?: boolean;
+      fullName?: boolean;
+      username?: boolean;
+      avatarUrl?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
+      userId?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['externalAccount']
+  >;
+
+  export type ExternalAccountSelectScalar = {
+    id?: boolean;
+    provider?: boolean;
+    providerUserId?: boolean;
+    approvedScope?: boolean;
+    emailAddress?: boolean;
+    phoneNumber?: boolean;
+    firstName?: boolean;
+    lastName?: boolean;
+    fullName?: boolean;
+    username?: boolean;
+    avatarUrl?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
+    userId?: boolean;
+  };
+
+  export type ExternalAccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    $Extensions.GetOmit<
+      | 'id'
+      | 'provider'
+      | 'providerUserId'
+      | 'approvedScope'
+      | 'emailAddress'
+      | 'phoneNumber'
+      | 'firstName'
+      | 'lastName'
+      | 'fullName'
+      | 'username'
+      | 'avatarUrl'
+      | 'createdAt'
+      | 'updatedAt'
+      | 'userId',
+      ExtArgs['result']['externalAccount']
+    >;
+  export type ExternalAccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type ExternalAccountIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type ExternalAccountIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+
+  export type $ExternalAccountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: 'ExternalAccount';
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string;
+        provider: $Enums.ProviderPlatform;
+        providerUserId: string;
+        approvedScope: string;
+        emailAddress: string;
+        phoneNumber: string | null;
+        firstName: string | null;
+        lastName: string | null;
+        fullName: string | null;
+        username: string | null;
+        avatarUrl: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+        userId: string;
+      },
+      ExtArgs['result']['externalAccount']
+    >;
+    composites: {};
+  };
+
+  type ExternalAccountGetPayload<S extends boolean | null | undefined | ExternalAccountDefaultArgs> = $Result.GetResult<
+    Prisma.$ExternalAccountPayload,
+    S
+  >;
+
+  type ExternalAccountCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<
+    ExternalAccountFindManyArgs,
+    'select' | 'include' | 'distinct' | 'omit' | 'relationLoadStrategy'
+  > & {
+    select?: ExternalAccountCountAggregateInputType | true;
+  };
+
+  export interface ExternalAccountDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ExternalAccount']; meta: { name: 'ExternalAccount' } };
+    /**
+     * Find zero or one ExternalAccount that matches the filter.
+     * @param {ExternalAccountFindUniqueArgs} args - Arguments to find a ExternalAccount
+     * @example
+     * // Get one ExternalAccount
+     * const externalAccount = await prisma.externalAccount.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ExternalAccountFindUniqueArgs>(
+      args: SelectSubset<T, ExternalAccountFindUniqueArgs<ExtArgs>>,
+    ): Prisma__ExternalAccountClient<
+      $Result.GetResult<Prisma.$ExternalAccountPayload<ExtArgs>, T, 'findUnique', GlobalOmitOptions> | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find one ExternalAccount that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ExternalAccountFindUniqueOrThrowArgs} args - Arguments to find a ExternalAccount
+     * @example
+     * // Get one ExternalAccount
+     * const externalAccount = await prisma.externalAccount.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ExternalAccountFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, ExternalAccountFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__ExternalAccountClient<
+      $Result.GetResult<Prisma.$ExternalAccountPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first ExternalAccount that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExternalAccountFindFirstArgs} args - Arguments to find a ExternalAccount
+     * @example
+     * // Get one ExternalAccount
+     * const externalAccount = await prisma.externalAccount.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ExternalAccountFindFirstArgs>(
+      args?: SelectSubset<T, ExternalAccountFindFirstArgs<ExtArgs>>,
+    ): Prisma__ExternalAccountClient<
+      $Result.GetResult<Prisma.$ExternalAccountPayload<ExtArgs>, T, 'findFirst', GlobalOmitOptions> | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first ExternalAccount that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExternalAccountFindFirstOrThrowArgs} args - Arguments to find a ExternalAccount
+     * @example
+     * // Get one ExternalAccount
+     * const externalAccount = await prisma.externalAccount.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ExternalAccountFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, ExternalAccountFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__ExternalAccountClient<
+      $Result.GetResult<Prisma.$ExternalAccountPayload<ExtArgs>, T, 'findFirstOrThrow', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find zero or more ExternalAccounts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExternalAccountFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ExternalAccounts
+     * const externalAccounts = await prisma.externalAccount.findMany()
+     *
+     * // Get first 10 ExternalAccounts
+     * const externalAccounts = await prisma.externalAccount.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const externalAccountWithIdOnly = await prisma.externalAccount.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends ExternalAccountFindManyArgs>(
+      args?: SelectSubset<T, ExternalAccountFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$ExternalAccountPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>
+    >;
+
+    /**
+     * Create a ExternalAccount.
+     * @param {ExternalAccountCreateArgs} args - Arguments to create a ExternalAccount.
+     * @example
+     * // Create one ExternalAccount
+     * const ExternalAccount = await prisma.externalAccount.create({
+     *   data: {
+     *     // ... data to create a ExternalAccount
+     *   }
+     * })
+     *
+     */
+    create<T extends ExternalAccountCreateArgs>(
+      args: SelectSubset<T, ExternalAccountCreateArgs<ExtArgs>>,
+    ): Prisma__ExternalAccountClient<
+      $Result.GetResult<Prisma.$ExternalAccountPayload<ExtArgs>, T, 'create', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Create many ExternalAccounts.
+     * @param {ExternalAccountCreateManyArgs} args - Arguments to create many ExternalAccounts.
+     * @example
+     * // Create many ExternalAccounts
+     * const externalAccount = await prisma.externalAccount.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends ExternalAccountCreateManyArgs>(
+      args?: SelectSubset<T, ExternalAccountCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many ExternalAccounts and returns the data saved in the database.
+     * @param {ExternalAccountCreateManyAndReturnArgs} args - Arguments to create many ExternalAccounts.
+     * @example
+     * // Create many ExternalAccounts
+     * const externalAccount = await prisma.externalAccount.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many ExternalAccounts and only return the `id`
+     * const externalAccountWithIdOnly = await prisma.externalAccount.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends ExternalAccountCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, ExternalAccountCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$ExternalAccountPayload<ExtArgs>, T, 'createManyAndReturn', GlobalOmitOptions>
+    >;
+
+    /**
+     * Delete a ExternalAccount.
+     * @param {ExternalAccountDeleteArgs} args - Arguments to delete one ExternalAccount.
+     * @example
+     * // Delete one ExternalAccount
+     * const ExternalAccount = await prisma.externalAccount.delete({
+     *   where: {
+     *     // ... filter to delete one ExternalAccount
+     *   }
+     * })
+     *
+     */
+    delete<T extends ExternalAccountDeleteArgs>(
+      args: SelectSubset<T, ExternalAccountDeleteArgs<ExtArgs>>,
+    ): Prisma__ExternalAccountClient<
+      $Result.GetResult<Prisma.$ExternalAccountPayload<ExtArgs>, T, 'delete', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Update one ExternalAccount.
+     * @param {ExternalAccountUpdateArgs} args - Arguments to update one ExternalAccount.
+     * @example
+     * // Update one ExternalAccount
+     * const externalAccount = await prisma.externalAccount.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends ExternalAccountUpdateArgs>(
+      args: SelectSubset<T, ExternalAccountUpdateArgs<ExtArgs>>,
+    ): Prisma__ExternalAccountClient<
+      $Result.GetResult<Prisma.$ExternalAccountPayload<ExtArgs>, T, 'update', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Delete zero or more ExternalAccounts.
+     * @param {ExternalAccountDeleteManyArgs} args - Arguments to filter ExternalAccounts to delete.
+     * @example
+     * // Delete a few ExternalAccounts
+     * const { count } = await prisma.externalAccount.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends ExternalAccountDeleteManyArgs>(
+      args?: SelectSubset<T, ExternalAccountDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more ExternalAccounts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExternalAccountUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ExternalAccounts
+     * const externalAccount = await prisma.externalAccount.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends ExternalAccountUpdateManyArgs>(
+      args: SelectSubset<T, ExternalAccountUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more ExternalAccounts and returns the data updated in the database.
+     * @param {ExternalAccountUpdateManyAndReturnArgs} args - Arguments to update many ExternalAccounts.
+     * @example
+     * // Update many ExternalAccounts
+     * const externalAccount = await prisma.externalAccount.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more ExternalAccounts and only return the `id`
+     * const externalAccountWithIdOnly = await prisma.externalAccount.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends ExternalAccountUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, ExternalAccountUpdateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$ExternalAccountPayload<ExtArgs>, T, 'updateManyAndReturn', GlobalOmitOptions>
+    >;
+
+    /**
+     * Create or update one ExternalAccount.
+     * @param {ExternalAccountUpsertArgs} args - Arguments to update or create a ExternalAccount.
+     * @example
+     * // Update or create a ExternalAccount
+     * const externalAccount = await prisma.externalAccount.upsert({
+     *   create: {
+     *     // ... data to create a ExternalAccount
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ExternalAccount we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ExternalAccountUpsertArgs>(
+      args: SelectSubset<T, ExternalAccountUpsertArgs<ExtArgs>>,
+    ): Prisma__ExternalAccountClient<
+      $Result.GetResult<Prisma.$ExternalAccountPayload<ExtArgs>, T, 'upsert', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Count the number of ExternalAccounts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExternalAccountCountArgs} args - Arguments to filter ExternalAccounts to count.
+     * @example
+     * // Count the number of ExternalAccounts
+     * const count = await prisma.externalAccount.count({
+     *   where: {
+     *     // ... the filter for the ExternalAccounts we want to count
+     *   }
+     * })
+     **/
+    count<T extends ExternalAccountCountArgs>(
+      args?: Subset<T, ExternalAccountCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ExternalAccountCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a ExternalAccount.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExternalAccountAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends ExternalAccountAggregateArgs>(
+      args: Subset<T, ExternalAccountAggregateArgs>,
+    ): Prisma.PrismaPromise<GetExternalAccountAggregateType<T>>;
+
+    /**
+     * Group by ExternalAccount.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExternalAccountGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends ExternalAccountGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ExternalAccountGroupByArgs['orderBy'] }
+        : { orderBy?: ExternalAccountGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, ExternalAccountGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors ? GetExternalAccountGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the ExternalAccount model
+     */
+    readonly fields: ExternalAccountFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ExternalAccount.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ExternalAccountClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the ExternalAccount model
+   */
+  interface ExternalAccountFieldRefs {
+    readonly id: FieldRef<'ExternalAccount', 'String'>;
+    readonly provider: FieldRef<'ExternalAccount', 'ProviderPlatform'>;
+    readonly providerUserId: FieldRef<'ExternalAccount', 'String'>;
+    readonly approvedScope: FieldRef<'ExternalAccount', 'String'>;
+    readonly emailAddress: FieldRef<'ExternalAccount', 'String'>;
+    readonly phoneNumber: FieldRef<'ExternalAccount', 'String'>;
+    readonly firstName: FieldRef<'ExternalAccount', 'String'>;
+    readonly lastName: FieldRef<'ExternalAccount', 'String'>;
+    readonly fullName: FieldRef<'ExternalAccount', 'String'>;
+    readonly username: FieldRef<'ExternalAccount', 'String'>;
+    readonly avatarUrl: FieldRef<'ExternalAccount', 'String'>;
+    readonly createdAt: FieldRef<'ExternalAccount', 'DateTime'>;
+    readonly updatedAt: FieldRef<'ExternalAccount', 'DateTime'>;
+    readonly userId: FieldRef<'ExternalAccount', 'String'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * ExternalAccount findUnique
+   */
+  export type ExternalAccountFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExternalAccount
+     */
+    select?: ExternalAccountSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ExternalAccount
+     */
+    omit?: ExternalAccountOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExternalAccountInclude<ExtArgs> | null;
+    /**
+     * Filter, which ExternalAccount to fetch.
+     */
+    where: ExternalAccountWhereUniqueInput;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * ExternalAccount findUniqueOrThrow
+   */
+  export type ExternalAccountFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    {
+      /**
+       * Select specific fields to fetch from the ExternalAccount
+       */
+      select?: ExternalAccountSelect<ExtArgs> | null;
+      /**
+       * Omit specific fields from the ExternalAccount
+       */
+      omit?: ExternalAccountOmit<ExtArgs> | null;
+      /**
+       * Choose, which related nodes to fetch as well
+       */
+      include?: ExternalAccountInclude<ExtArgs> | null;
+      /**
+       * Filter, which ExternalAccount to fetch.
+       */
+      where: ExternalAccountWhereUniqueInput;
+      relationLoadStrategy?: RelationLoadStrategy;
+    };
+
+  /**
+   * ExternalAccount findFirst
+   */
+  export type ExternalAccountFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExternalAccount
+     */
+    select?: ExternalAccountSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ExternalAccount
+     */
+    omit?: ExternalAccountOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExternalAccountInclude<ExtArgs> | null;
+    /**
+     * Filter, which ExternalAccount to fetch.
+     */
+    where?: ExternalAccountWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ExternalAccounts to fetch.
+     */
+    orderBy?: ExternalAccountOrderByWithRelationInput | ExternalAccountOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for ExternalAccounts.
+     */
+    cursor?: ExternalAccountWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ExternalAccounts from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ExternalAccounts.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ExternalAccounts.
+     */
+    distinct?: ExternalAccountScalarFieldEnum | ExternalAccountScalarFieldEnum[];
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * ExternalAccount findFirstOrThrow
+   */
+  export type ExternalAccountFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    {
+      /**
+       * Select specific fields to fetch from the ExternalAccount
+       */
+      select?: ExternalAccountSelect<ExtArgs> | null;
+      /**
+       * Omit specific fields from the ExternalAccount
+       */
+      omit?: ExternalAccountOmit<ExtArgs> | null;
+      /**
+       * Choose, which related nodes to fetch as well
+       */
+      include?: ExternalAccountInclude<ExtArgs> | null;
+      /**
+       * Filter, which ExternalAccount to fetch.
+       */
+      where?: ExternalAccountWhereInput;
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+       *
+       * Determine the order of ExternalAccounts to fetch.
+       */
+      orderBy?: ExternalAccountOrderByWithRelationInput | ExternalAccountOrderByWithRelationInput[];
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+       *
+       * Sets the position for searching for ExternalAccounts.
+       */
+      cursor?: ExternalAccountWhereUniqueInput;
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+       *
+       * Take `±n` ExternalAccounts from the position of the cursor.
+       */
+      take?: number;
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+       *
+       * Skip the first `n` ExternalAccounts.
+       */
+      skip?: number;
+      /**
+       * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+       *
+       * Filter by unique combinations of ExternalAccounts.
+       */
+      distinct?: ExternalAccountScalarFieldEnum | ExternalAccountScalarFieldEnum[];
+      relationLoadStrategy?: RelationLoadStrategy;
+    };
+
+  /**
+   * ExternalAccount findMany
+   */
+  export type ExternalAccountFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExternalAccount
+     */
+    select?: ExternalAccountSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ExternalAccount
+     */
+    omit?: ExternalAccountOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExternalAccountInclude<ExtArgs> | null;
+    /**
+     * Filter, which ExternalAccounts to fetch.
+     */
+    where?: ExternalAccountWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ExternalAccounts to fetch.
+     */
+    orderBy?: ExternalAccountOrderByWithRelationInput | ExternalAccountOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing ExternalAccounts.
+     */
+    cursor?: ExternalAccountWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ExternalAccounts from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ExternalAccounts.
+     */
+    skip?: number;
+    distinct?: ExternalAccountScalarFieldEnum | ExternalAccountScalarFieldEnum[];
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * ExternalAccount create
+   */
+  export type ExternalAccountCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExternalAccount
+     */
+    select?: ExternalAccountSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ExternalAccount
+     */
+    omit?: ExternalAccountOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExternalAccountInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a ExternalAccount.
+     */
+    data: XOR<ExternalAccountCreateInput, ExternalAccountUncheckedCreateInput>;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * ExternalAccount createMany
+   */
+  export type ExternalAccountCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ExternalAccounts.
+     */
+    data: ExternalAccountCreateManyInput | ExternalAccountCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * ExternalAccount createManyAndReturn
+   */
+  export type ExternalAccountCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ExternalAccount
+     */
+    select?: ExternalAccountSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ExternalAccount
+     */
+    omit?: ExternalAccountOmit<ExtArgs> | null;
+    /**
+     * The data used to create many ExternalAccounts.
+     */
+    data: ExternalAccountCreateManyInput | ExternalAccountCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExternalAccountIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * ExternalAccount update
+   */
+  export type ExternalAccountUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExternalAccount
+     */
+    select?: ExternalAccountSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ExternalAccount
+     */
+    omit?: ExternalAccountOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExternalAccountInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a ExternalAccount.
+     */
+    data: XOR<ExternalAccountUpdateInput, ExternalAccountUncheckedUpdateInput>;
+    /**
+     * Choose, which ExternalAccount to update.
+     */
+    where: ExternalAccountWhereUniqueInput;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * ExternalAccount updateMany
+   */
+  export type ExternalAccountUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ExternalAccounts.
+     */
+    data: XOR<ExternalAccountUpdateManyMutationInput, ExternalAccountUncheckedUpdateManyInput>;
+    /**
+     * Filter which ExternalAccounts to update
+     */
+    where?: ExternalAccountWhereInput;
+    /**
+     * Limit how many ExternalAccounts to update.
+     */
+    limit?: number;
+  };
+
+  /**
+   * ExternalAccount updateManyAndReturn
+   */
+  export type ExternalAccountUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ExternalAccount
+     */
+    select?: ExternalAccountSelectUpdateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ExternalAccount
+     */
+    omit?: ExternalAccountOmit<ExtArgs> | null;
+    /**
+     * The data used to update ExternalAccounts.
+     */
+    data: XOR<ExternalAccountUpdateManyMutationInput, ExternalAccountUncheckedUpdateManyInput>;
+    /**
+     * Filter which ExternalAccounts to update
+     */
+    where?: ExternalAccountWhereInput;
+    /**
+     * Limit how many ExternalAccounts to update.
+     */
+    limit?: number;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExternalAccountIncludeUpdateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * ExternalAccount upsert
+   */
+  export type ExternalAccountUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExternalAccount
+     */
+    select?: ExternalAccountSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ExternalAccount
+     */
+    omit?: ExternalAccountOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExternalAccountInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the ExternalAccount to update in case it exists.
+     */
+    where: ExternalAccountWhereUniqueInput;
+    /**
+     * In case the ExternalAccount found by the `where` argument doesn't exist, create a new ExternalAccount with this data.
+     */
+    create: XOR<ExternalAccountCreateInput, ExternalAccountUncheckedCreateInput>;
+    /**
+     * In case the ExternalAccount was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ExternalAccountUpdateInput, ExternalAccountUncheckedUpdateInput>;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * ExternalAccount delete
+   */
+  export type ExternalAccountDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExternalAccount
+     */
+    select?: ExternalAccountSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ExternalAccount
+     */
+    omit?: ExternalAccountOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExternalAccountInclude<ExtArgs> | null;
+    /**
+     * Filter which ExternalAccount to delete.
+     */
+    where: ExternalAccountWhereUniqueInput;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * ExternalAccount deleteMany
+   */
+  export type ExternalAccountDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ExternalAccounts to delete
+     */
+    where?: ExternalAccountWhereInput;
+    /**
+     * Limit how many ExternalAccounts to delete.
+     */
+    limit?: number;
+  };
+
+  /**
+   * ExternalAccount without action
+   */
+  export type ExternalAccountDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExternalAccount
+     */
+    select?: ExternalAccountSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the ExternalAccount
+     */
+    omit?: ExternalAccountOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExternalAccountInclude<ExtArgs> | null;
+  };
+
+  /**
    * Model Bill
    */
 
@@ -17111,8 +20096,8 @@ export namespace Prisma {
 
   export type BillMinAggregateOutputType = {
     id: string | null;
-    createAt: Date | null;
-    updateAt: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
     transactionId: string | null;
     paymentMethod: $Enums.PaymentMethod | null;
     type: $Enums.BillType | null;
@@ -17124,8 +20109,8 @@ export namespace Prisma {
 
   export type BillMaxAggregateOutputType = {
     id: string | null;
-    createAt: Date | null;
-    updateAt: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
     transactionId: string | null;
     paymentMethod: $Enums.PaymentMethod | null;
     type: $Enums.BillType | null;
@@ -17137,8 +20122,8 @@ export namespace Prisma {
 
   export type BillCountAggregateOutputType = {
     id: number;
-    createAt: number;
-    updateAt: number;
+    createdAt: number;
+    updatedAt: number;
     transactionId: number;
     paymentMethod: number;
     type: number;
@@ -17159,8 +20144,8 @@ export namespace Prisma {
 
   export type BillMinAggregateInputType = {
     id?: true;
-    createAt?: true;
-    updateAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
     transactionId?: true;
     paymentMethod?: true;
     type?: true;
@@ -17172,8 +20157,8 @@ export namespace Prisma {
 
   export type BillMaxAggregateInputType = {
     id?: true;
-    createAt?: true;
-    updateAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
     transactionId?: true;
     paymentMethod?: true;
     type?: true;
@@ -17185,8 +20170,8 @@ export namespace Prisma {
 
   export type BillCountAggregateInputType = {
     id?: true;
-    createAt?: true;
-    updateAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
     transactionId?: true;
     paymentMethod?: true;
     type?: true;
@@ -17282,8 +20267,8 @@ export namespace Prisma {
 
   export type BillGroupByOutputType = {
     id: string;
-    createAt: Date;
-    updateAt: Date;
+    createdAt: Date;
+    updatedAt: Date;
     transactionId: string | null;
     paymentMethod: $Enums.PaymentMethod;
     type: $Enums.BillType;
@@ -17313,8 +20298,8 @@ export namespace Prisma {
   export type BillSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<
     {
       id?: boolean;
-      createAt?: boolean;
-      updateAt?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
       transactionId?: boolean;
       paymentMethod?: boolean;
       type?: boolean;
@@ -17332,8 +20317,8 @@ export namespace Prisma {
     $Extensions.GetSelect<
       {
         id?: boolean;
-        createAt?: boolean;
-        updateAt?: boolean;
+        createdAt?: boolean;
+        updatedAt?: boolean;
         transactionId?: boolean;
         paymentMethod?: boolean;
         type?: boolean;
@@ -17350,8 +20335,8 @@ export namespace Prisma {
     $Extensions.GetSelect<
       {
         id?: boolean;
-        createAt?: boolean;
-        updateAt?: boolean;
+        createdAt?: boolean;
+        updatedAt?: boolean;
         transactionId?: boolean;
         paymentMethod?: boolean;
         type?: boolean;
@@ -17366,8 +20351,8 @@ export namespace Prisma {
 
   export type BillSelectScalar = {
     id?: boolean;
-    createAt?: boolean;
-    updateAt?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
     transactionId?: boolean;
     paymentMethod?: boolean;
     type?: boolean;
@@ -17379,8 +20364,8 @@ export namespace Prisma {
 
   export type BillOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<
     | 'id'
-    | 'createAt'
-    | 'updateAt'
+    | 'createdAt'
+    | 'updatedAt'
     | 'transactionId'
     | 'paymentMethod'
     | 'type'
@@ -17410,8 +20395,8 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<
       {
         id: string;
-        createAt: Date;
-        updateAt: Date;
+        createdAt: Date;
+        updatedAt: Date;
         transactionId: string | null;
         paymentMethod: $Enums.PaymentMethod;
         type: $Enums.BillType;
@@ -17943,8 +20928,8 @@ export namespace Prisma {
    */
   interface BillFieldRefs {
     readonly id: FieldRef<'Bill', 'String'>;
-    readonly createAt: FieldRef<'Bill', 'DateTime'>;
-    readonly updateAt: FieldRef<'Bill', 'DateTime'>;
+    readonly createdAt: FieldRef<'Bill', 'DateTime'>;
+    readonly updatedAt: FieldRef<'Bill', 'DateTime'>;
     readonly transactionId: FieldRef<'Bill', 'String'>;
     readonly paymentMethod: FieldRef<'Bill', 'PaymentMethod'>;
     readonly type: FieldRef<'Bill', 'BillType'>;
@@ -18433,8 +21418,8 @@ export namespace Prisma {
 
   export type CartItemMinAggregateOutputType = {
     id: string | null;
-    createAt: Date | null;
-    updateAt: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
     quantity: number | null;
     productId: string | null;
     userId: string | null;
@@ -18442,8 +21427,8 @@ export namespace Prisma {
 
   export type CartItemMaxAggregateOutputType = {
     id: string | null;
-    createAt: Date | null;
-    updateAt: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
     quantity: number | null;
     productId: string | null;
     userId: string | null;
@@ -18451,8 +21436,8 @@ export namespace Prisma {
 
   export type CartItemCountAggregateOutputType = {
     id: number;
-    createAt: number;
-    updateAt: number;
+    createdAt: number;
+    updatedAt: number;
     quantity: number;
     productId: number;
     userId: number;
@@ -18469,8 +21454,8 @@ export namespace Prisma {
 
   export type CartItemMinAggregateInputType = {
     id?: true;
-    createAt?: true;
-    updateAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
     quantity?: true;
     productId?: true;
     userId?: true;
@@ -18478,8 +21463,8 @@ export namespace Prisma {
 
   export type CartItemMaxAggregateInputType = {
     id?: true;
-    createAt?: true;
-    updateAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
     quantity?: true;
     productId?: true;
     userId?: true;
@@ -18487,8 +21472,8 @@ export namespace Prisma {
 
   export type CartItemCountAggregateInputType = {
     id?: true;
-    createAt?: true;
-    updateAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
     quantity?: true;
     productId?: true;
     userId?: true;
@@ -18580,8 +21565,8 @@ export namespace Prisma {
 
   export type CartItemGroupByOutputType = {
     id: string;
-    createAt: Date;
-    updateAt: Date;
+    createdAt: Date;
+    updatedAt: Date;
     quantity: number;
     productId: string;
     userId: string;
@@ -18608,8 +21593,8 @@ export namespace Prisma {
     $Extensions.GetSelect<
       {
         id?: boolean;
-        createAt?: boolean;
-        updateAt?: boolean;
+        createdAt?: boolean;
+        updatedAt?: boolean;
         quantity?: boolean;
         productId?: boolean;
         userId?: boolean;
@@ -18623,8 +21608,8 @@ export namespace Prisma {
     $Extensions.GetSelect<
       {
         id?: boolean;
-        createAt?: boolean;
-        updateAt?: boolean;
+        createdAt?: boolean;
+        updatedAt?: boolean;
         quantity?: boolean;
         productId?: boolean;
         userId?: boolean;
@@ -18638,8 +21623,8 @@ export namespace Prisma {
     $Extensions.GetSelect<
       {
         id?: boolean;
-        createAt?: boolean;
-        updateAt?: boolean;
+        createdAt?: boolean;
+        updatedAt?: boolean;
         quantity?: boolean;
         productId?: boolean;
         userId?: boolean;
@@ -18651,15 +21636,15 @@ export namespace Prisma {
 
   export type CartItemSelectScalar = {
     id?: boolean;
-    createAt?: boolean;
-    updateAt?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
     quantity?: boolean;
     productId?: boolean;
     userId?: boolean;
   };
 
   export type CartItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<
-    'id' | 'createAt' | 'updateAt' | 'quantity' | 'productId' | 'userId',
+    'id' | 'createdAt' | 'updatedAt' | 'quantity' | 'productId' | 'userId',
     ExtArgs['result']['cartItem']
   >;
   export type CartItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18684,8 +21669,8 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<
       {
         id: string;
-        createAt: Date;
-        updateAt: Date;
+        createdAt: Date;
+        updatedAt: Date;
         quantity: number;
         productId: string;
         userId: string;
@@ -19213,8 +22198,8 @@ export namespace Prisma {
    */
   interface CartItemFieldRefs {
     readonly id: FieldRef<'CartItem', 'String'>;
-    readonly createAt: FieldRef<'CartItem', 'DateTime'>;
-    readonly updateAt: FieldRef<'CartItem', 'DateTime'>;
+    readonly createdAt: FieldRef<'CartItem', 'DateTime'>;
+    readonly updatedAt: FieldRef<'CartItem', 'DateTime'>;
     readonly quantity: FieldRef<'CartItem', 'Int'>;
     readonly productId: FieldRef<'CartItem', 'String'>;
     readonly userId: FieldRef<'CartItem', 'String'>;
@@ -19662,36 +22647,36 @@ export namespace Prisma {
   export type TicketMinAggregateOutputType = {
     id: string | null;
     numericalOrder: number | null;
-    createAt: Date | null;
-    updateAt: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
     title: string | null;
     description: string | null;
     status: $Enums.TicketStatus | null;
     category: $Enums.TicketCategory | null;
     priority: $Enums.TicketPriority | null;
     authorId: string | null;
-    assignedId: string | null;
+    assignId: string | null;
   };
 
   export type TicketMaxAggregateOutputType = {
     id: string | null;
     numericalOrder: number | null;
-    createAt: Date | null;
-    updateAt: Date | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
     title: string | null;
     description: string | null;
     status: $Enums.TicketStatus | null;
     category: $Enums.TicketCategory | null;
     priority: $Enums.TicketPriority | null;
     authorId: string | null;
-    assignedId: string | null;
+    assignId: string | null;
   };
 
   export type TicketCountAggregateOutputType = {
     id: number;
     numericalOrder: number;
-    createAt: number;
-    updateAt: number;
+    createdAt: number;
+    updatedAt: number;
     title: number;
     description: number;
     status: number;
@@ -19699,7 +22684,7 @@ export namespace Prisma {
     priority: number;
     attachments: number;
     authorId: number;
-    assignedId: number;
+    assignId: number;
     _all: number;
   };
 
@@ -19714,36 +22699,36 @@ export namespace Prisma {
   export type TicketMinAggregateInputType = {
     id?: true;
     numericalOrder?: true;
-    createAt?: true;
-    updateAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
     title?: true;
     description?: true;
     status?: true;
     category?: true;
     priority?: true;
     authorId?: true;
-    assignedId?: true;
+    assignId?: true;
   };
 
   export type TicketMaxAggregateInputType = {
     id?: true;
     numericalOrder?: true;
-    createAt?: true;
-    updateAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
     title?: true;
     description?: true;
     status?: true;
     category?: true;
     priority?: true;
     authorId?: true;
-    assignedId?: true;
+    assignId?: true;
   };
 
   export type TicketCountAggregateInputType = {
     id?: true;
     numericalOrder?: true;
-    createAt?: true;
-    updateAt?: true;
+    createdAt?: true;
+    updatedAt?: true;
     title?: true;
     description?: true;
     status?: true;
@@ -19751,7 +22736,7 @@ export namespace Prisma {
     priority?: true;
     attachments?: true;
     authorId?: true;
-    assignedId?: true;
+    assignId?: true;
     _all?: true;
   };
 
@@ -19841,8 +22826,8 @@ export namespace Prisma {
   export type TicketGroupByOutputType = {
     id: string;
     numericalOrder: number;
-    createAt: Date;
-    updateAt: Date;
+    createdAt: Date;
+    updatedAt: Date;
     title: string;
     description: string;
     status: $Enums.TicketStatus;
@@ -19850,7 +22835,7 @@ export namespace Prisma {
     priority: $Enums.TicketPriority;
     attachments: string[];
     authorId: string;
-    assignedId: string | null;
+    assignId: string | null;
     _count: TicketCountAggregateOutputType | null;
     _avg: TicketAvgAggregateOutputType | null;
     _sum: TicketSumAggregateOutputType | null;
@@ -19874,8 +22859,8 @@ export namespace Prisma {
     {
       id?: boolean;
       numericalOrder?: boolean;
-      createAt?: boolean;
-      updateAt?: boolean;
+      createdAt?: boolean;
+      updatedAt?: boolean;
       title?: boolean;
       description?: boolean;
       status?: boolean;
@@ -19883,10 +22868,10 @@ export namespace Prisma {
       priority?: boolean;
       attachments?: boolean;
       authorId?: boolean;
-      assignedId?: boolean;
+      assignId?: boolean;
       contexts?: boolean | Ticket$contextsArgs<ExtArgs>;
       author?: boolean | UserDefaultArgs<ExtArgs>;
-      assigned?: boolean | Ticket$assignedArgs<ExtArgs>;
+      assign?: boolean | Ticket$assignArgs<ExtArgs>;
       messages?: boolean | Ticket$messagesArgs<ExtArgs>;
       members?: boolean | Ticket$membersArgs<ExtArgs>;
       _count?: boolean | TicketCountOutputTypeDefaultArgs<ExtArgs>;
@@ -19899,8 +22884,8 @@ export namespace Prisma {
       {
         id?: boolean;
         numericalOrder?: boolean;
-        createAt?: boolean;
-        updateAt?: boolean;
+        createdAt?: boolean;
+        updatedAt?: boolean;
         title?: boolean;
         description?: boolean;
         status?: boolean;
@@ -19908,9 +22893,9 @@ export namespace Prisma {
         priority?: boolean;
         attachments?: boolean;
         authorId?: boolean;
-        assignedId?: boolean;
+        assignId?: boolean;
         author?: boolean | UserDefaultArgs<ExtArgs>;
-        assigned?: boolean | Ticket$assignedArgs<ExtArgs>;
+        assign?: boolean | Ticket$assignArgs<ExtArgs>;
       },
       ExtArgs['result']['ticket']
     >;
@@ -19920,8 +22905,8 @@ export namespace Prisma {
       {
         id?: boolean;
         numericalOrder?: boolean;
-        createAt?: boolean;
-        updateAt?: boolean;
+        createdAt?: boolean;
+        updatedAt?: boolean;
         title?: boolean;
         description?: boolean;
         status?: boolean;
@@ -19929,9 +22914,9 @@ export namespace Prisma {
         priority?: boolean;
         attachments?: boolean;
         authorId?: boolean;
-        assignedId?: boolean;
+        assignId?: boolean;
         author?: boolean | UserDefaultArgs<ExtArgs>;
-        assigned?: boolean | Ticket$assignedArgs<ExtArgs>;
+        assign?: boolean | Ticket$assignArgs<ExtArgs>;
       },
       ExtArgs['result']['ticket']
     >;
@@ -19939,8 +22924,8 @@ export namespace Prisma {
   export type TicketSelectScalar = {
     id?: boolean;
     numericalOrder?: boolean;
-    createAt?: boolean;
-    updateAt?: boolean;
+    createdAt?: boolean;
+    updatedAt?: boolean;
     title?: boolean;
     description?: boolean;
     status?: boolean;
@@ -19948,14 +22933,14 @@ export namespace Prisma {
     priority?: boolean;
     attachments?: boolean;
     authorId?: boolean;
-    assignedId?: boolean;
+    assignId?: boolean;
   };
 
   export type TicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<
     | 'id'
     | 'numericalOrder'
-    | 'createAt'
-    | 'updateAt'
+    | 'createdAt'
+    | 'updatedAt'
     | 'title'
     | 'description'
     | 'status'
@@ -19963,24 +22948,24 @@ export namespace Prisma {
     | 'priority'
     | 'attachments'
     | 'authorId'
-    | 'assignedId',
+    | 'assignId',
     ExtArgs['result']['ticket']
   >;
   export type TicketInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     contexts?: boolean | Ticket$contextsArgs<ExtArgs>;
     author?: boolean | UserDefaultArgs<ExtArgs>;
-    assigned?: boolean | Ticket$assignedArgs<ExtArgs>;
+    assign?: boolean | Ticket$assignArgs<ExtArgs>;
     messages?: boolean | Ticket$messagesArgs<ExtArgs>;
     members?: boolean | Ticket$membersArgs<ExtArgs>;
     _count?: boolean | TicketCountOutputTypeDefaultArgs<ExtArgs>;
   };
   export type TicketIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     author?: boolean | UserDefaultArgs<ExtArgs>;
-    assigned?: boolean | Ticket$assignedArgs<ExtArgs>;
+    assign?: boolean | Ticket$assignArgs<ExtArgs>;
   };
   export type TicketIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     author?: boolean | UserDefaultArgs<ExtArgs>;
-    assigned?: boolean | Ticket$assignedArgs<ExtArgs>;
+    assign?: boolean | Ticket$assignArgs<ExtArgs>;
   };
 
   export type $TicketPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -19988,7 +22973,7 @@ export namespace Prisma {
     objects: {
       contexts: Prisma.$TicketContextPayload<ExtArgs>[];
       author: Prisma.$UserPayload<ExtArgs>;
-      assigned: Prisma.$UserPayload<ExtArgs> | null;
+      assign: Prisma.$UserPayload<ExtArgs> | null;
       messages: Prisma.$TicketMessagePayload<ExtArgs>[];
       members: Prisma.$TicketMemberPayload<ExtArgs>[];
     };
@@ -19996,8 +22981,8 @@ export namespace Prisma {
       {
         id: string;
         numericalOrder: number;
-        createAt: Date;
-        updateAt: Date;
+        createdAt: Date;
+        updatedAt: Date;
         title: string;
         description: string;
         status: $Enums.TicketStatus;
@@ -20005,7 +22990,7 @@ export namespace Prisma {
         priority: $Enums.TicketPriority;
         attachments: string[];
         authorId: string;
-        assignedId: string | null;
+        assignId: string | null;
       },
       ExtArgs['result']['ticket']
     >;
@@ -20495,8 +23480,8 @@ export namespace Prisma {
       ExtArgs,
       GlobalOmitOptions
     >;
-    assigned<T extends Ticket$assignedArgs<ExtArgs> = {}>(
-      args?: Subset<T, Ticket$assignedArgs<ExtArgs>>,
+    assign<T extends Ticket$assignArgs<ExtArgs> = {}>(
+      args?: Subset<T, Ticket$assignArgs<ExtArgs>>,
     ): Prisma__UserClient<
       $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | null,
       null,
@@ -20546,8 +23531,8 @@ export namespace Prisma {
   interface TicketFieldRefs {
     readonly id: FieldRef<'Ticket', 'String'>;
     readonly numericalOrder: FieldRef<'Ticket', 'Int'>;
-    readonly createAt: FieldRef<'Ticket', 'DateTime'>;
-    readonly updateAt: FieldRef<'Ticket', 'DateTime'>;
+    readonly createdAt: FieldRef<'Ticket', 'DateTime'>;
+    readonly updatedAt: FieldRef<'Ticket', 'DateTime'>;
     readonly title: FieldRef<'Ticket', 'String'>;
     readonly description: FieldRef<'Ticket', 'String'>;
     readonly status: FieldRef<'Ticket', 'TicketStatus'>;
@@ -20555,7 +23540,7 @@ export namespace Prisma {
     readonly priority: FieldRef<'Ticket', 'TicketPriority'>;
     readonly attachments: FieldRef<'Ticket', 'String[]'>;
     readonly authorId: FieldRef<'Ticket', 'String'>;
-    readonly assignedId: FieldRef<'Ticket', 'String'>;
+    readonly assignId: FieldRef<'Ticket', 'String'>;
   }
 
   // Custom InputTypes
@@ -20984,9 +23969,9 @@ export namespace Prisma {
   };
 
   /**
-   * Ticket.assigned
+   * Ticket.assign
    */
-  export type Ticket$assignedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Ticket$assignArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the User
      */
@@ -24769,8 +27754,8 @@ export namespace Prisma {
 
   export const AuthenticationScalarFieldEnum: {
     code: 'code';
-    type: 'type';
     retryTime: 'retryTime';
+    type: 'type';
     lastSentAt: 'lastSentAt';
     expiresAt: 'expiresAt';
     userId: 'userId';
@@ -24788,14 +27773,13 @@ export namespace Prisma {
 
   export const MfaSetupScalarFieldEnum: {
     id: 'id';
-    userId: 'userId';
     type: 'type';
-    isEnabled: 'isEnabled';
     secret: 'secret';
     phone: 'phone';
     email: 'email';
     createdAt: 'createdAt';
     updatedAt: 'updatedAt';
+    userId: 'userId';
   };
 
   export type MfaSetupScalarFieldEnum = (typeof MfaSetupScalarFieldEnum)[keyof typeof MfaSetupScalarFieldEnum];
@@ -24829,8 +27813,8 @@ export namespace Prisma {
 
   export const OrderScalarFieldEnum: {
     id: 'id';
-    createAt: 'createAt';
-    updateAt: 'updateAt';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
     totalPrice: 'totalPrice';
     userId: 'userId';
     billId: 'billId';
@@ -24852,8 +27836,8 @@ export namespace Prisma {
 
   export const ProductScalarFieldEnum: {
     id: 'id';
-    createAt: 'createAt';
-    updateAt: 'updateAt';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
     sku: 'sku';
     isActive: 'isActive';
     slug: 'slug';
@@ -24907,7 +27891,8 @@ export namespace Prisma {
     fullname: 'fullname';
     email: 'email';
     phone: 'phone';
-    isVerified: 'isVerified';
+    web3Wallet: 'web3Wallet';
+    passwordEnabled: 'passwordEnabled';
     hashedPassword: 'hashedPassword';
     avatarUrl: 'avatarUrl';
     address: 'address';
@@ -24917,17 +27902,60 @@ export namespace Prisma {
     biography: 'biography';
     roles: 'roles';
     flags: 'flags';
-    createAt: 'createAt';
-    updateAt: 'updateAt';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
     credit: 'credit';
+    isBanned: 'isBanned';
+    isLocked: 'isLocked';
+    isVerified: 'isVerified';
+    lastActiveAt: 'lastActiveAt';
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum];
 
+  export const UserSecurityScalarFieldEnum: {
+    userId: 'userId';
+    mfaEnabled: 'mfaEnabled';
+    mfaEnabledAt: 'mfaEnabledAt';
+    mfaDisabledAt: 'mfaDisabledAt';
+    totpEnabled: 'totpEnabled';
+    totpEnabledAt: 'totpEnabledAt';
+    totpDisabledAt: 'totpDisabledAt';
+    backupCodesEnabled: 'backupCodesEnabled';
+    backupCodesEnabledAt: 'backupCodesEnabledAt';
+    backupCodesDisabledAt: 'backupCodesDisabledAt';
+    verificationAttemptsRemaining: 'verificationAttemptsRemaining';
+    verificationAttemptsResetAt: 'verificationAttemptsResetAt';
+    updatedAt: 'updatedAt';
+  };
+
+  export type UserSecurityScalarFieldEnum =
+    (typeof UserSecurityScalarFieldEnum)[keyof typeof UserSecurityScalarFieldEnum];
+
+  export const ExternalAccountScalarFieldEnum: {
+    id: 'id';
+    provider: 'provider';
+    providerUserId: 'providerUserId';
+    approvedScope: 'approvedScope';
+    emailAddress: 'emailAddress';
+    phoneNumber: 'phoneNumber';
+    firstName: 'firstName';
+    lastName: 'lastName';
+    fullName: 'fullName';
+    username: 'username';
+    avatarUrl: 'avatarUrl';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
+    userId: 'userId';
+  };
+
+  export type ExternalAccountScalarFieldEnum =
+    (typeof ExternalAccountScalarFieldEnum)[keyof typeof ExternalAccountScalarFieldEnum];
+
   export const BillScalarFieldEnum: {
     id: 'id';
-    createAt: 'createAt';
-    updateAt: 'updateAt';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
     transactionId: 'transactionId';
     paymentMethod: 'paymentMethod';
     type: 'type';
@@ -24941,8 +27969,8 @@ export namespace Prisma {
 
   export const CartItemScalarFieldEnum: {
     id: 'id';
-    createAt: 'createAt';
-    updateAt: 'updateAt';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
     quantity: 'quantity';
     productId: 'productId';
     userId: 'userId';
@@ -24953,8 +27981,8 @@ export namespace Prisma {
   export const TicketScalarFieldEnum: {
     id: 'id';
     numericalOrder: 'numericalOrder';
-    createAt: 'createAt';
-    updateAt: 'updateAt';
+    createdAt: 'createdAt';
+    updatedAt: 'updatedAt';
     title: 'title';
     description: 'description';
     status: 'status';
@@ -24962,7 +27990,7 @@ export namespace Prisma {
     priority: 'priority';
     attachments: 'attachments';
     authorId: 'authorId';
-    assignedId: 'assignedId';
+    assignId: 'assignId';
   };
 
   export type TicketScalarFieldEnum = (typeof TicketScalarFieldEnum)[keyof typeof TicketScalarFieldEnum];
@@ -25039,16 +28067,6 @@ export namespace Prisma {
   export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>;
 
   /**
-   * Reference to a field of type 'AuthType'
-   */
-  export type EnumAuthTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuthType'>;
-
-  /**
-   * Reference to a field of type 'AuthType[]'
-   */
-  export type ListEnumAuthTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuthType[]'>;
-
-  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>;
@@ -25057,6 +28075,16 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>;
+
+  /**
+   * Reference to a field of type 'AuthType'
+   */
+  export type EnumAuthTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuthType'>;
+
+  /**
+   * Reference to a field of type 'AuthType[]'
+   */
+  export type ListEnumAuthTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuthType[]'>;
 
   /**
    * Reference to a field of type 'DateTime'
@@ -25132,6 +28160,19 @@ export namespace Prisma {
    * Reference to a field of type 'UserFlag'
    */
   export type EnumUserFlagFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserFlag'>;
+
+  /**
+   * Reference to a field of type 'ProviderPlatform'
+   */
+  export type EnumProviderPlatformFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProviderPlatform'>;
+
+  /**
+   * Reference to a field of type 'ProviderPlatform[]'
+   */
+  export type ListEnumProviderPlatformFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    'ProviderPlatform[]'
+  >;
 
   /**
    * Reference to a field of type 'PaymentMethod'
@@ -25225,8 +28266,8 @@ export namespace Prisma {
     OR?: AuthenticationWhereInput[];
     NOT?: AuthenticationWhereInput | AuthenticationWhereInput[];
     code?: StringFilter<'Authentication'> | string;
-    type?: EnumAuthTypeFilter<'Authentication'> | $Enums.AuthType;
     retryTime?: IntFilter<'Authentication'> | number;
+    type?: EnumAuthTypeFilter<'Authentication'> | $Enums.AuthType;
     lastSentAt?: DateTimeFilter<'Authentication'> | Date | string;
     expiresAt?: DateTimeFilter<'Authentication'> | Date | string;
     userId?: UuidFilter<'Authentication'> | string;
@@ -25235,8 +28276,8 @@ export namespace Prisma {
 
   export type AuthenticationOrderByWithRelationInput = {
     code?: SortOrder;
-    type?: SortOrder;
     retryTime?: SortOrder;
+    type?: SortOrder;
     lastSentAt?: SortOrder;
     expiresAt?: SortOrder;
     userId?: SortOrder;
@@ -25250,8 +28291,8 @@ export namespace Prisma {
       OR?: AuthenticationWhereInput[];
       NOT?: AuthenticationWhereInput | AuthenticationWhereInput[];
       code?: StringFilter<'Authentication'> | string;
-      type?: EnumAuthTypeFilter<'Authentication'> | $Enums.AuthType;
       retryTime?: IntFilter<'Authentication'> | number;
+      type?: EnumAuthTypeFilter<'Authentication'> | $Enums.AuthType;
       lastSentAt?: DateTimeFilter<'Authentication'> | Date | string;
       expiresAt?: DateTimeFilter<'Authentication'> | Date | string;
       userId?: UuidFilter<'Authentication'> | string;
@@ -25262,8 +28303,8 @@ export namespace Prisma {
 
   export type AuthenticationOrderByWithAggregationInput = {
     code?: SortOrder;
-    type?: SortOrder;
     retryTime?: SortOrder;
+    type?: SortOrder;
     lastSentAt?: SortOrder;
     expiresAt?: SortOrder;
     userId?: SortOrder;
@@ -25279,8 +28320,8 @@ export namespace Prisma {
     OR?: AuthenticationScalarWhereWithAggregatesInput[];
     NOT?: AuthenticationScalarWhereWithAggregatesInput | AuthenticationScalarWhereWithAggregatesInput[];
     code?: StringWithAggregatesFilter<'Authentication'> | string;
-    type?: EnumAuthTypeWithAggregatesFilter<'Authentication'> | $Enums.AuthType;
     retryTime?: IntWithAggregatesFilter<'Authentication'> | number;
+    type?: EnumAuthTypeWithAggregatesFilter<'Authentication'> | $Enums.AuthType;
     lastSentAt?: DateTimeWithAggregatesFilter<'Authentication'> | Date | string;
     expiresAt?: DateTimeWithAggregatesFilter<'Authentication'> | Date | string;
     userId?: UuidWithAggregatesFilter<'Authentication'> | string;
@@ -25291,28 +28332,26 @@ export namespace Prisma {
     OR?: MfaSetupWhereInput[];
     NOT?: MfaSetupWhereInput | MfaSetupWhereInput[];
     id?: UuidFilter<'MfaSetup'> | string;
-    userId?: UuidFilter<'MfaSetup'> | string;
     type?: EnumMfaTypeFilter<'MfaSetup'> | $Enums.MfaType;
-    isEnabled?: BoolFilter<'MfaSetup'> | boolean;
     secret?: StringNullableFilter<'MfaSetup'> | string | null;
     phone?: StringNullableFilter<'MfaSetup'> | string | null;
     email?: StringNullableFilter<'MfaSetup'> | string | null;
     createdAt?: DateTimeFilter<'MfaSetup'> | Date | string;
     updatedAt?: DateTimeFilter<'MfaSetup'> | Date | string;
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+    userId?: UuidFilter<'MfaSetup'> | string;
+    user?: XOR<UserSecurityScalarRelationFilter, UserSecurityWhereInput>;
   };
 
   export type MfaSetupOrderByWithRelationInput = {
     id?: SortOrder;
-    userId?: SortOrder;
     type?: SortOrder;
-    isEnabled?: SortOrder;
     secret?: SortOrderInput | SortOrder;
     phone?: SortOrderInput | SortOrder;
     email?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
-    user?: UserOrderByWithRelationInput;
+    userId?: SortOrder;
+    user?: UserSecurityOrderByWithRelationInput;
   };
 
   export type MfaSetupWhereUniqueInput = Prisma.AtLeast<
@@ -25322,29 +28361,27 @@ export namespace Prisma {
       AND?: MfaSetupWhereInput | MfaSetupWhereInput[];
       OR?: MfaSetupWhereInput[];
       NOT?: MfaSetupWhereInput | MfaSetupWhereInput[];
-      userId?: UuidFilter<'MfaSetup'> | string;
       type?: EnumMfaTypeFilter<'MfaSetup'> | $Enums.MfaType;
-      isEnabled?: BoolFilter<'MfaSetup'> | boolean;
       secret?: StringNullableFilter<'MfaSetup'> | string | null;
       phone?: StringNullableFilter<'MfaSetup'> | string | null;
       email?: StringNullableFilter<'MfaSetup'> | string | null;
       createdAt?: DateTimeFilter<'MfaSetup'> | Date | string;
       updatedAt?: DateTimeFilter<'MfaSetup'> | Date | string;
-      user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+      userId?: UuidFilter<'MfaSetup'> | string;
+      user?: XOR<UserSecurityScalarRelationFilter, UserSecurityWhereInput>;
     },
     'id' | 'userMfaType'
   >;
 
   export type MfaSetupOrderByWithAggregationInput = {
     id?: SortOrder;
-    userId?: SortOrder;
     type?: SortOrder;
-    isEnabled?: SortOrder;
     secret?: SortOrderInput | SortOrder;
     phone?: SortOrderInput | SortOrder;
     email?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
+    userId?: SortOrder;
     _count?: MfaSetupCountOrderByAggregateInput;
     _max?: MfaSetupMaxOrderByAggregateInput;
     _min?: MfaSetupMinOrderByAggregateInput;
@@ -25355,14 +28392,13 @@ export namespace Prisma {
     OR?: MfaSetupScalarWhereWithAggregatesInput[];
     NOT?: MfaSetupScalarWhereWithAggregatesInput | MfaSetupScalarWhereWithAggregatesInput[];
     id?: UuidWithAggregatesFilter<'MfaSetup'> | string;
-    userId?: UuidWithAggregatesFilter<'MfaSetup'> | string;
     type?: EnumMfaTypeWithAggregatesFilter<'MfaSetup'> | $Enums.MfaType;
-    isEnabled?: BoolWithAggregatesFilter<'MfaSetup'> | boolean;
     secret?: StringNullableWithAggregatesFilter<'MfaSetup'> | string | null;
     phone?: StringNullableWithAggregatesFilter<'MfaSetup'> | string | null;
     email?: StringNullableWithAggregatesFilter<'MfaSetup'> | string | null;
     createdAt?: DateTimeWithAggregatesFilter<'MfaSetup'> | Date | string;
     updatedAt?: DateTimeWithAggregatesFilter<'MfaSetup'> | Date | string;
+    userId?: UuidWithAggregatesFilter<'MfaSetup'> | string;
   };
 
   export type MfaBackupCodeWhereInput = {
@@ -25375,7 +28411,7 @@ export namespace Prisma {
     usedAt?: DateTimeNullableFilter<'MfaBackupCode'> | Date | string | null;
     createdAt?: DateTimeFilter<'MfaBackupCode'> | Date | string;
     userId?: UuidFilter<'MfaBackupCode'> | string;
-    user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+    user?: XOR<UserSecurityScalarRelationFilter, UserSecurityWhereInput>;
   };
 
   export type MfaBackupCodeOrderByWithRelationInput = {
@@ -25385,7 +28421,7 @@ export namespace Prisma {
     usedAt?: SortOrderInput | SortOrder;
     createdAt?: SortOrder;
     userId?: SortOrder;
-    user?: UserOrderByWithRelationInput;
+    user?: UserSecurityOrderByWithRelationInput;
   };
 
   export type MfaBackupCodeWhereUniqueInput = Prisma.AtLeast<
@@ -25400,7 +28436,7 @@ export namespace Prisma {
       usedAt?: DateTimeNullableFilter<'MfaBackupCode'> | Date | string | null;
       createdAt?: DateTimeFilter<'MfaBackupCode'> | Date | string;
       userId?: UuidFilter<'MfaBackupCode'> | string;
-      user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+      user?: XOR<UserSecurityScalarRelationFilter, UserSecurityWhereInput>;
     },
     'id' | 'userBackupCode'
   >;
@@ -25512,8 +28548,8 @@ export namespace Prisma {
     OR?: OrderWhereInput[];
     NOT?: OrderWhereInput | OrderWhereInput[];
     id?: UuidFilter<'Order'> | string;
-    createAt?: DateTimeFilter<'Order'> | Date | string;
-    updateAt?: DateTimeFilter<'Order'> | Date | string;
+    createdAt?: DateTimeFilter<'Order'> | Date | string;
+    updatedAt?: DateTimeFilter<'Order'> | Date | string;
     totalPrice?: IntFilter<'Order'> | number;
     userId?: UuidFilter<'Order'> | string;
     billId?: UuidFilter<'Order'> | string;
@@ -25524,8 +28560,8 @@ export namespace Prisma {
 
   export type OrderOrderByWithRelationInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     totalPrice?: SortOrder;
     userId?: SortOrder;
     billId?: SortOrder;
@@ -25541,8 +28577,8 @@ export namespace Prisma {
       AND?: OrderWhereInput | OrderWhereInput[];
       OR?: OrderWhereInput[];
       NOT?: OrderWhereInput | OrderWhereInput[];
-      createAt?: DateTimeFilter<'Order'> | Date | string;
-      updateAt?: DateTimeFilter<'Order'> | Date | string;
+      createdAt?: DateTimeFilter<'Order'> | Date | string;
+      updatedAt?: DateTimeFilter<'Order'> | Date | string;
       totalPrice?: IntFilter<'Order'> | number;
       userId?: UuidFilter<'Order'> | string;
       user?: XOR<UserScalarRelationFilter, UserWhereInput>;
@@ -25554,8 +28590,8 @@ export namespace Prisma {
 
   export type OrderOrderByWithAggregationInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     totalPrice?: SortOrder;
     userId?: SortOrder;
     billId?: SortOrder;
@@ -25571,8 +28607,8 @@ export namespace Prisma {
     OR?: OrderScalarWhereWithAggregatesInput[];
     NOT?: OrderScalarWhereWithAggregatesInput | OrderScalarWhereWithAggregatesInput[];
     id?: UuidWithAggregatesFilter<'Order'> | string;
-    createAt?: DateTimeWithAggregatesFilter<'Order'> | Date | string;
-    updateAt?: DateTimeWithAggregatesFilter<'Order'> | Date | string;
+    createdAt?: DateTimeWithAggregatesFilter<'Order'> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<'Order'> | Date | string;
     totalPrice?: IntWithAggregatesFilter<'Order'> | number;
     userId?: UuidWithAggregatesFilter<'Order'> | string;
     billId?: UuidWithAggregatesFilter<'Order'> | string;
@@ -25586,8 +28622,8 @@ export namespace Prisma {
     from?: EnumSelectFromFilter<'OrderItem'> | $Enums.SelectFrom;
     quantity?: IntFilter<'OrderItem'> | number;
     price?: IntFilter<'OrderItem'> | number;
-    productId?: StringFilter<'OrderItem'> | string;
-    productItemId?: StringFilter<'OrderItem'> | string;
+    productId?: UuidFilter<'OrderItem'> | string;
+    productItemId?: UuidFilter<'OrderItem'> | string;
     orderId?: UuidFilter<'OrderItem'> | string;
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>;
     productItem?: XOR<ProductItemScalarRelationFilter, ProductItemWhereInput>;
@@ -25617,7 +28653,7 @@ export namespace Prisma {
       from?: EnumSelectFromFilter<'OrderItem'> | $Enums.SelectFrom;
       quantity?: IntFilter<'OrderItem'> | number;
       price?: IntFilter<'OrderItem'> | number;
-      productId?: StringFilter<'OrderItem'> | string;
+      productId?: UuidFilter<'OrderItem'> | string;
       orderId?: UuidFilter<'OrderItem'> | string;
       product?: XOR<ProductScalarRelationFilter, ProductWhereInput>;
       productItem?: XOR<ProductItemScalarRelationFilter, ProductItemWhereInput>;
@@ -25649,8 +28685,8 @@ export namespace Prisma {
     from?: EnumSelectFromWithAggregatesFilter<'OrderItem'> | $Enums.SelectFrom;
     quantity?: IntWithAggregatesFilter<'OrderItem'> | number;
     price?: IntWithAggregatesFilter<'OrderItem'> | number;
-    productId?: StringWithAggregatesFilter<'OrderItem'> | string;
-    productItemId?: StringWithAggregatesFilter<'OrderItem'> | string;
+    productId?: UuidWithAggregatesFilter<'OrderItem'> | string;
+    productItemId?: UuidWithAggregatesFilter<'OrderItem'> | string;
     orderId?: UuidWithAggregatesFilter<'OrderItem'> | string;
   };
 
@@ -25658,9 +28694,9 @@ export namespace Prisma {
     AND?: ProductWhereInput | ProductWhereInput[];
     OR?: ProductWhereInput[];
     NOT?: ProductWhereInput | ProductWhereInput[];
-    id?: StringFilter<'Product'> | string;
-    createAt?: DateTimeFilter<'Product'> | Date | string;
-    updateAt?: DateTimeFilter<'Product'> | Date | string;
+    id?: UuidFilter<'Product'> | string;
+    createdAt?: DateTimeFilter<'Product'> | Date | string;
+    updatedAt?: DateTimeFilter<'Product'> | Date | string;
     sku?: StringNullableFilter<'Product'> | string | null;
     isActive?: BoolFilter<'Product'> | boolean;
     slug?: StringFilter<'Product'> | string;
@@ -25685,8 +28721,8 @@ export namespace Prisma {
 
   export type ProductOrderByWithRelationInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     sku?: SortOrderInput | SortOrder;
     isActive?: SortOrder;
     slug?: SortOrder;
@@ -25717,8 +28753,8 @@ export namespace Prisma {
       AND?: ProductWhereInput | ProductWhereInput[];
       OR?: ProductWhereInput[];
       NOT?: ProductWhereInput | ProductWhereInput[];
-      createAt?: DateTimeFilter<'Product'> | Date | string;
-      updateAt?: DateTimeFilter<'Product'> | Date | string;
+      createdAt?: DateTimeFilter<'Product'> | Date | string;
+      updatedAt?: DateTimeFilter<'Product'> | Date | string;
       isActive?: BoolFilter<'Product'> | boolean;
       name?: StringFilter<'Product'> | string;
       description?: StringFilter<'Product'> | string;
@@ -25743,8 +28779,8 @@ export namespace Prisma {
 
   export type ProductOrderByWithAggregationInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     sku?: SortOrderInput | SortOrder;
     isActive?: SortOrder;
     slug?: SortOrder;
@@ -25770,9 +28806,9 @@ export namespace Prisma {
     AND?: ProductScalarWhereWithAggregatesInput | ProductScalarWhereWithAggregatesInput[];
     OR?: ProductScalarWhereWithAggregatesInput[];
     NOT?: ProductScalarWhereWithAggregatesInput | ProductScalarWhereWithAggregatesInput[];
-    id?: StringWithAggregatesFilter<'Product'> | string;
-    createAt?: DateTimeWithAggregatesFilter<'Product'> | Date | string;
-    updateAt?: DateTimeWithAggregatesFilter<'Product'> | Date | string;
+    id?: UuidWithAggregatesFilter<'Product'> | string;
+    createdAt?: DateTimeWithAggregatesFilter<'Product'> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<'Product'> | Date | string;
     sku?: StringNullableWithAggregatesFilter<'Product'> | string | null;
     isActive?: BoolWithAggregatesFilter<'Product'> | boolean;
     slug?: StringWithAggregatesFilter<'Product'> | string;
@@ -25793,8 +28829,8 @@ export namespace Prisma {
     AND?: ProductItemWhereInput | ProductItemWhereInput[];
     OR?: ProductItemWhereInput[];
     NOT?: ProductItemWhereInput | ProductItemWhereInput[];
-    id?: StringFilter<'ProductItem'> | string;
-    productId?: StringFilter<'ProductItem'> | string;
+    id?: UuidFilter<'ProductItem'> | string;
+    productId?: UuidFilter<'ProductItem'> | string;
     data?: StringFilter<'ProductItem'> | string;
     isSold?: BoolFilter<'ProductItem'> | boolean;
     soldAt?: DateTimeNullableFilter<'ProductItem'> | Date | string | null;
@@ -25818,7 +28854,7 @@ export namespace Prisma {
       AND?: ProductItemWhereInput | ProductItemWhereInput[];
       OR?: ProductItemWhereInput[];
       NOT?: ProductItemWhereInput | ProductItemWhereInput[];
-      productId?: StringFilter<'ProductItem'> | string;
+      productId?: UuidFilter<'ProductItem'> | string;
       data?: StringFilter<'ProductItem'> | string;
       isSold?: BoolFilter<'ProductItem'> | boolean;
       soldAt?: DateTimeNullableFilter<'ProductItem'> | Date | string | null;
@@ -25843,8 +28879,8 @@ export namespace Prisma {
     AND?: ProductItemScalarWhereWithAggregatesInput | ProductItemScalarWhereWithAggregatesInput[];
     OR?: ProductItemScalarWhereWithAggregatesInput[];
     NOT?: ProductItemScalarWhereWithAggregatesInput | ProductItemScalarWhereWithAggregatesInput[];
-    id?: StringWithAggregatesFilter<'ProductItem'> | string;
-    productId?: StringWithAggregatesFilter<'ProductItem'> | string;
+    id?: UuidWithAggregatesFilter<'ProductItem'> | string;
+    productId?: UuidWithAggregatesFilter<'ProductItem'> | string;
     data?: StringWithAggregatesFilter<'ProductItem'> | string;
     isSold?: BoolWithAggregatesFilter<'ProductItem'> | boolean;
     soldAt?: DateTimeNullableWithAggregatesFilter<'ProductItem'> | Date | string | null;
@@ -25902,12 +28938,12 @@ export namespace Prisma {
     AND?: ReviewWhereInput | ReviewWhereInput[];
     OR?: ReviewWhereInput[];
     NOT?: ReviewWhereInput | ReviewWhereInput[];
-    id?: StringFilter<'Review'> | string;
+    id?: UuidFilter<'Review'> | string;
     createdAt?: DateTimeFilter<'Review'> | Date | string;
     updatedAt?: DateTimeFilter<'Review'> | Date | string;
     rating?: DecimalFilter<'Review'> | Decimal | DecimalJsLike | number | string;
     comment?: StringFilter<'Review'> | string;
-    productId?: StringFilter<'Review'> | string;
+    productId?: UuidFilter<'Review'> | string;
     userId?: UuidFilter<'Review'> | string;
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>;
     user?: XOR<UserScalarRelationFilter, UserWhereInput>;
@@ -25936,7 +28972,7 @@ export namespace Prisma {
       updatedAt?: DateTimeFilter<'Review'> | Date | string;
       rating?: DecimalFilter<'Review'> | Decimal | DecimalJsLike | number | string;
       comment?: StringFilter<'Review'> | string;
-      productId?: StringFilter<'Review'> | string;
+      productId?: UuidFilter<'Review'> | string;
       userId?: UuidFilter<'Review'> | string;
       product?: XOR<ProductScalarRelationFilter, ProductWhereInput>;
       user?: XOR<UserScalarRelationFilter, UserWhereInput>;
@@ -25963,12 +28999,12 @@ export namespace Prisma {
     AND?: ReviewScalarWhereWithAggregatesInput | ReviewScalarWhereWithAggregatesInput[];
     OR?: ReviewScalarWhereWithAggregatesInput[];
     NOT?: ReviewScalarWhereWithAggregatesInput | ReviewScalarWhereWithAggregatesInput[];
-    id?: StringWithAggregatesFilter<'Review'> | string;
+    id?: UuidWithAggregatesFilter<'Review'> | string;
     createdAt?: DateTimeWithAggregatesFilter<'Review'> | Date | string;
     updatedAt?: DateTimeWithAggregatesFilter<'Review'> | Date | string;
     rating?: DecimalWithAggregatesFilter<'Review'> | Decimal | DecimalJsLike | number | string;
     comment?: StringWithAggregatesFilter<'Review'> | string;
-    productId?: StringWithAggregatesFilter<'Review'> | string;
+    productId?: UuidWithAggregatesFilter<'Review'> | string;
     userId?: UuidWithAggregatesFilter<'Review'> | string;
   };
 
@@ -25980,7 +29016,8 @@ export namespace Prisma {
     fullname?: StringFilter<'User'> | string;
     email?: StringFilter<'User'> | string;
     phone?: StringNullableFilter<'User'> | string | null;
-    isVerified?: BoolFilter<'User'> | boolean;
+    web3Wallet?: StringNullableFilter<'User'> | string | null;
+    passwordEnabled?: BoolFilter<'User'> | boolean;
     hashedPassword?: StringNullableFilter<'User'> | string | null;
     avatarUrl?: StringNullableFilter<'User'> | string | null;
     address?: StringNullableFilter<'User'> | string | null;
@@ -25990,17 +29027,21 @@ export namespace Prisma {
     biography?: StringNullableFilter<'User'> | string | null;
     roles?: EnumUserRoleNullableListFilter<'User'>;
     flags?: EnumUserFlagNullableListFilter<'User'>;
-    createAt?: DateTimeFilter<'User'> | Date | string;
-    updateAt?: DateTimeFilter<'User'> | Date | string;
+    createdAt?: DateTimeFilter<'User'> | Date | string;
+    updatedAt?: DateTimeFilter<'User'> | Date | string;
     credit?: IntFilter<'User'> | number;
+    isBanned?: BoolFilter<'User'> | boolean;
+    isLocked?: BoolFilter<'User'> | boolean;
+    isVerified?: BoolFilter<'User'> | boolean;
+    lastActiveAt?: DateTimeNullableFilter<'User'> | Date | string | null;
+    security?: XOR<UserSecurityNullableScalarRelationFilter, UserSecurityWhereInput> | null;
+    externalAccounts?: ExternalAccountListRelationFilter;
     auth?: AuthenticationListRelationFilter;
-    backupCodes?: MfaBackupCodeListRelationFilter;
     loginSessions?: LoginSessionListRelationFilter;
     products?: ProductListRelationFilter;
     cart?: CartItemListRelationFilter;
-    mfaSetups?: MfaSetupListRelationFilter;
     ticketAuthor?: TicketListRelationFilter;
-    ticketAssigned?: TicketListRelationFilter;
+    ticketAssign?: TicketListRelationFilter;
     ticketMembers?: TicketMemberListRelationFilter;
     reviews?: ReviewListRelationFilter;
     bills?: BillListRelationFilter;
@@ -26012,7 +29053,8 @@ export namespace Prisma {
     fullname?: SortOrder;
     email?: SortOrder;
     phone?: SortOrderInput | SortOrder;
-    isVerified?: SortOrder;
+    web3Wallet?: SortOrderInput | SortOrder;
+    passwordEnabled?: SortOrder;
     hashedPassword?: SortOrderInput | SortOrder;
     avatarUrl?: SortOrderInput | SortOrder;
     address?: SortOrderInput | SortOrder;
@@ -26022,17 +29064,21 @@ export namespace Prisma {
     biography?: SortOrderInput | SortOrder;
     roles?: SortOrder;
     flags?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     credit?: SortOrder;
+    isBanned?: SortOrder;
+    isLocked?: SortOrder;
+    isVerified?: SortOrder;
+    lastActiveAt?: SortOrderInput | SortOrder;
+    security?: UserSecurityOrderByWithRelationInput;
+    externalAccounts?: ExternalAccountOrderByRelationAggregateInput;
     auth?: AuthenticationOrderByRelationAggregateInput;
-    backupCodes?: MfaBackupCodeOrderByRelationAggregateInput;
     loginSessions?: LoginSessionOrderByRelationAggregateInput;
     products?: ProductOrderByRelationAggregateInput;
     cart?: CartItemOrderByRelationAggregateInput;
-    mfaSetups?: MfaSetupOrderByRelationAggregateInput;
     ticketAuthor?: TicketOrderByRelationAggregateInput;
-    ticketAssigned?: TicketOrderByRelationAggregateInput;
+    ticketAssign?: TicketOrderByRelationAggregateInput;
     ticketMembers?: TicketMemberOrderByRelationAggregateInput;
     reviews?: ReviewOrderByRelationAggregateInput;
     bills?: BillOrderByRelationAggregateInput;
@@ -26044,11 +29090,12 @@ export namespace Prisma {
       id?: string;
       email?: string;
       phone?: string;
+      web3Wallet?: string;
       AND?: UserWhereInput | UserWhereInput[];
       OR?: UserWhereInput[];
       NOT?: UserWhereInput | UserWhereInput[];
       fullname?: StringFilter<'User'> | string;
-      isVerified?: BoolFilter<'User'> | boolean;
+      passwordEnabled?: BoolFilter<'User'> | boolean;
       hashedPassword?: StringNullableFilter<'User'> | string | null;
       avatarUrl?: StringNullableFilter<'User'> | string | null;
       address?: StringNullableFilter<'User'> | string | null;
@@ -26058,23 +29105,27 @@ export namespace Prisma {
       biography?: StringNullableFilter<'User'> | string | null;
       roles?: EnumUserRoleNullableListFilter<'User'>;
       flags?: EnumUserFlagNullableListFilter<'User'>;
-      createAt?: DateTimeFilter<'User'> | Date | string;
-      updateAt?: DateTimeFilter<'User'> | Date | string;
+      createdAt?: DateTimeFilter<'User'> | Date | string;
+      updatedAt?: DateTimeFilter<'User'> | Date | string;
       credit?: IntFilter<'User'> | number;
+      isBanned?: BoolFilter<'User'> | boolean;
+      isLocked?: BoolFilter<'User'> | boolean;
+      isVerified?: BoolFilter<'User'> | boolean;
+      lastActiveAt?: DateTimeNullableFilter<'User'> | Date | string | null;
+      security?: XOR<UserSecurityNullableScalarRelationFilter, UserSecurityWhereInput> | null;
+      externalAccounts?: ExternalAccountListRelationFilter;
       auth?: AuthenticationListRelationFilter;
-      backupCodes?: MfaBackupCodeListRelationFilter;
       loginSessions?: LoginSessionListRelationFilter;
       products?: ProductListRelationFilter;
       cart?: CartItemListRelationFilter;
-      mfaSetups?: MfaSetupListRelationFilter;
       ticketAuthor?: TicketListRelationFilter;
-      ticketAssigned?: TicketListRelationFilter;
+      ticketAssign?: TicketListRelationFilter;
       ticketMembers?: TicketMemberListRelationFilter;
       reviews?: ReviewListRelationFilter;
       bills?: BillListRelationFilter;
       orders?: OrderListRelationFilter;
     },
-    'id' | 'email' | 'phone'
+    'id' | 'email' | 'phone' | 'web3Wallet'
   >;
 
   export type UserOrderByWithAggregationInput = {
@@ -26082,7 +29133,8 @@ export namespace Prisma {
     fullname?: SortOrder;
     email?: SortOrder;
     phone?: SortOrderInput | SortOrder;
-    isVerified?: SortOrder;
+    web3Wallet?: SortOrderInput | SortOrder;
+    passwordEnabled?: SortOrder;
     hashedPassword?: SortOrderInput | SortOrder;
     avatarUrl?: SortOrderInput | SortOrder;
     address?: SortOrderInput | SortOrder;
@@ -26092,9 +29144,13 @@ export namespace Prisma {
     biography?: SortOrderInput | SortOrder;
     roles?: SortOrder;
     flags?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     credit?: SortOrder;
+    isBanned?: SortOrder;
+    isLocked?: SortOrder;
+    isVerified?: SortOrder;
+    lastActiveAt?: SortOrderInput | SortOrder;
     _count?: UserCountOrderByAggregateInput;
     _avg?: UserAvgOrderByAggregateInput;
     _max?: UserMaxOrderByAggregateInput;
@@ -26110,7 +29166,8 @@ export namespace Prisma {
     fullname?: StringWithAggregatesFilter<'User'> | string;
     email?: StringWithAggregatesFilter<'User'> | string;
     phone?: StringNullableWithAggregatesFilter<'User'> | string | null;
-    isVerified?: BoolWithAggregatesFilter<'User'> | boolean;
+    web3Wallet?: StringNullableWithAggregatesFilter<'User'> | string | null;
+    passwordEnabled?: BoolWithAggregatesFilter<'User'> | boolean;
     hashedPassword?: StringNullableWithAggregatesFilter<'User'> | string | null;
     avatarUrl?: StringNullableWithAggregatesFilter<'User'> | string | null;
     address?: StringNullableWithAggregatesFilter<'User'> | string | null;
@@ -26120,9 +29177,222 @@ export namespace Prisma {
     biography?: StringNullableWithAggregatesFilter<'User'> | string | null;
     roles?: EnumUserRoleNullableListFilter<'User'>;
     flags?: EnumUserFlagNullableListFilter<'User'>;
-    createAt?: DateTimeWithAggregatesFilter<'User'> | Date | string;
-    updateAt?: DateTimeWithAggregatesFilter<'User'> | Date | string;
+    createdAt?: DateTimeWithAggregatesFilter<'User'> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<'User'> | Date | string;
     credit?: IntWithAggregatesFilter<'User'> | number;
+    isBanned?: BoolWithAggregatesFilter<'User'> | boolean;
+    isLocked?: BoolWithAggregatesFilter<'User'> | boolean;
+    isVerified?: BoolWithAggregatesFilter<'User'> | boolean;
+    lastActiveAt?: DateTimeNullableWithAggregatesFilter<'User'> | Date | string | null;
+  };
+
+  export type UserSecurityWhereInput = {
+    AND?: UserSecurityWhereInput | UserSecurityWhereInput[];
+    OR?: UserSecurityWhereInput[];
+    NOT?: UserSecurityWhereInput | UserSecurityWhereInput[];
+    userId?: UuidFilter<'UserSecurity'> | string;
+    mfaEnabled?: BoolFilter<'UserSecurity'> | boolean;
+    mfaEnabledAt?: DateTimeNullableFilter<'UserSecurity'> | Date | string | null;
+    mfaDisabledAt?: DateTimeNullableFilter<'UserSecurity'> | Date | string | null;
+    totpEnabled?: BoolFilter<'UserSecurity'> | boolean;
+    totpEnabledAt?: DateTimeNullableFilter<'UserSecurity'> | Date | string | null;
+    totpDisabledAt?: DateTimeNullableFilter<'UserSecurity'> | Date | string | null;
+    backupCodesEnabled?: BoolFilter<'UserSecurity'> | boolean;
+    backupCodesEnabledAt?: DateTimeNullableFilter<'UserSecurity'> | Date | string | null;
+    backupCodesDisabledAt?: DateTimeNullableFilter<'UserSecurity'> | Date | string | null;
+    verificationAttemptsRemaining?: IntFilter<'UserSecurity'> | number;
+    verificationAttemptsResetAt?: DateTimeNullableFilter<'UserSecurity'> | Date | string | null;
+    updatedAt?: DateTimeFilter<'UserSecurity'> | Date | string;
+    mfaSetups?: MfaSetupListRelationFilter;
+    backupCodes?: MfaBackupCodeListRelationFilter;
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+  };
+
+  export type UserSecurityOrderByWithRelationInput = {
+    userId?: SortOrder;
+    mfaEnabled?: SortOrder;
+    mfaEnabledAt?: SortOrderInput | SortOrder;
+    mfaDisabledAt?: SortOrderInput | SortOrder;
+    totpEnabled?: SortOrder;
+    totpEnabledAt?: SortOrderInput | SortOrder;
+    totpDisabledAt?: SortOrderInput | SortOrder;
+    backupCodesEnabled?: SortOrder;
+    backupCodesEnabledAt?: SortOrderInput | SortOrder;
+    backupCodesDisabledAt?: SortOrderInput | SortOrder;
+    verificationAttemptsRemaining?: SortOrder;
+    verificationAttemptsResetAt?: SortOrderInput | SortOrder;
+    updatedAt?: SortOrder;
+    mfaSetups?: MfaSetupOrderByRelationAggregateInput;
+    backupCodes?: MfaBackupCodeOrderByRelationAggregateInput;
+    user?: UserOrderByWithRelationInput;
+  };
+
+  export type UserSecurityWhereUniqueInput = Prisma.AtLeast<
+    {
+      userId?: string;
+      AND?: UserSecurityWhereInput | UserSecurityWhereInput[];
+      OR?: UserSecurityWhereInput[];
+      NOT?: UserSecurityWhereInput | UserSecurityWhereInput[];
+      mfaEnabled?: BoolFilter<'UserSecurity'> | boolean;
+      mfaEnabledAt?: DateTimeNullableFilter<'UserSecurity'> | Date | string | null;
+      mfaDisabledAt?: DateTimeNullableFilter<'UserSecurity'> | Date | string | null;
+      totpEnabled?: BoolFilter<'UserSecurity'> | boolean;
+      totpEnabledAt?: DateTimeNullableFilter<'UserSecurity'> | Date | string | null;
+      totpDisabledAt?: DateTimeNullableFilter<'UserSecurity'> | Date | string | null;
+      backupCodesEnabled?: BoolFilter<'UserSecurity'> | boolean;
+      backupCodesEnabledAt?: DateTimeNullableFilter<'UserSecurity'> | Date | string | null;
+      backupCodesDisabledAt?: DateTimeNullableFilter<'UserSecurity'> | Date | string | null;
+      verificationAttemptsRemaining?: IntFilter<'UserSecurity'> | number;
+      verificationAttemptsResetAt?: DateTimeNullableFilter<'UserSecurity'> | Date | string | null;
+      updatedAt?: DateTimeFilter<'UserSecurity'> | Date | string;
+      mfaSetups?: MfaSetupListRelationFilter;
+      backupCodes?: MfaBackupCodeListRelationFilter;
+      user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+    },
+    'userId'
+  >;
+
+  export type UserSecurityOrderByWithAggregationInput = {
+    userId?: SortOrder;
+    mfaEnabled?: SortOrder;
+    mfaEnabledAt?: SortOrderInput | SortOrder;
+    mfaDisabledAt?: SortOrderInput | SortOrder;
+    totpEnabled?: SortOrder;
+    totpEnabledAt?: SortOrderInput | SortOrder;
+    totpDisabledAt?: SortOrderInput | SortOrder;
+    backupCodesEnabled?: SortOrder;
+    backupCodesEnabledAt?: SortOrderInput | SortOrder;
+    backupCodesDisabledAt?: SortOrderInput | SortOrder;
+    verificationAttemptsRemaining?: SortOrder;
+    verificationAttemptsResetAt?: SortOrderInput | SortOrder;
+    updatedAt?: SortOrder;
+    _count?: UserSecurityCountOrderByAggregateInput;
+    _avg?: UserSecurityAvgOrderByAggregateInput;
+    _max?: UserSecurityMaxOrderByAggregateInput;
+    _min?: UserSecurityMinOrderByAggregateInput;
+    _sum?: UserSecuritySumOrderByAggregateInput;
+  };
+
+  export type UserSecurityScalarWhereWithAggregatesInput = {
+    AND?: UserSecurityScalarWhereWithAggregatesInput | UserSecurityScalarWhereWithAggregatesInput[];
+    OR?: UserSecurityScalarWhereWithAggregatesInput[];
+    NOT?: UserSecurityScalarWhereWithAggregatesInput | UserSecurityScalarWhereWithAggregatesInput[];
+    userId?: UuidWithAggregatesFilter<'UserSecurity'> | string;
+    mfaEnabled?: BoolWithAggregatesFilter<'UserSecurity'> | boolean;
+    mfaEnabledAt?: DateTimeNullableWithAggregatesFilter<'UserSecurity'> | Date | string | null;
+    mfaDisabledAt?: DateTimeNullableWithAggregatesFilter<'UserSecurity'> | Date | string | null;
+    totpEnabled?: BoolWithAggregatesFilter<'UserSecurity'> | boolean;
+    totpEnabledAt?: DateTimeNullableWithAggregatesFilter<'UserSecurity'> | Date | string | null;
+    totpDisabledAt?: DateTimeNullableWithAggregatesFilter<'UserSecurity'> | Date | string | null;
+    backupCodesEnabled?: BoolWithAggregatesFilter<'UserSecurity'> | boolean;
+    backupCodesEnabledAt?: DateTimeNullableWithAggregatesFilter<'UserSecurity'> | Date | string | null;
+    backupCodesDisabledAt?: DateTimeNullableWithAggregatesFilter<'UserSecurity'> | Date | string | null;
+    verificationAttemptsRemaining?: IntWithAggregatesFilter<'UserSecurity'> | number;
+    verificationAttemptsResetAt?: DateTimeNullableWithAggregatesFilter<'UserSecurity'> | Date | string | null;
+    updatedAt?: DateTimeWithAggregatesFilter<'UserSecurity'> | Date | string;
+  };
+
+  export type ExternalAccountWhereInput = {
+    AND?: ExternalAccountWhereInput | ExternalAccountWhereInput[];
+    OR?: ExternalAccountWhereInput[];
+    NOT?: ExternalAccountWhereInput | ExternalAccountWhereInput[];
+    id?: UuidFilter<'ExternalAccount'> | string;
+    provider?: EnumProviderPlatformFilter<'ExternalAccount'> | $Enums.ProviderPlatform;
+    providerUserId?: StringFilter<'ExternalAccount'> | string;
+    approvedScope?: StringFilter<'ExternalAccount'> | string;
+    emailAddress?: StringFilter<'ExternalAccount'> | string;
+    phoneNumber?: StringNullableFilter<'ExternalAccount'> | string | null;
+    firstName?: StringNullableFilter<'ExternalAccount'> | string | null;
+    lastName?: StringNullableFilter<'ExternalAccount'> | string | null;
+    fullName?: StringNullableFilter<'ExternalAccount'> | string | null;
+    username?: StringNullableFilter<'ExternalAccount'> | string | null;
+    avatarUrl?: StringNullableFilter<'ExternalAccount'> | string | null;
+    createdAt?: DateTimeFilter<'ExternalAccount'> | Date | string;
+    updatedAt?: DateTimeFilter<'ExternalAccount'> | Date | string;
+    userId?: UuidFilter<'ExternalAccount'> | string;
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+  };
+
+  export type ExternalAccountOrderByWithRelationInput = {
+    id?: SortOrder;
+    provider?: SortOrder;
+    providerUserId?: SortOrder;
+    approvedScope?: SortOrder;
+    emailAddress?: SortOrder;
+    phoneNumber?: SortOrderInput | SortOrder;
+    firstName?: SortOrderInput | SortOrder;
+    lastName?: SortOrderInput | SortOrder;
+    fullName?: SortOrderInput | SortOrder;
+    username?: SortOrderInput | SortOrder;
+    avatarUrl?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    userId?: SortOrder;
+    user?: UserOrderByWithRelationInput;
+  };
+
+  export type ExternalAccountWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string;
+      AND?: ExternalAccountWhereInput | ExternalAccountWhereInput[];
+      OR?: ExternalAccountWhereInput[];
+      NOT?: ExternalAccountWhereInput | ExternalAccountWhereInput[];
+      provider?: EnumProviderPlatformFilter<'ExternalAccount'> | $Enums.ProviderPlatform;
+      providerUserId?: StringFilter<'ExternalAccount'> | string;
+      approvedScope?: StringFilter<'ExternalAccount'> | string;
+      emailAddress?: StringFilter<'ExternalAccount'> | string;
+      phoneNumber?: StringNullableFilter<'ExternalAccount'> | string | null;
+      firstName?: StringNullableFilter<'ExternalAccount'> | string | null;
+      lastName?: StringNullableFilter<'ExternalAccount'> | string | null;
+      fullName?: StringNullableFilter<'ExternalAccount'> | string | null;
+      username?: StringNullableFilter<'ExternalAccount'> | string | null;
+      avatarUrl?: StringNullableFilter<'ExternalAccount'> | string | null;
+      createdAt?: DateTimeFilter<'ExternalAccount'> | Date | string;
+      updatedAt?: DateTimeFilter<'ExternalAccount'> | Date | string;
+      userId?: UuidFilter<'ExternalAccount'> | string;
+      user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+    },
+    'id'
+  >;
+
+  export type ExternalAccountOrderByWithAggregationInput = {
+    id?: SortOrder;
+    provider?: SortOrder;
+    providerUserId?: SortOrder;
+    approvedScope?: SortOrder;
+    emailAddress?: SortOrder;
+    phoneNumber?: SortOrderInput | SortOrder;
+    firstName?: SortOrderInput | SortOrder;
+    lastName?: SortOrderInput | SortOrder;
+    fullName?: SortOrderInput | SortOrder;
+    username?: SortOrderInput | SortOrder;
+    avatarUrl?: SortOrderInput | SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    userId?: SortOrder;
+    _count?: ExternalAccountCountOrderByAggregateInput;
+    _max?: ExternalAccountMaxOrderByAggregateInput;
+    _min?: ExternalAccountMinOrderByAggregateInput;
+  };
+
+  export type ExternalAccountScalarWhereWithAggregatesInput = {
+    AND?: ExternalAccountScalarWhereWithAggregatesInput | ExternalAccountScalarWhereWithAggregatesInput[];
+    OR?: ExternalAccountScalarWhereWithAggregatesInput[];
+    NOT?: ExternalAccountScalarWhereWithAggregatesInput | ExternalAccountScalarWhereWithAggregatesInput[];
+    id?: UuidWithAggregatesFilter<'ExternalAccount'> | string;
+    provider?: EnumProviderPlatformWithAggregatesFilter<'ExternalAccount'> | $Enums.ProviderPlatform;
+    providerUserId?: StringWithAggregatesFilter<'ExternalAccount'> | string;
+    approvedScope?: StringWithAggregatesFilter<'ExternalAccount'> | string;
+    emailAddress?: StringWithAggregatesFilter<'ExternalAccount'> | string;
+    phoneNumber?: StringNullableWithAggregatesFilter<'ExternalAccount'> | string | null;
+    firstName?: StringNullableWithAggregatesFilter<'ExternalAccount'> | string | null;
+    lastName?: StringNullableWithAggregatesFilter<'ExternalAccount'> | string | null;
+    fullName?: StringNullableWithAggregatesFilter<'ExternalAccount'> | string | null;
+    username?: StringNullableWithAggregatesFilter<'ExternalAccount'> | string | null;
+    avatarUrl?: StringNullableWithAggregatesFilter<'ExternalAccount'> | string | null;
+    createdAt?: DateTimeWithAggregatesFilter<'ExternalAccount'> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<'ExternalAccount'> | Date | string;
+    userId?: UuidWithAggregatesFilter<'ExternalAccount'> | string;
   };
 
   export type BillWhereInput = {
@@ -26130,8 +29400,8 @@ export namespace Prisma {
     OR?: BillWhereInput[];
     NOT?: BillWhereInput | BillWhereInput[];
     id?: UuidFilter<'Bill'> | string;
-    createAt?: DateTimeFilter<'Bill'> | Date | string;
-    updateAt?: DateTimeFilter<'Bill'> | Date | string;
+    createdAt?: DateTimeFilter<'Bill'> | Date | string;
+    updatedAt?: DateTimeFilter<'Bill'> | Date | string;
     transactionId?: StringNullableFilter<'Bill'> | string | null;
     paymentMethod?: EnumPaymentMethodFilter<'Bill'> | $Enums.PaymentMethod;
     type?: EnumBillTypeFilter<'Bill'> | $Enums.BillType;
@@ -26145,8 +29415,8 @@ export namespace Prisma {
 
   export type BillOrderByWithRelationInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     transactionId?: SortOrderInput | SortOrder;
     paymentMethod?: SortOrder;
     type?: SortOrder;
@@ -26164,8 +29434,8 @@ export namespace Prisma {
       AND?: BillWhereInput | BillWhereInput[];
       OR?: BillWhereInput[];
       NOT?: BillWhereInput | BillWhereInput[];
-      createAt?: DateTimeFilter<'Bill'> | Date | string;
-      updateAt?: DateTimeFilter<'Bill'> | Date | string;
+      createdAt?: DateTimeFilter<'Bill'> | Date | string;
+      updatedAt?: DateTimeFilter<'Bill'> | Date | string;
       transactionId?: StringNullableFilter<'Bill'> | string | null;
       paymentMethod?: EnumPaymentMethodFilter<'Bill'> | $Enums.PaymentMethod;
       type?: EnumBillTypeFilter<'Bill'> | $Enums.BillType;
@@ -26181,8 +29451,8 @@ export namespace Prisma {
 
   export type BillOrderByWithAggregationInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     transactionId?: SortOrderInput | SortOrder;
     paymentMethod?: SortOrder;
     type?: SortOrder;
@@ -26202,8 +29472,8 @@ export namespace Prisma {
     OR?: BillScalarWhereWithAggregatesInput[];
     NOT?: BillScalarWhereWithAggregatesInput | BillScalarWhereWithAggregatesInput[];
     id?: UuidWithAggregatesFilter<'Bill'> | string;
-    createAt?: DateTimeWithAggregatesFilter<'Bill'> | Date | string;
-    updateAt?: DateTimeWithAggregatesFilter<'Bill'> | Date | string;
+    createdAt?: DateTimeWithAggregatesFilter<'Bill'> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<'Bill'> | Date | string;
     transactionId?: StringNullableWithAggregatesFilter<'Bill'> | string | null;
     paymentMethod?: EnumPaymentMethodWithAggregatesFilter<'Bill'> | $Enums.PaymentMethod;
     type?: EnumBillTypeWithAggregatesFilter<'Bill'> | $Enums.BillType;
@@ -26217,11 +29487,11 @@ export namespace Prisma {
     AND?: CartItemWhereInput | CartItemWhereInput[];
     OR?: CartItemWhereInput[];
     NOT?: CartItemWhereInput | CartItemWhereInput[];
-    id?: StringFilter<'CartItem'> | string;
-    createAt?: DateTimeFilter<'CartItem'> | Date | string;
-    updateAt?: DateTimeFilter<'CartItem'> | Date | string;
+    id?: UuidFilter<'CartItem'> | string;
+    createdAt?: DateTimeFilter<'CartItem'> | Date | string;
+    updatedAt?: DateTimeFilter<'CartItem'> | Date | string;
     quantity?: IntFilter<'CartItem'> | number;
-    productId?: StringFilter<'CartItem'> | string;
+    productId?: UuidFilter<'CartItem'> | string;
     userId?: UuidFilter<'CartItem'> | string;
     product?: XOR<ProductScalarRelationFilter, ProductWhereInput>;
     user?: XOR<UserScalarRelationFilter, UserWhereInput>;
@@ -26229,8 +29499,8 @@ export namespace Prisma {
 
   export type CartItemOrderByWithRelationInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     quantity?: SortOrder;
     productId?: SortOrder;
     userId?: SortOrder;
@@ -26245,10 +29515,10 @@ export namespace Prisma {
       AND?: CartItemWhereInput | CartItemWhereInput[];
       OR?: CartItemWhereInput[];
       NOT?: CartItemWhereInput | CartItemWhereInput[];
-      createAt?: DateTimeFilter<'CartItem'> | Date | string;
-      updateAt?: DateTimeFilter<'CartItem'> | Date | string;
+      createdAt?: DateTimeFilter<'CartItem'> | Date | string;
+      updatedAt?: DateTimeFilter<'CartItem'> | Date | string;
       quantity?: IntFilter<'CartItem'> | number;
-      productId?: StringFilter<'CartItem'> | string;
+      productId?: UuidFilter<'CartItem'> | string;
       userId?: UuidFilter<'CartItem'> | string;
       product?: XOR<ProductScalarRelationFilter, ProductWhereInput>;
       user?: XOR<UserScalarRelationFilter, UserWhereInput>;
@@ -26258,8 +29528,8 @@ export namespace Prisma {
 
   export type CartItemOrderByWithAggregationInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     quantity?: SortOrder;
     productId?: SortOrder;
     userId?: SortOrder;
@@ -26274,11 +29544,11 @@ export namespace Prisma {
     AND?: CartItemScalarWhereWithAggregatesInput | CartItemScalarWhereWithAggregatesInput[];
     OR?: CartItemScalarWhereWithAggregatesInput[];
     NOT?: CartItemScalarWhereWithAggregatesInput | CartItemScalarWhereWithAggregatesInput[];
-    id?: StringWithAggregatesFilter<'CartItem'> | string;
-    createAt?: DateTimeWithAggregatesFilter<'CartItem'> | Date | string;
-    updateAt?: DateTimeWithAggregatesFilter<'CartItem'> | Date | string;
+    id?: UuidWithAggregatesFilter<'CartItem'> | string;
+    createdAt?: DateTimeWithAggregatesFilter<'CartItem'> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<'CartItem'> | Date | string;
     quantity?: IntWithAggregatesFilter<'CartItem'> | number;
-    productId?: StringWithAggregatesFilter<'CartItem'> | string;
+    productId?: UuidWithAggregatesFilter<'CartItem'> | string;
     userId?: UuidWithAggregatesFilter<'CartItem'> | string;
   };
 
@@ -26288,8 +29558,8 @@ export namespace Prisma {
     NOT?: TicketWhereInput | TicketWhereInput[];
     id?: UuidFilter<'Ticket'> | string;
     numericalOrder?: IntFilter<'Ticket'> | number;
-    createAt?: DateTimeFilter<'Ticket'> | Date | string;
-    updateAt?: DateTimeFilter<'Ticket'> | Date | string;
+    createdAt?: DateTimeFilter<'Ticket'> | Date | string;
+    updatedAt?: DateTimeFilter<'Ticket'> | Date | string;
     title?: StringFilter<'Ticket'> | string;
     description?: StringFilter<'Ticket'> | string;
     status?: EnumTicketStatusFilter<'Ticket'> | $Enums.TicketStatus;
@@ -26297,10 +29567,10 @@ export namespace Prisma {
     priority?: EnumTicketPriorityFilter<'Ticket'> | $Enums.TicketPriority;
     attachments?: StringNullableListFilter<'Ticket'>;
     authorId?: UuidFilter<'Ticket'> | string;
-    assignedId?: UuidNullableFilter<'Ticket'> | string | null;
+    assignId?: UuidNullableFilter<'Ticket'> | string | null;
     contexts?: TicketContextListRelationFilter;
     author?: XOR<UserScalarRelationFilter, UserWhereInput>;
-    assigned?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null;
+    assign?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null;
     messages?: TicketMessageListRelationFilter;
     members?: TicketMemberListRelationFilter;
   };
@@ -26308,8 +29578,8 @@ export namespace Prisma {
   export type TicketOrderByWithRelationInput = {
     id?: SortOrder;
     numericalOrder?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     title?: SortOrder;
     description?: SortOrder;
     status?: SortOrder;
@@ -26317,10 +29587,10 @@ export namespace Prisma {
     priority?: SortOrder;
     attachments?: SortOrder;
     authorId?: SortOrder;
-    assignedId?: SortOrderInput | SortOrder;
+    assignId?: SortOrderInput | SortOrder;
     contexts?: TicketContextOrderByRelationAggregateInput;
     author?: UserOrderByWithRelationInput;
-    assigned?: UserOrderByWithRelationInput;
+    assign?: UserOrderByWithRelationInput;
     messages?: TicketMessageOrderByRelationAggregateInput;
     members?: TicketMemberOrderByRelationAggregateInput;
   };
@@ -26332,8 +29602,8 @@ export namespace Prisma {
       OR?: TicketWhereInput[];
       NOT?: TicketWhereInput | TicketWhereInput[];
       numericalOrder?: IntFilter<'Ticket'> | number;
-      createAt?: DateTimeFilter<'Ticket'> | Date | string;
-      updateAt?: DateTimeFilter<'Ticket'> | Date | string;
+      createdAt?: DateTimeFilter<'Ticket'> | Date | string;
+      updatedAt?: DateTimeFilter<'Ticket'> | Date | string;
       title?: StringFilter<'Ticket'> | string;
       description?: StringFilter<'Ticket'> | string;
       status?: EnumTicketStatusFilter<'Ticket'> | $Enums.TicketStatus;
@@ -26341,10 +29611,10 @@ export namespace Prisma {
       priority?: EnumTicketPriorityFilter<'Ticket'> | $Enums.TicketPriority;
       attachments?: StringNullableListFilter<'Ticket'>;
       authorId?: UuidFilter<'Ticket'> | string;
-      assignedId?: UuidNullableFilter<'Ticket'> | string | null;
+      assignId?: UuidNullableFilter<'Ticket'> | string | null;
       contexts?: TicketContextListRelationFilter;
       author?: XOR<UserScalarRelationFilter, UserWhereInput>;
-      assigned?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null;
+      assign?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null;
       messages?: TicketMessageListRelationFilter;
       members?: TicketMemberListRelationFilter;
     },
@@ -26354,8 +29624,8 @@ export namespace Prisma {
   export type TicketOrderByWithAggregationInput = {
     id?: SortOrder;
     numericalOrder?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     title?: SortOrder;
     description?: SortOrder;
     status?: SortOrder;
@@ -26363,7 +29633,7 @@ export namespace Prisma {
     priority?: SortOrder;
     attachments?: SortOrder;
     authorId?: SortOrder;
-    assignedId?: SortOrderInput | SortOrder;
+    assignId?: SortOrderInput | SortOrder;
     _count?: TicketCountOrderByAggregateInput;
     _avg?: TicketAvgOrderByAggregateInput;
     _max?: TicketMaxOrderByAggregateInput;
@@ -26377,8 +29647,8 @@ export namespace Prisma {
     NOT?: TicketScalarWhereWithAggregatesInput | TicketScalarWhereWithAggregatesInput[];
     id?: UuidWithAggregatesFilter<'Ticket'> | string;
     numericalOrder?: IntWithAggregatesFilter<'Ticket'> | number;
-    createAt?: DateTimeWithAggregatesFilter<'Ticket'> | Date | string;
-    updateAt?: DateTimeWithAggregatesFilter<'Ticket'> | Date | string;
+    createdAt?: DateTimeWithAggregatesFilter<'Ticket'> | Date | string;
+    updatedAt?: DateTimeWithAggregatesFilter<'Ticket'> | Date | string;
     title?: StringWithAggregatesFilter<'Ticket'> | string;
     description?: StringWithAggregatesFilter<'Ticket'> | string;
     status?: EnumTicketStatusWithAggregatesFilter<'Ticket'> | $Enums.TicketStatus;
@@ -26386,7 +29656,7 @@ export namespace Prisma {
     priority?: EnumTicketPriorityWithAggregatesFilter<'Ticket'> | $Enums.TicketPriority;
     attachments?: StringNullableListFilter<'Ticket'>;
     authorId?: UuidWithAggregatesFilter<'Ticket'> | string;
-    assignedId?: UuidNullableWithAggregatesFilter<'Ticket'> | string | null;
+    assignId?: UuidNullableWithAggregatesFilter<'Ticket'> | string | null;
   };
 
   export type TicketMemberWhereInput = {
@@ -26596,8 +29866,8 @@ export namespace Prisma {
 
   export type AuthenticationCreateInput = {
     code: string;
-    type: $Enums.AuthType;
     retryTime?: number;
+    type: $Enums.AuthType;
     lastSentAt: Date | string;
     expiresAt: Date | string;
     user: UserCreateNestedOneWithoutAuthInput;
@@ -26605,8 +29875,8 @@ export namespace Prisma {
 
   export type AuthenticationUncheckedCreateInput = {
     code: string;
-    type: $Enums.AuthType;
     retryTime?: number;
+    type: $Enums.AuthType;
     lastSentAt: Date | string;
     expiresAt: Date | string;
     userId: string;
@@ -26614,8 +29884,8 @@ export namespace Prisma {
 
   export type AuthenticationUpdateInput = {
     code?: StringFieldUpdateOperationsInput | string;
-    type?: EnumAuthTypeFieldUpdateOperationsInput | $Enums.AuthType;
     retryTime?: IntFieldUpdateOperationsInput | number;
+    type?: EnumAuthTypeFieldUpdateOperationsInput | $Enums.AuthType;
     lastSentAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     user?: UserUpdateOneRequiredWithoutAuthNestedInput;
@@ -26623,8 +29893,8 @@ export namespace Prisma {
 
   export type AuthenticationUncheckedUpdateInput = {
     code?: StringFieldUpdateOperationsInput | string;
-    type?: EnumAuthTypeFieldUpdateOperationsInput | $Enums.AuthType;
     retryTime?: IntFieldUpdateOperationsInput | number;
+    type?: EnumAuthTypeFieldUpdateOperationsInput | $Enums.AuthType;
     lastSentAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     userId?: StringFieldUpdateOperationsInput | string;
@@ -26632,8 +29902,8 @@ export namespace Prisma {
 
   export type AuthenticationCreateManyInput = {
     code: string;
-    type: $Enums.AuthType;
     retryTime?: number;
+    type: $Enums.AuthType;
     lastSentAt: Date | string;
     expiresAt: Date | string;
     userId: string;
@@ -26641,16 +29911,16 @@ export namespace Prisma {
 
   export type AuthenticationUpdateManyMutationInput = {
     code?: StringFieldUpdateOperationsInput | string;
-    type?: EnumAuthTypeFieldUpdateOperationsInput | $Enums.AuthType;
     retryTime?: IntFieldUpdateOperationsInput | number;
+    type?: EnumAuthTypeFieldUpdateOperationsInput | $Enums.AuthType;
     lastSentAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type AuthenticationUncheckedUpdateManyInput = {
     code?: StringFieldUpdateOperationsInput | string;
-    type?: EnumAuthTypeFieldUpdateOperationsInput | $Enums.AuthType;
     retryTime?: IntFieldUpdateOperationsInput | number;
+    type?: EnumAuthTypeFieldUpdateOperationsInput | $Enums.AuthType;
     lastSentAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     userId?: StringFieldUpdateOperationsInput | string;
@@ -26659,67 +29929,61 @@ export namespace Prisma {
   export type MfaSetupCreateInput = {
     id?: string;
     type: $Enums.MfaType;
-    isEnabled?: boolean;
     secret?: string | null;
     phone?: string | null;
     email?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
-    user: UserCreateNestedOneWithoutMfaSetupsInput;
+    user: UserSecurityCreateNestedOneWithoutMfaSetupsInput;
   };
 
   export type MfaSetupUncheckedCreateInput = {
     id?: string;
-    userId: string;
     type: $Enums.MfaType;
-    isEnabled?: boolean;
     secret?: string | null;
     phone?: string | null;
     email?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    userId: string;
   };
 
   export type MfaSetupUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
     type?: EnumMfaTypeFieldUpdateOperationsInput | $Enums.MfaType;
-    isEnabled?: BoolFieldUpdateOperationsInput | boolean;
     secret?: NullableStringFieldUpdateOperationsInput | string | null;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
     email?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    user?: UserUpdateOneRequiredWithoutMfaSetupsNestedInput;
+    user?: UserSecurityUpdateOneRequiredWithoutMfaSetupsNestedInput;
   };
 
   export type MfaSetupUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    userId?: StringFieldUpdateOperationsInput | string;
     type?: EnumMfaTypeFieldUpdateOperationsInput | $Enums.MfaType;
-    isEnabled?: BoolFieldUpdateOperationsInput | boolean;
     secret?: NullableStringFieldUpdateOperationsInput | string | null;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
     email?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    userId?: StringFieldUpdateOperationsInput | string;
   };
 
   export type MfaSetupCreateManyInput = {
     id?: string;
-    userId: string;
     type: $Enums.MfaType;
-    isEnabled?: boolean;
     secret?: string | null;
     phone?: string | null;
     email?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    userId: string;
   };
 
   export type MfaSetupUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string;
     type?: EnumMfaTypeFieldUpdateOperationsInput | $Enums.MfaType;
-    isEnabled?: BoolFieldUpdateOperationsInput | boolean;
     secret?: NullableStringFieldUpdateOperationsInput | string | null;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
     email?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -26729,14 +29993,13 @@ export namespace Prisma {
 
   export type MfaSetupUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    userId?: StringFieldUpdateOperationsInput | string;
     type?: EnumMfaTypeFieldUpdateOperationsInput | $Enums.MfaType;
-    isEnabled?: BoolFieldUpdateOperationsInput | boolean;
     secret?: NullableStringFieldUpdateOperationsInput | string | null;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
     email?: NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    userId?: StringFieldUpdateOperationsInput | string;
   };
 
   export type MfaBackupCodeCreateInput = {
@@ -26745,7 +30008,7 @@ export namespace Prisma {
     isUsed?: boolean;
     usedAt?: Date | string | null;
     createdAt?: Date | string;
-    user: UserCreateNestedOneWithoutBackupCodesInput;
+    user: UserSecurityCreateNestedOneWithoutBackupCodesInput;
   };
 
   export type MfaBackupCodeUncheckedCreateInput = {
@@ -26763,7 +30026,7 @@ export namespace Prisma {
     isUsed?: BoolFieldUpdateOperationsInput | boolean;
     usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    user?: UserUpdateOneRequiredWithoutBackupCodesNestedInput;
+    user?: UserSecurityUpdateOneRequiredWithoutBackupCodesNestedInput;
   };
 
   export type MfaBackupCodeUncheckedUpdateInput = {
@@ -26886,8 +30149,8 @@ export namespace Prisma {
 
   export type OrderCreateInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     totalPrice: number;
     user: UserCreateNestedOneWithoutOrdersInput;
     bill: BillCreateNestedOneWithoutOrderInput;
@@ -26896,8 +30159,8 @@ export namespace Prisma {
 
   export type OrderUncheckedCreateInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     totalPrice: number;
     userId: string;
     billId: string;
@@ -26906,8 +30169,8 @@ export namespace Prisma {
 
   export type OrderUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     totalPrice?: IntFieldUpdateOperationsInput | number;
     user?: UserUpdateOneRequiredWithoutOrdersNestedInput;
     bill?: BillUpdateOneRequiredWithoutOrderNestedInput;
@@ -26916,8 +30179,8 @@ export namespace Prisma {
 
   export type OrderUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     totalPrice?: IntFieldUpdateOperationsInput | number;
     userId?: StringFieldUpdateOperationsInput | string;
     billId?: StringFieldUpdateOperationsInput | string;
@@ -26926,8 +30189,8 @@ export namespace Prisma {
 
   export type OrderCreateManyInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     totalPrice: number;
     userId: string;
     billId: string;
@@ -26935,15 +30198,15 @@ export namespace Prisma {
 
   export type OrderUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     totalPrice?: IntFieldUpdateOperationsInput | number;
   };
 
   export type OrderUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     totalPrice?: IntFieldUpdateOperationsInput | number;
     userId?: StringFieldUpdateOperationsInput | string;
     billId?: StringFieldUpdateOperationsInput | string;
@@ -27018,8 +30281,8 @@ export namespace Prisma {
 
   export type ProductCreateInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     sku?: string | null;
     isActive?: boolean;
     slug: string;
@@ -27042,8 +30305,8 @@ export namespace Prisma {
 
   export type ProductUncheckedCreateInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     sku?: string | null;
     isActive?: boolean;
     slug: string;
@@ -27066,8 +30329,8 @@ export namespace Prisma {
 
   export type ProductUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sku?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
     slug?: StringFieldUpdateOperationsInput | string;
@@ -27090,8 +30353,8 @@ export namespace Prisma {
 
   export type ProductUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sku?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
     slug?: StringFieldUpdateOperationsInput | string;
@@ -27114,8 +30377,8 @@ export namespace Prisma {
 
   export type ProductCreateManyInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     sku?: string | null;
     isActive?: boolean;
     slug: string;
@@ -27134,8 +30397,8 @@ export namespace Prisma {
 
   export type ProductUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sku?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
     slug?: StringFieldUpdateOperationsInput | string;
@@ -27152,8 +30415,8 @@ export namespace Prisma {
 
   export type ProductUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sku?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
     slug?: StringFieldUpdateOperationsInput | string;
@@ -27348,7 +30611,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -27358,17 +30622,21 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
     products?: ProductCreateNestedManyWithoutSellerInput;
     cart?: CartItemCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketCreateNestedManyWithoutAssignInput;
     ticketMembers?: TicketMemberCreateNestedManyWithoutUserInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
@@ -27380,7 +30648,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -27390,17 +30659,21 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
     products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
     cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketUncheckedCreateNestedManyWithoutAssignInput;
     ticketMembers?: TicketMemberUncheckedCreateNestedManyWithoutUserInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
@@ -27412,7 +30685,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -27422,17 +30696,21 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
     products?: ProductUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUpdateManyWithoutAssignNestedInput;
     ticketMembers?: TicketMemberUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
@@ -27444,7 +30722,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -27454,17 +30733,21 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
     products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUncheckedUpdateManyWithoutAssignNestedInput;
     ticketMembers?: TicketMemberUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
@@ -27476,7 +30759,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -27486,9 +30770,13 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
   };
 
   export type UserUpdateManyMutationInput = {
@@ -27496,7 +30784,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -27506,9 +30795,13 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
   };
 
   export type UserUncheckedUpdateManyInput = {
@@ -27516,7 +30809,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -27526,15 +30820,256 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+  };
+
+  export type UserSecurityCreateInput = {
+    mfaEnabled?: boolean;
+    mfaEnabledAt?: Date | string | null;
+    mfaDisabledAt?: Date | string | null;
+    totpEnabled?: boolean;
+    totpEnabledAt?: Date | string | null;
+    totpDisabledAt?: Date | string | null;
+    backupCodesEnabled?: boolean;
+    backupCodesEnabledAt?: Date | string | null;
+    backupCodesDisabledAt?: Date | string | null;
+    verificationAttemptsRemaining?: number;
+    verificationAttemptsResetAt?: Date | string | null;
+    updatedAt?: Date | string;
+    mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
+    backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
+    user: UserCreateNestedOneWithoutSecurityInput;
+  };
+
+  export type UserSecurityUncheckedCreateInput = {
+    userId: string;
+    mfaEnabled?: boolean;
+    mfaEnabledAt?: Date | string | null;
+    mfaDisabledAt?: Date | string | null;
+    totpEnabled?: boolean;
+    totpEnabledAt?: Date | string | null;
+    totpDisabledAt?: Date | string | null;
+    backupCodesEnabled?: boolean;
+    backupCodesEnabledAt?: Date | string | null;
+    backupCodesDisabledAt?: Date | string | null;
+    verificationAttemptsRemaining?: number;
+    verificationAttemptsResetAt?: Date | string | null;
+    updatedAt?: Date | string;
+    mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
+    backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserSecurityUpdateInput = {
+    mfaEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    mfaEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    mfaDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    totpEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    backupCodesEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    verificationAttemptsRemaining?: IntFieldUpdateOperationsInput | number;
+    verificationAttemptsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
+    backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
+    user?: UserUpdateOneRequiredWithoutSecurityNestedInput;
+  };
+
+  export type UserSecurityUncheckedUpdateInput = {
+    userId?: StringFieldUpdateOperationsInput | string;
+    mfaEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    mfaEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    mfaDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    totpEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    backupCodesEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    verificationAttemptsRemaining?: IntFieldUpdateOperationsInput | number;
+    verificationAttemptsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
+    backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserSecurityCreateManyInput = {
+    userId: string;
+    mfaEnabled?: boolean;
+    mfaEnabledAt?: Date | string | null;
+    mfaDisabledAt?: Date | string | null;
+    totpEnabled?: boolean;
+    totpEnabledAt?: Date | string | null;
+    totpDisabledAt?: Date | string | null;
+    backupCodesEnabled?: boolean;
+    backupCodesEnabledAt?: Date | string | null;
+    backupCodesDisabledAt?: Date | string | null;
+    verificationAttemptsRemaining?: number;
+    verificationAttemptsResetAt?: Date | string | null;
+    updatedAt?: Date | string;
+  };
+
+  export type UserSecurityUpdateManyMutationInput = {
+    mfaEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    mfaEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    mfaDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    totpEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    backupCodesEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    verificationAttemptsRemaining?: IntFieldUpdateOperationsInput | number;
+    verificationAttemptsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type UserSecurityUncheckedUpdateManyInput = {
+    userId?: StringFieldUpdateOperationsInput | string;
+    mfaEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    mfaEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    mfaDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    totpEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    backupCodesEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    verificationAttemptsRemaining?: IntFieldUpdateOperationsInput | number;
+    verificationAttemptsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type ExternalAccountCreateInput = {
+    id?: string;
+    provider: $Enums.ProviderPlatform;
+    providerUserId: string;
+    approvedScope: string;
+    emailAddress: string;
+    phoneNumber?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    fullName?: string | null;
+    username?: string | null;
+    avatarUrl?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    user: UserCreateNestedOneWithoutExternalAccountsInput;
+  };
+
+  export type ExternalAccountUncheckedCreateInput = {
+    id?: string;
+    provider: $Enums.ProviderPlatform;
+    providerUserId: string;
+    approvedScope: string;
+    emailAddress: string;
+    phoneNumber?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    fullName?: string | null;
+    username?: string | null;
+    avatarUrl?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    userId: string;
+  };
+
+  export type ExternalAccountUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    provider?: EnumProviderPlatformFieldUpdateOperationsInput | $Enums.ProviderPlatform;
+    providerUserId?: StringFieldUpdateOperationsInput | string;
+    approvedScope?: StringFieldUpdateOperationsInput | string;
+    emailAddress?: StringFieldUpdateOperationsInput | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null;
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null;
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null;
+    username?: NullableStringFieldUpdateOperationsInput | string | null;
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    user?: UserUpdateOneRequiredWithoutExternalAccountsNestedInput;
+  };
+
+  export type ExternalAccountUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    provider?: EnumProviderPlatformFieldUpdateOperationsInput | $Enums.ProviderPlatform;
+    providerUserId?: StringFieldUpdateOperationsInput | string;
+    approvedScope?: StringFieldUpdateOperationsInput | string;
+    emailAddress?: StringFieldUpdateOperationsInput | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null;
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null;
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null;
+    username?: NullableStringFieldUpdateOperationsInput | string | null;
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    userId?: StringFieldUpdateOperationsInput | string;
+  };
+
+  export type ExternalAccountCreateManyInput = {
+    id?: string;
+    provider: $Enums.ProviderPlatform;
+    providerUserId: string;
+    approvedScope: string;
+    emailAddress: string;
+    phoneNumber?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    fullName?: string | null;
+    username?: string | null;
+    avatarUrl?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    userId: string;
+  };
+
+  export type ExternalAccountUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    provider?: EnumProviderPlatformFieldUpdateOperationsInput | $Enums.ProviderPlatform;
+    providerUserId?: StringFieldUpdateOperationsInput | string;
+    approvedScope?: StringFieldUpdateOperationsInput | string;
+    emailAddress?: StringFieldUpdateOperationsInput | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null;
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null;
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null;
+    username?: NullableStringFieldUpdateOperationsInput | string | null;
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type ExternalAccountUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    provider?: EnumProviderPlatformFieldUpdateOperationsInput | $Enums.ProviderPlatform;
+    providerUserId?: StringFieldUpdateOperationsInput | string;
+    approvedScope?: StringFieldUpdateOperationsInput | string;
+    emailAddress?: StringFieldUpdateOperationsInput | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null;
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null;
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null;
+    username?: NullableStringFieldUpdateOperationsInput | string | null;
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    userId?: StringFieldUpdateOperationsInput | string;
   };
 
   export type BillCreateInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     transactionId?: string | null;
     paymentMethod: $Enums.PaymentMethod;
     type: $Enums.BillType;
@@ -27547,8 +31082,8 @@ export namespace Prisma {
 
   export type BillUncheckedCreateInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     transactionId?: string | null;
     paymentMethod: $Enums.PaymentMethod;
     type: $Enums.BillType;
@@ -27561,8 +31096,8 @@ export namespace Prisma {
 
   export type BillUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
     type?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType;
@@ -27575,8 +31110,8 @@ export namespace Prisma {
 
   export type BillUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
     type?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType;
@@ -27589,8 +31124,8 @@ export namespace Prisma {
 
   export type BillCreateManyInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     transactionId?: string | null;
     paymentMethod: $Enums.PaymentMethod;
     type: $Enums.BillType;
@@ -27602,8 +31137,8 @@ export namespace Prisma {
 
   export type BillUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
     type?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType;
@@ -27614,8 +31149,8 @@ export namespace Prisma {
 
   export type BillUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
     type?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType;
@@ -27627,8 +31162,8 @@ export namespace Prisma {
 
   export type CartItemCreateInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     quantity?: number;
     product: ProductCreateNestedOneWithoutCartItemInput;
     user: UserCreateNestedOneWithoutCartInput;
@@ -27636,8 +31171,8 @@ export namespace Prisma {
 
   export type CartItemUncheckedCreateInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     quantity?: number;
     productId: string;
     userId: string;
@@ -27645,8 +31180,8 @@ export namespace Prisma {
 
   export type CartItemUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
     product?: ProductUpdateOneRequiredWithoutCartItemNestedInput;
     user?: UserUpdateOneRequiredWithoutCartNestedInput;
@@ -27654,8 +31189,8 @@ export namespace Prisma {
 
   export type CartItemUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
     productId?: StringFieldUpdateOperationsInput | string;
     userId?: StringFieldUpdateOperationsInput | string;
@@ -27663,8 +31198,8 @@ export namespace Prisma {
 
   export type CartItemCreateManyInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     quantity?: number;
     productId: string;
     userId: string;
@@ -27672,15 +31207,15 @@ export namespace Prisma {
 
   export type CartItemUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
   };
 
   export type CartItemUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
     productId?: StringFieldUpdateOperationsInput | string;
     userId?: StringFieldUpdateOperationsInput | string;
@@ -27689,8 +31224,8 @@ export namespace Prisma {
   export type TicketCreateInput = {
     id?: string;
     numericalOrder?: number;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     title: string;
     description: string;
     status?: $Enums.TicketStatus;
@@ -27699,7 +31234,7 @@ export namespace Prisma {
     attachments?: TicketCreateattachmentsInput | string[];
     contexts?: TicketContextCreateNestedManyWithoutTicketInput;
     author: UserCreateNestedOneWithoutTicketAuthorInput;
-    assigned?: UserCreateNestedOneWithoutTicketAssignedInput;
+    assign?: UserCreateNestedOneWithoutTicketAssignInput;
     messages?: TicketMessageCreateNestedManyWithoutTicketInput;
     members?: TicketMemberCreateNestedManyWithoutTicketInput;
   };
@@ -27707,8 +31242,8 @@ export namespace Prisma {
   export type TicketUncheckedCreateInput = {
     id?: string;
     numericalOrder?: number;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     title: string;
     description: string;
     status?: $Enums.TicketStatus;
@@ -27716,7 +31251,7 @@ export namespace Prisma {
     priority: $Enums.TicketPriority;
     attachments?: TicketCreateattachmentsInput | string[];
     authorId: string;
-    assignedId?: string | null;
+    assignId?: string | null;
     contexts?: TicketContextUncheckedCreateNestedManyWithoutTicketInput;
     messages?: TicketMessageUncheckedCreateNestedManyWithoutTicketInput;
     members?: TicketMemberUncheckedCreateNestedManyWithoutTicketInput;
@@ -27725,8 +31260,8 @@ export namespace Prisma {
   export type TicketUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
     numericalOrder?: IntFieldUpdateOperationsInput | number;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
@@ -27735,7 +31270,7 @@ export namespace Prisma {
     attachments?: TicketUpdateattachmentsInput | string[];
     contexts?: TicketContextUpdateManyWithoutTicketNestedInput;
     author?: UserUpdateOneRequiredWithoutTicketAuthorNestedInput;
-    assigned?: UserUpdateOneWithoutTicketAssignedNestedInput;
+    assign?: UserUpdateOneWithoutTicketAssignNestedInput;
     messages?: TicketMessageUpdateManyWithoutTicketNestedInput;
     members?: TicketMemberUpdateManyWithoutTicketNestedInput;
   };
@@ -27743,8 +31278,8 @@ export namespace Prisma {
   export type TicketUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string;
     numericalOrder?: IntFieldUpdateOperationsInput | number;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
@@ -27752,7 +31287,7 @@ export namespace Prisma {
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
     attachments?: TicketUpdateattachmentsInput | string[];
     authorId?: StringFieldUpdateOperationsInput | string;
-    assignedId?: NullableStringFieldUpdateOperationsInput | string | null;
+    assignId?: NullableStringFieldUpdateOperationsInput | string | null;
     contexts?: TicketContextUncheckedUpdateManyWithoutTicketNestedInput;
     messages?: TicketMessageUncheckedUpdateManyWithoutTicketNestedInput;
     members?: TicketMemberUncheckedUpdateManyWithoutTicketNestedInput;
@@ -27761,8 +31296,8 @@ export namespace Prisma {
   export type TicketCreateManyInput = {
     id?: string;
     numericalOrder?: number;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     title: string;
     description: string;
     status?: $Enums.TicketStatus;
@@ -27770,14 +31305,14 @@ export namespace Prisma {
     priority: $Enums.TicketPriority;
     attachments?: TicketCreateattachmentsInput | string[];
     authorId: string;
-    assignedId?: string | null;
+    assignId?: string | null;
   };
 
   export type TicketUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string;
     numericalOrder?: IntFieldUpdateOperationsInput | number;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
@@ -27789,8 +31324,8 @@ export namespace Prisma {
   export type TicketUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string;
     numericalOrder?: IntFieldUpdateOperationsInput | number;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
@@ -27798,7 +31333,7 @@ export namespace Prisma {
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
     attachments?: TicketUpdateattachmentsInput | string[];
     authorId?: StringFieldUpdateOperationsInput | string;
-    assignedId?: NullableStringFieldUpdateOperationsInput | string | null;
+    assignId?: NullableStringFieldUpdateOperationsInput | string | null;
   };
 
   export type TicketMemberCreateInput = {
@@ -28007,13 +31542,6 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string;
   };
 
-  export type EnumAuthTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.AuthType | EnumAuthTypeFieldRefInput<$PrismaModel>;
-    in?: $Enums.AuthType[] | ListEnumAuthTypeFieldRefInput<$PrismaModel>;
-    notIn?: $Enums.AuthType[] | ListEnumAuthTypeFieldRefInput<$PrismaModel>;
-    not?: NestedEnumAuthTypeFilter<$PrismaModel> | $Enums.AuthType;
-  };
-
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>;
     in?: number[] | ListIntFieldRefInput<$PrismaModel>;
@@ -28023,6 +31551,13 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>;
     gte?: number | IntFieldRefInput<$PrismaModel>;
     not?: NestedIntFilter<$PrismaModel> | number;
+  };
+
+  export type EnumAuthTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.AuthType | EnumAuthTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.AuthType[] | ListEnumAuthTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.AuthType[] | ListEnumAuthTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumAuthTypeFilter<$PrismaModel> | $Enums.AuthType;
   };
 
   export type DateTimeFilter<$PrismaModel = never> = {
@@ -28060,8 +31595,8 @@ export namespace Prisma {
 
   export type AuthenticationCountOrderByAggregateInput = {
     code?: SortOrder;
-    type?: SortOrder;
     retryTime?: SortOrder;
+    type?: SortOrder;
     lastSentAt?: SortOrder;
     expiresAt?: SortOrder;
     userId?: SortOrder;
@@ -28073,8 +31608,8 @@ export namespace Prisma {
 
   export type AuthenticationMaxOrderByAggregateInput = {
     code?: SortOrder;
-    type?: SortOrder;
     retryTime?: SortOrder;
+    type?: SortOrder;
     lastSentAt?: SortOrder;
     expiresAt?: SortOrder;
     userId?: SortOrder;
@@ -28082,8 +31617,8 @@ export namespace Prisma {
 
   export type AuthenticationMinOrderByAggregateInput = {
     code?: SortOrder;
-    type?: SortOrder;
     retryTime?: SortOrder;
+    type?: SortOrder;
     lastSentAt?: SortOrder;
     expiresAt?: SortOrder;
     userId?: SortOrder;
@@ -28111,16 +31646,6 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>;
   };
 
-  export type EnumAuthTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.AuthType | EnumAuthTypeFieldRefInput<$PrismaModel>;
-    in?: $Enums.AuthType[] | ListEnumAuthTypeFieldRefInput<$PrismaModel>;
-    notIn?: $Enums.AuthType[] | ListEnumAuthTypeFieldRefInput<$PrismaModel>;
-    not?: NestedEnumAuthTypeWithAggregatesFilter<$PrismaModel> | $Enums.AuthType;
-    _count?: NestedIntFilter<$PrismaModel>;
-    _min?: NestedEnumAuthTypeFilter<$PrismaModel>;
-    _max?: NestedEnumAuthTypeFilter<$PrismaModel>;
-  };
-
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>;
     in?: number[] | ListIntFieldRefInput<$PrismaModel>;
@@ -28135,6 +31660,16 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>;
     _min?: NestedIntFilter<$PrismaModel>;
     _max?: NestedIntFilter<$PrismaModel>;
+  };
+
+  export type EnumAuthTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AuthType | EnumAuthTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.AuthType[] | ListEnumAuthTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.AuthType[] | ListEnumAuthTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumAuthTypeWithAggregatesFilter<$PrismaModel> | $Enums.AuthType;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumAuthTypeFilter<$PrismaModel>;
+    _max?: NestedEnumAuthTypeFilter<$PrismaModel>;
   };
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -28173,11 +31708,6 @@ export namespace Prisma {
     not?: NestedEnumMfaTypeFilter<$PrismaModel> | $Enums.MfaType;
   };
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>;
-    not?: NestedBoolFilter<$PrismaModel> | boolean;
-  };
-
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null;
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null;
@@ -28193,6 +31723,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null;
   };
 
+  export type UserSecurityScalarRelationFilter = {
+    is?: UserSecurityWhereInput;
+    isNot?: UserSecurityWhereInput;
+  };
+
   export type SortOrderInput = {
     sort: SortOrder;
     nulls?: NullsOrder;
@@ -28205,38 +31740,35 @@ export namespace Prisma {
 
   export type MfaSetupCountOrderByAggregateInput = {
     id?: SortOrder;
-    userId?: SortOrder;
     type?: SortOrder;
-    isEnabled?: SortOrder;
     secret?: SortOrder;
     phone?: SortOrder;
     email?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
+    userId?: SortOrder;
   };
 
   export type MfaSetupMaxOrderByAggregateInput = {
     id?: SortOrder;
-    userId?: SortOrder;
     type?: SortOrder;
-    isEnabled?: SortOrder;
     secret?: SortOrder;
     phone?: SortOrder;
     email?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
+    userId?: SortOrder;
   };
 
   export type MfaSetupMinOrderByAggregateInput = {
     id?: SortOrder;
-    userId?: SortOrder;
     type?: SortOrder;
-    isEnabled?: SortOrder;
     secret?: SortOrder;
     phone?: SortOrder;
     email?: SortOrder;
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
+    userId?: SortOrder;
   };
 
   export type EnumMfaTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -28247,14 +31779,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>;
     _min?: NestedEnumMfaTypeFilter<$PrismaModel>;
     _max?: NestedEnumMfaTypeFilter<$PrismaModel>;
-  };
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>;
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean;
-    _count?: NestedIntFilter<$PrismaModel>;
-    _min?: NestedBoolFilter<$PrismaModel>;
-    _max?: NestedBoolFilter<$PrismaModel>;
   };
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -28273,6 +31797,11 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>;
     _min?: NestedStringNullableFilter<$PrismaModel>;
     _max?: NestedStringNullableFilter<$PrismaModel>;
+  };
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>;
+    not?: NestedBoolFilter<$PrismaModel> | boolean;
   };
 
   export type DateTimeNullableFilter<$PrismaModel = never> = {
@@ -28316,6 +31845,14 @@ export namespace Prisma {
     usedAt?: SortOrder;
     createdAt?: SortOrder;
     userId?: SortOrder;
+  };
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>;
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedBoolFilter<$PrismaModel>;
+    _max?: NestedBoolFilter<$PrismaModel>;
   };
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -28385,8 +31922,8 @@ export namespace Prisma {
 
   export type OrderCountOrderByAggregateInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     totalPrice?: SortOrder;
     userId?: SortOrder;
     billId?: SortOrder;
@@ -28398,8 +31935,8 @@ export namespace Prisma {
 
   export type OrderMaxOrderByAggregateInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     totalPrice?: SortOrder;
     userId?: SortOrder;
     billId?: SortOrder;
@@ -28407,8 +31944,8 @@ export namespace Prisma {
 
   export type OrderMinOrderByAggregateInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     totalPrice?: SortOrder;
     userId?: SortOrder;
     billId?: SortOrder;
@@ -28543,8 +32080,8 @@ export namespace Prisma {
 
   export type ProductCountOrderByAggregateInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     sku?: SortOrder;
     isActive?: SortOrder;
     slug?: SortOrder;
@@ -28570,8 +32107,8 @@ export namespace Prisma {
 
   export type ProductMaxOrderByAggregateInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     sku?: SortOrder;
     isActive?: SortOrder;
     slug?: SortOrder;
@@ -28587,8 +32124,8 @@ export namespace Prisma {
 
   export type ProductMinOrderByAggregateInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     sku?: SortOrder;
     isActive?: SortOrder;
     slug?: SortOrder;
@@ -28752,28 +32289,27 @@ export namespace Prisma {
     isEmpty?: boolean;
   };
 
+  export type UserSecurityNullableScalarRelationFilter = {
+    is?: UserSecurityWhereInput | null;
+    isNot?: UserSecurityWhereInput | null;
+  };
+
+  export type ExternalAccountListRelationFilter = {
+    every?: ExternalAccountWhereInput;
+    some?: ExternalAccountWhereInput;
+    none?: ExternalAccountWhereInput;
+  };
+
   export type AuthenticationListRelationFilter = {
     every?: AuthenticationWhereInput;
     some?: AuthenticationWhereInput;
     none?: AuthenticationWhereInput;
   };
 
-  export type MfaBackupCodeListRelationFilter = {
-    every?: MfaBackupCodeWhereInput;
-    some?: MfaBackupCodeWhereInput;
-    none?: MfaBackupCodeWhereInput;
-  };
-
   export type LoginSessionListRelationFilter = {
     every?: LoginSessionWhereInput;
     some?: LoginSessionWhereInput;
     none?: LoginSessionWhereInput;
-  };
-
-  export type MfaSetupListRelationFilter = {
-    every?: MfaSetupWhereInput;
-    some?: MfaSetupWhereInput;
-    none?: MfaSetupWhereInput;
   };
 
   export type TicketListRelationFilter = {
@@ -28800,19 +32336,15 @@ export namespace Prisma {
     none?: OrderWhereInput;
   };
 
+  export type ExternalAccountOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
   export type AuthenticationOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
 
-  export type MfaBackupCodeOrderByRelationAggregateInput = {
-    _count?: SortOrder;
-  };
-
   export type LoginSessionOrderByRelationAggregateInput = {
-    _count?: SortOrder;
-  };
-
-  export type MfaSetupOrderByRelationAggregateInput = {
     _count?: SortOrder;
   };
 
@@ -28837,7 +32369,8 @@ export namespace Prisma {
     fullname?: SortOrder;
     email?: SortOrder;
     phone?: SortOrder;
-    isVerified?: SortOrder;
+    web3Wallet?: SortOrder;
+    passwordEnabled?: SortOrder;
     hashedPassword?: SortOrder;
     avatarUrl?: SortOrder;
     address?: SortOrder;
@@ -28847,9 +32380,13 @@ export namespace Prisma {
     biography?: SortOrder;
     roles?: SortOrder;
     flags?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     credit?: SortOrder;
+    isBanned?: SortOrder;
+    isLocked?: SortOrder;
+    isVerified?: SortOrder;
+    lastActiveAt?: SortOrder;
   };
 
   export type UserAvgOrderByAggregateInput = {
@@ -28861,7 +32398,8 @@ export namespace Prisma {
     fullname?: SortOrder;
     email?: SortOrder;
     phone?: SortOrder;
-    isVerified?: SortOrder;
+    web3Wallet?: SortOrder;
+    passwordEnabled?: SortOrder;
     hashedPassword?: SortOrder;
     avatarUrl?: SortOrder;
     address?: SortOrder;
@@ -28869,9 +32407,13 @@ export namespace Prisma {
     state?: SortOrder;
     zipCode?: SortOrder;
     biography?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     credit?: SortOrder;
+    isBanned?: SortOrder;
+    isLocked?: SortOrder;
+    isVerified?: SortOrder;
+    lastActiveAt?: SortOrder;
   };
 
   export type UserMinOrderByAggregateInput = {
@@ -28879,7 +32421,8 @@ export namespace Prisma {
     fullname?: SortOrder;
     email?: SortOrder;
     phone?: SortOrder;
-    isVerified?: SortOrder;
+    web3Wallet?: SortOrder;
+    passwordEnabled?: SortOrder;
     hashedPassword?: SortOrder;
     avatarUrl?: SortOrder;
     address?: SortOrder;
@@ -28887,13 +32430,161 @@ export namespace Prisma {
     state?: SortOrder;
     zipCode?: SortOrder;
     biography?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     credit?: SortOrder;
+    isBanned?: SortOrder;
+    isLocked?: SortOrder;
+    isVerified?: SortOrder;
+    lastActiveAt?: SortOrder;
   };
 
   export type UserSumOrderByAggregateInput = {
     credit?: SortOrder;
+  };
+
+  export type MfaSetupListRelationFilter = {
+    every?: MfaSetupWhereInput;
+    some?: MfaSetupWhereInput;
+    none?: MfaSetupWhereInput;
+  };
+
+  export type MfaBackupCodeListRelationFilter = {
+    every?: MfaBackupCodeWhereInput;
+    some?: MfaBackupCodeWhereInput;
+    none?: MfaBackupCodeWhereInput;
+  };
+
+  export type MfaSetupOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type MfaBackupCodeOrderByRelationAggregateInput = {
+    _count?: SortOrder;
+  };
+
+  export type UserSecurityCountOrderByAggregateInput = {
+    userId?: SortOrder;
+    mfaEnabled?: SortOrder;
+    mfaEnabledAt?: SortOrder;
+    mfaDisabledAt?: SortOrder;
+    totpEnabled?: SortOrder;
+    totpEnabledAt?: SortOrder;
+    totpDisabledAt?: SortOrder;
+    backupCodesEnabled?: SortOrder;
+    backupCodesEnabledAt?: SortOrder;
+    backupCodesDisabledAt?: SortOrder;
+    verificationAttemptsRemaining?: SortOrder;
+    verificationAttemptsResetAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type UserSecurityAvgOrderByAggregateInput = {
+    verificationAttemptsRemaining?: SortOrder;
+  };
+
+  export type UserSecurityMaxOrderByAggregateInput = {
+    userId?: SortOrder;
+    mfaEnabled?: SortOrder;
+    mfaEnabledAt?: SortOrder;
+    mfaDisabledAt?: SortOrder;
+    totpEnabled?: SortOrder;
+    totpEnabledAt?: SortOrder;
+    totpDisabledAt?: SortOrder;
+    backupCodesEnabled?: SortOrder;
+    backupCodesEnabledAt?: SortOrder;
+    backupCodesDisabledAt?: SortOrder;
+    verificationAttemptsRemaining?: SortOrder;
+    verificationAttemptsResetAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type UserSecurityMinOrderByAggregateInput = {
+    userId?: SortOrder;
+    mfaEnabled?: SortOrder;
+    mfaEnabledAt?: SortOrder;
+    mfaDisabledAt?: SortOrder;
+    totpEnabled?: SortOrder;
+    totpEnabledAt?: SortOrder;
+    totpDisabledAt?: SortOrder;
+    backupCodesEnabled?: SortOrder;
+    backupCodesEnabledAt?: SortOrder;
+    backupCodesDisabledAt?: SortOrder;
+    verificationAttemptsRemaining?: SortOrder;
+    verificationAttemptsResetAt?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type UserSecuritySumOrderByAggregateInput = {
+    verificationAttemptsRemaining?: SortOrder;
+  };
+
+  export type EnumProviderPlatformFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProviderPlatform | EnumProviderPlatformFieldRefInput<$PrismaModel>;
+    in?: $Enums.ProviderPlatform[] | ListEnumProviderPlatformFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.ProviderPlatform[] | ListEnumProviderPlatformFieldRefInput<$PrismaModel>;
+    not?: NestedEnumProviderPlatformFilter<$PrismaModel> | $Enums.ProviderPlatform;
+  };
+
+  export type ExternalAccountCountOrderByAggregateInput = {
+    id?: SortOrder;
+    provider?: SortOrder;
+    providerUserId?: SortOrder;
+    approvedScope?: SortOrder;
+    emailAddress?: SortOrder;
+    phoneNumber?: SortOrder;
+    firstName?: SortOrder;
+    lastName?: SortOrder;
+    fullName?: SortOrder;
+    username?: SortOrder;
+    avatarUrl?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    userId?: SortOrder;
+  };
+
+  export type ExternalAccountMaxOrderByAggregateInput = {
+    id?: SortOrder;
+    provider?: SortOrder;
+    providerUserId?: SortOrder;
+    approvedScope?: SortOrder;
+    emailAddress?: SortOrder;
+    phoneNumber?: SortOrder;
+    firstName?: SortOrder;
+    lastName?: SortOrder;
+    fullName?: SortOrder;
+    username?: SortOrder;
+    avatarUrl?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    userId?: SortOrder;
+  };
+
+  export type ExternalAccountMinOrderByAggregateInput = {
+    id?: SortOrder;
+    provider?: SortOrder;
+    providerUserId?: SortOrder;
+    approvedScope?: SortOrder;
+    emailAddress?: SortOrder;
+    phoneNumber?: SortOrder;
+    firstName?: SortOrder;
+    lastName?: SortOrder;
+    fullName?: SortOrder;
+    username?: SortOrder;
+    avatarUrl?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
+    userId?: SortOrder;
+  };
+
+  export type EnumProviderPlatformWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProviderPlatform | EnumProviderPlatformFieldRefInput<$PrismaModel>;
+    in?: $Enums.ProviderPlatform[] | ListEnumProviderPlatformFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.ProviderPlatform[] | ListEnumProviderPlatformFieldRefInput<$PrismaModel>;
+    not?: NestedEnumProviderPlatformWithAggregatesFilter<$PrismaModel> | $Enums.ProviderPlatform;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumProviderPlatformFilter<$PrismaModel>;
+    _max?: NestedEnumProviderPlatformFilter<$PrismaModel>;
   };
 
   export type EnumPaymentMethodFilter<$PrismaModel = never> = {
@@ -28941,8 +32632,8 @@ export namespace Prisma {
 
   export type BillCountOrderByAggregateInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     transactionId?: SortOrder;
     paymentMethod?: SortOrder;
     type?: SortOrder;
@@ -28958,8 +32649,8 @@ export namespace Prisma {
 
   export type BillMaxOrderByAggregateInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     transactionId?: SortOrder;
     paymentMethod?: SortOrder;
     type?: SortOrder;
@@ -28971,8 +32662,8 @@ export namespace Prisma {
 
   export type BillMinOrderByAggregateInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     transactionId?: SortOrder;
     paymentMethod?: SortOrder;
     type?: SortOrder;
@@ -29038,8 +32729,8 @@ export namespace Prisma {
 
   export type CartItemCountOrderByAggregateInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     quantity?: SortOrder;
     productId?: SortOrder;
     userId?: SortOrder;
@@ -29051,8 +32742,8 @@ export namespace Prisma {
 
   export type CartItemMaxOrderByAggregateInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     quantity?: SortOrder;
     productId?: SortOrder;
     userId?: SortOrder;
@@ -29060,8 +32751,8 @@ export namespace Prisma {
 
   export type CartItemMinOrderByAggregateInput = {
     id?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     quantity?: SortOrder;
     productId?: SortOrder;
     userId?: SortOrder;
@@ -29115,8 +32806,8 @@ export namespace Prisma {
   export type TicketCountOrderByAggregateInput = {
     id?: SortOrder;
     numericalOrder?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     title?: SortOrder;
     description?: SortOrder;
     status?: SortOrder;
@@ -29124,7 +32815,7 @@ export namespace Prisma {
     priority?: SortOrder;
     attachments?: SortOrder;
     authorId?: SortOrder;
-    assignedId?: SortOrder;
+    assignId?: SortOrder;
   };
 
   export type TicketAvgOrderByAggregateInput = {
@@ -29134,29 +32825,29 @@ export namespace Prisma {
   export type TicketMaxOrderByAggregateInput = {
     id?: SortOrder;
     numericalOrder?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     title?: SortOrder;
     description?: SortOrder;
     status?: SortOrder;
     category?: SortOrder;
     priority?: SortOrder;
     authorId?: SortOrder;
-    assignedId?: SortOrder;
+    assignId?: SortOrder;
   };
 
   export type TicketMinOrderByAggregateInput = {
     id?: SortOrder;
     numericalOrder?: SortOrder;
-    createAt?: SortOrder;
-    updateAt?: SortOrder;
+    createdAt?: SortOrder;
+    updatedAt?: SortOrder;
     title?: SortOrder;
     description?: SortOrder;
     status?: SortOrder;
     category?: SortOrder;
     priority?: SortOrder;
     authorId?: SortOrder;
-    assignedId?: SortOrder;
+    assignId?: SortOrder;
   };
 
   export type TicketSumOrderByAggregateInput = {
@@ -29324,16 +33015,16 @@ export namespace Prisma {
     set?: string;
   };
 
-  export type EnumAuthTypeFieldUpdateOperationsInput = {
-    set?: $Enums.AuthType;
-  };
-
   export type IntFieldUpdateOperationsInput = {
     set?: number;
     increment?: number;
     decrement?: number;
     multiply?: number;
     divide?: number;
+  };
+
+  export type EnumAuthTypeFieldUpdateOperationsInput = {
+    set?: $Enums.AuthType;
   };
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -29351,53 +33042,53 @@ export namespace Prisma {
     >;
   };
 
-  export type UserCreateNestedOneWithoutMfaSetupsInput = {
-    create?: XOR<UserCreateWithoutMfaSetupsInput, UserUncheckedCreateWithoutMfaSetupsInput>;
-    connectOrCreate?: UserCreateOrConnectWithoutMfaSetupsInput;
-    connect?: UserWhereUniqueInput;
+  export type UserSecurityCreateNestedOneWithoutMfaSetupsInput = {
+    create?: XOR<UserSecurityCreateWithoutMfaSetupsInput, UserSecurityUncheckedCreateWithoutMfaSetupsInput>;
+    connectOrCreate?: UserSecurityCreateOrConnectWithoutMfaSetupsInput;
+    connect?: UserSecurityWhereUniqueInput;
   };
 
   export type EnumMfaTypeFieldUpdateOperationsInput = {
     set?: $Enums.MfaType;
   };
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean;
-  };
-
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null;
   };
 
-  export type UserUpdateOneRequiredWithoutMfaSetupsNestedInput = {
-    create?: XOR<UserCreateWithoutMfaSetupsInput, UserUncheckedCreateWithoutMfaSetupsInput>;
-    connectOrCreate?: UserCreateOrConnectWithoutMfaSetupsInput;
-    upsert?: UserUpsertWithoutMfaSetupsInput;
-    connect?: UserWhereUniqueInput;
+  export type UserSecurityUpdateOneRequiredWithoutMfaSetupsNestedInput = {
+    create?: XOR<UserSecurityCreateWithoutMfaSetupsInput, UserSecurityUncheckedCreateWithoutMfaSetupsInput>;
+    connectOrCreate?: UserSecurityCreateOrConnectWithoutMfaSetupsInput;
+    upsert?: UserSecurityUpsertWithoutMfaSetupsInput;
+    connect?: UserSecurityWhereUniqueInput;
     update?: XOR<
-      XOR<UserUpdateToOneWithWhereWithoutMfaSetupsInput, UserUpdateWithoutMfaSetupsInput>,
-      UserUncheckedUpdateWithoutMfaSetupsInput
+      XOR<UserSecurityUpdateToOneWithWhereWithoutMfaSetupsInput, UserSecurityUpdateWithoutMfaSetupsInput>,
+      UserSecurityUncheckedUpdateWithoutMfaSetupsInput
     >;
   };
 
-  export type UserCreateNestedOneWithoutBackupCodesInput = {
-    create?: XOR<UserCreateWithoutBackupCodesInput, UserUncheckedCreateWithoutBackupCodesInput>;
-    connectOrCreate?: UserCreateOrConnectWithoutBackupCodesInput;
-    connect?: UserWhereUniqueInput;
+  export type UserSecurityCreateNestedOneWithoutBackupCodesInput = {
+    create?: XOR<UserSecurityCreateWithoutBackupCodesInput, UserSecurityUncheckedCreateWithoutBackupCodesInput>;
+    connectOrCreate?: UserSecurityCreateOrConnectWithoutBackupCodesInput;
+    connect?: UserSecurityWhereUniqueInput;
+  };
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean;
   };
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null;
   };
 
-  export type UserUpdateOneRequiredWithoutBackupCodesNestedInput = {
-    create?: XOR<UserCreateWithoutBackupCodesInput, UserUncheckedCreateWithoutBackupCodesInput>;
-    connectOrCreate?: UserCreateOrConnectWithoutBackupCodesInput;
-    upsert?: UserUpsertWithoutBackupCodesInput;
-    connect?: UserWhereUniqueInput;
+  export type UserSecurityUpdateOneRequiredWithoutBackupCodesNestedInput = {
+    create?: XOR<UserSecurityCreateWithoutBackupCodesInput, UserSecurityUncheckedCreateWithoutBackupCodesInput>;
+    connectOrCreate?: UserSecurityCreateOrConnectWithoutBackupCodesInput;
+    upsert?: UserSecurityUpsertWithoutBackupCodesInput;
+    connect?: UserSecurityWhereUniqueInput;
     update?: XOR<
-      XOR<UserUpdateToOneWithWhereWithoutBackupCodesInput, UserUpdateWithoutBackupCodesInput>,
-      UserUncheckedUpdateWithoutBackupCodesInput
+      XOR<UserSecurityUpdateToOneWithWhereWithoutBackupCodesInput, UserSecurityUpdateWithoutBackupCodesInput>,
+      UserSecurityUncheckedUpdateWithoutBackupCodesInput
     >;
   };
 
@@ -30009,6 +33700,22 @@ export namespace Prisma {
     set: $Enums.UserFlag[];
   };
 
+  export type UserSecurityCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserSecurityCreateWithoutUserInput, UserSecurityUncheckedCreateWithoutUserInput>;
+    connectOrCreate?: UserSecurityCreateOrConnectWithoutUserInput;
+    connect?: UserSecurityWhereUniqueInput;
+  };
+
+  export type ExternalAccountCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<ExternalAccountCreateWithoutUserInput, ExternalAccountUncheckedCreateWithoutUserInput>
+      | ExternalAccountCreateWithoutUserInput[]
+      | ExternalAccountUncheckedCreateWithoutUserInput[];
+    connectOrCreate?: ExternalAccountCreateOrConnectWithoutUserInput | ExternalAccountCreateOrConnectWithoutUserInput[];
+    createMany?: ExternalAccountCreateManyUserInputEnvelope;
+    connect?: ExternalAccountWhereUniqueInput | ExternalAccountWhereUniqueInput[];
+  };
+
   export type AuthenticationCreateNestedManyWithoutUserInput = {
     create?:
       | XOR<AuthenticationCreateWithoutUserInput, AuthenticationUncheckedCreateWithoutUserInput>
@@ -30017,16 +33724,6 @@ export namespace Prisma {
     connectOrCreate?: AuthenticationCreateOrConnectWithoutUserInput | AuthenticationCreateOrConnectWithoutUserInput[];
     createMany?: AuthenticationCreateManyUserInputEnvelope;
     connect?: AuthenticationWhereUniqueInput | AuthenticationWhereUniqueInput[];
-  };
-
-  export type MfaBackupCodeCreateNestedManyWithoutUserInput = {
-    create?:
-      | XOR<MfaBackupCodeCreateWithoutUserInput, MfaBackupCodeUncheckedCreateWithoutUserInput>
-      | MfaBackupCodeCreateWithoutUserInput[]
-      | MfaBackupCodeUncheckedCreateWithoutUserInput[];
-    connectOrCreate?: MfaBackupCodeCreateOrConnectWithoutUserInput | MfaBackupCodeCreateOrConnectWithoutUserInput[];
-    createMany?: MfaBackupCodeCreateManyUserInputEnvelope;
-    connect?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
   };
 
   export type LoginSessionCreateNestedManyWithoutUserInput = {
@@ -30059,16 +33756,6 @@ export namespace Prisma {
     connect?: CartItemWhereUniqueInput | CartItemWhereUniqueInput[];
   };
 
-  export type MfaSetupCreateNestedManyWithoutUserInput = {
-    create?:
-      | XOR<MfaSetupCreateWithoutUserInput, MfaSetupUncheckedCreateWithoutUserInput>
-      | MfaSetupCreateWithoutUserInput[]
-      | MfaSetupUncheckedCreateWithoutUserInput[];
-    connectOrCreate?: MfaSetupCreateOrConnectWithoutUserInput | MfaSetupCreateOrConnectWithoutUserInput[];
-    createMany?: MfaSetupCreateManyUserInputEnvelope;
-    connect?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
-  };
-
   export type TicketCreateNestedManyWithoutAuthorInput = {
     create?:
       | XOR<TicketCreateWithoutAuthorInput, TicketUncheckedCreateWithoutAuthorInput>
@@ -30079,13 +33766,13 @@ export namespace Prisma {
     connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[];
   };
 
-  export type TicketCreateNestedManyWithoutAssignedInput = {
+  export type TicketCreateNestedManyWithoutAssignInput = {
     create?:
-      | XOR<TicketCreateWithoutAssignedInput, TicketUncheckedCreateWithoutAssignedInput>
-      | TicketCreateWithoutAssignedInput[]
-      | TicketUncheckedCreateWithoutAssignedInput[];
-    connectOrCreate?: TicketCreateOrConnectWithoutAssignedInput | TicketCreateOrConnectWithoutAssignedInput[];
-    createMany?: TicketCreateManyAssignedInputEnvelope;
+      | XOR<TicketCreateWithoutAssignInput, TicketUncheckedCreateWithoutAssignInput>
+      | TicketCreateWithoutAssignInput[]
+      | TicketUncheckedCreateWithoutAssignInput[];
+    connectOrCreate?: TicketCreateOrConnectWithoutAssignInput | TicketCreateOrConnectWithoutAssignInput[];
+    createMany?: TicketCreateManyAssignInputEnvelope;
     connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[];
   };
 
@@ -30129,6 +33816,22 @@ export namespace Prisma {
     connect?: OrderWhereUniqueInput | OrderWhereUniqueInput[];
   };
 
+  export type UserSecurityUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserSecurityCreateWithoutUserInput, UserSecurityUncheckedCreateWithoutUserInput>;
+    connectOrCreate?: UserSecurityCreateOrConnectWithoutUserInput;
+    connect?: UserSecurityWhereUniqueInput;
+  };
+
+  export type ExternalAccountUncheckedCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<ExternalAccountCreateWithoutUserInput, ExternalAccountUncheckedCreateWithoutUserInput>
+      | ExternalAccountCreateWithoutUserInput[]
+      | ExternalAccountUncheckedCreateWithoutUserInput[];
+    connectOrCreate?: ExternalAccountCreateOrConnectWithoutUserInput | ExternalAccountCreateOrConnectWithoutUserInput[];
+    createMany?: ExternalAccountCreateManyUserInputEnvelope;
+    connect?: ExternalAccountWhereUniqueInput | ExternalAccountWhereUniqueInput[];
+  };
+
   export type AuthenticationUncheckedCreateNestedManyWithoutUserInput = {
     create?:
       | XOR<AuthenticationCreateWithoutUserInput, AuthenticationUncheckedCreateWithoutUserInput>
@@ -30137,16 +33840,6 @@ export namespace Prisma {
     connectOrCreate?: AuthenticationCreateOrConnectWithoutUserInput | AuthenticationCreateOrConnectWithoutUserInput[];
     createMany?: AuthenticationCreateManyUserInputEnvelope;
     connect?: AuthenticationWhereUniqueInput | AuthenticationWhereUniqueInput[];
-  };
-
-  export type MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput = {
-    create?:
-      | XOR<MfaBackupCodeCreateWithoutUserInput, MfaBackupCodeUncheckedCreateWithoutUserInput>
-      | MfaBackupCodeCreateWithoutUserInput[]
-      | MfaBackupCodeUncheckedCreateWithoutUserInput[];
-    connectOrCreate?: MfaBackupCodeCreateOrConnectWithoutUserInput | MfaBackupCodeCreateOrConnectWithoutUserInput[];
-    createMany?: MfaBackupCodeCreateManyUserInputEnvelope;
-    connect?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
   };
 
   export type LoginSessionUncheckedCreateNestedManyWithoutUserInput = {
@@ -30179,16 +33872,6 @@ export namespace Prisma {
     connect?: CartItemWhereUniqueInput | CartItemWhereUniqueInput[];
   };
 
-  export type MfaSetupUncheckedCreateNestedManyWithoutUserInput = {
-    create?:
-      | XOR<MfaSetupCreateWithoutUserInput, MfaSetupUncheckedCreateWithoutUserInput>
-      | MfaSetupCreateWithoutUserInput[]
-      | MfaSetupUncheckedCreateWithoutUserInput[];
-    connectOrCreate?: MfaSetupCreateOrConnectWithoutUserInput | MfaSetupCreateOrConnectWithoutUserInput[];
-    createMany?: MfaSetupCreateManyUserInputEnvelope;
-    connect?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
-  };
-
   export type TicketUncheckedCreateNestedManyWithoutAuthorInput = {
     create?:
       | XOR<TicketCreateWithoutAuthorInput, TicketUncheckedCreateWithoutAuthorInput>
@@ -30199,13 +33882,13 @@ export namespace Prisma {
     connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[];
   };
 
-  export type TicketUncheckedCreateNestedManyWithoutAssignedInput = {
+  export type TicketUncheckedCreateNestedManyWithoutAssignInput = {
     create?:
-      | XOR<TicketCreateWithoutAssignedInput, TicketUncheckedCreateWithoutAssignedInput>
-      | TicketCreateWithoutAssignedInput[]
-      | TicketUncheckedCreateWithoutAssignedInput[];
-    connectOrCreate?: TicketCreateOrConnectWithoutAssignedInput | TicketCreateOrConnectWithoutAssignedInput[];
-    createMany?: TicketCreateManyAssignedInputEnvelope;
+      | XOR<TicketCreateWithoutAssignInput, TicketUncheckedCreateWithoutAssignInput>
+      | TicketCreateWithoutAssignInput[]
+      | TicketUncheckedCreateWithoutAssignInput[];
+    connectOrCreate?: TicketCreateOrConnectWithoutAssignInput | TicketCreateOrConnectWithoutAssignInput[];
+    createMany?: TicketCreateManyAssignInputEnvelope;
     connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[];
   };
 
@@ -30259,6 +33942,42 @@ export namespace Prisma {
     push?: $Enums.UserFlag | $Enums.UserFlag[];
   };
 
+  export type UserSecurityUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserSecurityCreateWithoutUserInput, UserSecurityUncheckedCreateWithoutUserInput>;
+    connectOrCreate?: UserSecurityCreateOrConnectWithoutUserInput;
+    upsert?: UserSecurityUpsertWithoutUserInput;
+    disconnect?: UserSecurityWhereInput | boolean;
+    delete?: UserSecurityWhereInput | boolean;
+    connect?: UserSecurityWhereUniqueInput;
+    update?: XOR<
+      XOR<UserSecurityUpdateToOneWithWhereWithoutUserInput, UserSecurityUpdateWithoutUserInput>,
+      UserSecurityUncheckedUpdateWithoutUserInput
+    >;
+  };
+
+  export type ExternalAccountUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<ExternalAccountCreateWithoutUserInput, ExternalAccountUncheckedCreateWithoutUserInput>
+      | ExternalAccountCreateWithoutUserInput[]
+      | ExternalAccountUncheckedCreateWithoutUserInput[];
+    connectOrCreate?: ExternalAccountCreateOrConnectWithoutUserInput | ExternalAccountCreateOrConnectWithoutUserInput[];
+    upsert?:
+      | ExternalAccountUpsertWithWhereUniqueWithoutUserInput
+      | ExternalAccountUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: ExternalAccountCreateManyUserInputEnvelope;
+    set?: ExternalAccountWhereUniqueInput | ExternalAccountWhereUniqueInput[];
+    disconnect?: ExternalAccountWhereUniqueInput | ExternalAccountWhereUniqueInput[];
+    delete?: ExternalAccountWhereUniqueInput | ExternalAccountWhereUniqueInput[];
+    connect?: ExternalAccountWhereUniqueInput | ExternalAccountWhereUniqueInput[];
+    update?:
+      | ExternalAccountUpdateWithWhereUniqueWithoutUserInput
+      | ExternalAccountUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?:
+      | ExternalAccountUpdateManyWithWhereWithoutUserInput
+      | ExternalAccountUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: ExternalAccountScalarWhereInput | ExternalAccountScalarWhereInput[];
+  };
+
   export type AuthenticationUpdateManyWithoutUserNestedInput = {
     create?:
       | XOR<AuthenticationCreateWithoutUserInput, AuthenticationUncheckedCreateWithoutUserInput>
@@ -30280,23 +33999,6 @@ export namespace Prisma {
       | AuthenticationUpdateManyWithWhereWithoutUserInput
       | AuthenticationUpdateManyWithWhereWithoutUserInput[];
     deleteMany?: AuthenticationScalarWhereInput | AuthenticationScalarWhereInput[];
-  };
-
-  export type MfaBackupCodeUpdateManyWithoutUserNestedInput = {
-    create?:
-      | XOR<MfaBackupCodeCreateWithoutUserInput, MfaBackupCodeUncheckedCreateWithoutUserInput>
-      | MfaBackupCodeCreateWithoutUserInput[]
-      | MfaBackupCodeUncheckedCreateWithoutUserInput[];
-    connectOrCreate?: MfaBackupCodeCreateOrConnectWithoutUserInput | MfaBackupCodeCreateOrConnectWithoutUserInput[];
-    upsert?: MfaBackupCodeUpsertWithWhereUniqueWithoutUserInput | MfaBackupCodeUpsertWithWhereUniqueWithoutUserInput[];
-    createMany?: MfaBackupCodeCreateManyUserInputEnvelope;
-    set?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
-    disconnect?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
-    delete?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
-    connect?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
-    update?: MfaBackupCodeUpdateWithWhereUniqueWithoutUserInput | MfaBackupCodeUpdateWithWhereUniqueWithoutUserInput[];
-    updateMany?: MfaBackupCodeUpdateManyWithWhereWithoutUserInput | MfaBackupCodeUpdateManyWithWhereWithoutUserInput[];
-    deleteMany?: MfaBackupCodeScalarWhereInput | MfaBackupCodeScalarWhereInput[];
   };
 
   export type LoginSessionUpdateManyWithoutUserNestedInput = {
@@ -30350,23 +34052,6 @@ export namespace Prisma {
     deleteMany?: CartItemScalarWhereInput | CartItemScalarWhereInput[];
   };
 
-  export type MfaSetupUpdateManyWithoutUserNestedInput = {
-    create?:
-      | XOR<MfaSetupCreateWithoutUserInput, MfaSetupUncheckedCreateWithoutUserInput>
-      | MfaSetupCreateWithoutUserInput[]
-      | MfaSetupUncheckedCreateWithoutUserInput[];
-    connectOrCreate?: MfaSetupCreateOrConnectWithoutUserInput | MfaSetupCreateOrConnectWithoutUserInput[];
-    upsert?: MfaSetupUpsertWithWhereUniqueWithoutUserInput | MfaSetupUpsertWithWhereUniqueWithoutUserInput[];
-    createMany?: MfaSetupCreateManyUserInputEnvelope;
-    set?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
-    disconnect?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
-    delete?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
-    connect?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
-    update?: MfaSetupUpdateWithWhereUniqueWithoutUserInput | MfaSetupUpdateWithWhereUniqueWithoutUserInput[];
-    updateMany?: MfaSetupUpdateManyWithWhereWithoutUserInput | MfaSetupUpdateManyWithWhereWithoutUserInput[];
-    deleteMany?: MfaSetupScalarWhereInput | MfaSetupScalarWhereInput[];
-  };
-
   export type TicketUpdateManyWithoutAuthorNestedInput = {
     create?:
       | XOR<TicketCreateWithoutAuthorInput, TicketUncheckedCreateWithoutAuthorInput>
@@ -30384,20 +34069,20 @@ export namespace Prisma {
     deleteMany?: TicketScalarWhereInput | TicketScalarWhereInput[];
   };
 
-  export type TicketUpdateManyWithoutAssignedNestedInput = {
+  export type TicketUpdateManyWithoutAssignNestedInput = {
     create?:
-      | XOR<TicketCreateWithoutAssignedInput, TicketUncheckedCreateWithoutAssignedInput>
-      | TicketCreateWithoutAssignedInput[]
-      | TicketUncheckedCreateWithoutAssignedInput[];
-    connectOrCreate?: TicketCreateOrConnectWithoutAssignedInput | TicketCreateOrConnectWithoutAssignedInput[];
-    upsert?: TicketUpsertWithWhereUniqueWithoutAssignedInput | TicketUpsertWithWhereUniqueWithoutAssignedInput[];
-    createMany?: TicketCreateManyAssignedInputEnvelope;
+      | XOR<TicketCreateWithoutAssignInput, TicketUncheckedCreateWithoutAssignInput>
+      | TicketCreateWithoutAssignInput[]
+      | TicketUncheckedCreateWithoutAssignInput[];
+    connectOrCreate?: TicketCreateOrConnectWithoutAssignInput | TicketCreateOrConnectWithoutAssignInput[];
+    upsert?: TicketUpsertWithWhereUniqueWithoutAssignInput | TicketUpsertWithWhereUniqueWithoutAssignInput[];
+    createMany?: TicketCreateManyAssignInputEnvelope;
     set?: TicketWhereUniqueInput | TicketWhereUniqueInput[];
     disconnect?: TicketWhereUniqueInput | TicketWhereUniqueInput[];
     delete?: TicketWhereUniqueInput | TicketWhereUniqueInput[];
     connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[];
-    update?: TicketUpdateWithWhereUniqueWithoutAssignedInput | TicketUpdateWithWhereUniqueWithoutAssignedInput[];
-    updateMany?: TicketUpdateManyWithWhereWithoutAssignedInput | TicketUpdateManyWithWhereWithoutAssignedInput[];
+    update?: TicketUpdateWithWhereUniqueWithoutAssignInput | TicketUpdateWithWhereUniqueWithoutAssignInput[];
+    updateMany?: TicketUpdateManyWithWhereWithoutAssignInput | TicketUpdateManyWithWhereWithoutAssignInput[];
     deleteMany?: TicketScalarWhereInput | TicketScalarWhereInput[];
   };
 
@@ -30469,6 +34154,42 @@ export namespace Prisma {
     deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[];
   };
 
+  export type UserSecurityUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserSecurityCreateWithoutUserInput, UserSecurityUncheckedCreateWithoutUserInput>;
+    connectOrCreate?: UserSecurityCreateOrConnectWithoutUserInput;
+    upsert?: UserSecurityUpsertWithoutUserInput;
+    disconnect?: UserSecurityWhereInput | boolean;
+    delete?: UserSecurityWhereInput | boolean;
+    connect?: UserSecurityWhereUniqueInput;
+    update?: XOR<
+      XOR<UserSecurityUpdateToOneWithWhereWithoutUserInput, UserSecurityUpdateWithoutUserInput>,
+      UserSecurityUncheckedUpdateWithoutUserInput
+    >;
+  };
+
+  export type ExternalAccountUncheckedUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<ExternalAccountCreateWithoutUserInput, ExternalAccountUncheckedCreateWithoutUserInput>
+      | ExternalAccountCreateWithoutUserInput[]
+      | ExternalAccountUncheckedCreateWithoutUserInput[];
+    connectOrCreate?: ExternalAccountCreateOrConnectWithoutUserInput | ExternalAccountCreateOrConnectWithoutUserInput[];
+    upsert?:
+      | ExternalAccountUpsertWithWhereUniqueWithoutUserInput
+      | ExternalAccountUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: ExternalAccountCreateManyUserInputEnvelope;
+    set?: ExternalAccountWhereUniqueInput | ExternalAccountWhereUniqueInput[];
+    disconnect?: ExternalAccountWhereUniqueInput | ExternalAccountWhereUniqueInput[];
+    delete?: ExternalAccountWhereUniqueInput | ExternalAccountWhereUniqueInput[];
+    connect?: ExternalAccountWhereUniqueInput | ExternalAccountWhereUniqueInput[];
+    update?:
+      | ExternalAccountUpdateWithWhereUniqueWithoutUserInput
+      | ExternalAccountUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?:
+      | ExternalAccountUpdateManyWithWhereWithoutUserInput
+      | ExternalAccountUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: ExternalAccountScalarWhereInput | ExternalAccountScalarWhereInput[];
+  };
+
   export type AuthenticationUncheckedUpdateManyWithoutUserNestedInput = {
     create?:
       | XOR<AuthenticationCreateWithoutUserInput, AuthenticationUncheckedCreateWithoutUserInput>
@@ -30490,23 +34211,6 @@ export namespace Prisma {
       | AuthenticationUpdateManyWithWhereWithoutUserInput
       | AuthenticationUpdateManyWithWhereWithoutUserInput[];
     deleteMany?: AuthenticationScalarWhereInput | AuthenticationScalarWhereInput[];
-  };
-
-  export type MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput = {
-    create?:
-      | XOR<MfaBackupCodeCreateWithoutUserInput, MfaBackupCodeUncheckedCreateWithoutUserInput>
-      | MfaBackupCodeCreateWithoutUserInput[]
-      | MfaBackupCodeUncheckedCreateWithoutUserInput[];
-    connectOrCreate?: MfaBackupCodeCreateOrConnectWithoutUserInput | MfaBackupCodeCreateOrConnectWithoutUserInput[];
-    upsert?: MfaBackupCodeUpsertWithWhereUniqueWithoutUserInput | MfaBackupCodeUpsertWithWhereUniqueWithoutUserInput[];
-    createMany?: MfaBackupCodeCreateManyUserInputEnvelope;
-    set?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
-    disconnect?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
-    delete?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
-    connect?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
-    update?: MfaBackupCodeUpdateWithWhereUniqueWithoutUserInput | MfaBackupCodeUpdateWithWhereUniqueWithoutUserInput[];
-    updateMany?: MfaBackupCodeUpdateManyWithWhereWithoutUserInput | MfaBackupCodeUpdateManyWithWhereWithoutUserInput[];
-    deleteMany?: MfaBackupCodeScalarWhereInput | MfaBackupCodeScalarWhereInput[];
   };
 
   export type LoginSessionUncheckedUpdateManyWithoutUserNestedInput = {
@@ -30560,23 +34264,6 @@ export namespace Prisma {
     deleteMany?: CartItemScalarWhereInput | CartItemScalarWhereInput[];
   };
 
-  export type MfaSetupUncheckedUpdateManyWithoutUserNestedInput = {
-    create?:
-      | XOR<MfaSetupCreateWithoutUserInput, MfaSetupUncheckedCreateWithoutUserInput>
-      | MfaSetupCreateWithoutUserInput[]
-      | MfaSetupUncheckedCreateWithoutUserInput[];
-    connectOrCreate?: MfaSetupCreateOrConnectWithoutUserInput | MfaSetupCreateOrConnectWithoutUserInput[];
-    upsert?: MfaSetupUpsertWithWhereUniqueWithoutUserInput | MfaSetupUpsertWithWhereUniqueWithoutUserInput[];
-    createMany?: MfaSetupCreateManyUserInputEnvelope;
-    set?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
-    disconnect?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
-    delete?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
-    connect?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
-    update?: MfaSetupUpdateWithWhereUniqueWithoutUserInput | MfaSetupUpdateWithWhereUniqueWithoutUserInput[];
-    updateMany?: MfaSetupUpdateManyWithWhereWithoutUserInput | MfaSetupUpdateManyWithWhereWithoutUserInput[];
-    deleteMany?: MfaSetupScalarWhereInput | MfaSetupScalarWhereInput[];
-  };
-
   export type TicketUncheckedUpdateManyWithoutAuthorNestedInput = {
     create?:
       | XOR<TicketCreateWithoutAuthorInput, TicketUncheckedCreateWithoutAuthorInput>
@@ -30594,20 +34281,20 @@ export namespace Prisma {
     deleteMany?: TicketScalarWhereInput | TicketScalarWhereInput[];
   };
 
-  export type TicketUncheckedUpdateManyWithoutAssignedNestedInput = {
+  export type TicketUncheckedUpdateManyWithoutAssignNestedInput = {
     create?:
-      | XOR<TicketCreateWithoutAssignedInput, TicketUncheckedCreateWithoutAssignedInput>
-      | TicketCreateWithoutAssignedInput[]
-      | TicketUncheckedCreateWithoutAssignedInput[];
-    connectOrCreate?: TicketCreateOrConnectWithoutAssignedInput | TicketCreateOrConnectWithoutAssignedInput[];
-    upsert?: TicketUpsertWithWhereUniqueWithoutAssignedInput | TicketUpsertWithWhereUniqueWithoutAssignedInput[];
-    createMany?: TicketCreateManyAssignedInputEnvelope;
+      | XOR<TicketCreateWithoutAssignInput, TicketUncheckedCreateWithoutAssignInput>
+      | TicketCreateWithoutAssignInput[]
+      | TicketUncheckedCreateWithoutAssignInput[];
+    connectOrCreate?: TicketCreateOrConnectWithoutAssignInput | TicketCreateOrConnectWithoutAssignInput[];
+    upsert?: TicketUpsertWithWhereUniqueWithoutAssignInput | TicketUpsertWithWhereUniqueWithoutAssignInput[];
+    createMany?: TicketCreateManyAssignInputEnvelope;
     set?: TicketWhereUniqueInput | TicketWhereUniqueInput[];
     disconnect?: TicketWhereUniqueInput | TicketWhereUniqueInput[];
     delete?: TicketWhereUniqueInput | TicketWhereUniqueInput[];
     connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[];
-    update?: TicketUpdateWithWhereUniqueWithoutAssignedInput | TicketUpdateWithWhereUniqueWithoutAssignedInput[];
-    updateMany?: TicketUpdateManyWithWhereWithoutAssignedInput | TicketUpdateManyWithWhereWithoutAssignedInput[];
+    update?: TicketUpdateWithWhereUniqueWithoutAssignInput | TicketUpdateWithWhereUniqueWithoutAssignInput[];
+    updateMany?: TicketUpdateManyWithWhereWithoutAssignInput | TicketUpdateManyWithWhereWithoutAssignInput[];
     deleteMany?: TicketScalarWhereInput | TicketScalarWhereInput[];
   };
 
@@ -30677,6 +34364,152 @@ export namespace Prisma {
     update?: OrderUpdateWithWhereUniqueWithoutUserInput | OrderUpdateWithWhereUniqueWithoutUserInput[];
     updateMany?: OrderUpdateManyWithWhereWithoutUserInput | OrderUpdateManyWithWhereWithoutUserInput[];
     deleteMany?: OrderScalarWhereInput | OrderScalarWhereInput[];
+  };
+
+  export type MfaSetupCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<MfaSetupCreateWithoutUserInput, MfaSetupUncheckedCreateWithoutUserInput>
+      | MfaSetupCreateWithoutUserInput[]
+      | MfaSetupUncheckedCreateWithoutUserInput[];
+    connectOrCreate?: MfaSetupCreateOrConnectWithoutUserInput | MfaSetupCreateOrConnectWithoutUserInput[];
+    createMany?: MfaSetupCreateManyUserInputEnvelope;
+    connect?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
+  };
+
+  export type MfaBackupCodeCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<MfaBackupCodeCreateWithoutUserInput, MfaBackupCodeUncheckedCreateWithoutUserInput>
+      | MfaBackupCodeCreateWithoutUserInput[]
+      | MfaBackupCodeUncheckedCreateWithoutUserInput[];
+    connectOrCreate?: MfaBackupCodeCreateOrConnectWithoutUserInput | MfaBackupCodeCreateOrConnectWithoutUserInput[];
+    createMany?: MfaBackupCodeCreateManyUserInputEnvelope;
+    connect?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
+  };
+
+  export type UserCreateNestedOneWithoutSecurityInput = {
+    create?: XOR<UserCreateWithoutSecurityInput, UserUncheckedCreateWithoutSecurityInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutSecurityInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type MfaSetupUncheckedCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<MfaSetupCreateWithoutUserInput, MfaSetupUncheckedCreateWithoutUserInput>
+      | MfaSetupCreateWithoutUserInput[]
+      | MfaSetupUncheckedCreateWithoutUserInput[];
+    connectOrCreate?: MfaSetupCreateOrConnectWithoutUserInput | MfaSetupCreateOrConnectWithoutUserInput[];
+    createMany?: MfaSetupCreateManyUserInputEnvelope;
+    connect?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
+  };
+
+  export type MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput = {
+    create?:
+      | XOR<MfaBackupCodeCreateWithoutUserInput, MfaBackupCodeUncheckedCreateWithoutUserInput>
+      | MfaBackupCodeCreateWithoutUserInput[]
+      | MfaBackupCodeUncheckedCreateWithoutUserInput[];
+    connectOrCreate?: MfaBackupCodeCreateOrConnectWithoutUserInput | MfaBackupCodeCreateOrConnectWithoutUserInput[];
+    createMany?: MfaBackupCodeCreateManyUserInputEnvelope;
+    connect?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
+  };
+
+  export type MfaSetupUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<MfaSetupCreateWithoutUserInput, MfaSetupUncheckedCreateWithoutUserInput>
+      | MfaSetupCreateWithoutUserInput[]
+      | MfaSetupUncheckedCreateWithoutUserInput[];
+    connectOrCreate?: MfaSetupCreateOrConnectWithoutUserInput | MfaSetupCreateOrConnectWithoutUserInput[];
+    upsert?: MfaSetupUpsertWithWhereUniqueWithoutUserInput | MfaSetupUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: MfaSetupCreateManyUserInputEnvelope;
+    set?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
+    disconnect?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
+    delete?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
+    connect?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
+    update?: MfaSetupUpdateWithWhereUniqueWithoutUserInput | MfaSetupUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?: MfaSetupUpdateManyWithWhereWithoutUserInput | MfaSetupUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: MfaSetupScalarWhereInput | MfaSetupScalarWhereInput[];
+  };
+
+  export type MfaBackupCodeUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<MfaBackupCodeCreateWithoutUserInput, MfaBackupCodeUncheckedCreateWithoutUserInput>
+      | MfaBackupCodeCreateWithoutUserInput[]
+      | MfaBackupCodeUncheckedCreateWithoutUserInput[];
+    connectOrCreate?: MfaBackupCodeCreateOrConnectWithoutUserInput | MfaBackupCodeCreateOrConnectWithoutUserInput[];
+    upsert?: MfaBackupCodeUpsertWithWhereUniqueWithoutUserInput | MfaBackupCodeUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: MfaBackupCodeCreateManyUserInputEnvelope;
+    set?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
+    disconnect?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
+    delete?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
+    connect?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
+    update?: MfaBackupCodeUpdateWithWhereUniqueWithoutUserInput | MfaBackupCodeUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?: MfaBackupCodeUpdateManyWithWhereWithoutUserInput | MfaBackupCodeUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: MfaBackupCodeScalarWhereInput | MfaBackupCodeScalarWhereInput[];
+  };
+
+  export type UserUpdateOneRequiredWithoutSecurityNestedInput = {
+    create?: XOR<UserCreateWithoutSecurityInput, UserUncheckedCreateWithoutSecurityInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutSecurityInput;
+    upsert?: UserUpsertWithoutSecurityInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<UserUpdateToOneWithWhereWithoutSecurityInput, UserUpdateWithoutSecurityInput>,
+      UserUncheckedUpdateWithoutSecurityInput
+    >;
+  };
+
+  export type MfaSetupUncheckedUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<MfaSetupCreateWithoutUserInput, MfaSetupUncheckedCreateWithoutUserInput>
+      | MfaSetupCreateWithoutUserInput[]
+      | MfaSetupUncheckedCreateWithoutUserInput[];
+    connectOrCreate?: MfaSetupCreateOrConnectWithoutUserInput | MfaSetupCreateOrConnectWithoutUserInput[];
+    upsert?: MfaSetupUpsertWithWhereUniqueWithoutUserInput | MfaSetupUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: MfaSetupCreateManyUserInputEnvelope;
+    set?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
+    disconnect?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
+    delete?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
+    connect?: MfaSetupWhereUniqueInput | MfaSetupWhereUniqueInput[];
+    update?: MfaSetupUpdateWithWhereUniqueWithoutUserInput | MfaSetupUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?: MfaSetupUpdateManyWithWhereWithoutUserInput | MfaSetupUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: MfaSetupScalarWhereInput | MfaSetupScalarWhereInput[];
+  };
+
+  export type MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput = {
+    create?:
+      | XOR<MfaBackupCodeCreateWithoutUserInput, MfaBackupCodeUncheckedCreateWithoutUserInput>
+      | MfaBackupCodeCreateWithoutUserInput[]
+      | MfaBackupCodeUncheckedCreateWithoutUserInput[];
+    connectOrCreate?: MfaBackupCodeCreateOrConnectWithoutUserInput | MfaBackupCodeCreateOrConnectWithoutUserInput[];
+    upsert?: MfaBackupCodeUpsertWithWhereUniqueWithoutUserInput | MfaBackupCodeUpsertWithWhereUniqueWithoutUserInput[];
+    createMany?: MfaBackupCodeCreateManyUserInputEnvelope;
+    set?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
+    disconnect?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
+    delete?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
+    connect?: MfaBackupCodeWhereUniqueInput | MfaBackupCodeWhereUniqueInput[];
+    update?: MfaBackupCodeUpdateWithWhereUniqueWithoutUserInput | MfaBackupCodeUpdateWithWhereUniqueWithoutUserInput[];
+    updateMany?: MfaBackupCodeUpdateManyWithWhereWithoutUserInput | MfaBackupCodeUpdateManyWithWhereWithoutUserInput[];
+    deleteMany?: MfaBackupCodeScalarWhereInput | MfaBackupCodeScalarWhereInput[];
+  };
+
+  export type UserCreateNestedOneWithoutExternalAccountsInput = {
+    create?: XOR<UserCreateWithoutExternalAccountsInput, UserUncheckedCreateWithoutExternalAccountsInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutExternalAccountsInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type EnumProviderPlatformFieldUpdateOperationsInput = {
+    set?: $Enums.ProviderPlatform;
+  };
+
+  export type UserUpdateOneRequiredWithoutExternalAccountsNestedInput = {
+    create?: XOR<UserCreateWithoutExternalAccountsInput, UserUncheckedCreateWithoutExternalAccountsInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutExternalAccountsInput;
+    upsert?: UserUpsertWithoutExternalAccountsInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<UserUpdateToOneWithWhereWithoutExternalAccountsInput, UserUpdateWithoutExternalAccountsInput>,
+      UserUncheckedUpdateWithoutExternalAccountsInput
+    >;
   };
 
   export type OrderCreateNestedOneWithoutBillInput = {
@@ -30802,9 +34635,9 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput;
   };
 
-  export type UserCreateNestedOneWithoutTicketAssignedInput = {
-    create?: XOR<UserCreateWithoutTicketAssignedInput, UserUncheckedCreateWithoutTicketAssignedInput>;
-    connectOrCreate?: UserCreateOrConnectWithoutTicketAssignedInput;
+  export type UserCreateNestedOneWithoutTicketAssignInput = {
+    create?: XOR<UserCreateWithoutTicketAssignInput, UserUncheckedCreateWithoutTicketAssignInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutTicketAssignInput;
     connect?: UserWhereUniqueInput;
   };
 
@@ -30909,16 +34742,16 @@ export namespace Prisma {
     >;
   };
 
-  export type UserUpdateOneWithoutTicketAssignedNestedInput = {
-    create?: XOR<UserCreateWithoutTicketAssignedInput, UserUncheckedCreateWithoutTicketAssignedInput>;
-    connectOrCreate?: UserCreateOrConnectWithoutTicketAssignedInput;
-    upsert?: UserUpsertWithoutTicketAssignedInput;
+  export type UserUpdateOneWithoutTicketAssignNestedInput = {
+    create?: XOR<UserCreateWithoutTicketAssignInput, UserUncheckedCreateWithoutTicketAssignInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutTicketAssignInput;
+    upsert?: UserUpsertWithoutTicketAssignInput;
     disconnect?: UserWhereInput | boolean;
     delete?: UserWhereInput | boolean;
     connect?: UserWhereUniqueInput;
     update?: XOR<
-      XOR<UserUpdateToOneWithWhereWithoutTicketAssignedInput, UserUpdateWithoutTicketAssignedInput>,
-      UserUncheckedUpdateWithoutTicketAssignedInput
+      XOR<UserUpdateToOneWithWhereWithoutTicketAssignInput, UserUpdateWithoutTicketAssignInput>,
+      UserUncheckedUpdateWithoutTicketAssignInput
     >;
   };
 
@@ -31281,13 +35114,6 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string;
   };
 
-  export type NestedEnumAuthTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.AuthType | EnumAuthTypeFieldRefInput<$PrismaModel>;
-    in?: $Enums.AuthType[] | ListEnumAuthTypeFieldRefInput<$PrismaModel>;
-    notIn?: $Enums.AuthType[] | ListEnumAuthTypeFieldRefInput<$PrismaModel>;
-    not?: NestedEnumAuthTypeFilter<$PrismaModel> | $Enums.AuthType;
-  };
-
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>;
     in?: number[] | ListIntFieldRefInput<$PrismaModel>;
@@ -31297,6 +35123,13 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>;
     gte?: number | IntFieldRefInput<$PrismaModel>;
     not?: NestedIntFilter<$PrismaModel> | number;
+  };
+
+  export type NestedEnumAuthTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.AuthType | EnumAuthTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.AuthType[] | ListEnumAuthTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.AuthType[] | ListEnumAuthTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumAuthTypeFilter<$PrismaModel> | $Enums.AuthType;
   };
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -31338,16 +35171,6 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>;
   };
 
-  export type NestedEnumAuthTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.AuthType | EnumAuthTypeFieldRefInput<$PrismaModel>;
-    in?: $Enums.AuthType[] | ListEnumAuthTypeFieldRefInput<$PrismaModel>;
-    notIn?: $Enums.AuthType[] | ListEnumAuthTypeFieldRefInput<$PrismaModel>;
-    not?: NestedEnumAuthTypeWithAggregatesFilter<$PrismaModel> | $Enums.AuthType;
-    _count?: NestedIntFilter<$PrismaModel>;
-    _min?: NestedEnumAuthTypeFilter<$PrismaModel>;
-    _max?: NestedEnumAuthTypeFilter<$PrismaModel>;
-  };
-
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>;
     in?: number[] | ListIntFieldRefInput<$PrismaModel>;
@@ -31373,6 +35196,16 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>;
     gte?: number | FloatFieldRefInput<$PrismaModel>;
     not?: NestedFloatFilter<$PrismaModel> | number;
+  };
+
+  export type NestedEnumAuthTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AuthType | EnumAuthTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.AuthType[] | ListEnumAuthTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.AuthType[] | ListEnumAuthTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumAuthTypeWithAggregatesFilter<$PrismaModel> | $Enums.AuthType;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumAuthTypeFilter<$PrismaModel>;
+    _max?: NestedEnumAuthTypeFilter<$PrismaModel>;
   };
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -31410,11 +35243,6 @@ export namespace Prisma {
     not?: NestedEnumMfaTypeFilter<$PrismaModel> | $Enums.MfaType;
   };
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>;
-    not?: NestedBoolFilter<$PrismaModel> | boolean;
-  };
-
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null;
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null;
@@ -31437,14 +35265,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>;
     _min?: NestedEnumMfaTypeFilter<$PrismaModel>;
     _max?: NestedEnumMfaTypeFilter<$PrismaModel>;
-  };
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>;
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean;
-    _count?: NestedIntFilter<$PrismaModel>;
-    _min?: NestedBoolFilter<$PrismaModel>;
-    _max?: NestedBoolFilter<$PrismaModel>;
   };
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -31475,6 +35295,11 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null;
   };
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>;
+    not?: NestedBoolFilter<$PrismaModel> | boolean;
+  };
+
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null;
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null;
@@ -31484,6 +35309,14 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>;
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null;
+  };
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>;
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedBoolFilter<$PrismaModel>;
+    _max?: NestedBoolFilter<$PrismaModel>;
   };
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -31542,6 +35375,23 @@ export namespace Prisma {
     _sum?: NestedDecimalFilter<$PrismaModel>;
     _min?: NestedDecimalFilter<$PrismaModel>;
     _max?: NestedDecimalFilter<$PrismaModel>;
+  };
+
+  export type NestedEnumProviderPlatformFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProviderPlatform | EnumProviderPlatformFieldRefInput<$PrismaModel>;
+    in?: $Enums.ProviderPlatform[] | ListEnumProviderPlatformFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.ProviderPlatform[] | ListEnumProviderPlatformFieldRefInput<$PrismaModel>;
+    not?: NestedEnumProviderPlatformFilter<$PrismaModel> | $Enums.ProviderPlatform;
+  };
+
+  export type NestedEnumProviderPlatformWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProviderPlatform | EnumProviderPlatformFieldRefInput<$PrismaModel>;
+    in?: $Enums.ProviderPlatform[] | ListEnumProviderPlatformFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.ProviderPlatform[] | ListEnumProviderPlatformFieldRefInput<$PrismaModel>;
+    not?: NestedEnumProviderPlatformWithAggregatesFilter<$PrismaModel> | $Enums.ProviderPlatform;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumProviderPlatformFilter<$PrismaModel>;
+    _max?: NestedEnumProviderPlatformFilter<$PrismaModel>;
   };
 
   export type NestedEnumPaymentMethodFilter<$PrismaModel = never> = {
@@ -31693,7 +35543,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -31703,16 +35554,20 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
-    backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
     products?: ProductCreateNestedManyWithoutSellerInput;
     cart?: CartItemCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketCreateNestedManyWithoutAssignInput;
     ticketMembers?: TicketMemberCreateNestedManyWithoutUserInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
@@ -31724,7 +35579,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -31734,16 +35590,20 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
-    backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
     products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
     cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketUncheckedCreateNestedManyWithoutAssignInput;
     ticketMembers?: TicketMemberUncheckedCreateNestedManyWithoutUserInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
@@ -31771,7 +35631,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -31781,16 +35642,20 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
-    backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
     products?: ProductUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUpdateManyWithoutAssignNestedInput;
     ticketMembers?: TicketMemberUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
@@ -31802,7 +35667,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -31812,300 +35678,192 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
-    backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
     products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUncheckedUpdateManyWithoutAssignNestedInput;
     ticketMembers?: TicketMemberUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
-  export type UserCreateWithoutMfaSetupsInput = {
-    id?: string;
-    fullname: string;
-    email: string;
-    phone?: string | null;
-    isVerified?: boolean;
-    hashedPassword?: string | null;
-    avatarUrl?: string | null;
-    address?: string | null;
-    city?: string | null;
-    state?: string | null;
-    zipCode?: string | null;
-    biography?: string | null;
-    roles?: UserCreaterolesInput | $Enums.UserRole[];
-    flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
-    credit?: number;
-    auth?: AuthenticationCreateNestedManyWithoutUserInput;
+  export type UserSecurityCreateWithoutMfaSetupsInput = {
+    mfaEnabled?: boolean;
+    mfaEnabledAt?: Date | string | null;
+    mfaDisabledAt?: Date | string | null;
+    totpEnabled?: boolean;
+    totpEnabledAt?: Date | string | null;
+    totpDisabledAt?: Date | string | null;
+    backupCodesEnabled?: boolean;
+    backupCodesEnabledAt?: Date | string | null;
+    backupCodesDisabledAt?: Date | string | null;
+    verificationAttemptsRemaining?: number;
+    verificationAttemptsResetAt?: Date | string | null;
+    updatedAt?: Date | string;
     backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
-    loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
-    products?: ProductCreateNestedManyWithoutSellerInput;
-    cart?: CartItemCreateNestedManyWithoutUserInput;
-    ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
-    ticketMembers?: TicketMemberCreateNestedManyWithoutUserInput;
-    reviews?: ReviewCreateNestedManyWithoutUserInput;
-    bills?: BillCreateNestedManyWithoutUserInput;
-    orders?: OrderCreateNestedManyWithoutUserInput;
+    user: UserCreateNestedOneWithoutSecurityInput;
   };
 
-  export type UserUncheckedCreateWithoutMfaSetupsInput = {
-    id?: string;
-    fullname: string;
-    email: string;
-    phone?: string | null;
-    isVerified?: boolean;
-    hashedPassword?: string | null;
-    avatarUrl?: string | null;
-    address?: string | null;
-    city?: string | null;
-    state?: string | null;
-    zipCode?: string | null;
-    biography?: string | null;
-    roles?: UserCreaterolesInput | $Enums.UserRole[];
-    flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
-    credit?: number;
-    auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
+  export type UserSecurityUncheckedCreateWithoutMfaSetupsInput = {
+    userId: string;
+    mfaEnabled?: boolean;
+    mfaEnabledAt?: Date | string | null;
+    mfaDisabledAt?: Date | string | null;
+    totpEnabled?: boolean;
+    totpEnabledAt?: Date | string | null;
+    totpDisabledAt?: Date | string | null;
+    backupCodesEnabled?: boolean;
+    backupCodesEnabledAt?: Date | string | null;
+    backupCodesDisabledAt?: Date | string | null;
+    verificationAttemptsRemaining?: number;
+    verificationAttemptsResetAt?: Date | string | null;
+    updatedAt?: Date | string;
     backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
-    loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
-    products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
-    cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
-    ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
-    ticketMembers?: TicketMemberUncheckedCreateNestedManyWithoutUserInput;
-    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
-    bills?: BillUncheckedCreateNestedManyWithoutUserInput;
-    orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
   };
 
-  export type UserCreateOrConnectWithoutMfaSetupsInput = {
-    where: UserWhereUniqueInput;
-    create: XOR<UserCreateWithoutMfaSetupsInput, UserUncheckedCreateWithoutMfaSetupsInput>;
+  export type UserSecurityCreateOrConnectWithoutMfaSetupsInput = {
+    where: UserSecurityWhereUniqueInput;
+    create: XOR<UserSecurityCreateWithoutMfaSetupsInput, UserSecurityUncheckedCreateWithoutMfaSetupsInput>;
   };
 
-  export type UserUpsertWithoutMfaSetupsInput = {
-    update: XOR<UserUpdateWithoutMfaSetupsInput, UserUncheckedUpdateWithoutMfaSetupsInput>;
-    create: XOR<UserCreateWithoutMfaSetupsInput, UserUncheckedCreateWithoutMfaSetupsInput>;
-    where?: UserWhereInput;
+  export type UserSecurityUpsertWithoutMfaSetupsInput = {
+    update: XOR<UserSecurityUpdateWithoutMfaSetupsInput, UserSecurityUncheckedUpdateWithoutMfaSetupsInput>;
+    create: XOR<UserSecurityCreateWithoutMfaSetupsInput, UserSecurityUncheckedCreateWithoutMfaSetupsInput>;
+    where?: UserSecurityWhereInput;
   };
 
-  export type UserUpdateToOneWithWhereWithoutMfaSetupsInput = {
-    where?: UserWhereInput;
-    data: XOR<UserUpdateWithoutMfaSetupsInput, UserUncheckedUpdateWithoutMfaSetupsInput>;
+  export type UserSecurityUpdateToOneWithWhereWithoutMfaSetupsInput = {
+    where?: UserSecurityWhereInput;
+    data: XOR<UserSecurityUpdateWithoutMfaSetupsInput, UserSecurityUncheckedUpdateWithoutMfaSetupsInput>;
   };
 
-  export type UserUpdateWithoutMfaSetupsInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    fullname?: StringFieldUpdateOperationsInput | string;
-    email?: StringFieldUpdateOperationsInput | string;
-    phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
-    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
-    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
-    address?: NullableStringFieldUpdateOperationsInput | string | null;
-    city?: NullableStringFieldUpdateOperationsInput | string | null;
-    state?: NullableStringFieldUpdateOperationsInput | string | null;
-    zipCode?: NullableStringFieldUpdateOperationsInput | string | null;
-    biography?: NullableStringFieldUpdateOperationsInput | string | null;
-    roles?: UserUpdaterolesInput | $Enums.UserRole[];
-    flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    credit?: IntFieldUpdateOperationsInput | number;
-    auth?: AuthenticationUpdateManyWithoutUserNestedInput;
+  export type UserSecurityUpdateWithoutMfaSetupsInput = {
+    mfaEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    mfaEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    mfaDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    totpEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    backupCodesEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    verificationAttemptsRemaining?: IntFieldUpdateOperationsInput | number;
+    verificationAttemptsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
-    loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
-    products?: ProductUpdateManyWithoutSellerNestedInput;
-    cart?: CartItemUpdateManyWithoutUserNestedInput;
-    ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
-    ticketMembers?: TicketMemberUpdateManyWithoutUserNestedInput;
-    reviews?: ReviewUpdateManyWithoutUserNestedInput;
-    bills?: BillUpdateManyWithoutUserNestedInput;
-    orders?: OrderUpdateManyWithoutUserNestedInput;
+    user?: UserUpdateOneRequiredWithoutSecurityNestedInput;
   };
 
-  export type UserUncheckedUpdateWithoutMfaSetupsInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    fullname?: StringFieldUpdateOperationsInput | string;
-    email?: StringFieldUpdateOperationsInput | string;
-    phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
-    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
-    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
-    address?: NullableStringFieldUpdateOperationsInput | string | null;
-    city?: NullableStringFieldUpdateOperationsInput | string | null;
-    state?: NullableStringFieldUpdateOperationsInput | string | null;
-    zipCode?: NullableStringFieldUpdateOperationsInput | string | null;
-    biography?: NullableStringFieldUpdateOperationsInput | string | null;
-    roles?: UserUpdaterolesInput | $Enums.UserRole[];
-    flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    credit?: IntFieldUpdateOperationsInput | number;
-    auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
+  export type UserSecurityUncheckedUpdateWithoutMfaSetupsInput = {
+    userId?: StringFieldUpdateOperationsInput | string;
+    mfaEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    mfaEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    mfaDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    totpEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    backupCodesEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    verificationAttemptsRemaining?: IntFieldUpdateOperationsInput | number;
+    verificationAttemptsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
-    loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
-    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
-    cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
-    ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
-    ticketMembers?: TicketMemberUncheckedUpdateManyWithoutUserNestedInput;
-    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
-    bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
-    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
-  export type UserCreateWithoutBackupCodesInput = {
-    id?: string;
-    fullname: string;
-    email: string;
-    phone?: string | null;
-    isVerified?: boolean;
-    hashedPassword?: string | null;
-    avatarUrl?: string | null;
-    address?: string | null;
-    city?: string | null;
-    state?: string | null;
-    zipCode?: string | null;
-    biography?: string | null;
-    roles?: UserCreaterolesInput | $Enums.UserRole[];
-    flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
-    credit?: number;
-    auth?: AuthenticationCreateNestedManyWithoutUserInput;
-    loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
-    products?: ProductCreateNestedManyWithoutSellerInput;
-    cart?: CartItemCreateNestedManyWithoutUserInput;
+  export type UserSecurityCreateWithoutBackupCodesInput = {
+    mfaEnabled?: boolean;
+    mfaEnabledAt?: Date | string | null;
+    mfaDisabledAt?: Date | string | null;
+    totpEnabled?: boolean;
+    totpEnabledAt?: Date | string | null;
+    totpDisabledAt?: Date | string | null;
+    backupCodesEnabled?: boolean;
+    backupCodesEnabledAt?: Date | string | null;
+    backupCodesDisabledAt?: Date | string | null;
+    verificationAttemptsRemaining?: number;
+    verificationAttemptsResetAt?: Date | string | null;
+    updatedAt?: Date | string;
     mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
-    ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
-    ticketMembers?: TicketMemberCreateNestedManyWithoutUserInput;
-    reviews?: ReviewCreateNestedManyWithoutUserInput;
-    bills?: BillCreateNestedManyWithoutUserInput;
-    orders?: OrderCreateNestedManyWithoutUserInput;
+    user: UserCreateNestedOneWithoutSecurityInput;
   };
 
-  export type UserUncheckedCreateWithoutBackupCodesInput = {
-    id?: string;
-    fullname: string;
-    email: string;
-    phone?: string | null;
-    isVerified?: boolean;
-    hashedPassword?: string | null;
-    avatarUrl?: string | null;
-    address?: string | null;
-    city?: string | null;
-    state?: string | null;
-    zipCode?: string | null;
-    biography?: string | null;
-    roles?: UserCreaterolesInput | $Enums.UserRole[];
-    flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
-    credit?: number;
-    auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
-    loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
-    products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
-    cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
+  export type UserSecurityUncheckedCreateWithoutBackupCodesInput = {
+    userId: string;
+    mfaEnabled?: boolean;
+    mfaEnabledAt?: Date | string | null;
+    mfaDisabledAt?: Date | string | null;
+    totpEnabled?: boolean;
+    totpEnabledAt?: Date | string | null;
+    totpDisabledAt?: Date | string | null;
+    backupCodesEnabled?: boolean;
+    backupCodesEnabledAt?: Date | string | null;
+    backupCodesDisabledAt?: Date | string | null;
+    verificationAttemptsRemaining?: number;
+    verificationAttemptsResetAt?: Date | string | null;
+    updatedAt?: Date | string;
     mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
-    ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
-    ticketMembers?: TicketMemberUncheckedCreateNestedManyWithoutUserInput;
-    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
-    bills?: BillUncheckedCreateNestedManyWithoutUserInput;
-    orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
   };
 
-  export type UserCreateOrConnectWithoutBackupCodesInput = {
-    where: UserWhereUniqueInput;
-    create: XOR<UserCreateWithoutBackupCodesInput, UserUncheckedCreateWithoutBackupCodesInput>;
+  export type UserSecurityCreateOrConnectWithoutBackupCodesInput = {
+    where: UserSecurityWhereUniqueInput;
+    create: XOR<UserSecurityCreateWithoutBackupCodesInput, UserSecurityUncheckedCreateWithoutBackupCodesInput>;
   };
 
-  export type UserUpsertWithoutBackupCodesInput = {
-    update: XOR<UserUpdateWithoutBackupCodesInput, UserUncheckedUpdateWithoutBackupCodesInput>;
-    create: XOR<UserCreateWithoutBackupCodesInput, UserUncheckedCreateWithoutBackupCodesInput>;
-    where?: UserWhereInput;
+  export type UserSecurityUpsertWithoutBackupCodesInput = {
+    update: XOR<UserSecurityUpdateWithoutBackupCodesInput, UserSecurityUncheckedUpdateWithoutBackupCodesInput>;
+    create: XOR<UserSecurityCreateWithoutBackupCodesInput, UserSecurityUncheckedCreateWithoutBackupCodesInput>;
+    where?: UserSecurityWhereInput;
   };
 
-  export type UserUpdateToOneWithWhereWithoutBackupCodesInput = {
-    where?: UserWhereInput;
-    data: XOR<UserUpdateWithoutBackupCodesInput, UserUncheckedUpdateWithoutBackupCodesInput>;
+  export type UserSecurityUpdateToOneWithWhereWithoutBackupCodesInput = {
+    where?: UserSecurityWhereInput;
+    data: XOR<UserSecurityUpdateWithoutBackupCodesInput, UserSecurityUncheckedUpdateWithoutBackupCodesInput>;
   };
 
-  export type UserUpdateWithoutBackupCodesInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    fullname?: StringFieldUpdateOperationsInput | string;
-    email?: StringFieldUpdateOperationsInput | string;
-    phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
-    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
-    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
-    address?: NullableStringFieldUpdateOperationsInput | string | null;
-    city?: NullableStringFieldUpdateOperationsInput | string | null;
-    state?: NullableStringFieldUpdateOperationsInput | string | null;
-    zipCode?: NullableStringFieldUpdateOperationsInput | string | null;
-    biography?: NullableStringFieldUpdateOperationsInput | string | null;
-    roles?: UserUpdaterolesInput | $Enums.UserRole[];
-    flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    credit?: IntFieldUpdateOperationsInput | number;
-    auth?: AuthenticationUpdateManyWithoutUserNestedInput;
-    loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
-    products?: ProductUpdateManyWithoutSellerNestedInput;
-    cart?: CartItemUpdateManyWithoutUserNestedInput;
+  export type UserSecurityUpdateWithoutBackupCodesInput = {
+    mfaEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    mfaEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    mfaDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    totpEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    backupCodesEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    verificationAttemptsRemaining?: IntFieldUpdateOperationsInput | number;
+    verificationAttemptsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
-    ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
-    ticketMembers?: TicketMemberUpdateManyWithoutUserNestedInput;
-    reviews?: ReviewUpdateManyWithoutUserNestedInput;
-    bills?: BillUpdateManyWithoutUserNestedInput;
-    orders?: OrderUpdateManyWithoutUserNestedInput;
+    user?: UserUpdateOneRequiredWithoutSecurityNestedInput;
   };
 
-  export type UserUncheckedUpdateWithoutBackupCodesInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    fullname?: StringFieldUpdateOperationsInput | string;
-    email?: StringFieldUpdateOperationsInput | string;
-    phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
-    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
-    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
-    address?: NullableStringFieldUpdateOperationsInput | string | null;
-    city?: NullableStringFieldUpdateOperationsInput | string | null;
-    state?: NullableStringFieldUpdateOperationsInput | string | null;
-    zipCode?: NullableStringFieldUpdateOperationsInput | string | null;
-    biography?: NullableStringFieldUpdateOperationsInput | string | null;
-    roles?: UserUpdaterolesInput | $Enums.UserRole[];
-    flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    credit?: IntFieldUpdateOperationsInput | number;
-    auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
-    loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
-    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
-    cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
+  export type UserSecurityUncheckedUpdateWithoutBackupCodesInput = {
+    userId?: StringFieldUpdateOperationsInput | string;
+    mfaEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    mfaEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    mfaDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    totpEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    backupCodesEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    verificationAttemptsRemaining?: IntFieldUpdateOperationsInput | number;
+    verificationAttemptsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
-    ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
-    ticketMembers?: TicketMemberUncheckedUpdateManyWithoutUserNestedInput;
-    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
-    bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
-    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
   export type UserCreateWithoutLoginSessionsInput = {
@@ -32113,7 +35871,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -32123,16 +35882,20 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
     products?: ProductCreateNestedManyWithoutSellerInput;
     cart?: CartItemCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketCreateNestedManyWithoutAssignInput;
     ticketMembers?: TicketMemberCreateNestedManyWithoutUserInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
@@ -32144,7 +35907,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -32154,16 +35918,20 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
     products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
     cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketUncheckedCreateNestedManyWithoutAssignInput;
     ticketMembers?: TicketMemberUncheckedCreateNestedManyWithoutUserInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
@@ -32191,7 +35959,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -32201,16 +35970,20 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
     products?: ProductUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUpdateManyWithoutAssignNestedInput;
     ticketMembers?: TicketMemberUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
@@ -32222,7 +35995,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -32232,16 +36006,20 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
     products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUncheckedUpdateManyWithoutAssignNestedInput;
     ticketMembers?: TicketMemberUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
@@ -32253,7 +36031,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -32263,17 +36042,21 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
     products?: ProductCreateNestedManyWithoutSellerInput;
     cart?: CartItemCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketCreateNestedManyWithoutAssignInput;
     ticketMembers?: TicketMemberCreateNestedManyWithoutUserInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
@@ -32284,7 +36067,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -32294,17 +36078,21 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
     products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
     cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketUncheckedCreateNestedManyWithoutAssignInput;
     ticketMembers?: TicketMemberUncheckedCreateNestedManyWithoutUserInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
@@ -32317,8 +36105,8 @@ export namespace Prisma {
 
   export type BillCreateWithoutOrderInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     transactionId?: string | null;
     paymentMethod: $Enums.PaymentMethod;
     type: $Enums.BillType;
@@ -32330,8 +36118,8 @@ export namespace Prisma {
 
   export type BillUncheckedCreateWithoutOrderInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     transactionId?: string | null;
     paymentMethod: $Enums.PaymentMethod;
     type: $Enums.BillType;
@@ -32390,7 +36178,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -32400,17 +36189,21 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
     products?: ProductUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUpdateManyWithoutAssignNestedInput;
     ticketMembers?: TicketMemberUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
@@ -32421,7 +36214,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -32431,17 +36225,21 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
     products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUncheckedUpdateManyWithoutAssignNestedInput;
     ticketMembers?: TicketMemberUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
@@ -32460,8 +36258,8 @@ export namespace Prisma {
 
   export type BillUpdateWithoutOrderInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
     type?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType;
@@ -32473,8 +36271,8 @@ export namespace Prisma {
 
   export type BillUncheckedUpdateWithoutOrderInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
     type?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType;
@@ -32508,15 +36306,15 @@ export namespace Prisma {
     from?: EnumSelectFromFilter<'OrderItem'> | $Enums.SelectFrom;
     quantity?: IntFilter<'OrderItem'> | number;
     price?: IntFilter<'OrderItem'> | number;
-    productId?: StringFilter<'OrderItem'> | string;
-    productItemId?: StringFilter<'OrderItem'> | string;
+    productId?: UuidFilter<'OrderItem'> | string;
+    productItemId?: UuidFilter<'OrderItem'> | string;
     orderId?: UuidFilter<'OrderItem'> | string;
   };
 
   export type ProductCreateWithoutOrderItemInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     sku?: string | null;
     isActive?: boolean;
     slug: string;
@@ -32538,8 +36336,8 @@ export namespace Prisma {
 
   export type ProductUncheckedCreateWithoutOrderItemInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     sku?: string | null;
     isActive?: boolean;
     slug: string;
@@ -32587,8 +36385,8 @@ export namespace Prisma {
 
   export type OrderCreateWithoutItemsInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     totalPrice: number;
     user: UserCreateNestedOneWithoutOrdersInput;
     bill: BillCreateNestedOneWithoutOrderInput;
@@ -32596,8 +36394,8 @@ export namespace Prisma {
 
   export type OrderUncheckedCreateWithoutItemsInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     totalPrice: number;
     userId: string;
     billId: string;
@@ -32621,8 +36419,8 @@ export namespace Prisma {
 
   export type ProductUpdateWithoutOrderItemInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sku?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
     slug?: StringFieldUpdateOperationsInput | string;
@@ -32644,8 +36442,8 @@ export namespace Prisma {
 
   export type ProductUncheckedUpdateWithoutOrderItemInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sku?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
     slug?: StringFieldUpdateOperationsInput | string;
@@ -32705,8 +36503,8 @@ export namespace Prisma {
 
   export type OrderUpdateWithoutItemsInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     totalPrice?: IntFieldUpdateOperationsInput | number;
     user?: UserUpdateOneRequiredWithoutOrdersNestedInput;
     bill?: BillUpdateOneRequiredWithoutOrderNestedInput;
@@ -32714,8 +36512,8 @@ export namespace Prisma {
 
   export type OrderUncheckedUpdateWithoutItemsInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     totalPrice?: IntFieldUpdateOperationsInput | number;
     userId?: StringFieldUpdateOperationsInput | string;
     billId?: StringFieldUpdateOperationsInput | string;
@@ -32743,7 +36541,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -32753,16 +36552,20 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
     cart?: CartItemCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketCreateNestedManyWithoutAssignInput;
     ticketMembers?: TicketMemberCreateNestedManyWithoutUserInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
@@ -32774,7 +36577,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -32784,16 +36588,20 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
     cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketUncheckedCreateNestedManyWithoutAssignInput;
     ticketMembers?: TicketMemberUncheckedCreateNestedManyWithoutUserInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
@@ -32807,16 +36615,16 @@ export namespace Prisma {
 
   export type CartItemCreateWithoutProductInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     quantity?: number;
     user: UserCreateNestedOneWithoutCartInput;
   };
 
   export type CartItemUncheckedCreateWithoutProductInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     quantity?: number;
     userId: string;
   };
@@ -32952,7 +36760,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -32962,16 +36771,20 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
     cart?: CartItemUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUpdateManyWithoutAssignNestedInput;
     ticketMembers?: TicketMemberUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
@@ -32983,7 +36796,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -32993,16 +36807,20 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
     cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUncheckedUpdateManyWithoutAssignNestedInput;
     ticketMembers?: TicketMemberUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
@@ -33029,11 +36847,11 @@ export namespace Prisma {
     AND?: CartItemScalarWhereInput | CartItemScalarWhereInput[];
     OR?: CartItemScalarWhereInput[];
     NOT?: CartItemScalarWhereInput | CartItemScalarWhereInput[];
-    id?: StringFilter<'CartItem'> | string;
-    createAt?: DateTimeFilter<'CartItem'> | Date | string;
-    updateAt?: DateTimeFilter<'CartItem'> | Date | string;
+    id?: UuidFilter<'CartItem'> | string;
+    createdAt?: DateTimeFilter<'CartItem'> | Date | string;
+    updatedAt?: DateTimeFilter<'CartItem'> | Date | string;
     quantity?: IntFilter<'CartItem'> | number;
-    productId?: StringFilter<'CartItem'> | string;
+    productId?: UuidFilter<'CartItem'> | string;
     userId?: UuidFilter<'CartItem'> | string;
   };
 
@@ -33057,8 +36875,8 @@ export namespace Prisma {
     AND?: ProductItemScalarWhereInput | ProductItemScalarWhereInput[];
     OR?: ProductItemScalarWhereInput[];
     NOT?: ProductItemScalarWhereInput | ProductItemScalarWhereInput[];
-    id?: StringFilter<'ProductItem'> | string;
-    productId?: StringFilter<'ProductItem'> | string;
+    id?: UuidFilter<'ProductItem'> | string;
+    productId?: UuidFilter<'ProductItem'> | string;
     data?: StringFilter<'ProductItem'> | string;
     isSold?: BoolFilter<'ProductItem'> | boolean;
     soldAt?: DateTimeNullableFilter<'ProductItem'> | Date | string | null;
@@ -33100,19 +36918,19 @@ export namespace Prisma {
     AND?: ReviewScalarWhereInput | ReviewScalarWhereInput[];
     OR?: ReviewScalarWhereInput[];
     NOT?: ReviewScalarWhereInput | ReviewScalarWhereInput[];
-    id?: StringFilter<'Review'> | string;
+    id?: UuidFilter<'Review'> | string;
     createdAt?: DateTimeFilter<'Review'> | Date | string;
     updatedAt?: DateTimeFilter<'Review'> | Date | string;
     rating?: DecimalFilter<'Review'> | Decimal | DecimalJsLike | number | string;
     comment?: StringFilter<'Review'> | string;
-    productId?: StringFilter<'Review'> | string;
+    productId?: UuidFilter<'Review'> | string;
     userId?: UuidFilter<'Review'> | string;
   };
 
   export type ProductCreateWithoutProductItemsInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     sku?: string | null;
     isActive?: boolean;
     slug: string;
@@ -33134,8 +36952,8 @@ export namespace Prisma {
 
   export type ProductUncheckedCreateWithoutProductItemsInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     sku?: string | null;
     isActive?: boolean;
     slug: string;
@@ -33196,8 +37014,8 @@ export namespace Prisma {
 
   export type ProductUpdateWithoutProductItemsInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sku?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
     slug?: StringFieldUpdateOperationsInput | string;
@@ -33219,8 +37037,8 @@ export namespace Prisma {
 
   export type ProductUncheckedUpdateWithoutProductItemsInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sku?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
     slug?: StringFieldUpdateOperationsInput | string;
@@ -33271,8 +37089,8 @@ export namespace Prisma {
 
   export type ProductCreateWithoutCategoryInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     sku?: string | null;
     isActive?: boolean;
     slug: string;
@@ -33294,8 +37112,8 @@ export namespace Prisma {
 
   export type ProductUncheckedCreateWithoutCategoryInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     sku?: string | null;
     isActive?: boolean;
     slug: string;
@@ -33345,9 +37163,9 @@ export namespace Prisma {
     AND?: ProductScalarWhereInput | ProductScalarWhereInput[];
     OR?: ProductScalarWhereInput[];
     NOT?: ProductScalarWhereInput | ProductScalarWhereInput[];
-    id?: StringFilter<'Product'> | string;
-    createAt?: DateTimeFilter<'Product'> | Date | string;
-    updateAt?: DateTimeFilter<'Product'> | Date | string;
+    id?: UuidFilter<'Product'> | string;
+    createdAt?: DateTimeFilter<'Product'> | Date | string;
+    updatedAt?: DateTimeFilter<'Product'> | Date | string;
     sku?: StringNullableFilter<'Product'> | string | null;
     isActive?: BoolFilter<'Product'> | boolean;
     slug?: StringFilter<'Product'> | string;
@@ -33366,8 +37184,8 @@ export namespace Prisma {
 
   export type ProductCreateWithoutReviewsInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     sku?: string | null;
     isActive?: boolean;
     slug: string;
@@ -33389,8 +37207,8 @@ export namespace Prisma {
 
   export type ProductUncheckedCreateWithoutReviewsInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     sku?: string | null;
     isActive?: boolean;
     slug: string;
@@ -33420,7 +37238,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -33430,17 +37249,21 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
     products?: ProductCreateNestedManyWithoutSellerInput;
     cart?: CartItemCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketCreateNestedManyWithoutAssignInput;
     ticketMembers?: TicketMemberCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
     orders?: OrderCreateNestedManyWithoutUserInput;
@@ -33451,7 +37274,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -33461,17 +37285,21 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
     products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
     cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketUncheckedCreateNestedManyWithoutAssignInput;
     ticketMembers?: TicketMemberUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
@@ -33495,8 +37323,8 @@ export namespace Prisma {
 
   export type ProductUpdateWithoutReviewsInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sku?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
     slug?: StringFieldUpdateOperationsInput | string;
@@ -33518,8 +37346,8 @@ export namespace Prisma {
 
   export type ProductUncheckedUpdateWithoutReviewsInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sku?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
     slug?: StringFieldUpdateOperationsInput | string;
@@ -33555,7 +37383,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -33565,17 +37394,21 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
     products?: ProductUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUpdateManyWithoutAssignNestedInput;
     ticketMembers?: TicketMemberUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
     orders?: OrderUpdateManyWithoutUserNestedInput;
@@ -33586,7 +37419,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -33596,34 +37430,119 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
     products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUncheckedUpdateManyWithoutAssignNestedInput;
     ticketMembers?: TicketMemberUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
+  export type UserSecurityCreateWithoutUserInput = {
+    mfaEnabled?: boolean;
+    mfaEnabledAt?: Date | string | null;
+    mfaDisabledAt?: Date | string | null;
+    totpEnabled?: boolean;
+    totpEnabledAt?: Date | string | null;
+    totpDisabledAt?: Date | string | null;
+    backupCodesEnabled?: boolean;
+    backupCodesEnabledAt?: Date | string | null;
+    backupCodesDisabledAt?: Date | string | null;
+    verificationAttemptsRemaining?: number;
+    verificationAttemptsResetAt?: Date | string | null;
+    updatedAt?: Date | string;
+    mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
+    backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserSecurityUncheckedCreateWithoutUserInput = {
+    mfaEnabled?: boolean;
+    mfaEnabledAt?: Date | string | null;
+    mfaDisabledAt?: Date | string | null;
+    totpEnabled?: boolean;
+    totpEnabledAt?: Date | string | null;
+    totpDisabledAt?: Date | string | null;
+    backupCodesEnabled?: boolean;
+    backupCodesEnabledAt?: Date | string | null;
+    backupCodesDisabledAt?: Date | string | null;
+    verificationAttemptsRemaining?: number;
+    verificationAttemptsResetAt?: Date | string | null;
+    updatedAt?: Date | string;
+    mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
+    backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserSecurityCreateOrConnectWithoutUserInput = {
+    where: UserSecurityWhereUniqueInput;
+    create: XOR<UserSecurityCreateWithoutUserInput, UserSecurityUncheckedCreateWithoutUserInput>;
+  };
+
+  export type ExternalAccountCreateWithoutUserInput = {
+    id?: string;
+    provider: $Enums.ProviderPlatform;
+    providerUserId: string;
+    approvedScope: string;
+    emailAddress: string;
+    phoneNumber?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    fullName?: string | null;
+    username?: string | null;
+    avatarUrl?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type ExternalAccountUncheckedCreateWithoutUserInput = {
+    id?: string;
+    provider: $Enums.ProviderPlatform;
+    providerUserId: string;
+    approvedScope: string;
+    emailAddress: string;
+    phoneNumber?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    fullName?: string | null;
+    username?: string | null;
+    avatarUrl?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type ExternalAccountCreateOrConnectWithoutUserInput = {
+    where: ExternalAccountWhereUniqueInput;
+    create: XOR<ExternalAccountCreateWithoutUserInput, ExternalAccountUncheckedCreateWithoutUserInput>;
+  };
+
+  export type ExternalAccountCreateManyUserInputEnvelope = {
+    data: ExternalAccountCreateManyUserInput | ExternalAccountCreateManyUserInput[];
+    skipDuplicates?: boolean;
+  };
+
   export type AuthenticationCreateWithoutUserInput = {
     code: string;
-    type: $Enums.AuthType;
     retryTime?: number;
+    type: $Enums.AuthType;
     lastSentAt: Date | string;
     expiresAt: Date | string;
   };
 
   export type AuthenticationUncheckedCreateWithoutUserInput = {
     code: string;
-    type: $Enums.AuthType;
     retryTime?: number;
+    type: $Enums.AuthType;
     lastSentAt: Date | string;
     expiresAt: Date | string;
   };
@@ -33635,32 +37554,6 @@ export namespace Prisma {
 
   export type AuthenticationCreateManyUserInputEnvelope = {
     data: AuthenticationCreateManyUserInput | AuthenticationCreateManyUserInput[];
-    skipDuplicates?: boolean;
-  };
-
-  export type MfaBackupCodeCreateWithoutUserInput = {
-    id?: string;
-    code: string;
-    isUsed?: boolean;
-    usedAt?: Date | string | null;
-    createdAt?: Date | string;
-  };
-
-  export type MfaBackupCodeUncheckedCreateWithoutUserInput = {
-    id?: string;
-    code: string;
-    isUsed?: boolean;
-    usedAt?: Date | string | null;
-    createdAt?: Date | string;
-  };
-
-  export type MfaBackupCodeCreateOrConnectWithoutUserInput = {
-    where: MfaBackupCodeWhereUniqueInput;
-    create: XOR<MfaBackupCodeCreateWithoutUserInput, MfaBackupCodeUncheckedCreateWithoutUserInput>;
-  };
-
-  export type MfaBackupCodeCreateManyUserInputEnvelope = {
-    data: MfaBackupCodeCreateManyUserInput | MfaBackupCodeCreateManyUserInput[];
     skipDuplicates?: boolean;
   };
 
@@ -33698,8 +37591,8 @@ export namespace Prisma {
 
   export type ProductCreateWithoutSellerInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     sku?: string | null;
     isActive?: boolean;
     slug: string;
@@ -33721,8 +37614,8 @@ export namespace Prisma {
 
   export type ProductUncheckedCreateWithoutSellerInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     sku?: string | null;
     isActive?: boolean;
     slug: string;
@@ -33754,16 +37647,16 @@ export namespace Prisma {
 
   export type CartItemCreateWithoutUserInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     quantity?: number;
     product: ProductCreateNestedOneWithoutCartItemInput;
   };
 
   export type CartItemUncheckedCreateWithoutUserInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     quantity?: number;
     productId: string;
   };
@@ -33778,43 +37671,11 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
-  export type MfaSetupCreateWithoutUserInput = {
-    id?: string;
-    type: $Enums.MfaType;
-    isEnabled?: boolean;
-    secret?: string | null;
-    phone?: string | null;
-    email?: string | null;
-    createdAt?: Date | string;
-    updatedAt?: Date | string;
-  };
-
-  export type MfaSetupUncheckedCreateWithoutUserInput = {
-    id?: string;
-    type: $Enums.MfaType;
-    isEnabled?: boolean;
-    secret?: string | null;
-    phone?: string | null;
-    email?: string | null;
-    createdAt?: Date | string;
-    updatedAt?: Date | string;
-  };
-
-  export type MfaSetupCreateOrConnectWithoutUserInput = {
-    where: MfaSetupWhereUniqueInput;
-    create: XOR<MfaSetupCreateWithoutUserInput, MfaSetupUncheckedCreateWithoutUserInput>;
-  };
-
-  export type MfaSetupCreateManyUserInputEnvelope = {
-    data: MfaSetupCreateManyUserInput | MfaSetupCreateManyUserInput[];
-    skipDuplicates?: boolean;
-  };
-
   export type TicketCreateWithoutAuthorInput = {
     id?: string;
     numericalOrder?: number;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     title: string;
     description: string;
     status?: $Enums.TicketStatus;
@@ -33822,7 +37683,7 @@ export namespace Prisma {
     priority: $Enums.TicketPriority;
     attachments?: TicketCreateattachmentsInput | string[];
     contexts?: TicketContextCreateNestedManyWithoutTicketInput;
-    assigned?: UserCreateNestedOneWithoutTicketAssignedInput;
+    assign?: UserCreateNestedOneWithoutTicketAssignInput;
     messages?: TicketMessageCreateNestedManyWithoutTicketInput;
     members?: TicketMemberCreateNestedManyWithoutTicketInput;
   };
@@ -33830,15 +37691,15 @@ export namespace Prisma {
   export type TicketUncheckedCreateWithoutAuthorInput = {
     id?: string;
     numericalOrder?: number;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     title: string;
     description: string;
     status?: $Enums.TicketStatus;
     category: $Enums.TicketCategory;
     priority: $Enums.TicketPriority;
     attachments?: TicketCreateattachmentsInput | string[];
-    assignedId?: string | null;
+    assignId?: string | null;
     contexts?: TicketContextUncheckedCreateNestedManyWithoutTicketInput;
     messages?: TicketMessageUncheckedCreateNestedManyWithoutTicketInput;
     members?: TicketMemberUncheckedCreateNestedManyWithoutTicketInput;
@@ -33854,11 +37715,11 @@ export namespace Prisma {
     skipDuplicates?: boolean;
   };
 
-  export type TicketCreateWithoutAssignedInput = {
+  export type TicketCreateWithoutAssignInput = {
     id?: string;
     numericalOrder?: number;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     title: string;
     description: string;
     status?: $Enums.TicketStatus;
@@ -33871,11 +37732,11 @@ export namespace Prisma {
     members?: TicketMemberCreateNestedManyWithoutTicketInput;
   };
 
-  export type TicketUncheckedCreateWithoutAssignedInput = {
+  export type TicketUncheckedCreateWithoutAssignInput = {
     id?: string;
     numericalOrder?: number;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     title: string;
     description: string;
     status?: $Enums.TicketStatus;
@@ -33888,13 +37749,13 @@ export namespace Prisma {
     members?: TicketMemberUncheckedCreateNestedManyWithoutTicketInput;
   };
 
-  export type TicketCreateOrConnectWithoutAssignedInput = {
+  export type TicketCreateOrConnectWithoutAssignInput = {
     where: TicketWhereUniqueInput;
-    create: XOR<TicketCreateWithoutAssignedInput, TicketUncheckedCreateWithoutAssignedInput>;
+    create: XOR<TicketCreateWithoutAssignInput, TicketUncheckedCreateWithoutAssignInput>;
   };
 
-  export type TicketCreateManyAssignedInputEnvelope = {
-    data: TicketCreateManyAssignedInput | TicketCreateManyAssignedInput[];
+  export type TicketCreateManyAssignInputEnvelope = {
+    data: TicketCreateManyAssignInput | TicketCreateManyAssignInput[];
     skipDuplicates?: boolean;
   };
 
@@ -33954,8 +37815,8 @@ export namespace Prisma {
 
   export type BillCreateWithoutUserInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     transactionId?: string | null;
     paymentMethod: $Enums.PaymentMethod;
     type: $Enums.BillType;
@@ -33967,8 +37828,8 @@ export namespace Prisma {
 
   export type BillUncheckedCreateWithoutUserInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     transactionId?: string | null;
     paymentMethod: $Enums.PaymentMethod;
     type: $Enums.BillType;
@@ -33990,8 +37851,8 @@ export namespace Prisma {
 
   export type OrderCreateWithoutUserInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     totalPrice: number;
     bill: BillCreateNestedOneWithoutOrderInput;
     items?: OrderItemCreateNestedManyWithoutOrderInput;
@@ -33999,8 +37860,8 @@ export namespace Prisma {
 
   export type OrderUncheckedCreateWithoutUserInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     totalPrice: number;
     billId: string;
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput;
@@ -34014,6 +37875,87 @@ export namespace Prisma {
   export type OrderCreateManyUserInputEnvelope = {
     data: OrderCreateManyUserInput | OrderCreateManyUserInput[];
     skipDuplicates?: boolean;
+  };
+
+  export type UserSecurityUpsertWithoutUserInput = {
+    update: XOR<UserSecurityUpdateWithoutUserInput, UserSecurityUncheckedUpdateWithoutUserInput>;
+    create: XOR<UserSecurityCreateWithoutUserInput, UserSecurityUncheckedCreateWithoutUserInput>;
+    where?: UserSecurityWhereInput;
+  };
+
+  export type UserSecurityUpdateToOneWithWhereWithoutUserInput = {
+    where?: UserSecurityWhereInput;
+    data: XOR<UserSecurityUpdateWithoutUserInput, UserSecurityUncheckedUpdateWithoutUserInput>;
+  };
+
+  export type UserSecurityUpdateWithoutUserInput = {
+    mfaEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    mfaEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    mfaDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    totpEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    backupCodesEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    verificationAttemptsRemaining?: IntFieldUpdateOperationsInput | number;
+    verificationAttemptsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
+    backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserSecurityUncheckedUpdateWithoutUserInput = {
+    mfaEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    mfaEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    mfaDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    totpEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    totpDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    backupCodesEnabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    backupCodesDisabledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    verificationAttemptsRemaining?: IntFieldUpdateOperationsInput | number;
+    verificationAttemptsResetAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
+    backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
+  };
+
+  export type ExternalAccountUpsertWithWhereUniqueWithoutUserInput = {
+    where: ExternalAccountWhereUniqueInput;
+    update: XOR<ExternalAccountUpdateWithoutUserInput, ExternalAccountUncheckedUpdateWithoutUserInput>;
+    create: XOR<ExternalAccountCreateWithoutUserInput, ExternalAccountUncheckedCreateWithoutUserInput>;
+  };
+
+  export type ExternalAccountUpdateWithWhereUniqueWithoutUserInput = {
+    where: ExternalAccountWhereUniqueInput;
+    data: XOR<ExternalAccountUpdateWithoutUserInput, ExternalAccountUncheckedUpdateWithoutUserInput>;
+  };
+
+  export type ExternalAccountUpdateManyWithWhereWithoutUserInput = {
+    where: ExternalAccountScalarWhereInput;
+    data: XOR<ExternalAccountUpdateManyMutationInput, ExternalAccountUncheckedUpdateManyWithoutUserInput>;
+  };
+
+  export type ExternalAccountScalarWhereInput = {
+    AND?: ExternalAccountScalarWhereInput | ExternalAccountScalarWhereInput[];
+    OR?: ExternalAccountScalarWhereInput[];
+    NOT?: ExternalAccountScalarWhereInput | ExternalAccountScalarWhereInput[];
+    id?: UuidFilter<'ExternalAccount'> | string;
+    provider?: EnumProviderPlatformFilter<'ExternalAccount'> | $Enums.ProviderPlatform;
+    providerUserId?: StringFilter<'ExternalAccount'> | string;
+    approvedScope?: StringFilter<'ExternalAccount'> | string;
+    emailAddress?: StringFilter<'ExternalAccount'> | string;
+    phoneNumber?: StringNullableFilter<'ExternalAccount'> | string | null;
+    firstName?: StringNullableFilter<'ExternalAccount'> | string | null;
+    lastName?: StringNullableFilter<'ExternalAccount'> | string | null;
+    fullName?: StringNullableFilter<'ExternalAccount'> | string | null;
+    username?: StringNullableFilter<'ExternalAccount'> | string | null;
+    avatarUrl?: StringNullableFilter<'ExternalAccount'> | string | null;
+    createdAt?: DateTimeFilter<'ExternalAccount'> | Date | string;
+    updatedAt?: DateTimeFilter<'ExternalAccount'> | Date | string;
+    userId?: UuidFilter<'ExternalAccount'> | string;
   };
 
   export type AuthenticationUpsertWithWhereUniqueWithoutUserInput = {
@@ -34037,39 +37979,11 @@ export namespace Prisma {
     OR?: AuthenticationScalarWhereInput[];
     NOT?: AuthenticationScalarWhereInput | AuthenticationScalarWhereInput[];
     code?: StringFilter<'Authentication'> | string;
-    type?: EnumAuthTypeFilter<'Authentication'> | $Enums.AuthType;
     retryTime?: IntFilter<'Authentication'> | number;
+    type?: EnumAuthTypeFilter<'Authentication'> | $Enums.AuthType;
     lastSentAt?: DateTimeFilter<'Authentication'> | Date | string;
     expiresAt?: DateTimeFilter<'Authentication'> | Date | string;
     userId?: UuidFilter<'Authentication'> | string;
-  };
-
-  export type MfaBackupCodeUpsertWithWhereUniqueWithoutUserInput = {
-    where: MfaBackupCodeWhereUniqueInput;
-    update: XOR<MfaBackupCodeUpdateWithoutUserInput, MfaBackupCodeUncheckedUpdateWithoutUserInput>;
-    create: XOR<MfaBackupCodeCreateWithoutUserInput, MfaBackupCodeUncheckedCreateWithoutUserInput>;
-  };
-
-  export type MfaBackupCodeUpdateWithWhereUniqueWithoutUserInput = {
-    where: MfaBackupCodeWhereUniqueInput;
-    data: XOR<MfaBackupCodeUpdateWithoutUserInput, MfaBackupCodeUncheckedUpdateWithoutUserInput>;
-  };
-
-  export type MfaBackupCodeUpdateManyWithWhereWithoutUserInput = {
-    where: MfaBackupCodeScalarWhereInput;
-    data: XOR<MfaBackupCodeUpdateManyMutationInput, MfaBackupCodeUncheckedUpdateManyWithoutUserInput>;
-  };
-
-  export type MfaBackupCodeScalarWhereInput = {
-    AND?: MfaBackupCodeScalarWhereInput | MfaBackupCodeScalarWhereInput[];
-    OR?: MfaBackupCodeScalarWhereInput[];
-    NOT?: MfaBackupCodeScalarWhereInput | MfaBackupCodeScalarWhereInput[];
-    id?: UuidFilter<'MfaBackupCode'> | string;
-    code?: StringFilter<'MfaBackupCode'> | string;
-    isUsed?: BoolFilter<'MfaBackupCode'> | boolean;
-    usedAt?: DateTimeNullableFilter<'MfaBackupCode'> | Date | string | null;
-    createdAt?: DateTimeFilter<'MfaBackupCode'> | Date | string;
-    userId?: UuidFilter<'MfaBackupCode'> | string;
   };
 
   export type LoginSessionUpsertWithWhereUniqueWithoutUserInput = {
@@ -34135,37 +38049,6 @@ export namespace Prisma {
     data: XOR<CartItemUpdateManyMutationInput, CartItemUncheckedUpdateManyWithoutUserInput>;
   };
 
-  export type MfaSetupUpsertWithWhereUniqueWithoutUserInput = {
-    where: MfaSetupWhereUniqueInput;
-    update: XOR<MfaSetupUpdateWithoutUserInput, MfaSetupUncheckedUpdateWithoutUserInput>;
-    create: XOR<MfaSetupCreateWithoutUserInput, MfaSetupUncheckedCreateWithoutUserInput>;
-  };
-
-  export type MfaSetupUpdateWithWhereUniqueWithoutUserInput = {
-    where: MfaSetupWhereUniqueInput;
-    data: XOR<MfaSetupUpdateWithoutUserInput, MfaSetupUncheckedUpdateWithoutUserInput>;
-  };
-
-  export type MfaSetupUpdateManyWithWhereWithoutUserInput = {
-    where: MfaSetupScalarWhereInput;
-    data: XOR<MfaSetupUpdateManyMutationInput, MfaSetupUncheckedUpdateManyWithoutUserInput>;
-  };
-
-  export type MfaSetupScalarWhereInput = {
-    AND?: MfaSetupScalarWhereInput | MfaSetupScalarWhereInput[];
-    OR?: MfaSetupScalarWhereInput[];
-    NOT?: MfaSetupScalarWhereInput | MfaSetupScalarWhereInput[];
-    id?: UuidFilter<'MfaSetup'> | string;
-    userId?: UuidFilter<'MfaSetup'> | string;
-    type?: EnumMfaTypeFilter<'MfaSetup'> | $Enums.MfaType;
-    isEnabled?: BoolFilter<'MfaSetup'> | boolean;
-    secret?: StringNullableFilter<'MfaSetup'> | string | null;
-    phone?: StringNullableFilter<'MfaSetup'> | string | null;
-    email?: StringNullableFilter<'MfaSetup'> | string | null;
-    createdAt?: DateTimeFilter<'MfaSetup'> | Date | string;
-    updatedAt?: DateTimeFilter<'MfaSetup'> | Date | string;
-  };
-
   export type TicketUpsertWithWhereUniqueWithoutAuthorInput = {
     where: TicketWhereUniqueInput;
     update: XOR<TicketUpdateWithoutAuthorInput, TicketUncheckedUpdateWithoutAuthorInput>;
@@ -34188,8 +38071,8 @@ export namespace Prisma {
     NOT?: TicketScalarWhereInput | TicketScalarWhereInput[];
     id?: UuidFilter<'Ticket'> | string;
     numericalOrder?: IntFilter<'Ticket'> | number;
-    createAt?: DateTimeFilter<'Ticket'> | Date | string;
-    updateAt?: DateTimeFilter<'Ticket'> | Date | string;
+    createdAt?: DateTimeFilter<'Ticket'> | Date | string;
+    updatedAt?: DateTimeFilter<'Ticket'> | Date | string;
     title?: StringFilter<'Ticket'> | string;
     description?: StringFilter<'Ticket'> | string;
     status?: EnumTicketStatusFilter<'Ticket'> | $Enums.TicketStatus;
@@ -34197,23 +38080,23 @@ export namespace Prisma {
     priority?: EnumTicketPriorityFilter<'Ticket'> | $Enums.TicketPriority;
     attachments?: StringNullableListFilter<'Ticket'>;
     authorId?: UuidFilter<'Ticket'> | string;
-    assignedId?: UuidNullableFilter<'Ticket'> | string | null;
+    assignId?: UuidNullableFilter<'Ticket'> | string | null;
   };
 
-  export type TicketUpsertWithWhereUniqueWithoutAssignedInput = {
+  export type TicketUpsertWithWhereUniqueWithoutAssignInput = {
     where: TicketWhereUniqueInput;
-    update: XOR<TicketUpdateWithoutAssignedInput, TicketUncheckedUpdateWithoutAssignedInput>;
-    create: XOR<TicketCreateWithoutAssignedInput, TicketUncheckedCreateWithoutAssignedInput>;
+    update: XOR<TicketUpdateWithoutAssignInput, TicketUncheckedUpdateWithoutAssignInput>;
+    create: XOR<TicketCreateWithoutAssignInput, TicketUncheckedCreateWithoutAssignInput>;
   };
 
-  export type TicketUpdateWithWhereUniqueWithoutAssignedInput = {
+  export type TicketUpdateWithWhereUniqueWithoutAssignInput = {
     where: TicketWhereUniqueInput;
-    data: XOR<TicketUpdateWithoutAssignedInput, TicketUncheckedUpdateWithoutAssignedInput>;
+    data: XOR<TicketUpdateWithoutAssignInput, TicketUncheckedUpdateWithoutAssignInput>;
   };
 
-  export type TicketUpdateManyWithWhereWithoutAssignedInput = {
+  export type TicketUpdateManyWithWhereWithoutAssignInput = {
     where: TicketScalarWhereInput;
-    data: XOR<TicketUpdateManyMutationInput, TicketUncheckedUpdateManyWithoutAssignedInput>;
+    data: XOR<TicketUpdateManyMutationInput, TicketUncheckedUpdateManyWithoutAssignInput>;
   };
 
   export type TicketMemberUpsertWithWhereUniqueWithoutUserInput = {
@@ -34280,8 +38163,8 @@ export namespace Prisma {
     OR?: BillScalarWhereInput[];
     NOT?: BillScalarWhereInput | BillScalarWhereInput[];
     id?: UuidFilter<'Bill'> | string;
-    createAt?: DateTimeFilter<'Bill'> | Date | string;
-    updateAt?: DateTimeFilter<'Bill'> | Date | string;
+    createdAt?: DateTimeFilter<'Bill'> | Date | string;
+    updatedAt?: DateTimeFilter<'Bill'> | Date | string;
     transactionId?: StringNullableFilter<'Bill'> | string | null;
     paymentMethod?: EnumPaymentMethodFilter<'Bill'> | $Enums.PaymentMethod;
     type?: EnumBillTypeFilter<'Bill'> | $Enums.BillType;
@@ -34312,17 +38195,451 @@ export namespace Prisma {
     OR?: OrderScalarWhereInput[];
     NOT?: OrderScalarWhereInput | OrderScalarWhereInput[];
     id?: UuidFilter<'Order'> | string;
-    createAt?: DateTimeFilter<'Order'> | Date | string;
-    updateAt?: DateTimeFilter<'Order'> | Date | string;
+    createdAt?: DateTimeFilter<'Order'> | Date | string;
+    updatedAt?: DateTimeFilter<'Order'> | Date | string;
     totalPrice?: IntFilter<'Order'> | number;
     userId?: UuidFilter<'Order'> | string;
     billId?: UuidFilter<'Order'> | string;
   };
 
+  export type MfaSetupCreateWithoutUserInput = {
+    id?: string;
+    type: $Enums.MfaType;
+    secret?: string | null;
+    phone?: string | null;
+    email?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type MfaSetupUncheckedCreateWithoutUserInput = {
+    id?: string;
+    type: $Enums.MfaType;
+    secret?: string | null;
+    phone?: string | null;
+    email?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type MfaSetupCreateOrConnectWithoutUserInput = {
+    where: MfaSetupWhereUniqueInput;
+    create: XOR<MfaSetupCreateWithoutUserInput, MfaSetupUncheckedCreateWithoutUserInput>;
+  };
+
+  export type MfaSetupCreateManyUserInputEnvelope = {
+    data: MfaSetupCreateManyUserInput | MfaSetupCreateManyUserInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type MfaBackupCodeCreateWithoutUserInput = {
+    id?: string;
+    code: string;
+    isUsed?: boolean;
+    usedAt?: Date | string | null;
+    createdAt?: Date | string;
+  };
+
+  export type MfaBackupCodeUncheckedCreateWithoutUserInput = {
+    id?: string;
+    code: string;
+    isUsed?: boolean;
+    usedAt?: Date | string | null;
+    createdAt?: Date | string;
+  };
+
+  export type MfaBackupCodeCreateOrConnectWithoutUserInput = {
+    where: MfaBackupCodeWhereUniqueInput;
+    create: XOR<MfaBackupCodeCreateWithoutUserInput, MfaBackupCodeUncheckedCreateWithoutUserInput>;
+  };
+
+  export type MfaBackupCodeCreateManyUserInputEnvelope = {
+    data: MfaBackupCodeCreateManyUserInput | MfaBackupCodeCreateManyUserInput[];
+    skipDuplicates?: boolean;
+  };
+
+  export type UserCreateWithoutSecurityInput = {
+    id?: string;
+    fullname: string;
+    email: string;
+    phone?: string | null;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
+    hashedPassword?: string | null;
+    avatarUrl?: string | null;
+    address?: string | null;
+    city?: string | null;
+    state?: string | null;
+    zipCode?: string | null;
+    biography?: string | null;
+    roles?: UserCreaterolesInput | $Enums.UserRole[];
+    flags?: UserCreateflagsInput | $Enums.UserFlag[];
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
+    auth?: AuthenticationCreateNestedManyWithoutUserInput;
+    loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
+    products?: ProductCreateNestedManyWithoutSellerInput;
+    cart?: CartItemCreateNestedManyWithoutUserInput;
+    ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
+    ticketAssign?: TicketCreateNestedManyWithoutAssignInput;
+    ticketMembers?: TicketMemberCreateNestedManyWithoutUserInput;
+    reviews?: ReviewCreateNestedManyWithoutUserInput;
+    bills?: BillCreateNestedManyWithoutUserInput;
+    orders?: OrderCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutSecurityInput = {
+    id?: string;
+    fullname: string;
+    email: string;
+    phone?: string | null;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
+    hashedPassword?: string | null;
+    avatarUrl?: string | null;
+    address?: string | null;
+    city?: string | null;
+    state?: string | null;
+    zipCode?: string | null;
+    biography?: string | null;
+    roles?: UserCreaterolesInput | $Enums.UserRole[];
+    flags?: UserCreateflagsInput | $Enums.UserFlag[];
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
+    auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
+    loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
+    cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
+    ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
+    ticketAssign?: TicketUncheckedCreateNestedManyWithoutAssignInput;
+    ticketMembers?: TicketMemberUncheckedCreateNestedManyWithoutUserInput;
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
+    bills?: BillUncheckedCreateNestedManyWithoutUserInput;
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutSecurityInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<UserCreateWithoutSecurityInput, UserUncheckedCreateWithoutSecurityInput>;
+  };
+
+  export type MfaSetupUpsertWithWhereUniqueWithoutUserInput = {
+    where: MfaSetupWhereUniqueInput;
+    update: XOR<MfaSetupUpdateWithoutUserInput, MfaSetupUncheckedUpdateWithoutUserInput>;
+    create: XOR<MfaSetupCreateWithoutUserInput, MfaSetupUncheckedCreateWithoutUserInput>;
+  };
+
+  export type MfaSetupUpdateWithWhereUniqueWithoutUserInput = {
+    where: MfaSetupWhereUniqueInput;
+    data: XOR<MfaSetupUpdateWithoutUserInput, MfaSetupUncheckedUpdateWithoutUserInput>;
+  };
+
+  export type MfaSetupUpdateManyWithWhereWithoutUserInput = {
+    where: MfaSetupScalarWhereInput;
+    data: XOR<MfaSetupUpdateManyMutationInput, MfaSetupUncheckedUpdateManyWithoutUserInput>;
+  };
+
+  export type MfaSetupScalarWhereInput = {
+    AND?: MfaSetupScalarWhereInput | MfaSetupScalarWhereInput[];
+    OR?: MfaSetupScalarWhereInput[];
+    NOT?: MfaSetupScalarWhereInput | MfaSetupScalarWhereInput[];
+    id?: UuidFilter<'MfaSetup'> | string;
+    type?: EnumMfaTypeFilter<'MfaSetup'> | $Enums.MfaType;
+    secret?: StringNullableFilter<'MfaSetup'> | string | null;
+    phone?: StringNullableFilter<'MfaSetup'> | string | null;
+    email?: StringNullableFilter<'MfaSetup'> | string | null;
+    createdAt?: DateTimeFilter<'MfaSetup'> | Date | string;
+    updatedAt?: DateTimeFilter<'MfaSetup'> | Date | string;
+    userId?: UuidFilter<'MfaSetup'> | string;
+  };
+
+  export type MfaBackupCodeUpsertWithWhereUniqueWithoutUserInput = {
+    where: MfaBackupCodeWhereUniqueInput;
+    update: XOR<MfaBackupCodeUpdateWithoutUserInput, MfaBackupCodeUncheckedUpdateWithoutUserInput>;
+    create: XOR<MfaBackupCodeCreateWithoutUserInput, MfaBackupCodeUncheckedCreateWithoutUserInput>;
+  };
+
+  export type MfaBackupCodeUpdateWithWhereUniqueWithoutUserInput = {
+    where: MfaBackupCodeWhereUniqueInput;
+    data: XOR<MfaBackupCodeUpdateWithoutUserInput, MfaBackupCodeUncheckedUpdateWithoutUserInput>;
+  };
+
+  export type MfaBackupCodeUpdateManyWithWhereWithoutUserInput = {
+    where: MfaBackupCodeScalarWhereInput;
+    data: XOR<MfaBackupCodeUpdateManyMutationInput, MfaBackupCodeUncheckedUpdateManyWithoutUserInput>;
+  };
+
+  export type MfaBackupCodeScalarWhereInput = {
+    AND?: MfaBackupCodeScalarWhereInput | MfaBackupCodeScalarWhereInput[];
+    OR?: MfaBackupCodeScalarWhereInput[];
+    NOT?: MfaBackupCodeScalarWhereInput | MfaBackupCodeScalarWhereInput[];
+    id?: UuidFilter<'MfaBackupCode'> | string;
+    code?: StringFilter<'MfaBackupCode'> | string;
+    isUsed?: BoolFilter<'MfaBackupCode'> | boolean;
+    usedAt?: DateTimeNullableFilter<'MfaBackupCode'> | Date | string | null;
+    createdAt?: DateTimeFilter<'MfaBackupCode'> | Date | string;
+    userId?: UuidFilter<'MfaBackupCode'> | string;
+  };
+
+  export type UserUpsertWithoutSecurityInput = {
+    update: XOR<UserUpdateWithoutSecurityInput, UserUncheckedUpdateWithoutSecurityInput>;
+    create: XOR<UserCreateWithoutSecurityInput, UserUncheckedCreateWithoutSecurityInput>;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutSecurityInput = {
+    where?: UserWhereInput;
+    data: XOR<UserUpdateWithoutSecurityInput, UserUncheckedUpdateWithoutSecurityInput>;
+  };
+
+  export type UserUpdateWithoutSecurityInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    fullname?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    address?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    state?: NullableStringFieldUpdateOperationsInput | string | null;
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null;
+    biography?: NullableStringFieldUpdateOperationsInput | string | null;
+    roles?: UserUpdaterolesInput | $Enums.UserRole[];
+    flags?: UserUpdateflagsInput | $Enums.UserFlag[];
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
+    auth?: AuthenticationUpdateManyWithoutUserNestedInput;
+    loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
+    products?: ProductUpdateManyWithoutSellerNestedInput;
+    cart?: CartItemUpdateManyWithoutUserNestedInput;
+    ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
+    ticketAssign?: TicketUpdateManyWithoutAssignNestedInput;
+    ticketMembers?: TicketMemberUpdateManyWithoutUserNestedInput;
+    reviews?: ReviewUpdateManyWithoutUserNestedInput;
+    bills?: BillUpdateManyWithoutUserNestedInput;
+    orders?: OrderUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutSecurityInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    fullname?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    address?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    state?: NullableStringFieldUpdateOperationsInput | string | null;
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null;
+    biography?: NullableStringFieldUpdateOperationsInput | string | null;
+    roles?: UserUpdaterolesInput | $Enums.UserRole[];
+    flags?: UserUpdateflagsInput | $Enums.UserFlag[];
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
+    auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
+    loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
+    cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
+    ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
+    ticketAssign?: TicketUncheckedUpdateManyWithoutAssignNestedInput;
+    ticketMembers?: TicketMemberUncheckedUpdateManyWithoutUserNestedInput;
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
+    bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserCreateWithoutExternalAccountsInput = {
+    id?: string;
+    fullname: string;
+    email: string;
+    phone?: string | null;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
+    hashedPassword?: string | null;
+    avatarUrl?: string | null;
+    address?: string | null;
+    city?: string | null;
+    state?: string | null;
+    zipCode?: string | null;
+    biography?: string | null;
+    roles?: UserCreaterolesInput | $Enums.UserRole[];
+    flags?: UserCreateflagsInput | $Enums.UserFlag[];
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityCreateNestedOneWithoutUserInput;
+    auth?: AuthenticationCreateNestedManyWithoutUserInput;
+    loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
+    products?: ProductCreateNestedManyWithoutSellerInput;
+    cart?: CartItemCreateNestedManyWithoutUserInput;
+    ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
+    ticketAssign?: TicketCreateNestedManyWithoutAssignInput;
+    ticketMembers?: TicketMemberCreateNestedManyWithoutUserInput;
+    reviews?: ReviewCreateNestedManyWithoutUserInput;
+    bills?: BillCreateNestedManyWithoutUserInput;
+    orders?: OrderCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutExternalAccountsInput = {
+    id?: string;
+    fullname: string;
+    email: string;
+    phone?: string | null;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
+    hashedPassword?: string | null;
+    avatarUrl?: string | null;
+    address?: string | null;
+    city?: string | null;
+    state?: string | null;
+    zipCode?: string | null;
+    biography?: string | null;
+    roles?: UserCreaterolesInput | $Enums.UserRole[];
+    flags?: UserCreateflagsInput | $Enums.UserFlag[];
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
+    loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
+    cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
+    ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
+    ticketAssign?: TicketUncheckedCreateNestedManyWithoutAssignInput;
+    ticketMembers?: TicketMemberUncheckedCreateNestedManyWithoutUserInput;
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
+    bills?: BillUncheckedCreateNestedManyWithoutUserInput;
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutExternalAccountsInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<UserCreateWithoutExternalAccountsInput, UserUncheckedCreateWithoutExternalAccountsInput>;
+  };
+
+  export type UserUpsertWithoutExternalAccountsInput = {
+    update: XOR<UserUpdateWithoutExternalAccountsInput, UserUncheckedUpdateWithoutExternalAccountsInput>;
+    create: XOR<UserCreateWithoutExternalAccountsInput, UserUncheckedCreateWithoutExternalAccountsInput>;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutExternalAccountsInput = {
+    where?: UserWhereInput;
+    data: XOR<UserUpdateWithoutExternalAccountsInput, UserUncheckedUpdateWithoutExternalAccountsInput>;
+  };
+
+  export type UserUpdateWithoutExternalAccountsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    fullname?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    address?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    state?: NullableStringFieldUpdateOperationsInput | string | null;
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null;
+    biography?: NullableStringFieldUpdateOperationsInput | string | null;
+    roles?: UserUpdaterolesInput | $Enums.UserRole[];
+    flags?: UserUpdateflagsInput | $Enums.UserFlag[];
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    auth?: AuthenticationUpdateManyWithoutUserNestedInput;
+    loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
+    products?: ProductUpdateManyWithoutSellerNestedInput;
+    cart?: CartItemUpdateManyWithoutUserNestedInput;
+    ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
+    ticketAssign?: TicketUpdateManyWithoutAssignNestedInput;
+    ticketMembers?: TicketMemberUpdateManyWithoutUserNestedInput;
+    reviews?: ReviewUpdateManyWithoutUserNestedInput;
+    bills?: BillUpdateManyWithoutUserNestedInput;
+    orders?: OrderUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutExternalAccountsInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    fullname?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    address?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    state?: NullableStringFieldUpdateOperationsInput | string | null;
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null;
+    biography?: NullableStringFieldUpdateOperationsInput | string | null;
+    roles?: UserUpdaterolesInput | $Enums.UserRole[];
+    flags?: UserUpdateflagsInput | $Enums.UserFlag[];
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
+    loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
+    cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
+    ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
+    ticketAssign?: TicketUncheckedUpdateManyWithoutAssignNestedInput;
+    ticketMembers?: TicketMemberUncheckedUpdateManyWithoutUserNestedInput;
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
+    bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
+  };
+
   export type OrderCreateWithoutBillInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     totalPrice: number;
     user: UserCreateNestedOneWithoutOrdersInput;
     items?: OrderItemCreateNestedManyWithoutOrderInput;
@@ -34330,8 +38647,8 @@ export namespace Prisma {
 
   export type OrderUncheckedCreateWithoutBillInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     totalPrice: number;
     userId: string;
     items?: OrderItemUncheckedCreateNestedManyWithoutOrderInput;
@@ -34347,7 +38664,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -34357,17 +38675,21 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
     products?: ProductCreateNestedManyWithoutSellerInput;
     cart?: CartItemCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketCreateNestedManyWithoutAssignInput;
     ticketMembers?: TicketMemberCreateNestedManyWithoutUserInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
     orders?: OrderCreateNestedManyWithoutUserInput;
@@ -34378,7 +38700,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -34388,17 +38711,21 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
     products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
     cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketUncheckedCreateNestedManyWithoutAssignInput;
     ticketMembers?: TicketMemberUncheckedCreateNestedManyWithoutUserInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
@@ -34422,8 +38749,8 @@ export namespace Prisma {
 
   export type OrderUpdateWithoutBillInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     totalPrice?: IntFieldUpdateOperationsInput | number;
     user?: UserUpdateOneRequiredWithoutOrdersNestedInput;
     items?: OrderItemUpdateManyWithoutOrderNestedInput;
@@ -34431,8 +38758,8 @@ export namespace Prisma {
 
   export type OrderUncheckedUpdateWithoutBillInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     totalPrice?: IntFieldUpdateOperationsInput | number;
     userId?: StringFieldUpdateOperationsInput | string;
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput;
@@ -34454,7 +38781,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -34464,17 +38792,21 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
     products?: ProductUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUpdateManyWithoutAssignNestedInput;
     ticketMembers?: TicketMemberUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
     orders?: OrderUpdateManyWithoutUserNestedInput;
@@ -34485,7 +38817,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -34495,17 +38828,21 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
     products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUncheckedUpdateManyWithoutAssignNestedInput;
     ticketMembers?: TicketMemberUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
@@ -34513,8 +38850,8 @@ export namespace Prisma {
 
   export type ProductCreateWithoutCartItemInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     sku?: string | null;
     isActive?: boolean;
     slug: string;
@@ -34536,8 +38873,8 @@ export namespace Prisma {
 
   export type ProductUncheckedCreateWithoutCartItemInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     sku?: string | null;
     isActive?: boolean;
     slug: string;
@@ -34567,7 +38904,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -34577,16 +38915,20 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
     products?: ProductCreateNestedManyWithoutSellerInput;
-    mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketCreateNestedManyWithoutAssignInput;
     ticketMembers?: TicketMemberCreateNestedManyWithoutUserInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
@@ -34598,7 +38940,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -34608,16 +38951,20 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
     products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
-    mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketUncheckedCreateNestedManyWithoutAssignInput;
     ticketMembers?: TicketMemberUncheckedCreateNestedManyWithoutUserInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
@@ -34642,8 +38989,8 @@ export namespace Prisma {
 
   export type ProductUpdateWithoutCartItemInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sku?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
     slug?: StringFieldUpdateOperationsInput | string;
@@ -34665,8 +39012,8 @@ export namespace Prisma {
 
   export type ProductUncheckedUpdateWithoutCartItemInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sku?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
     slug?: StringFieldUpdateOperationsInput | string;
@@ -34702,7 +39049,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -34712,16 +39060,20 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
     products?: ProductUpdateManyWithoutSellerNestedInput;
-    mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUpdateManyWithoutAssignNestedInput;
     ticketMembers?: TicketMemberUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
@@ -34733,7 +39085,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -34743,16 +39096,20 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
     products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
-    mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUncheckedUpdateManyWithoutAssignNestedInput;
     ticketMembers?: TicketMemberUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
@@ -34788,7 +39145,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -34798,16 +39156,20 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
     products?: ProductCreateNestedManyWithoutSellerInput;
     cart?: CartItemCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
-    ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketCreateNestedManyWithoutAssignInput;
     ticketMembers?: TicketMemberCreateNestedManyWithoutUserInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
@@ -34819,7 +39181,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -34829,16 +39192,20 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
     products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
     cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
-    ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketUncheckedCreateNestedManyWithoutAssignInput;
     ticketMembers?: TicketMemberUncheckedCreateNestedManyWithoutUserInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
@@ -34850,12 +39217,13 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutTicketAuthorInput, UserUncheckedCreateWithoutTicketAuthorInput>;
   };
 
-  export type UserCreateWithoutTicketAssignedInput = {
+  export type UserCreateWithoutTicketAssignInput = {
     id?: string;
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -34865,15 +39233,19 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
     products?: ProductCreateNestedManyWithoutSellerInput;
     cart?: CartItemCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
     ticketMembers?: TicketMemberCreateNestedManyWithoutUserInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
@@ -34881,12 +39253,13 @@ export namespace Prisma {
     orders?: OrderCreateNestedManyWithoutUserInput;
   };
 
-  export type UserUncheckedCreateWithoutTicketAssignedInput = {
+  export type UserUncheckedCreateWithoutTicketAssignInput = {
     id?: string;
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -34896,15 +39269,19 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
     products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
     cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
     ticketMembers?: TicketMemberUncheckedCreateNestedManyWithoutUserInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
@@ -34912,9 +39289,9 @@ export namespace Prisma {
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
   };
 
-  export type UserCreateOrConnectWithoutTicketAssignedInput = {
+  export type UserCreateOrConnectWithoutTicketAssignInput = {
     where: UserWhereUniqueInput;
-    create: XOR<UserCreateWithoutTicketAssignedInput, UserUncheckedCreateWithoutTicketAssignedInput>;
+    create: XOR<UserCreateWithoutTicketAssignInput, UserUncheckedCreateWithoutTicketAssignInput>;
   };
 
   export type TicketMessageCreateWithoutTicketInput = {
@@ -35018,7 +39395,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -35028,16 +39406,20 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
     products?: ProductUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
-    ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUpdateManyWithoutAssignNestedInput;
     ticketMembers?: TicketMemberUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
@@ -35049,7 +39431,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -35059,39 +39442,44 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
     products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
-    ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUncheckedUpdateManyWithoutAssignNestedInput;
     ticketMembers?: TicketMemberUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
   };
 
-  export type UserUpsertWithoutTicketAssignedInput = {
-    update: XOR<UserUpdateWithoutTicketAssignedInput, UserUncheckedUpdateWithoutTicketAssignedInput>;
-    create: XOR<UserCreateWithoutTicketAssignedInput, UserUncheckedCreateWithoutTicketAssignedInput>;
+  export type UserUpsertWithoutTicketAssignInput = {
+    update: XOR<UserUpdateWithoutTicketAssignInput, UserUncheckedUpdateWithoutTicketAssignInput>;
+    create: XOR<UserCreateWithoutTicketAssignInput, UserUncheckedCreateWithoutTicketAssignInput>;
     where?: UserWhereInput;
   };
 
-  export type UserUpdateToOneWithWhereWithoutTicketAssignedInput = {
+  export type UserUpdateToOneWithWhereWithoutTicketAssignInput = {
     where?: UserWhereInput;
-    data: XOR<UserUpdateWithoutTicketAssignedInput, UserUncheckedUpdateWithoutTicketAssignedInput>;
+    data: XOR<UserUpdateWithoutTicketAssignInput, UserUncheckedUpdateWithoutTicketAssignInput>;
   };
 
-  export type UserUpdateWithoutTicketAssignedInput = {
+  export type UserUpdateWithoutTicketAssignInput = {
     id?: StringFieldUpdateOperationsInput | string;
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -35101,15 +39489,19 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
     products?: ProductUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
     ticketMembers?: TicketMemberUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
@@ -35117,12 +39509,13 @@ export namespace Prisma {
     orders?: OrderUpdateManyWithoutUserNestedInput;
   };
 
-  export type UserUncheckedUpdateWithoutTicketAssignedInput = {
+  export type UserUncheckedUpdateWithoutTicketAssignInput = {
     id?: StringFieldUpdateOperationsInput | string;
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -35132,15 +39525,19 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
     products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
     ticketMembers?: TicketMemberUncheckedUpdateManyWithoutUserNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
@@ -35197,8 +39594,8 @@ export namespace Prisma {
   export type TicketCreateWithoutMembersInput = {
     id?: string;
     numericalOrder?: number;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     title: string;
     description: string;
     status?: $Enums.TicketStatus;
@@ -35207,15 +39604,15 @@ export namespace Prisma {
     attachments?: TicketCreateattachmentsInput | string[];
     contexts?: TicketContextCreateNestedManyWithoutTicketInput;
     author: UserCreateNestedOneWithoutTicketAuthorInput;
-    assigned?: UserCreateNestedOneWithoutTicketAssignedInput;
+    assign?: UserCreateNestedOneWithoutTicketAssignInput;
     messages?: TicketMessageCreateNestedManyWithoutTicketInput;
   };
 
   export type TicketUncheckedCreateWithoutMembersInput = {
     id?: string;
     numericalOrder?: number;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     title: string;
     description: string;
     status?: $Enums.TicketStatus;
@@ -35223,7 +39620,7 @@ export namespace Prisma {
     priority: $Enums.TicketPriority;
     attachments?: TicketCreateattachmentsInput | string[];
     authorId: string;
-    assignedId?: string | null;
+    assignId?: string | null;
     contexts?: TicketContextUncheckedCreateNestedManyWithoutTicketInput;
     messages?: TicketMessageUncheckedCreateNestedManyWithoutTicketInput;
   };
@@ -35238,7 +39635,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -35248,17 +39646,21 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
     products?: ProductCreateNestedManyWithoutSellerInput;
     cart?: CartItemCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketCreateNestedManyWithoutAssignInput;
     reviews?: ReviewCreateNestedManyWithoutUserInput;
     bills?: BillCreateNestedManyWithoutUserInput;
     orders?: OrderCreateNestedManyWithoutUserInput;
@@ -35269,7 +39671,8 @@ export namespace Prisma {
     fullname: string;
     email: string;
     phone?: string | null;
-    isVerified?: boolean;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
     hashedPassword?: string | null;
     avatarUrl?: string | null;
     address?: string | null;
@@ -35279,17 +39682,21 @@ export namespace Prisma {
     biography?: string | null;
     roles?: UserCreaterolesInput | $Enums.UserRole[];
     flags?: UserCreateflagsInput | $Enums.UserFlag[];
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     credit?: number;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
-    backupCodes?: MfaBackupCodeUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
     products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
     cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
-    mfaSetups?: MfaSetupUncheckedCreateNestedManyWithoutUserInput;
     ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
-    ticketAssigned?: TicketUncheckedCreateNestedManyWithoutAssignedInput;
+    ticketAssign?: TicketUncheckedCreateNestedManyWithoutAssignInput;
     reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
     bills?: BillUncheckedCreateNestedManyWithoutUserInput;
     orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
@@ -35373,8 +39780,8 @@ export namespace Prisma {
   export type TicketUpdateWithoutMembersInput = {
     id?: StringFieldUpdateOperationsInput | string;
     numericalOrder?: IntFieldUpdateOperationsInput | number;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
@@ -35383,15 +39790,15 @@ export namespace Prisma {
     attachments?: TicketUpdateattachmentsInput | string[];
     contexts?: TicketContextUpdateManyWithoutTicketNestedInput;
     author?: UserUpdateOneRequiredWithoutTicketAuthorNestedInput;
-    assigned?: UserUpdateOneWithoutTicketAssignedNestedInput;
+    assign?: UserUpdateOneWithoutTicketAssignNestedInput;
     messages?: TicketMessageUpdateManyWithoutTicketNestedInput;
   };
 
   export type TicketUncheckedUpdateWithoutMembersInput = {
     id?: StringFieldUpdateOperationsInput | string;
     numericalOrder?: IntFieldUpdateOperationsInput | number;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
@@ -35399,7 +39806,7 @@ export namespace Prisma {
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
     attachments?: TicketUpdateattachmentsInput | string[];
     authorId?: StringFieldUpdateOperationsInput | string;
-    assignedId?: NullableStringFieldUpdateOperationsInput | string | null;
+    assignId?: NullableStringFieldUpdateOperationsInput | string | null;
     contexts?: TicketContextUncheckedUpdateManyWithoutTicketNestedInput;
     messages?: TicketMessageUncheckedUpdateManyWithoutTicketNestedInput;
   };
@@ -35420,7 +39827,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -35430,17 +39838,21 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
     products?: ProductUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUpdateManyWithoutAssignNestedInput;
     reviews?: ReviewUpdateManyWithoutUserNestedInput;
     bills?: BillUpdateManyWithoutUserNestedInput;
     orders?: OrderUpdateManyWithoutUserNestedInput;
@@ -35451,7 +39863,8 @@ export namespace Prisma {
     fullname?: StringFieldUpdateOperationsInput | string;
     email?: StringFieldUpdateOperationsInput | string;
     phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
     hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
     address?: NullableStringFieldUpdateOperationsInput | string | null;
@@ -35461,17 +39874,21 @@ export namespace Prisma {
     biography?: NullableStringFieldUpdateOperationsInput | string | null;
     roles?: UserUpdaterolesInput | $Enums.UserRole[];
     flags?: UserUpdateflagsInput | $Enums.UserFlag[];
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
-    backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
     products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
     cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
-    mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
-    ticketAssigned?: TicketUncheckedUpdateManyWithoutAssignedNestedInput;
+    ticketAssign?: TicketUncheckedUpdateManyWithoutAssignNestedInput;
     reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
     bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
     orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
@@ -35550,8 +39967,8 @@ export namespace Prisma {
   export type TicketCreateWithoutMessagesInput = {
     id?: string;
     numericalOrder?: number;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     title: string;
     description: string;
     status?: $Enums.TicketStatus;
@@ -35560,15 +39977,15 @@ export namespace Prisma {
     attachments?: TicketCreateattachmentsInput | string[];
     contexts?: TicketContextCreateNestedManyWithoutTicketInput;
     author: UserCreateNestedOneWithoutTicketAuthorInput;
-    assigned?: UserCreateNestedOneWithoutTicketAssignedInput;
+    assign?: UserCreateNestedOneWithoutTicketAssignInput;
     members?: TicketMemberCreateNestedManyWithoutTicketInput;
   };
 
   export type TicketUncheckedCreateWithoutMessagesInput = {
     id?: string;
     numericalOrder?: number;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     title: string;
     description: string;
     status?: $Enums.TicketStatus;
@@ -35576,7 +39993,7 @@ export namespace Prisma {
     priority: $Enums.TicketPriority;
     attachments?: TicketCreateattachmentsInput | string[];
     authorId: string;
-    assignedId?: string | null;
+    assignId?: string | null;
     contexts?: TicketContextUncheckedCreateNestedManyWithoutTicketInput;
     members?: TicketMemberUncheckedCreateNestedManyWithoutTicketInput;
   };
@@ -35651,8 +40068,8 @@ export namespace Prisma {
   export type TicketUpdateWithoutMessagesInput = {
     id?: StringFieldUpdateOperationsInput | string;
     numericalOrder?: IntFieldUpdateOperationsInput | number;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
@@ -35661,15 +40078,15 @@ export namespace Prisma {
     attachments?: TicketUpdateattachmentsInput | string[];
     contexts?: TicketContextUpdateManyWithoutTicketNestedInput;
     author?: UserUpdateOneRequiredWithoutTicketAuthorNestedInput;
-    assigned?: UserUpdateOneWithoutTicketAssignedNestedInput;
+    assign?: UserUpdateOneWithoutTicketAssignNestedInput;
     members?: TicketMemberUpdateManyWithoutTicketNestedInput;
   };
 
   export type TicketUncheckedUpdateWithoutMessagesInput = {
     id?: StringFieldUpdateOperationsInput | string;
     numericalOrder?: IntFieldUpdateOperationsInput | number;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
@@ -35677,7 +40094,7 @@ export namespace Prisma {
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
     attachments?: TicketUpdateattachmentsInput | string[];
     authorId?: StringFieldUpdateOperationsInput | string;
-    assignedId?: NullableStringFieldUpdateOperationsInput | string | null;
+    assignId?: NullableStringFieldUpdateOperationsInput | string | null;
     contexts?: TicketContextUncheckedUpdateManyWithoutTicketNestedInput;
     members?: TicketMemberUncheckedUpdateManyWithoutTicketNestedInput;
   };
@@ -35721,8 +40138,8 @@ export namespace Prisma {
   export type TicketCreateWithoutContextsInput = {
     id?: string;
     numericalOrder?: number;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     title: string;
     description: string;
     status?: $Enums.TicketStatus;
@@ -35730,7 +40147,7 @@ export namespace Prisma {
     priority: $Enums.TicketPriority;
     attachments?: TicketCreateattachmentsInput | string[];
     author: UserCreateNestedOneWithoutTicketAuthorInput;
-    assigned?: UserCreateNestedOneWithoutTicketAssignedInput;
+    assign?: UserCreateNestedOneWithoutTicketAssignInput;
     messages?: TicketMessageCreateNestedManyWithoutTicketInput;
     members?: TicketMemberCreateNestedManyWithoutTicketInput;
   };
@@ -35738,8 +40155,8 @@ export namespace Prisma {
   export type TicketUncheckedCreateWithoutContextsInput = {
     id?: string;
     numericalOrder?: number;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     title: string;
     description: string;
     status?: $Enums.TicketStatus;
@@ -35747,7 +40164,7 @@ export namespace Prisma {
     priority: $Enums.TicketPriority;
     attachments?: TicketCreateattachmentsInput | string[];
     authorId: string;
-    assignedId?: string | null;
+    assignId?: string | null;
     messages?: TicketMessageUncheckedCreateNestedManyWithoutTicketInput;
     members?: TicketMemberUncheckedCreateNestedManyWithoutTicketInput;
   };
@@ -35771,8 +40188,8 @@ export namespace Prisma {
   export type TicketUpdateWithoutContextsInput = {
     id?: StringFieldUpdateOperationsInput | string;
     numericalOrder?: IntFieldUpdateOperationsInput | number;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
@@ -35780,7 +40197,7 @@ export namespace Prisma {
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
     attachments?: TicketUpdateattachmentsInput | string[];
     author?: UserUpdateOneRequiredWithoutTicketAuthorNestedInput;
-    assigned?: UserUpdateOneWithoutTicketAssignedNestedInput;
+    assign?: UserUpdateOneWithoutTicketAssignNestedInput;
     messages?: TicketMessageUpdateManyWithoutTicketNestedInput;
     members?: TicketMemberUpdateManyWithoutTicketNestedInput;
   };
@@ -35788,8 +40205,8 @@ export namespace Prisma {
   export type TicketUncheckedUpdateWithoutContextsInput = {
     id?: StringFieldUpdateOperationsInput | string;
     numericalOrder?: IntFieldUpdateOperationsInput | number;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
@@ -35797,7 +40214,7 @@ export namespace Prisma {
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
     attachments?: TicketUpdateattachmentsInput | string[];
     authorId?: StringFieldUpdateOperationsInput | string;
-    assignedId?: NullableStringFieldUpdateOperationsInput | string | null;
+    assignId?: NullableStringFieldUpdateOperationsInput | string | null;
     messages?: TicketMessageUncheckedUpdateManyWithoutTicketNestedInput;
     members?: TicketMemberUncheckedUpdateManyWithoutTicketNestedInput;
   };
@@ -35840,8 +40257,8 @@ export namespace Prisma {
 
   export type CartItemCreateManyProductInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     quantity?: number;
     userId: string;
   };
@@ -35873,24 +40290,24 @@ export namespace Prisma {
 
   export type CartItemUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
     user?: UserUpdateOneRequiredWithoutCartNestedInput;
   };
 
   export type CartItemUncheckedUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
     userId?: StringFieldUpdateOperationsInput | string;
   };
 
   export type CartItemUncheckedUpdateManyWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
     userId?: StringFieldUpdateOperationsInput | string;
   };
@@ -35974,8 +40391,8 @@ export namespace Prisma {
 
   export type ProductCreateManyCategoryInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     sku?: string | null;
     isActive?: boolean;
     slug: string;
@@ -35993,8 +40410,8 @@ export namespace Prisma {
 
   export type ProductUpdateWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sku?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
     slug?: StringFieldUpdateOperationsInput | string;
@@ -36016,8 +40433,8 @@ export namespace Prisma {
 
   export type ProductUncheckedUpdateWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sku?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
     slug?: StringFieldUpdateOperationsInput | string;
@@ -36039,8 +40456,8 @@ export namespace Prisma {
 
   export type ProductUncheckedUpdateManyWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sku?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
     slug?: StringFieldUpdateOperationsInput | string;
@@ -36056,20 +40473,28 @@ export namespace Prisma {
     sellerId?: StringFieldUpdateOperationsInput | string;
   };
 
-  export type AuthenticationCreateManyUserInput = {
-    code: string;
-    type: $Enums.AuthType;
-    retryTime?: number;
-    lastSentAt: Date | string;
-    expiresAt: Date | string;
+  export type ExternalAccountCreateManyUserInput = {
+    id?: string;
+    provider: $Enums.ProviderPlatform;
+    providerUserId: string;
+    approvedScope: string;
+    emailAddress: string;
+    phoneNumber?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    fullName?: string | null;
+    username?: string | null;
+    avatarUrl?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
   };
 
-  export type MfaBackupCodeCreateManyUserInput = {
-    id?: string;
+  export type AuthenticationCreateManyUserInput = {
     code: string;
-    isUsed?: boolean;
-    usedAt?: Date | string | null;
-    createdAt?: Date | string;
+    retryTime?: number;
+    type: $Enums.AuthType;
+    lastSentAt: Date | string;
+    expiresAt: Date | string;
   };
 
   export type LoginSessionCreateManyUserInput = {
@@ -36085,8 +40510,8 @@ export namespace Prisma {
 
   export type ProductCreateManySellerInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     sku?: string | null;
     isActive?: boolean;
     slug: string;
@@ -36104,42 +40529,31 @@ export namespace Prisma {
 
   export type CartItemCreateManyUserInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
-    quantity?: number;
-    productId: string;
-  };
-
-  export type MfaSetupCreateManyUserInput = {
-    id?: string;
-    type: $Enums.MfaType;
-    isEnabled?: boolean;
-    secret?: string | null;
-    phone?: string | null;
-    email?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
+    quantity?: number;
+    productId: string;
   };
 
   export type TicketCreateManyAuthorInput = {
     id?: string;
     numericalOrder?: number;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     title: string;
     description: string;
     status?: $Enums.TicketStatus;
     category: $Enums.TicketCategory;
     priority: $Enums.TicketPriority;
     attachments?: TicketCreateattachmentsInput | string[];
-    assignedId?: string | null;
+    assignId?: string | null;
   };
 
-  export type TicketCreateManyAssignedInput = {
+  export type TicketCreateManyAssignInput = {
     id?: string;
     numericalOrder?: number;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     title: string;
     description: string;
     status?: $Enums.TicketStatus;
@@ -36167,8 +40581,8 @@ export namespace Prisma {
 
   export type BillCreateManyUserInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     transactionId?: string | null;
     paymentMethod: $Enums.PaymentMethod;
     type: $Enums.BillType;
@@ -36179,58 +40593,82 @@ export namespace Prisma {
 
   export type OrderCreateManyUserInput = {
     id?: string;
-    createAt?: Date | string;
-    updateAt?: Date | string;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
     totalPrice: number;
     billId: string;
   };
 
+  export type ExternalAccountUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    provider?: EnumProviderPlatformFieldUpdateOperationsInput | $Enums.ProviderPlatform;
+    providerUserId?: StringFieldUpdateOperationsInput | string;
+    approvedScope?: StringFieldUpdateOperationsInput | string;
+    emailAddress?: StringFieldUpdateOperationsInput | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null;
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null;
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null;
+    username?: NullableStringFieldUpdateOperationsInput | string | null;
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type ExternalAccountUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    provider?: EnumProviderPlatformFieldUpdateOperationsInput | $Enums.ProviderPlatform;
+    providerUserId?: StringFieldUpdateOperationsInput | string;
+    approvedScope?: StringFieldUpdateOperationsInput | string;
+    emailAddress?: StringFieldUpdateOperationsInput | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null;
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null;
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null;
+    username?: NullableStringFieldUpdateOperationsInput | string | null;
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type ExternalAccountUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    provider?: EnumProviderPlatformFieldUpdateOperationsInput | $Enums.ProviderPlatform;
+    providerUserId?: StringFieldUpdateOperationsInput | string;
+    approvedScope?: StringFieldUpdateOperationsInput | string;
+    emailAddress?: StringFieldUpdateOperationsInput | string;
+    phoneNumber?: NullableStringFieldUpdateOperationsInput | string | null;
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null;
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null;
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null;
+    username?: NullableStringFieldUpdateOperationsInput | string | null;
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
   export type AuthenticationUpdateWithoutUserInput = {
     code?: StringFieldUpdateOperationsInput | string;
-    type?: EnumAuthTypeFieldUpdateOperationsInput | $Enums.AuthType;
     retryTime?: IntFieldUpdateOperationsInput | number;
+    type?: EnumAuthTypeFieldUpdateOperationsInput | $Enums.AuthType;
     lastSentAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type AuthenticationUncheckedUpdateWithoutUserInput = {
     code?: StringFieldUpdateOperationsInput | string;
-    type?: EnumAuthTypeFieldUpdateOperationsInput | $Enums.AuthType;
     retryTime?: IntFieldUpdateOperationsInput | number;
+    type?: EnumAuthTypeFieldUpdateOperationsInput | $Enums.AuthType;
     lastSentAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type AuthenticationUncheckedUpdateManyWithoutUserInput = {
     code?: StringFieldUpdateOperationsInput | string;
-    type?: EnumAuthTypeFieldUpdateOperationsInput | $Enums.AuthType;
     retryTime?: IntFieldUpdateOperationsInput | number;
+    type?: EnumAuthTypeFieldUpdateOperationsInput | $Enums.AuthType;
     lastSentAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-  };
-
-  export type MfaBackupCodeUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    code?: StringFieldUpdateOperationsInput | string;
-    isUsed?: BoolFieldUpdateOperationsInput | boolean;
-    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-  };
-
-  export type MfaBackupCodeUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    code?: StringFieldUpdateOperationsInput | string;
-    isUsed?: BoolFieldUpdateOperationsInput | boolean;
-    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-  };
-
-  export type MfaBackupCodeUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    code?: StringFieldUpdateOperationsInput | string;
-    isUsed?: BoolFieldUpdateOperationsInput | boolean;
-    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type LoginSessionUpdateWithoutUserInput = {
@@ -36268,8 +40706,8 @@ export namespace Prisma {
 
   export type ProductUpdateWithoutSellerInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sku?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
     slug?: StringFieldUpdateOperationsInput | string;
@@ -36291,8 +40729,8 @@ export namespace Prisma {
 
   export type ProductUncheckedUpdateWithoutSellerInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sku?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
     slug?: StringFieldUpdateOperationsInput | string;
@@ -36314,8 +40752,8 @@ export namespace Prisma {
 
   export type ProductUncheckedUpdateManyWithoutSellerInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     sku?: NullableStringFieldUpdateOperationsInput | string | null;
     isActive?: BoolFieldUpdateOperationsInput | boolean;
     slug?: StringFieldUpdateOperationsInput | string;
@@ -36333,66 +40771,33 @@ export namespace Prisma {
 
   export type CartItemUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
     product?: ProductUpdateOneRequiredWithoutCartItemNestedInput;
   };
 
   export type CartItemUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
     productId?: StringFieldUpdateOperationsInput | string;
   };
 
   export type CartItemUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     quantity?: IntFieldUpdateOperationsInput | number;
     productId?: StringFieldUpdateOperationsInput | string;
-  };
-
-  export type MfaSetupUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    type?: EnumMfaTypeFieldUpdateOperationsInput | $Enums.MfaType;
-    isEnabled?: BoolFieldUpdateOperationsInput | boolean;
-    secret?: NullableStringFieldUpdateOperationsInput | string | null;
-    phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    email?: NullableStringFieldUpdateOperationsInput | string | null;
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-  };
-
-  export type MfaSetupUncheckedUpdateWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    type?: EnumMfaTypeFieldUpdateOperationsInput | $Enums.MfaType;
-    isEnabled?: BoolFieldUpdateOperationsInput | boolean;
-    secret?: NullableStringFieldUpdateOperationsInput | string | null;
-    phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    email?: NullableStringFieldUpdateOperationsInput | string | null;
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-  };
-
-  export type MfaSetupUncheckedUpdateManyWithoutUserInput = {
-    id?: StringFieldUpdateOperationsInput | string;
-    type?: EnumMfaTypeFieldUpdateOperationsInput | $Enums.MfaType;
-    isEnabled?: BoolFieldUpdateOperationsInput | boolean;
-    secret?: NullableStringFieldUpdateOperationsInput | string | null;
-    phone?: NullableStringFieldUpdateOperationsInput | string | null;
-    email?: NullableStringFieldUpdateOperationsInput | string | null;
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type TicketUpdateWithoutAuthorInput = {
     id?: StringFieldUpdateOperationsInput | string;
     numericalOrder?: IntFieldUpdateOperationsInput | number;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
@@ -36400,7 +40805,7 @@ export namespace Prisma {
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
     attachments?: TicketUpdateattachmentsInput | string[];
     contexts?: TicketContextUpdateManyWithoutTicketNestedInput;
-    assigned?: UserUpdateOneWithoutTicketAssignedNestedInput;
+    assign?: UserUpdateOneWithoutTicketAssignNestedInput;
     messages?: TicketMessageUpdateManyWithoutTicketNestedInput;
     members?: TicketMemberUpdateManyWithoutTicketNestedInput;
   };
@@ -36408,15 +40813,15 @@ export namespace Prisma {
   export type TicketUncheckedUpdateWithoutAuthorInput = {
     id?: StringFieldUpdateOperationsInput | string;
     numericalOrder?: IntFieldUpdateOperationsInput | number;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
     category?: EnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory;
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
     attachments?: TicketUpdateattachmentsInput | string[];
-    assignedId?: NullableStringFieldUpdateOperationsInput | string | null;
+    assignId?: NullableStringFieldUpdateOperationsInput | string | null;
     contexts?: TicketContextUncheckedUpdateManyWithoutTicketNestedInput;
     messages?: TicketMessageUncheckedUpdateManyWithoutTicketNestedInput;
     members?: TicketMemberUncheckedUpdateManyWithoutTicketNestedInput;
@@ -36425,22 +40830,22 @@ export namespace Prisma {
   export type TicketUncheckedUpdateManyWithoutAuthorInput = {
     id?: StringFieldUpdateOperationsInput | string;
     numericalOrder?: IntFieldUpdateOperationsInput | number;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
     category?: EnumTicketCategoryFieldUpdateOperationsInput | $Enums.TicketCategory;
     priority?: EnumTicketPriorityFieldUpdateOperationsInput | $Enums.TicketPriority;
     attachments?: TicketUpdateattachmentsInput | string[];
-    assignedId?: NullableStringFieldUpdateOperationsInput | string | null;
+    assignId?: NullableStringFieldUpdateOperationsInput | string | null;
   };
 
-  export type TicketUpdateWithoutAssignedInput = {
+  export type TicketUpdateWithoutAssignInput = {
     id?: StringFieldUpdateOperationsInput | string;
     numericalOrder?: IntFieldUpdateOperationsInput | number;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
@@ -36453,11 +40858,11 @@ export namespace Prisma {
     members?: TicketMemberUpdateManyWithoutTicketNestedInput;
   };
 
-  export type TicketUncheckedUpdateWithoutAssignedInput = {
+  export type TicketUncheckedUpdateWithoutAssignInput = {
     id?: StringFieldUpdateOperationsInput | string;
     numericalOrder?: IntFieldUpdateOperationsInput | number;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
@@ -36470,11 +40875,11 @@ export namespace Prisma {
     members?: TicketMemberUncheckedUpdateManyWithoutTicketNestedInput;
   };
 
-  export type TicketUncheckedUpdateManyWithoutAssignedInput = {
+  export type TicketUncheckedUpdateManyWithoutAssignInput = {
     id?: StringFieldUpdateOperationsInput | string;
     numericalOrder?: IntFieldUpdateOperationsInput | number;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     title?: StringFieldUpdateOperationsInput | string;
     description?: StringFieldUpdateOperationsInput | string;
     status?: EnumTicketStatusFieldUpdateOperationsInput | $Enums.TicketStatus;
@@ -36536,8 +40941,8 @@ export namespace Prisma {
 
   export type BillUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
     type?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType;
@@ -36549,8 +40954,8 @@ export namespace Prisma {
 
   export type BillUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
     type?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType;
@@ -36562,8 +40967,8 @@ export namespace Prisma {
 
   export type BillUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     transactionId?: NullableStringFieldUpdateOperationsInput | string | null;
     paymentMethod?: EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod;
     type?: EnumBillTypeFieldUpdateOperationsInput | $Enums.BillType;
@@ -36574,8 +40979,8 @@ export namespace Prisma {
 
   export type OrderUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     totalPrice?: IntFieldUpdateOperationsInput | number;
     bill?: BillUpdateOneRequiredWithoutOrderNestedInput;
     items?: OrderItemUpdateManyWithoutOrderNestedInput;
@@ -36583,8 +40988,8 @@ export namespace Prisma {
 
   export type OrderUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     totalPrice?: IntFieldUpdateOperationsInput | number;
     billId?: StringFieldUpdateOperationsInput | string;
     items?: OrderItemUncheckedUpdateManyWithoutOrderNestedInput;
@@ -36592,10 +40997,82 @@ export namespace Prisma {
 
   export type OrderUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string;
-    createAt?: DateTimeFieldUpdateOperationsInput | Date | string;
-    updateAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     totalPrice?: IntFieldUpdateOperationsInput | number;
     billId?: StringFieldUpdateOperationsInput | string;
+  };
+
+  export type MfaSetupCreateManyUserInput = {
+    id?: string;
+    type: $Enums.MfaType;
+    secret?: string | null;
+    phone?: string | null;
+    email?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+  };
+
+  export type MfaBackupCodeCreateManyUserInput = {
+    id?: string;
+    code: string;
+    isUsed?: boolean;
+    usedAt?: Date | string | null;
+    createdAt?: Date | string;
+  };
+
+  export type MfaSetupUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?: EnumMfaTypeFieldUpdateOperationsInput | $Enums.MfaType;
+    secret?: NullableStringFieldUpdateOperationsInput | string | null;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    email?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type MfaSetupUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?: EnumMfaTypeFieldUpdateOperationsInput | $Enums.MfaType;
+    secret?: NullableStringFieldUpdateOperationsInput | string | null;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    email?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type MfaSetupUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    type?: EnumMfaTypeFieldUpdateOperationsInput | $Enums.MfaType;
+    secret?: NullableStringFieldUpdateOperationsInput | string | null;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    email?: NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type MfaBackupCodeUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    code?: StringFieldUpdateOperationsInput | string;
+    isUsed?: BoolFieldUpdateOperationsInput | boolean;
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type MfaBackupCodeUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    code?: StringFieldUpdateOperationsInput | string;
+    isUsed?: BoolFieldUpdateOperationsInput | boolean;
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type MfaBackupCodeUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    code?: StringFieldUpdateOperationsInput | string;
+    isUsed?: BoolFieldUpdateOperationsInput | boolean;
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type TicketContextCreateManyTicketInput = {

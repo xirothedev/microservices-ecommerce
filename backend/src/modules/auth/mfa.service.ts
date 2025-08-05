@@ -24,10 +24,10 @@ export class MfaService {
     // Check if MFA is already enabled for this type
     const existingMfa = await this.prismaService.mfaSetup.findUnique({
       where: { userMfaType: { userId: req.user.id, type: body.type } },
-      select: { isEnabled: true },
+      select: { id: true },
     });
 
-    if (existingMfa && existingMfa.isEnabled) {
+    if (existingMfa) {
       throw new BadRequestException(`MFA ${body.type} is already enabled`);
     }
 
@@ -46,15 +46,11 @@ export class MfaService {
   public async verifyMfaSetup(userId: string, verifyDto: VerifyMfaSetupDto) {
     const mfaSetup = await this.prismaService.mfaSetup.findUnique({
       where: { userMfaType: { userId, type: verifyDto.type } },
-      select: { isEnabled: true, secret: true, id: true },
+      select: { secret: true, id: true },
     });
 
     if (!mfaSetup) {
       throw new NotFoundException('MFA setup not found');
-    }
-
-    if (mfaSetup.isEnabled) {
-      throw new BadRequestException('MFA is already enabled');
     }
 
     let isValid = false;
@@ -77,14 +73,10 @@ export class MfaService {
       throw new UnauthorizedException('Invalid verification code');
     }
 
-    await this.prismaService.mfaSetup.update({
-      where: { id: mfaSetup.id },
-      data: { isEnabled: true },
-    });
-
+    // MFA is already enabled by the existence of the record
     // Generate backup codes if this is the first MFA method
     const enabledMfaCount = await this.prismaService.mfaSetup.count({
-      where: { userId, isEnabled: true },
+      where: { userId },
     });
 
     if (enabledMfaCount === 1) {
@@ -97,20 +89,24 @@ export class MfaService {
   public async toggleMfa(userId: string, status: MfaStatus, body: ToggleMfaDto) {
     const mfaSetup = await this.prismaService.mfaSetup.findUnique({
       where: { userMfaType: { userId, type: body.type } },
-      select: { isEnabled: true, id: true, secret: true },
+      select: { id: true, secret: true },
     });
 
-    if (!mfaSetup) {
+    if (!mfaSetup && status === 'disable') {
       throw new NotFoundException('MFA setup not found');
     }
 
-    if ((mfaSetup.isEnabled && status === 'enable') || (!mfaSetup.isEnabled && status === 'disable')) {
-      throw new BadRequestException(`MFA is already ${status}d`);
+    if (mfaSetup && status === 'enable') {
+      throw new BadRequestException('MFA is already enabled');
+    }
+
+    if (!mfaSetup && status === 'enable') {
+      throw new BadRequestException('MFA setup not found. Please setup MFA first.');
     }
 
     if (status === 'disable') {
       if (!body.code) {
-        throw new BadRequestException("You need to enter the 'code' field to enable MFA");
+        throw new BadRequestException("You need to enter the 'code' field to disable MFA");
       }
 
       // Verify the code before disabling
@@ -118,7 +114,7 @@ export class MfaService {
 
       switch (body.type) {
         case 'TOTP':
-          if (!mfaSetup.secret) {
+          if (!mfaSetup?.secret) {
             isValid = false;
             break;
           }
@@ -134,14 +130,14 @@ export class MfaService {
         throw new UnauthorizedException('Invalid verification code');
       }
 
-      await this.prismaService.mfaSetup.update({
-        where: { id: mfaSetup.id },
-        data: { isEnabled: false },
+      // Delete the MFA setup to disable it
+      await this.prismaService.mfaSetup.delete({
+        where: { id: mfaSetup?.id ?? '' },
       });
 
       // If no MFA methods are enabled, remove backup codes
       const enabledMfaCount = await this.prismaService.mfaSetup.count({
-        where: { userId, isEnabled: true },
+        where: { userId },
       });
 
       if (enabledMfaCount === 0) {
@@ -152,14 +148,10 @@ export class MfaService {
 
       return { message: 'MFA disabled successfully' };
     } else {
-      await this.prismaService.mfaSetup.update({
-        where: { id: mfaSetup.id },
-        data: { isEnabled: true },
-      });
-
+      // MFA is already enabled by the existence of the record
       // Generate backup codes if this is the first MFA method
       const enabledMfaCount = await this.prismaService.mfaSetup.count({
-        where: { userId, isEnabled: true },
+        where: { userId },
       });
 
       if (enabledMfaCount === 1) {
@@ -188,15 +180,11 @@ export class MfaService {
   public async requestMfaCode(body: RequestMfaCodeDto) {
     const mfaSetup = await this.prismaService.mfaSetup.findUnique({
       where: { userMfaType: { userId: body.userId, type: body.type } },
-      select: { isEnabled: true, phone: true, email: true },
+      select: { phone: true, email: true },
     });
 
     if (!mfaSetup) {
-      throw new NotFoundException('MFA setup not found');
-    }
-
-    if (!mfaSetup.isEnabled) {
-      throw new NotFoundException('MFA not enabled for this type');
+      throw new NotFoundException('MFA setup not found or not enabled');
     }
 
     switch (body.type) {
@@ -214,7 +202,7 @@ export class MfaService {
   public async getMfaStatus(userId: string) {
     const mfaSetups = await this.prismaService.mfaSetup.findMany({
       where: { userId },
-      select: { type: true, isEnabled: true, createdAt: true },
+      select: { type: true, createdAt: true },
     });
 
     const backupCodes = await this.prismaService.mfaBackupCode.count({
@@ -224,7 +212,7 @@ export class MfaService {
     return {
       mfaMethods: mfaSetups.map((setup) => ({
         type: setup.type,
-        isEnabled: setup.isEnabled,
+        isEnabled: true, // If record exists, MFA is enabled
         createdAt: setup.createdAt,
       })),
       hasBackupCodes: backupCodes > 0,
@@ -246,7 +234,7 @@ export class MfaService {
 
   public async hasMfaEnabled(userId: string): Promise<boolean> {
     const count = await this.prismaService.mfaSetup.count({
-      where: { userId, isEnabled: true },
+      where: { userId },
     });
     return count > 0;
   }
@@ -333,10 +321,10 @@ export class MfaService {
   private async verifyTotpMfa(userId: string, code: string) {
     const mfaSetup = await this.prismaService.mfaSetup.findUnique({
       where: { userMfaType: { userId, type: 'TOTP' } },
-      select: { isEnabled: true, secret: true },
+      select: { secret: true },
     });
 
-    if (!mfaSetup || !mfaSetup.isEnabled || !mfaSetup.secret) {
+    if (!mfaSetup || !mfaSetup.secret) {
       throw new UnauthorizedException('TOTP MFA not enabled');
     }
 

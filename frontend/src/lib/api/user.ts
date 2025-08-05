@@ -10,7 +10,7 @@ import {
 	UpdateUserMutationResponse,
 	UpdateAvatarResponse,
 	UserProfile,
-} from "./types/user";
+} from "@/@types/api/user";
 
 // GraphQL queries and mutations
 const ME_QUERY = gql`
@@ -19,7 +19,7 @@ const ME_QUERY = gql`
 			address
 			avatarUrl
 			city
-			createAt
+			createdAt
 			credit
 			email
 			flags
@@ -29,7 +29,7 @@ const ME_QUERY = gql`
 			phone
 			roles
 			state
-			updateAt
+			updatedAt
 			zipCode
 			biography
 		}
@@ -43,7 +43,7 @@ const UPDATE_USER_MUTATION = gql`
 			avatarUrl
 			biography
 			city
-			createAt
+			createdAt
 			credit
 			email
 			flags
@@ -53,7 +53,7 @@ const UPDATE_USER_MUTATION = gql`
 			phone
 			roles
 			state
-			updateAt
+			updatedAt
 			zipCode
 		}
 	}

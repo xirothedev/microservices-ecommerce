@@ -1,27 +1,27 @@
 model Authentication {
   code       String   @db.Char(6)
-  type       AuthType
   retryTime  Int      @default(0) @map("retry_time") @db.SmallInt
-  lastSentAt DateTime @map("last_sent_at") @db.Timestamptz()
-  expiresAt  DateTime @map("expires_at") @db.Timestamptz()
+  type       AuthType
+  lastSentAt DateTime @map("last_sent_at") @db.Timestamptz
+  expiresAt  DateTime @map("expires_at") @db.Timestamptz
 
-  userId String @db.Uuid
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @db.Uuid
 
   @@unique([type, userId], name: "id")
 }
 
 model MfaSetup {
   id        String   @id @default(uuid()) @db.Uuid
-  userId    String   @db.Uuid
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   type      MfaType
-  isEnabled Boolean  @default(false) @map("is_enabled")
   secret    String?  @db.VarChar(255)
   phone     String?  @db.VarChar(20)
   email     String?  @db.VarChar(255)
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  user      UserSecurity     @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  userId    String   @db.Uuid
 
   @@unique([userId, type], name: "userMfaType", map: "user_mfa_type")
 }
@@ -33,8 +33,8 @@ model MfaBackupCode {
   usedAt    DateTime? @map("used_at") @db.Timestamptz
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
 
+  user   UserSecurity   @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
   userId String @db.Uuid
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([userId, code], name: "userBackupCode", map: "user_backup_code")
 }

@@ -144,7 +144,7 @@ export default function TicketHistory() {
 
 	const isNewTicket = (ticket: TicketResponse) => {
 		const now = new Date();
-		const ticketDate = new Date(ticket.createAt);
+		const ticketDate = new Date(ticket.createdAt);
 		const diffInHours = (now.getTime() - ticketDate.getTime()) / (1000 * 60 * 60);
 		return diffInHours < 24; // Consider tickets created in last 24 hours as "new"
 	};
@@ -270,7 +270,7 @@ export default function TicketHistory() {
 															<span className="font-medium">#{ticket.id}</span>
 															<div className="flex items-center gap-1">
 																<Calendar className="h-4 w-4" />
-																{formatDate(ticket.createAt, {
+																{formatDate(ticket.createdAt, {
 																	hour: "2-digit",
 																	minute: "2-digit",
 																})}
@@ -318,7 +318,7 @@ export default function TicketHistory() {
 													<div className="ml-4 flex flex-col items-end gap-2">
 														<div className="text-xs text-gray-500">
 															Updated{" "}
-															{formatDate(ticket.updateAt, {
+															{formatDate(ticket.updatedAt, {
 																hour: "2-digit",
 																minute: "2-digit",
 															})}

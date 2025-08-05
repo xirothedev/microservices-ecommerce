@@ -249,9 +249,9 @@ export class OrdersService {
     }
 
     if (startDate || endDate) {
-      where.createAt = {};
-      if (startDate) where.createAt.gte = new Date(startDate);
-      if (endDate) where.createAt.lte = new Date(endDate);
+      where.createdAt = {};
+      if (startDate) where.createdAt.gte = new Date(startDate);
+      if (endDate) where.createdAt.lte = new Date(endDate);
     }
 
     // eslint-disable-next-line prisma/require-select
@@ -272,7 +272,7 @@ export class OrdersService {
         },
         bill: true,
       },
-      orderBy: [{ createAt: 'desc' }, { id: 'desc' }],
+      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
       take: take + 1,
       skip,
       ...(cursorObj && { cursor: cursorObj }),
@@ -346,9 +346,9 @@ export class OrdersService {
     }
 
     if (startDate || endDate) {
-      where.createAt = {};
-      if (startDate) where.createAt.gte = new Date(startDate);
-      if (endDate) where.createAt.lte = new Date(endDate);
+      where.createdAt = {};
+      if (startDate) where.createdAt.gte = new Date(startDate);
+      if (endDate) where.createdAt.lte = new Date(endDate);
     }
 
     // eslint-disable-next-line prisma/require-select
@@ -379,7 +379,7 @@ export class OrdersService {
           },
         },
       },
-      orderBy: [{ createAt: 'desc' }, { id: 'desc' }],
+      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
       take: take + 1,
       skip,
       ...(cursorObj && { cursor: cursorObj }),

@@ -21,10 +21,10 @@ export class ProductQL implements Partial<Product> {
   sellerId: string;
 
   @Field()
-  createAt: Date;
+  createdAt: Date;
 
   @Field()
-  updateAt: Date;
+  updatedAt: Date;
 
   @Field()
   name: string;

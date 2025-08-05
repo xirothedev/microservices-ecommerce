@@ -98,8 +98,8 @@ export class TicketService {
       select: {
         id: true,
         numericalOrder: true,
-        createAt: true,
-        updateAt: true,
+        createdAt: true,
+        updatedAt: true,
         title: true,
         description: true,
         status: true,
@@ -115,7 +115,7 @@ export class TicketService {
             avatarUrl: true,
           },
         },
-        assigned: {
+        assign: {
           select: {
             id: true,
             fullname: true,
@@ -125,7 +125,7 @@ export class TicketService {
         },
         _count: { select: { messages: true } },
       },
-      orderBy: [{ createAt: 'desc' }, { id: 'desc' }],
+      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
       take: take + 1,
       skip,
       ...(cursorObj && { cursor: cursorObj }),
@@ -161,8 +161,8 @@ export class TicketService {
         select: {
           id: true,
           numericalOrder: true,
-          createAt: true,
-          updateAt: true,
+          createdAt: true,
+          updatedAt: true,
           title: true,
           description: true,
           status: true,
@@ -178,7 +178,7 @@ export class TicketService {
               avatarUrl: true,
             },
           },
-          assigned: {
+          assign: {
             select: {
               id: true,
               fullname: true,
@@ -223,7 +223,7 @@ export class TicketService {
       where: { id },
       select: {
         authorId: true,
-        assignedId: true,
+        assignId: true,
       },
     });
 
@@ -231,7 +231,7 @@ export class TicketService {
     // Only author can update all fields
     // Assigned user can only update status
     const isAuthor = ticket.authorId === user.id;
-    const isAssigned = ticket.assignedId === user.id;
+    const isAssigned = ticket.assignId === user.id;
     if (!isAuthor && !isAssigned) {
       throw new ForbiddenException('You do not have permission to update this ticket');
     }
@@ -265,14 +265,14 @@ export class TicketService {
     attachments: Express.Multer.File[],
   ) {
     const user = req.user;
-    // Check ticket exists and get author/assigned
+    // Check ticket exists and get author/assign
     const ticket = await this.prismaService.ticket.findUnique({
       where: { id: ticketId },
-      select: { authorId: true, assignedId: true },
+      select: { authorId: true, assignId: true },
     });
     if (!ticket) throw new NotFoundException('Ticket not found');
     const isAuthor = ticket.authorId === user.id;
-    const isAssigned = ticket.assignedId === user.id;
+    const isAssigned = ticket.assignId === user.id;
     if (!isAuthor && !isAssigned) {
       throw new ForbiddenException('You do not have permission to send message to this ticket');
     }
@@ -335,7 +335,7 @@ export class TicketService {
           select: {
             id: true,
             author: { select: { fullname: true, id: true, avatarUrl: true } },
-            assigned: { select: { fullname: true, id: true, avatarUrl: true } },
+            assign: { select: { fullname: true, id: true, avatarUrl: true } },
           },
         },
         sender: {
@@ -384,7 +384,7 @@ export class TicketService {
           select: {
             id: true,
             author: { select: { fullname: true, id: true, avatarUrl: true } },
-            assigned: { select: { fullname: true, id: true, avatarUrl: true } },
+            assign: { select: { fullname: true, id: true, avatarUrl: true } },
           },
         },
         sender: {

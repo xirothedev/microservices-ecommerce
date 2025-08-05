@@ -25,8 +25,8 @@ export interface CartItemGQL {
 	id: string;
 	productId: string;
 	quantity: number;
-	createAt: string;
-	updateAt: string;
+	createdAt: string;
+	updatedAt: string;
 	product: {
 		id: string;
 		name: string;

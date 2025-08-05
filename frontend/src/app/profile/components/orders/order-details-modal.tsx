@@ -102,7 +102,7 @@ export function OrderDetailsModal({ orderId, open, onOpenChange, onOrderUpdated 
 						{getStatusBadge(order.bill?.status || "PENDING")}
 					</DialogTitle>
 					<DialogDescription>
-						Order placed on {dayjs(order.createAt).format("MMMM DD, YYYY [at] HH:mm")}
+						Order placed on {dayjs(order.createdAt).format("MMMM DD, YYYY [at] HH:mm")}
 					</DialogDescription>
 				</DialogHeader>
 
@@ -126,7 +126,7 @@ export function OrderDetailsModal({ orderId, open, onOpenChange, onOrderUpdated 
 							</div>
 							<div>
 								<span className="text-gray-600">Order Date:</span>
-								<span className="ml-2">{dayjs(order.createAt).format("MMM DD, YYYY")}</span>
+								<span className="ml-2">{dayjs(order.createdAt).format("MMM DD, YYYY")}</span>
 							</div>
 							<div>
 								<span className="text-gray-600">Status:</span>

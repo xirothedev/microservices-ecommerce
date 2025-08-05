@@ -81,7 +81,7 @@ export function useCart() {
 					id
 					productId
 					quantity
-					createAt
+					createdAt
 					updateAt
 					product {
 						id
@@ -117,8 +117,8 @@ export function useCart() {
 	const items: CartItem[] = (queryResult.data?.cartItems || [])
 		.slice() // Create a copy to avoid mutating the original array
 		.sort((a, b) => {
-			// Sort by createAt (oldest first) to maintain stable order
-			return new Date(a.createAt).getTime() - new Date(b.createAt).getTime();
+			// Sort by createdAt (oldest first) to maintain stable order
+			return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
 		})
 		.map((cartItem) => ({
 			id: cartItem.id,

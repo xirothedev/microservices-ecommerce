@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import * as PDFDocument from 'pdfkit';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as PDFDocument from 'pdfkit';
+import { OrderWithInvoiceDetails } from './orders.interface';
 
 @Injectable()
 export class PdfGeneratorService {
-  async generateInvoicePDF(order: any): Promise<Buffer> {
+  async generateInvoicePDF(order: OrderWithInvoiceDetails): Promise<Buffer> {
     return new Promise((resolve, reject) => {
       try {
         const doc = new PDFDocument({
@@ -56,7 +57,7 @@ export class PdfGeneratorService {
           .fontSize(11)
           .fillColor('#666666')
           .text(
-            `Order placed on ${order.createAt.toLocaleDateString('en-US', {
+            `Order placed on ${order.createdAt.toLocaleDateString('en-US', {
               year: 'numeric',
               month: 'long',
               day: 'numeric',
@@ -83,7 +84,7 @@ export class PdfGeneratorService {
 
         doc.fillColor('#666666').text('Order Date:', 60, yPosition + 20);
         doc.fillColor('black').text(
-          new Date(order.createAt).toLocaleDateString('en-US', {
+          new Date(order.createdAt).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'short',
             day: 'numeric',
@@ -122,10 +123,10 @@ export class PdfGeneratorService {
 
         // Right column
         doc.fillColor('#666666').text('Phone:', 350, yPosition);
-        doc.fillColor('black').text(order.user.phone, 430, yPosition);
+        doc.fillColor('black').text(order.user.phone || 'N/A', 430, yPosition);
 
         doc.fillColor('#666666').text('Address:', 350, yPosition + 20);
-        doc.fillColor('black').text(order.user.address, 430, yPosition + 20);
+        doc.fillColor('black').text(order.user.address || 'N/A', 430, yPosition + 20);
 
         yPosition += 50;
 

@@ -9,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useOrderMutations } from "@/lib/api/orders";
 import { ordersApi, downloadInvoice } from "@/lib/api/orders";
-import { FindAllOrdersRequest, Order, OrdersListResponse } from "@/@types/api/orders";
+import { FindAllOrdersRequest, Order, OrderListData, OrdersListResponse } from "@/@types/api/orders";
 import { IAxiosError } from "@/@types";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
@@ -62,7 +62,7 @@ export default function OrdersContent() {
 		initialPageParam: undefined,
 	});
 
-	const orders: Order[] = (data?.pages || []).flatMap((page) => page.data || []);
+	const orders: OrderListData[] = (data?.pages || []).flatMap((page) => page.data || []);
 
 	const handleCancelOrder = useCallback(
 		async (orderId: string) => {
@@ -265,7 +265,7 @@ export default function OrdersContent() {
 															</div>
 															<CardDescription className="flex items-center gap-2">
 																<Calendar className="h-4 w-4" />
-																{dayjs(order.createAt).format(
+																{dayjs(order.createdAt).format(
 																	"MMM DD, YYYY [at] HH:mm",
 																)}
 															</CardDescription>
@@ -316,7 +316,8 @@ export default function OrdersContent() {
 																		>
 																			<div className="flex-1">
 																				<p className="font-medium">
-																					{item.product?.name || "Product"}
+																					{item.productItem.product.name ||
+																						"Product"}
 																				</p>
 																				<p className="text-sm text-gray-600">
 																					Quantity: {item.quantity} | From:{" "}

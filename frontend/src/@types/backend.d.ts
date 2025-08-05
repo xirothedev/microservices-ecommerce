@@ -21,8 +21,8 @@ export interface ProductWithAverageRating extends Product {
 
 export interface TicketResponse {
 	id: string;
-	createAt: string;
-	updateAt: string;
+	createdAt: string;
+	updatedAt: string;
 	numericalOrder: number;
 	title: string;
 	description: string;

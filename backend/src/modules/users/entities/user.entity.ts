@@ -52,10 +52,10 @@ export class UserQL implements Partial<User> {
   flags: UserFlag[];
 
   @Field()
-  createAt: Date;
+  createdAt: Date;
 
   @Field()
-  updateAt: Date;
+  updatedAt: Date;
 
   @Field()
   credit: number;

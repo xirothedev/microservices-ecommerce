@@ -1,3 +1,5 @@
+import { Category, ProductItem } from "../backend";
+
 // Order related types
 export interface OrderItem {
 	id: string;
@@ -24,8 +26,8 @@ export interface OrderItem {
 
 export interface Bill {
 	id: string;
-	createAt: string;
-	updateAt: string;
+	createdAt: string;
+	updatedAt: string;
 	transactionId?: string;
 	paymentMethod: "MOMO" | "VIETQR_PAYOS";
 	type: "MONEY_OUT" | "MONEY_IN";
@@ -36,14 +38,14 @@ export interface Bill {
 
 export interface Order {
 	id: string;
-	createAt: string;
-	updateAt: string;
+	createdAt: string;
+	updatedAt: string;
 	totalPrice: number;
 	userId: string;
 	billId: string;
-	bill?: Bill;
+	bill: Bill;
 	items: OrderItem[];
-	user?: {
+	user: {
 		id: string;
 		fullname: string;
 		email: string;
@@ -92,7 +94,44 @@ export interface ApiResponse<T> {
 	};
 }
 
-export interface OrdersListResponse extends ApiResponse<Order[]> {
+export interface OrderData extends Omit<Order, "items"> {
+	items: {
+		product: {
+			seller: {
+				id: string;
+				fullname: string;
+			};
+		};
+		productItem: ProductItem;
+	};
+}
+
+export interface ProductItemWithProduct extends ProductItem {
+	product: {
+		id: string;
+		name: string;
+		medias: string[];
+		discountPrice: number;
+	};
+}
+
+export interface OrderListData extends Omit<Order, "items"> {
+	product: {
+		id: string;
+		name: string;
+		medias: string[];
+		discountPrice: number;
+	};
+	items: {
+		id: string;
+		quantity: number;
+		price: number;
+		from: "CART" | "SERVICES";
+		productItem: ProductItemWithProduct;
+	}[];
+}
+
+export interface OrdersListResponse extends ApiResponse<OrderListData[]> {
 	"@data": {
 		totalItems: number;
 		nextCursor: string | null;
@@ -100,7 +139,7 @@ export interface OrdersListResponse extends ApiResponse<Order[]> {
 	};
 }
 
-export interface OrderResponse extends ApiResponse<Order> {}
+export interface OrderResponse extends ApiResponse<OrderData> {}
 export interface OrderItemsResponse extends ApiResponse<OrderItem[]> {}
 export interface CreateOrderResponse extends ApiResponse<Order> {}
 

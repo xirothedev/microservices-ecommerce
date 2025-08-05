@@ -47,10 +47,10 @@ export class BillQL {
   id: string;
 
   @Field()
-  createAt: Date;
+  createdAt: Date;
 
   @Field()
-  updateAt: Date;
+  updatedAt: Date;
 
   @Field({ nullable: true })
   transactionId?: string;
@@ -74,10 +74,10 @@ export class OrderQL implements Partial<Order> {
   id: string;
 
   @Field()
-  createAt: Date;
+  createdAt: Date;
 
   @Field()
-  updateAt: Date;
+  updatedAt: Date;
 
   @Field()
   totalPrice: number;

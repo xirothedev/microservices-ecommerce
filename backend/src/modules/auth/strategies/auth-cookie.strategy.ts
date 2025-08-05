@@ -45,7 +45,7 @@ export class AuthCookieStrategy extends PassportStrategy(Strategy, 'auth-cookie'
         throw new ForbiddenException('User needs to be verified');
       }
 
-      if (user.flags.includes('BANNED')) {
+      if (user.isBanned) {
         throw new ForbiddenException('User has been banned');
       }
 

@@ -101,7 +101,7 @@ export class CartService {
     // eslint-disable-next-line prisma/require-select
     const carts = await this.prismaService.cartItem.findMany({
       where: { userId: id },
-      orderBy: { createAt: 'desc' },
+      orderBy: { createdAt: 'desc' },
     });
 
     return carts;

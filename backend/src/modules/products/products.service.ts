@@ -182,7 +182,7 @@ export class ProductsService {
         category: true,
       },
       orderBy: {
-        createAt: 'desc',
+        createdAt: 'desc',
       },
     });
 
@@ -237,7 +237,7 @@ export class ProductsService {
           },
         },
       },
-      orderBy: [{ createAt: 'desc' }, { id: 'desc' }],
+      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
       take: take + 1,
       skip,
       ...(cursorObj && { cursor: cursorObj }),

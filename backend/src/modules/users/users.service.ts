@@ -33,8 +33,8 @@ export class UsersService {
           flags: true,
           credit: true,
           isVerified: true,
-          createAt: true,
-          updateAt: true,
+          createdAt: true,
+          updatedAt: true,
         },
       });
 

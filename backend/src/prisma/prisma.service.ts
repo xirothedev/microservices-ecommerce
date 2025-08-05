@@ -50,10 +50,10 @@ function generateTicketImages(min = 2, max = 5) {
 // --- Generate IDs ---
 const userIds = unique(Array.from({ length: 100 }, () => faker.string.uuid()));
 const categoryIds = unique(Array.from({ length: 10 }, () => faker.string.uuid()));
-const cartItemIds = unique(Array.from({ length: 2000 }, () => faker.string.alphanumeric(25)));
-const productIds = unique(Array.from({ length: 100 }, () => faker.string.alphanumeric(25)));
-const productItemIds = unique(Array.from({ length: 1000 }, () => faker.string.alphanumeric(25)));
-const reviewIds = unique(Array.from({ length: 1000 }, () => faker.string.alphanumeric(25)));
+const cartItemIds = unique(Array.from({ length: 2000 }, () => faker.string.uuid()));
+const productIds = unique(Array.from({ length: 100 }, () => faker.string.uuid()));
+const productItemIds = unique(Array.from({ length: 1000 }, () => faker.string.uuid()));
+const reviewIds = unique(Array.from({ length: 1000 }, () => faker.string.uuid()));
 const billIds = unique(Array.from({ length: 5000 }, () => faker.string.uuid()));
 const orderIds = unique(Array.from({ length: 5000 }, () => faker.string.uuid()));
 const orderItemIds = unique(Array.from({ length: 50000 }, () => faker.string.uuid()));
@@ -223,14 +223,14 @@ for (const id of orderItemIds) {
 const tickets: Prisma.TicketCreateManyInput[] = ticketIds.map((id, i) => {
   const assignableUsers = users.filter((user) => Array.isArray(user.roles) && user.roles.includes('SUPPORTER'));
   const authorId = faker.helpers.arrayElement(userIds);
-  let assignedId: string | undefined;
+  let assignId: string | undefined;
 
   if (assignableUsers.length > 0) {
     let assignedUser = faker.helpers.arrayElement(assignableUsers);
     while (assignedUser.id === authorId && assignableUsers.length > 1) {
       assignedUser = faker.helpers.arrayElement(assignableUsers);
     }
-    assignedId = assignedUser.id;
+    assignId = assignedUser.id;
   }
 
   return {
@@ -244,7 +244,7 @@ const tickets: Prisma.TicketCreateManyInput[] = ticketIds.map((id, i) => {
     ]),
     description: faker.lorem.paragraphs({ min: 1, max: 2 }),
     authorId,
-    assignedId,
+    assignId,
     category: faker.helpers.arrayElement(Object.values(TicketCategory)),
     priority: faker.helpers.arrayElement(Object.values(TicketPriority)),
     status: faker.helpers.arrayElement(Object.values(TicketStatus)),
@@ -254,7 +254,7 @@ const tickets: Prisma.TicketCreateManyInput[] = ticketIds.map((id, i) => {
 
 const ticketUsers: Prisma.TicketMemberCreateManyInput[] = tickets.flatMap((ticket) => {
   const participants = new Set<string>([ticket.authorId]);
-  if (ticket.assignedId) participants.add(ticket.assignedId);
+  if (ticket.assignId) participants.add(ticket.assignId);
 
   return Array.from(participants).map((userId) => ({
     id: faker.string.uuid(),
@@ -279,7 +279,7 @@ for (const ticket of tickets) {
   const participants = ticketUserMap.get(ticket.id!);
   if (!participants || participants.length === 0) continue;
 
-  const messageCount = faker.number.int({ min: 50, max: 300 });
+  const messageCount = faker.number.int({ min: 50, max: 100 });
 
   for (let i = 0; i < messageCount; i++) {
     const sender = faker.helpers.arrayElement(participants);

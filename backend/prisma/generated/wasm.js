@@ -111,8 +111,8 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.AuthenticationScalarFieldEnum = {
   code: 'code',
-  type: 'type',
   retryTime: 'retryTime',
+  type: 'type',
   lastSentAt: 'lastSentAt',
   expiresAt: 'expiresAt',
   userId: 'userId',
@@ -125,14 +125,13 @@ exports.Prisma.RelationLoadStrategy = {
 
 exports.Prisma.MfaSetupScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
   type: 'type',
-  isEnabled: 'isEnabled',
   secret: 'secret',
   phone: 'phone',
   email: 'email',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  userId: 'userId',
 };
 
 exports.Prisma.MfaBackupCodeScalarFieldEnum = {
@@ -158,8 +157,8 @@ exports.Prisma.LoginSessionScalarFieldEnum = {
 
 exports.Prisma.OrderScalarFieldEnum = {
   id: 'id',
-  createAt: 'createAt',
-  updateAt: 'updateAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   totalPrice: 'totalPrice',
   userId: 'userId',
   billId: 'billId',
@@ -177,8 +176,8 @@ exports.Prisma.OrderItemScalarFieldEnum = {
 
 exports.Prisma.ProductScalarFieldEnum = {
   id: 'id',
-  createAt: 'createAt',
-  updateAt: 'updateAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   sku: 'sku',
   isActive: 'isActive',
   slug: 'slug',
@@ -224,7 +223,8 @@ exports.Prisma.UserScalarFieldEnum = {
   fullname: 'fullname',
   email: 'email',
   phone: 'phone',
-  isVerified: 'isVerified',
+  web3Wallet: 'web3Wallet',
+  passwordEnabled: 'passwordEnabled',
   hashedPassword: 'hashedPassword',
   avatarUrl: 'avatarUrl',
   address: 'address',
@@ -234,15 +234,52 @@ exports.Prisma.UserScalarFieldEnum = {
   biography: 'biography',
   roles: 'roles',
   flags: 'flags',
-  createAt: 'createAt',
-  updateAt: 'updateAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   credit: 'credit',
+  isBanned: 'isBanned',
+  isLocked: 'isLocked',
+  isVerified: 'isVerified',
+  lastActiveAt: 'lastActiveAt',
+};
+
+exports.Prisma.UserSecurityScalarFieldEnum = {
+  userId: 'userId',
+  mfaEnabled: 'mfaEnabled',
+  mfaEnabledAt: 'mfaEnabledAt',
+  mfaDisabledAt: 'mfaDisabledAt',
+  totpEnabled: 'totpEnabled',
+  totpEnabledAt: 'totpEnabledAt',
+  totpDisabledAt: 'totpDisabledAt',
+  backupCodesEnabled: 'backupCodesEnabled',
+  backupCodesEnabledAt: 'backupCodesEnabledAt',
+  backupCodesDisabledAt: 'backupCodesDisabledAt',
+  verificationAttemptsRemaining: 'verificationAttemptsRemaining',
+  verificationAttemptsResetAt: 'verificationAttemptsResetAt',
+  updatedAt: 'updatedAt',
+};
+
+exports.Prisma.ExternalAccountScalarFieldEnum = {
+  id: 'id',
+  provider: 'provider',
+  providerUserId: 'providerUserId',
+  approvedScope: 'approvedScope',
+  emailAddress: 'emailAddress',
+  phoneNumber: 'phoneNumber',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  fullName: 'fullName',
+  username: 'username',
+  avatarUrl: 'avatarUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
 };
 
 exports.Prisma.BillScalarFieldEnum = {
   id: 'id',
-  createAt: 'createAt',
-  updateAt: 'updateAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   transactionId: 'transactionId',
   paymentMethod: 'paymentMethod',
   type: 'type',
@@ -254,8 +291,8 @@ exports.Prisma.BillScalarFieldEnum = {
 
 exports.Prisma.CartItemScalarFieldEnum = {
   id: 'id',
-  createAt: 'createAt',
-  updateAt: 'updateAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   quantity: 'quantity',
   productId: 'productId',
   userId: 'userId',
@@ -264,8 +301,8 @@ exports.Prisma.CartItemScalarFieldEnum = {
 exports.Prisma.TicketScalarFieldEnum = {
   id: 'id',
   numericalOrder: 'numericalOrder',
-  createAt: 'createAt',
-  updateAt: 'updateAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   title: 'title',
   description: 'description',
   status: 'status',
@@ -273,7 +310,7 @@ exports.Prisma.TicketScalarFieldEnum = {
   priority: 'priority',
   attachments: 'attachments',
   authorId: 'authorId',
-  assignedId: 'assignedId',
+  assignId: 'assignId',
 };
 
 exports.Prisma.TicketMemberScalarFieldEnum = {
@@ -359,7 +396,11 @@ exports.UserFlag = exports.$Enums.UserFlag = {
   SILVER_CUSTOMER: 'SILVER_CUSTOMER',
   COPPER_CUSTOMER: 'COPPER_CUSTOMER',
   CUSTOMER: 'CUSTOMER',
-  BANNED: 'BANNED',
+};
+
+exports.ProviderPlatform = exports.$Enums.ProviderPlatform = {
+  GOOGLE: 'GOOGLE',
+  DISCORD: 'DISCORD',
 };
 
 exports.PaymentMethod = exports.$Enums.PaymentMethod = {
@@ -423,6 +464,8 @@ exports.Prisma.ModelName = {
   Category: 'Category',
   Review: 'Review',
   User: 'User',
+  UserSecurity: 'UserSecurity',
+  ExternalAccount: 'ExternalAccount',
   Bill: 'Bill',
   CartItem: 'CartItem',
   Ticket: 'Ticket',

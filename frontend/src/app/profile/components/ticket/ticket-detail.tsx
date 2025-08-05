@@ -37,8 +37,8 @@ interface TicketDetailProps {
 interface TicketDetail {
 	id: string;
 	numericalOrder: number;
-	createAt: string;
-	updateAt: string;
+	createdAt: string;
+	updatedAt: string;
 	title: string;
 	description: string;
 	status: string;
@@ -294,12 +294,12 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 							<div className="flex items-center gap-2 text-sm">
 								<Calendar className="h-4 w-4 text-gray-500" />
 								<span className="text-gray-600">Created:</span>
-								<span className="font-medium">{data && formatDate(data.createAt)}</span>
+								<span className="font-medium">{data && formatDate(data.createdAt)}</span>
 							</div>
 							<div className="flex items-center gap-2 text-sm">
 								<Clock className="h-4 w-4 text-gray-500" />
 								<span className="text-gray-600">Updated:</span>
-								<span className="font-medium">{data && formatDate(data.updateAt)}</span>
+								<span className="font-medium">{data && formatDate(data.updatedAt)}</span>
 							</div>
 							<div className="flex items-center gap-2 text-sm">
 								<Tag className="h-4 w-4 text-gray-500" />

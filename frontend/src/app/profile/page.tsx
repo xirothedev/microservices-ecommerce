@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-import { UpdateUserInput, useUpdateUserAvatarMutation, useUpdateUserMutation, useUserQuery } from "@/lib/api/user";
+import { useUpdateUserAvatarMutation, useUpdateUserMutation, useUserQuery } from "@/lib/api/user";
 import { getFallbackString } from "@/lib/utils";
 import { ProfileForm, profileSchema } from "@/zods/user";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,6 +18,7 @@ import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import ImageCropModal from "./components/image-crop-modal";
+import { UpdateUserInput } from "@/@types/api/user";
 
 export default function PersonalInformation() {
 	const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -286,7 +287,7 @@ export default function PersonalInformation() {
 							</div>
 							<div className="rounded-lg bg-purple-50 p-4 text-center">
 								<div className="text-2xl font-bold text-purple-600">
-									{data?.me.createAt ? dayjs(data.me.createAt).format("MMM YYYY") : ""}
+									{data?.me.createdAt ? dayjs(data.me.createdAt).format("MMM YYYY") : ""}
 								</div>
 								<div className="text-sm text-gray-600">Member Since</div>
 							</div>

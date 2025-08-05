@@ -53,7 +53,7 @@ export class WsAuthGuard implements CanActivate {
         throw new WsException('User needs to be verified');
       }
 
-      if (user.flags.includes('BANNED')) {
+      if (user.isBanned) {
         this.logger.warn(`Banned user ${user.email} attempted to connect`);
         throw new WsException('User has been banned');
       }

@@ -14,7 +14,9 @@ import {
 	ApiError,
 	Order,
 	OrderItem,
-} from "./types/orders";
+	OrderListData,
+	OrderData,
+} from "@/@types/api/orders";
 
 class OrdersApi {
 	/**
@@ -143,7 +145,7 @@ export function useUserOrders(params?: FindAllOrdersRequest) {
 		initialPageParam: undefined,
 	});
 
-	const orders: Order[] = (data?.pages || []).flatMap((page) => page.data || []);
+	const orders: OrderListData[] = (data?.pages || []).flatMap((page) => page.data || []);
 
 	const loadMore = useCallback(() => {
 		if (hasNextPage && !isLoading) {
@@ -181,7 +183,7 @@ export function useUserOrders(params?: FindAllOrdersRequest) {
  * Hook for fetching seller orders
  */
 export function useSellerOrders(params?: FindAllOrdersRequest) {
-	const [orders, setOrders] = useState<Order[]>([]);
+	const [orders, setOrders] = useState<OrderListData[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [totalItems, setTotalItems] = useState(0);
@@ -250,7 +252,7 @@ export function useSellerOrders(params?: FindAllOrdersRequest) {
  * Hook for fetching single order
  */
 export function useOrder(orderId: string | null) {
-	const [order, setOrder] = useState<Order | null>(null);
+	const [order, setOrder] = useState<OrderData | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const { toast } = useToast();
