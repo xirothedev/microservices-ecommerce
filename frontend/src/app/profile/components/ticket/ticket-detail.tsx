@@ -115,7 +115,7 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 
 	useEffect(() => {
 		if (isError && error.response?.status === 404) {
-			router.replace("/profile/tickets");
+			router.push("/profile/tickets");
 		}
 	}, [error, router, isError]);
 

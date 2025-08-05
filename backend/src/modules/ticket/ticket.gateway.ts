@@ -33,6 +33,16 @@ export class TicketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.logger.log(`[Disconnected] ${client.id}`);
   }
 
+  @SubscribeMessage('join.user.room')
+  async handleJoinRoom(@ConnectedSocket() client: Socket, @WsUser() user: User) {
+    return this.ticketGatewayService.handleJoinRoom(client, user);
+  }
+
+  @SubscribeMessage('leave.user.room')
+  async handleLeaveRoom(@ConnectedSocket() client: Socket, @WsUser() user: User) {
+    return this.ticketGatewayService.handleLeaveRoom(client, user);
+  }
+
   @SubscribeMessage('join.ticket.room')
   async handleJoinTicketRoom(@MessageBody() ticketId: string, @ConnectedSocket() client: Socket, @WsUser() user: User) {
     return this.ticketGatewayService.handleJoinTicketRoom(ticketId, client, user);

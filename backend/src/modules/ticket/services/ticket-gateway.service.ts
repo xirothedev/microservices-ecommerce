@@ -7,6 +7,16 @@ import { User } from '@prisma/generated';
 export class TicketGatewayService {
   constructor(private readonly prismaService: PrismaService) {}
 
+  async handleJoinRoom(client: Socket, user: User) {
+    const room = `user:${user.id}`;
+    await client.join(room);
+  }
+
+  async handleLeaveRoom(client: Socket, user: User) {
+    const room = `user:${user.id}`;
+    await client.leave(room);
+  }
+
   async handleJoinTicketRoom(ticketId: string, client: Socket, user: User) {
     const ticket = await this.prismaService.ticket.findUnique({
       where: { id: ticketId },

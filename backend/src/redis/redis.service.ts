@@ -33,7 +33,7 @@ export class RedisService {
     return await this.client.get(key);
   }
 
-  async getOrSet(key: string, callback: () => Promise<any>, expireSeconds?: number): Promise<any> {
+  async getOrSet(key: string, callback: () => any, expireSeconds?: number): Promise<any> {
     const cachedData = await this.get(key);
     if (cachedData) return JSON.parse(cachedData);
 

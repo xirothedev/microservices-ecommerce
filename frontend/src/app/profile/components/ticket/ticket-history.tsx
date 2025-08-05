@@ -13,7 +13,7 @@ import { IAxiosError } from "@/@types";
 import { TicketResponse } from "@/@types/backend";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { TicketSocketEvents, useTicketSocket } from "@/lib/websocket/ticket";
+import { TicketSocketEvents, useTicketSocket } from "@/lib/ws/ticket";
 import {
 	AlertCircle,
 	ArrowRight,
@@ -55,42 +55,6 @@ export default function TicketHistory() {
 	const debouncedSearchQuery = useDebounce(searchQuery, 500);
 	const queryClient = useQueryClient();
 	const ticketSocket = useTicketSocket();
-
-	useEffect(() => {
-		function handleNewTicket(newTicket: TicketResponse) {
-			// Only add if ticket doesn't exist in the list
-			queryClient.setQueryData<{ pages: { data: TicketResponse[] }[] }>(
-				["tickets", debouncedSearchQuery, statusFilter, priorityFilter],
-				(oldData) => {
-					if (!oldData) return oldData;
-					const exists = oldData.pages.some((page) => page.data.some((t) => t.id === newTicket.id));
-					if (exists) return oldData;
-					return {
-						...oldData,
-						pages:
-							oldData.pages && oldData.pages.length > 0
-								? [
-										{
-											...oldData.pages[0],
-											data: [newTicket, ...(oldData.pages[0].data || [])],
-										},
-										...oldData.pages.slice(1),
-									]
-								: [
-										{
-											data: [newTicket],
-											"@data": {},
-										},
-									],
-					};
-				},
-			);
-		}
-		ticketSocket.on(TicketSocketEvents.NEW_TICKET, handleNewTicket);
-		return () => {
-			ticketSocket.off(TicketSocketEvents.NEW_TICKET, handleNewTicket);
-		};
-	}, [debouncedSearchQuery, statusFilter, priorityFilter, queryClient, ticketSocket]);
 
 	const { data, isLoading, isError, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery<
 		{

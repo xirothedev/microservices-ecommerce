@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useUserQuery } from "@/lib/api/user";
 import axiosInstance from "@/lib/axios";
-import { useTicketRoom } from "@/lib/websocket/ticket";
+import { useTicketMessageSocket } from "@/lib/ws/ticket";
 import { getFallbackString } from "@/lib/utils";
 import { IAxiosError } from "@/@types";
 import { TicketMessageResponse } from "@/@types/backend";
@@ -23,7 +23,7 @@ export default function MessageList({ ticketId }: MessageListProps) {
 	const { data: user } = useUserQuery();
 	const scrollableRef = useRef<HTMLDivElement>(null);
 	const scrollStateRef = useRef<{ scrollHeight: number; scrollTop: number } | null>(null);
-	const {} = useTicketRoom(ticketId);
+	const {} = useTicketMessageSocket(ticketId);
 
 	const { data, fetchPreviousPage, hasPreviousPage, isFetchingPreviousPage } = useInfiniteQuery<
 		{
