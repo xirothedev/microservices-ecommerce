@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Send, Paperclip, ImageIcon, X, Loader2, Smile, Bold, Italic } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { useThrottle } from "@/hooks/use-throttle";
 
 interface MessageInputProps {
 	onSendMessage: (content: string, attachments?: File[]) => Promise<void>;
@@ -27,29 +28,10 @@ export default function MessageInput({
 	const [shouldFocusAfterSend, setShouldFocusAfterSend] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
-	const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-	// Debounced typing function
-	const debouncedTyping = useCallback(() => {
-		// Clear existing timeout
-		if (typingTimeoutRef.current) {
-			clearTimeout(typingTimeoutRef.current);
-		}
-
-		// Set new timeout
-		typingTimeoutRef.current = setTimeout(() => {
-			onTyping();
-		}, 500); // 500ms debounce
-	}, [onTyping]);
-
-	// Cleanup timeout on unmount
-	useEffect(() => {
-		return () => {
-			if (typingTimeoutRef.current) {
-				clearTimeout(typingTimeoutRef.current);
-			}
-		};
-	}, []);
+	// Throttled typing function - limits how often typing events are sent
+	const throttledTyping = useThrottle(() => {
+		onTyping();
+	}, 1000); // 1 second throttle - maximum 1 typing event per second
 
 	// Focus textarea when loading finishes after sending
 	useEffect(() => {
@@ -223,7 +205,7 @@ export default function MessageInput({
 
 		// Trigger typing indicator when user is actually typing
 		if (e.target.value.length > 0) {
-			debouncedTyping();
+			throttledTyping();
 		}
 
 		// Auto-resize

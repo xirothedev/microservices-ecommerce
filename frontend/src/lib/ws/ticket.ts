@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { TicketMessageResponse, TicketResponse } from "@/@types/backend";
 import { io, Socket } from "socket.io-client";
@@ -106,50 +106,72 @@ export function useTicketMessageSocket(ticketId: string) {
 	};
 }
 
-export function useTicketUserTypingSocket(enemyId?: string, ticketId?: string) {
+export function useTicketTyping(enemyId?: string, ticketId?: string) {
 	const ticketSocket = getTicketSocket();
-	const [isEnemyTyping, setIsEnemyTyping] = useState<boolean>(false);
+	const [isEnemyTyping, setIsEnemyTyping] = useState(false);
+	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+	// Emit typing (debounced)
+	const handleSetUserTyping = useMemo(() => {
+		return (ticketIdToEmit: string) => {
+			ticketSocket.emit(TicketSocketEvents.USER_TYPING, ticketIdToEmit);
+		};
+	}, [ticketSocket]);
+
+	// Handle received typing event
 	const handleUserTyping = useCallback(
 		(userId: string) => {
-			if (enemyId && userId === enemyId) {
-				setIsEnemyTyping(true);
+			if (!enemyId || userId !== enemyId) return;
 
-				setTimeout(() => {
-					setIsEnemyTyping(false);
-				}, 3000);
+			setIsEnemyTyping(true);
+
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
 			}
+
+			timeoutRef.current = setTimeout(() => {
+				setIsEnemyTyping(false);
+			}, 3000);
 		},
 		[enemyId],
 	);
 
-	const handleSetUserTyping = useCallback(
-		(ticketId: string) => {
-			ticketSocket.emit(TicketSocketEvents.USER_TYPING, ticketId);
-		},
-		[ticketSocket],
-	);
-
-	// Join ticket room if ticketId is provided
+	// Join room after socket connects
 	useEffect(() => {
-		if (!ticketSocket.connected || !ticketId) return;
+		if (!ticketId) return;
 
-		ticketSocket.emit(TicketSocketEvents.JOIN_TICKET_ROOM, ticketId);
+		const joinRoom = () => {
+			ticketSocket.emit(TicketSocketEvents.JOIN_TICKET_ROOM, ticketId);
+		};
+
+		// If already connected, join immediately
+		if (ticketSocket.connected) {
+			joinRoom();
+		}
+
+		ticketSocket.on("connect", joinRoom);
 
 		return () => {
 			ticketSocket.emit(TicketSocketEvents.LEAVE_TICKET_ROOM, ticketId);
+			ticketSocket.off("connect", joinRoom);
 		};
-	}, [ticketId, ticketSocket]);
+	}, [ticketSocket, ticketId]);
 
+	// Listen for typing event
 	useEffect(() => {
-		if (!ticketSocket.connected) return;
-
 		ticketSocket.on(TicketSocketEvents.USER_TYPING, handleUserTyping);
 
 		return () => {
 			ticketSocket.off(TicketSocketEvents.USER_TYPING, handleUserTyping);
 		};
-	}, [handleUserTyping]);
+	}, [ticketSocket, handleUserTyping]);
+
+	// Clear timeout on unmount
+	useEffect(() => {
+		return () => {
+			if (timeoutRef.current) clearTimeout(timeoutRef.current);
+		};
+	}, []);
 
 	return {
 		isEnemyTyping,

@@ -6,11 +6,10 @@ import { Separator } from "@/components/ui/separator";
 import axiosInstance from "@/lib/axios";
 import { cn, getFallbackString } from "@/lib/utils";
 import { Wifi, WifiOff } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import MessageInput from "./message-input";
 import MessageList from "./message-list";
-import { getTicketSocket, useTicketUserTypingSocket } from "@/lib/ws/ticket";
+import { getTicketSocket, useTicketTyping } from "@/lib/ws/ticket";
 import { formatRelativeTime } from "@/lib/format";
 
 interface ChatInterfaceProps {
@@ -28,7 +27,7 @@ interface ChatInterfaceProps {
 export default function ChatInterface({ ticketId, displayUser, displayUserStatus }: ChatInterfaceProps) {
 	const [isConnected, setIsConnected] = useState(true);
 	const [isLoading, setIsLoading] = useState(false);
-	const { isEnemyTyping, handleSetUserTyping } = useTicketUserTypingSocket(displayUser?.id, ticketId);
+	const { isEnemyTyping, handleSetUserTyping } = useTicketTyping(displayUser?.id, ticketId);
 	const messagesEndRef = useRef<HTMLDivElement>(null);
 	const socket = getTicketSocket();
 
@@ -107,46 +106,28 @@ export default function ChatInterface({ ticketId, displayUser, displayUserStatus
 			<div id="scrollableDiv" className="flex flex-1 flex-col-reverse overflow-y-auto p-4">
 				<MessageList ticketId={ticketId} />
 
-				{/* Agent Typing Indicator */}
-				<AnimatePresence>
-					{isEnemyTyping && (
-						<motion.div
-							initial={{ opacity: 0, y: 10 }}
-							animate={{ opacity: 1, y: 0 }}
-							exit={{ opacity: 0, y: -10 }}
-							className="mb-4 flex items-center gap-3"
-						>
-							<Avatar className="h-8 w-8">
-								<AvatarImage src={displayUser?.avatarUrl ?? undefined} />
-								<AvatarFallback className="text-xs">
-									{getFallbackString(displayUser?.fullname ?? "Unknown User")}
-								</AvatarFallback>
-							</Avatar>
-							<div className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2">
-								<div className="flex gap-1">
-									<div
-										className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
-										style={{ animationDelay: "0ms" }}
-									/>
-									<div
-										className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
-										style={{ animationDelay: "150ms" }}
-									/>
-									<div
-										className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
-										style={{ animationDelay: "300ms" }}
-									/>
-								</div>
-								<span className="text-xs text-gray-600">{displayUser?.fullname} is typing...</span>
-							</div>
-						</motion.div>
-					)}
-				</AnimatePresence>
-
 				<div ref={messagesEndRef} />
 			</div>
 
 			<Separator />
+
+			{/* Typing Indicator */}
+			{isEnemyTyping && displayUser && (
+				<div className="border-b border-gray-100 px-4 py-2">
+					<div className="flex items-center gap-2 text-sm text-gray-600">
+						<span>{displayUser.fullname} is typing</span>
+						<div className="flex gap-1">
+							<span className="animate-pulse">.</span>
+							<span className="animate-pulse" style={{ animationDelay: "0.2s" }}>
+								.
+							</span>
+							<span className="animate-pulse" style={{ animationDelay: "0.4s" }}>
+								.
+							</span>
+						</div>
+					</div>
+				</div>
+			)}
 
 			{/* Message Input */}
 			<div className="p-4">

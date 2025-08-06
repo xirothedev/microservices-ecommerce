@@ -62,7 +62,6 @@ export class WsAuthGuard implements CanActivate {
       client.data.user = user;
       client.data.authenticatedAt = new Date();
 
-      this.logger.log(`User ${user.email} authenticated successfully via WebSocket`);
       return true;
     } catch (error) {
       if (error instanceof WsException) {
@@ -80,7 +79,6 @@ export class WsAuthGuard implements CanActivate {
     if (cookies) {
       const cookieToken = this.extractTokenFromCookies(cookies);
       if (cookieToken) {
-        this.logger.debug('Token extracted from cookies');
         return cookieToken;
       }
     }
