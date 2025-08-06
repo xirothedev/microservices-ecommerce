@@ -20,7 +20,6 @@ interface MessageListProps {
 }
 
 export default function MessageList({ ticketId }: MessageListProps) {
-	const { data: user } = useUserQuery();
 	const scrollableRef = useRef<HTMLDivElement>(null);
 	const scrollStateRef = useRef<{ scrollHeight: number; scrollTop: number } | null>(null);
 	const {} = useTicketMessageSocket(ticketId);
@@ -106,7 +105,7 @@ export default function MessageList({ ticketId }: MessageListProps) {
 		>
 			<div className="space-y-0">
 				{messages.map((message, index) => {
-					const isUser = message.sender.user.id === user?.me.id;
+					const isAgent = message.sender.user.id === message.ticket.assign.id;
 
 					// Since messages are sorted chronologically, we can use simple index logic
 					const prevMessage = messages[index - 1]; // Previous (older) message
@@ -145,7 +144,7 @@ export default function MessageList({ ticketId }: MessageListProps) {
 										<span className="cursor-pointer text-sm font-semibold text-gray-900 hover:underline">
 											{message.sender.user.fullname}
 										</span>
-										{!isUser && (
+										{isAgent && (
 											<Badge
 												variant="secondary"
 												className="bg-blue-100 px-1.5 py-0.5 text-xs text-blue-800"

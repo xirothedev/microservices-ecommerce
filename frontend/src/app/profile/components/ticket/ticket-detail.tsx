@@ -30,6 +30,7 @@ import { Fragment, useEffect } from "react";
 import ChatInterface from "./chat-interface";
 import { formatDate } from "@/lib/format";
 import { useGetOnlineUser } from "@/lib/ws/users";
+import { getFallbackString } from "@/lib/utils";
 
 interface TicketDetailProps {
 	ticketId: string;
@@ -330,28 +331,12 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 								<div className="flex items-center gap-3">
 									<div className="relative">
 										<Avatar className="h-12 w-12">
-											<AvatarImage
-												src={
-													displayUser.avatarUrl ||
-													"https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg"
-												}
-											/>
-											<AvatarFallback>
-												{displayUser.fullname
-													.split(" ")
-													.map((n) => n[0])
-													.join("")}
-											</AvatarFallback>
+											<AvatarImage src={displayUser.avatarUrl ?? undefined} />
+											<AvatarFallback>{getFallbackString(displayUser.fullname)}</AvatarFallback>
 										</Avatar>
 										<div
 											className={`absolute -right-1 -bottom-1 h-4 w-4 rounded-full border-2 border-white ${
-												// displayUser.status === "online"
-												true
-													? "bg-green-500"
-													: // : displayUser.status === "away"
-														false
-														? "bg-yellow-500"
-														: "bg-gray-400"
+												displayUserStatus === "online" ? "bg-green-500" : "bg-gray-400"
 											}`}
 										/>
 									</div>
@@ -364,9 +349,7 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 											{displayUser.email}
 										</p>
 										<div className="flex items-center gap-2">
-											<p className="text-xs text-gray-500 capitalize">
-												{/* {displayUser.status} */} Online
-											</p>
+											<p className="text-xs text-gray-500 capitalize">{displayUserStatus}</p>
 											{!isCurrentUserAssign && (
 												<Badge
 													variant="secondary"
