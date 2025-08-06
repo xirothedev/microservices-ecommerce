@@ -29,6 +29,7 @@ import { useRouter } from "next/navigation";
 import { Fragment, useEffect } from "react";
 import ChatInterface from "./chat-interface";
 import { formatDate } from "@/lib/format";
+import { useGetOnlineUser } from "@/lib/ws/users";
 
 interface TicketDetailProps {
 	ticketId: string;
@@ -113,6 +114,8 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 	// const isCurrentUserAuthor = currentUser?.me.id === data?.author?.id;
 	const displayUser = isCurrentUserAssign ? data?.author : data?.assign;
 
+	const { status: displayUserStatus } = useGetOnlineUser(displayUser?.id ?? "Unknown User");
+
 	useEffect(() => {
 		if (isError && error.response?.status === 404) {
 			router.push("/profile/tickets");
@@ -144,7 +147,7 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 		);
 	};
 
-	if (isLoading) {
+	if (isLoading || !data) {
 		return <SkeletonLoading />;
 	}
 
@@ -278,7 +281,11 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 							<CardDescription>Chat with our support team for real-time assistance</CardDescription>
 						</CardHeader>
 						<CardContent className="p-0">
-							<ChatInterface ticketId={ticketId} />
+							<ChatInterface
+								displayUser={displayUser}
+								displayUserStatus={displayUserStatus}
+								ticketId={ticketId}
+							/>
 						</CardContent>
 					</Card>
 				</div>

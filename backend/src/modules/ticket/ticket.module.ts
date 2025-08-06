@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { WsAuthGuard } from './guards/ws-auth.guard';
+import { WsAuthGuard } from '../../common/guards/ws-auth.guard';
 import { TicketController } from './ticket.controller';
 import { TicketGateway } from './ticket.gateway';
 import { TicketEventListener } from './ticket.listener';

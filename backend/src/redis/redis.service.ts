@@ -1,24 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
 
 @Injectable()
 export class RedisService {
+  private readonly logger = new Logger(RedisService.name);
   private readonly client: Redis;
+  private readonly subscriber: Redis;
+  private readonly publisher: Redis;
 
   constructor(private readonly configService: ConfigService) {
-    this.client = new Redis({
+    const redisConfig = {
       host: this.configService.get<string>('REDIS_HOST'),
       port: Number(this.configService.get<string>('REDIS_PORT')),
       password: this.configService.get<string>('REDIS_PASSWORD'),
       lazyConnect: false,
       connectTimeout: 1000,
       maxLoadingRetryTime: 1,
-    });
-  }
+    };
 
-  getClient(): Redis {
-    return this.client;
+    this.client = new Redis(redisConfig);
+    this.subscriber = new Redis(redisConfig);
+    this.publisher = new Redis(redisConfig);
   }
 
   async set(key: string, value: string, expireSeconds?: number): Promise<void> {
@@ -64,5 +67,46 @@ export class RedisService {
     const keys = await this.client.keys(pattern);
     if (keys.length === 0) return 0;
     return await this.client.del(keys);
+  }
+
+  // Pub/Sub methods
+  async publish(channel: string, message: string): Promise<number> {
+    return await this.publisher.publish(channel, message);
+  }
+
+  async publishObject(channel: string, data: any): Promise<number> {
+    return await this.publisher.publish(channel, JSON.stringify(data));
+  }
+
+  async subscribe(channel: string, callback: (message: string) => void): Promise<void> {
+    await this.subscriber.subscribe(channel);
+    this.subscriber.on('message', (receivedChannel, message) => {
+      if (receivedChannel === channel) {
+        callback(message);
+      }
+    });
+    this.logger.log(`Subscribed to channel: ${channel}`);
+  }
+
+  async subscribePattern(pattern: string, callback: (channel: string, message: string) => void): Promise<void> {
+    await this.subscriber.psubscribe(pattern);
+    this.subscriber.on('pmessage', (receivedPattern, channel, message) => {
+      if (receivedPattern === pattern) {
+        callback(channel, message);
+      }
+    });
+    this.logger.log(`Subscribed to pattern: ${pattern}`);
+  }
+
+  getSubscriber(): Redis {
+    return this.subscriber;
+  }
+
+  getPublisher(): Redis {
+    return this.publisher;
+  }
+
+  getClient(): Redis {
+    return this.client;
   }
 }

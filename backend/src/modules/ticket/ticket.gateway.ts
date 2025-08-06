@@ -10,7 +10,7 @@ import {
 } from '@nestjs/websockets';
 import { User } from '@prisma/generated';
 import { Server, Socket } from 'socket.io';
-import { WsAuthGuard } from './guards/ws-auth.guard';
+import { WsAuthGuard } from '../../common/guards/ws-auth.guard';
 import { TicketMessageResponse, TicketResponse } from './ticket.interface';
 import { WsUser } from '@/common/decorators/ws-user.decorator';
 import { TicketGatewayService } from './services/ticket-gateway.service';

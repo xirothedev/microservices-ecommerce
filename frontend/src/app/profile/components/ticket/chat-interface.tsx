@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import axiosInstance from "@/lib/axios";
+import { cn, getFallbackString } from "@/lib/utils";
 import { Wifi, WifiOff } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useRef, useState } from "react";
@@ -12,9 +13,16 @@ import MessageList from "./message-list";
 
 interface ChatInterfaceProps {
 	ticketId: string;
+	displayUser?: {
+		id: string;
+		email: string;
+		fullname: string;
+		avatarUrl: string | null;
+	} | null;
+	displayUserStatus: "online" | "offline";
 }
 
-export default function ChatInterface({ ticketId }: ChatInterfaceProps) {
+export default function ChatInterface({ ticketId, displayUser, displayUserStatus }: ChatInterfaceProps) {
 	const [isConnected, _setIsConnected] = useState(true);
 	const [isAgentTyping, _setIsAgentTyping] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -24,18 +32,12 @@ export default function ChatInterface({ ticketId }: ChatInterfaceProps) {
 		if (!content.trim() && (!attachments || attachments.length === 0)) return;
 		setIsLoading(true);
 		try {
-			const formData = new FormData();
-			formData.append("content", content);
-
-			// Add hasAttachments flag
 			const hasAttachments = attachments && attachments.length > 0;
-			formData.append("hasAttachments", hasAttachments?.toString() ?? "false");
 
-			if (attachments) {
-				attachments.forEach((file) => formData.append("attachments", file));
-			}
-			await axiosInstance.post(`/ticket/${ticketId}/message`, formData, {
-				headers: { "Content-Type": "multipart/form-data" },
+			await axiosInstance.postForm(`/ticket/${ticketId}/message`, {
+				content,
+				hasAttachments,
+				attachments,
 			});
 			// The backend will broadcast the new message via socket.io, so no need to add it manually
 		} catch (err) {
@@ -67,14 +69,21 @@ export default function ChatInterface({ ticketId }: ChatInterfaceProps) {
 
 				<div className="flex items-center gap-2">
 					<Avatar className="h-6 w-6">
-						<AvatarImage src="https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=24&width=24" />
-						<AvatarFallback className="text-xs">SJ</AvatarFallback>
+						<AvatarImage src={displayUser?.avatarUrl ?? undefined} />
+						<AvatarFallback className="text-xs">
+							{getFallbackString(displayUser?.fullname ?? "Unknown User")}
+						</AvatarFallback>
 					</Avatar>
 					<div className="text-sm">
-						<span className="font-medium">Sarah Johnson</span>
+						<span className="font-medium">{displayUser?.fullname}</span>
 						<div className="flex items-center gap-1">
-							<div className="h-2 w-2 rounded-full bg-green-500" />
-							<span className="text-xs text-gray-600">Online</span>
+							<div
+								className={cn(
+									"h-2 w-2 rounded-full",
+									displayUserStatus === "online" ? "animate-pulse bg-green-500" : "bg-gray-400",
+								)}
+							/>
+							<span className="text-xs text-gray-600 capitalize">{displayUserStatus}</span>
 						</div>
 					</div>
 				</div>
@@ -94,8 +103,10 @@ export default function ChatInterface({ ticketId }: ChatInterfaceProps) {
 							className="mb-4 flex items-center gap-3"
 						>
 							<Avatar className="h-8 w-8">
-								<AvatarImage src="https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=32&width=32" />
-								<AvatarFallback className="text-xs">SJ</AvatarFallback>
+								<AvatarImage src={displayUser?.avatarUrl ?? undefined} />
+								<AvatarFallback className="text-xs">
+									{getFallbackString(displayUser?.fullname ?? "Unknown User")}
+								</AvatarFallback>
 							</Avatar>
 							<div className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2">
 								<div className="flex gap-1">

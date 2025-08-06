@@ -1,5 +1,6 @@
 "use client";
 
+import { useAutoUpdateUserStatus } from "@/lib/ws/users";
 import dynamic from "next/dynamic";
 import { createContext, Dispatch, SetStateAction, useState } from "react";
 
@@ -19,6 +20,7 @@ export const LiveChatContext = createContext<LiveChatContextType>({
 
 export default function TemplateRoot({ children }: { children: React.ReactNode }) {
 	const [isLiveChatOpen, setIsLiveChatOpen] = useState<boolean>(false);
+	const {} = useAutoUpdateUserStatus();
 
 	return (
 		<LiveChatContext.Provider value={{ isOpen: isLiveChatOpen, setIsOpen: setIsLiveChatOpen }}>
