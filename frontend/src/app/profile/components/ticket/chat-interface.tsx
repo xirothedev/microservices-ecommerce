@@ -93,9 +93,9 @@ export default function ChatInterface({ ticketId, displayUser, displayUserStatus
 							/>
 							<span className="text-xs text-gray-600 first-letter:uppercase">
 								{displayUserStatus}{" "}
-								{displayUserStatus === "offline" && displayUser?.lastActiveAt
-									? formatRelativeTime(displayUser.lastActiveAt)
-									: "recently"}
+								{displayUserStatus === "offline" &&
+									displayUser?.lastActiveAt &&
+									formatRelativeTime(displayUser.lastActiveAt)}
 							</span>
 						</div>
 					</div>

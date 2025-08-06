@@ -1,12 +1,13 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import { TicketMessageResponse, TicketResponse } from "@/@types/backend";
+import { useQueryClient } from "@tanstack/react-query";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { useDebounce } from "@/hooks/use-debounce";
+import { handleWebSocketError } from "./shared";
 
 const NAMESPACE = "ticket";
 
 let socket: Socket | null = null;
+let initialized = false;
 
 export const getTicketSocket = (): Socket => {
 	if (!socket) {
@@ -14,6 +15,17 @@ export const getTicketSocket = (): Socket => {
 			transports: ["websocket", "polling"],
 		});
 	}
+
+	if (!initialized) {
+		socket.on("connect", () => {
+			initialized = true;
+		});
+
+		socket.on("connect_error", (err: any) => {
+			handleWebSocketError(socket, err);
+		});
+	}
+
 	return socket;
 };
 
@@ -57,7 +69,7 @@ export function useTicketMessageSocket(ticketId: string) {
 						...oldData,
 						pages:
 							oldData.pages && oldData.pages.length > 0
-								? oldData.pages.map((page: any, index: number) => {
+								? oldData.pages.map((page: { data: TicketMessageResponse[] }, index: number) => {
 										if (index === 0) {
 											return {
 												...page,
@@ -89,7 +101,7 @@ export function useTicketMessageSocket(ticketId: string) {
 		return () => {
 			ticketSocket.emit(TicketSocketEvents.LEAVE_TICKET_ROOM, ticketId);
 		};
-	}, [ticketId]);
+	}, [ticketId, ticketSocket.connected]);
 
 	useEffect(() => {
 		if (!ticketSocket.connected) return;
@@ -99,7 +111,7 @@ export function useTicketMessageSocket(ticketId: string) {
 		return () => {
 			ticketSocket.off(TicketSocketEvents.NEW_MESSAGE, handleNewMessage);
 		};
-	}, [handleNewMessage]);
+	}, [handleNewMessage, ticketSocket.connected]);
 
 	return {
 		handleNewMessage,
@@ -119,22 +131,19 @@ export function useTicketTyping(enemyId?: string, ticketId?: string) {
 	}, [ticketSocket]);
 
 	// Handle received typing event
-	const handleUserTyping = useCallback(
-		(userId: string) => {
-			if (!enemyId || userId !== enemyId) return;
+	const handleUserTyping = useCallback(() => {
+		if (!enemyId) return;
 
-			setIsEnemyTyping(true);
+		setIsEnemyTyping(true);
 
-			if (timeoutRef.current) {
-				clearTimeout(timeoutRef.current);
-			}
+		if (timeoutRef.current) {
+			clearTimeout(timeoutRef.current);
+		}
 
-			timeoutRef.current = setTimeout(() => {
-				setIsEnemyTyping(false);
-			}, 3000);
-		},
-		[enemyId],
-	);
+		timeoutRef.current = setTimeout(() => {
+			setIsEnemyTyping(false);
+		}, 3000);
+	}, [enemyId]);
 
 	// Join room after socket connects
 	useEffect(() => {
@@ -155,16 +164,18 @@ export function useTicketTyping(enemyId?: string, ticketId?: string) {
 			ticketSocket.emit(TicketSocketEvents.LEAVE_TICKET_ROOM, ticketId);
 			ticketSocket.off("connect", joinRoom);
 		};
-	}, [ticketSocket, ticketId]);
+	}, [ticketSocket.connected, ticketId]);
 
 	// Listen for typing event
 	useEffect(() => {
+		if (!ticketSocket.connected) return;
+
 		ticketSocket.on(TicketSocketEvents.USER_TYPING, handleUserTyping);
 
 		return () => {
 			ticketSocket.off(TicketSocketEvents.USER_TYPING, handleUserTyping);
 		};
-	}, [ticketSocket, handleUserTyping]);
+	}, [ticketSocket.connected, handleUserTyping]);
 
 	// Clear timeout on unmount
 	useEffect(() => {
@@ -220,7 +231,7 @@ export function useTicketSocket() {
 		return () => {
 			ticketSocket.emit(TicketSocketEvents.LEAVE_USER_ROOM);
 		};
-	}, []);
+	}, [ticketSocket.connected]);
 
 	useEffect(() => {
 		if (!ticketSocket.connected) return;
@@ -230,7 +241,7 @@ export function useTicketSocket() {
 		return () => {
 			ticketSocket.off(TicketSocketEvents.NEW_TICKET, handleNewTicket);
 		};
-	}, []);
+	}, [ticketSocket.connected]);
 
 	return {
 		handleNewTicket,

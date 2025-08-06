@@ -1,3 +1,5 @@
+import { WsUser } from '@/common/decorators/ws-user.decorator';
+import { WsAuthGuard } from '@/common/guards/ws-auth.guard';
 import { Logger, UseGuards } from '@nestjs/common';
 import {
   ConnectedSocket,
@@ -10,12 +12,10 @@ import {
 } from '@nestjs/websockets';
 import { User } from '@prisma/generated';
 import { Server, Socket } from 'socket.io';
-import { WsAuthGuard } from '../../common/guards/ws-auth.guard';
-import { TicketMessageResponse, TicketResponse } from './ticket.interface';
-import { WsUser } from '@/common/decorators/ws-user.decorator';
 import { TicketGatewayService } from './services/ticket-gateway.service';
+import { TicketMessageResponse, TicketResponse } from './ticket.interface';
 
-@WebSocketGateway({ namespace: 'ticket', transports: ['websocket'] })
+@WebSocketGateway({ namespace: 'ticket', transports: ['websocket', 'polling'] })
 @UseGuards(WsAuthGuard)
 export class TicketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private logger = new Logger(TicketGateway.name);
@@ -54,10 +54,10 @@ export class TicketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('ticket.user.typing')
-  handleUserTyping(@MessageBody() ticketId: string, @WsUser() user: User) {
+  handleUserTyping(@MessageBody() ticketId: string, @ConnectedSocket() client: Socket, @WsUser() user: User) {
     const room = `ticket:${ticketId}`;
     this.logger.debug(`User ${user.id} is typing in ticket ${ticketId}`);
-    this.server.to(room).emit('ticket.user.typing', user.id);
+    client.broadcast.to(room).emit('ticket.user.typing', user.id);
   }
 
   broadcastNewTicket(ticket: TicketResponse) {

@@ -14,7 +14,7 @@ import { User } from '@prisma/generated';
 import { Server, Socket } from 'socket.io';
 import { UserStatusService } from './services/users-status.service';
 
-@WebSocketGateway({ namespace: 'users', transports: ['websocket'] })
+@WebSocketGateway({ namespace: 'users', transports: ['websocket', 'polling'] })
 @UseGuards(WsAuthGuard)
 export class UsersGateway implements OnGatewayConnection, OnGatewayDisconnect, OnModuleInit {
   private logger = new Logger(UsersGateway.name);
@@ -32,7 +32,6 @@ export class UsersGateway implements OnGatewayConnection, OnGatewayDisconnect, O
     await this.redisService.subscribe('user:status:changed', (message) => {
       try {
         const statusData = JSON.parse(message);
-        this.logger.log(`Broadcasting status change for user ${statusData.userId}: ${statusData.status}`);
 
         // Broadcast to all connected clients in the users namespace
         this.server.emit('user.status.changed', statusData);

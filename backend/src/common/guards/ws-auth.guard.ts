@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { WsException } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
 import { IS_PUBLIC_KEY } from '@/common/decorators/public.decorator';
+import { Payload } from '@/modules/auth/auth.interface';
 
 @Injectable()
 export class WsAuthGuard implements CanActivate {
@@ -36,12 +37,23 @@ export class WsAuthGuard implements CanActivate {
 
       if (!token) {
         this.logger.warn(`Unauthorized connection attempt from ${client.handshake.address} - No token provided`);
-        throw new WsException('Access token not found');
+        throw new WsException({
+          message: 'Access token not found',
+          code: 'ACCESS_TOKEN_NOT_FOUND',
+        });
       }
 
-      const payload = this.jwtService.verify(token, {
+      const payload = this.jwtService.verify<Payload>(token, {
         secret: this.config.getOrThrow<string>('ACCESS_TOKEN_SECRET_KEY'),
       });
+
+      if (!payload) {
+        this.logger.warn(`Invalid token provided or expired`);
+        throw new WsException({
+          message: 'Invalid token provided or expired',
+          code: 'INVALID_TOKEN_OR_EXPIRED',
+        });
+      }
 
       const user = await this.prismaService.user.findUniqueOrThrow({
         where: { id: payload.sub },
@@ -50,12 +62,26 @@ export class WsAuthGuard implements CanActivate {
 
       if (!user.isVerified) {
         this.logger.warn(`Unverified user ${user.email} attempted to connect`);
-        throw new WsException('User needs to be verified');
+        throw new WsException({
+          message: 'User needs to be verified',
+          code: 'USER_NOT_VERIFIED',
+        });
       }
 
       if (user.isBanned) {
         this.logger.warn(`Banned user ${user.email} attempted to connect`);
-        throw new WsException('User has been banned');
+        throw new WsException({
+          message: 'User has been banned',
+          code: 'USER_HAS_BEEN_BANNED',
+        });
+      }
+
+      if (user.isLocked) {
+        this.logger.warn(`Locked user ${user.email} attempted to connect`);
+        throw new WsException({
+          message: 'User has been locked',
+          code: 'USER_HAS_BEEN_LOCKED',
+        });
       }
 
       // Attach user to socket for later use
@@ -69,7 +95,10 @@ export class WsAuthGuard implements CanActivate {
       }
 
       this.logger.error(`Authentication failed: ${error.message}`);
-      throw new WsException('Unauthorized');
+      throw new WsException({
+        message: 'Unauthorized',
+        code: 'UNAUTHORIZED',
+      });
     }
   }
 
@@ -86,21 +115,18 @@ export class WsAuthGuard implements CanActivate {
     // Try to get token from authorization header
     const authHeader = client.handshake.headers.authorization;
     if (authHeader && authHeader.startsWith('Bearer ')) {
-      this.logger.debug('Token extracted from authorization header');
       return authHeader.substring(7);
     }
 
     // Try to get token from query parameters (for mobile apps or testing)
     const queryToken = client.handshake.query.token as string;
     if (queryToken) {
-      this.logger.debug('Token extracted from query parameters');
       return queryToken;
     }
 
     // Try to get token from handshake auth object (Socket.IO specific)
     const authToken = client.handshake.auth?.token as string;
     if (authToken) {
-      this.logger.debug('Token extracted from handshake auth');
       return authToken;
     }
 
@@ -121,8 +147,7 @@ export class WsAuthGuard implements CanActivate {
       );
 
       return cookies['access_token'] || null;
-    } catch (error) {
-      this.logger.warn('Failed to parse cookies:', error.message);
+    } catch {
       return null;
     }
   }

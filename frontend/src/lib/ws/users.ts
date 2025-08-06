@@ -1,14 +1,26 @@
 import { useEffect, useState } from "react";
 import { Socket, io } from "socket.io-client";
+import { handleWebSocketError } from "./shared";
 
 const NAMESPACE = "users";
 
 let socket: Socket | null = null;
+let initialized = false;
 
 export const getUsersSocket = (): Socket => {
 	if (!socket) {
 		socket = io(`${process.env.NEXT_PUBLIC_SOCKET_URL}/${NAMESPACE}`, {
 			transports: ["websocket", "polling"],
+		});
+	}
+
+	if (!initialized) {
+		socket.on("connect", () => {
+			initialized = true;
+		});
+
+		socket.on("connect_error", (err: any) => {
+			handleWebSocketError(socket, err);
 		});
 	}
 	return socket;
