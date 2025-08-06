@@ -1,7 +1,8 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { TicketMessageResponse, TicketResponse } from "@/@types/backend";
 import { io, Socket } from "socket.io-client";
+import { useDebounce } from "@/hooks/use-debounce";
 
 const NAMESPACE = "ticket";
 
@@ -23,6 +24,7 @@ export const TicketSocketEvents = {
 	JOIN_TICKET_ROOM: "join.ticket.room",
 	LEAVE_TICKET_ROOM: "leave.ticket.room",
 	NEW_MESSAGE: "ticket.message.new",
+	USER_TYPING: "ticket.user.typing",
 } as const;
 
 export function useTicketMessageSocket(ticketId: string) {
@@ -80,14 +82,18 @@ export function useTicketMessageSocket(ticketId: string) {
 	);
 
 	useEffect(() => {
+		if (!ticketSocket.connected) return;
+
 		ticketSocket.emit(TicketSocketEvents.JOIN_TICKET_ROOM, ticketId);
 
 		return () => {
 			ticketSocket.emit(TicketSocketEvents.LEAVE_TICKET_ROOM, ticketId);
 		};
-	}, []);
+	}, [ticketId]);
 
 	useEffect(() => {
+		if (!ticketSocket.connected) return;
+
 		ticketSocket.on(TicketSocketEvents.NEW_MESSAGE, handleNewMessage);
 
 		return () => {
@@ -97,6 +103,57 @@ export function useTicketMessageSocket(ticketId: string) {
 
 	return {
 		handleNewMessage,
+	};
+}
+
+export function useTicketUserTypingSocket(enemyId?: string, ticketId?: string) {
+	const ticketSocket = getTicketSocket();
+	const [isEnemyTyping, setIsEnemyTyping] = useState<boolean>(false);
+
+	const handleUserTyping = useCallback(
+		(userId: string) => {
+			if (enemyId && userId === enemyId) {
+				setIsEnemyTyping(true);
+
+				setTimeout(() => {
+					setIsEnemyTyping(false);
+				}, 3000);
+			}
+		},
+		[enemyId],
+	);
+
+	const handleSetUserTyping = useCallback(
+		(ticketId: string) => {
+			ticketSocket.emit(TicketSocketEvents.USER_TYPING, ticketId);
+		},
+		[ticketSocket],
+	);
+
+	// Join ticket room if ticketId is provided
+	useEffect(() => {
+		if (!ticketSocket.connected || !ticketId) return;
+
+		ticketSocket.emit(TicketSocketEvents.JOIN_TICKET_ROOM, ticketId);
+
+		return () => {
+			ticketSocket.emit(TicketSocketEvents.LEAVE_TICKET_ROOM, ticketId);
+		};
+	}, [ticketId, ticketSocket]);
+
+	useEffect(() => {
+		if (!ticketSocket.connected) return;
+
+		ticketSocket.on(TicketSocketEvents.USER_TYPING, handleUserTyping);
+
+		return () => {
+			ticketSocket.off(TicketSocketEvents.USER_TYPING, handleUserTyping);
+		};
+	}, [handleUserTyping]);
+
+	return {
+		isEnemyTyping,
+		handleSetUserTyping,
 	};
 }
 
@@ -134,6 +191,8 @@ export function useTicketSocket() {
 	);
 
 	useEffect(() => {
+		if (!ticketSocket.connected) return;
+
 		ticketSocket.emit(TicketSocketEvents.JOIN_USER_ROOM);
 
 		return () => {
@@ -142,12 +201,14 @@ export function useTicketSocket() {
 	}, []);
 
 	useEffect(() => {
+		if (!ticketSocket.connected) return;
+
 		ticketSocket.on(TicketSocketEvents.NEW_TICKET, handleNewTicket);
 
 		return () => {
 			ticketSocket.off(TicketSocketEvents.NEW_TICKET, handleNewTicket);
 		};
-	}, [handleNewTicket]);
+	}, []);
 
 	return {
 		handleNewTicket,

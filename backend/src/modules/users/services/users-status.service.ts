@@ -1,3 +1,4 @@
+import { PrismaService } from '@/prisma/prisma.service';
 import { RedisService } from '@/redis/redis.service';
 import { Injectable, Logger } from '@nestjs/common';
 
@@ -5,7 +6,10 @@ import { Injectable, Logger } from '@nestjs/common';
 export class UserStatusService {
   private readonly logger = new Logger(UserStatusService.name);
 
-  constructor(private readonly redisService: RedisService) {}
+  constructor(
+    private readonly redisService: RedisService,
+    private readonly prismaService: PrismaService,
+  ) {}
 
   async setUserOnline(userId: string) {
     const previousStatus = await this.getUserStatus(userId);
@@ -59,5 +63,29 @@ export class UserStatusService {
 
   async getOnlineUsersCount(): Promise<number> {
     return await this.redisService.getClient().scard('users:online');
+  }
+
+  async updateLastActiveAt(userId: string): Promise<void> {
+    try {
+      await this.prismaService.user.update({
+        where: { id: userId },
+        data: { lastActiveAt: new Date() },
+      });
+    } catch (error) {
+      this.logger.error(`Failed to update lastActiveAt for user ${userId}:`, error);
+    }
+  }
+
+  async setUserLastActive(userId: string): Promise<void> {
+    // Update both Redis status and database lastActiveAt
+    await this.setUserOnline(userId);
+    await this.updateLastActiveAt(userId);
+  }
+
+  async syncOnlineUsersLastActive(): Promise<void> {
+    const onlineUsers = await this.getOnlineUsers();
+
+    const updatePromises = onlineUsers.map((userId) => this.updateLastActiveAt(userId));
+    await Promise.allSettled(updatePromises);
   }
 }

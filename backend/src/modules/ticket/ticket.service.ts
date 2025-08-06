@@ -113,6 +113,7 @@ export class TicketService {
             fullname: true,
             email: true,
             avatarUrl: true,
+            lastActiveAt: true,
           },
         },
         assign: {
@@ -121,6 +122,7 @@ export class TicketService {
             fullname: true,
             email: true,
             avatarUrl: true,
+            lastActiveAt: true,
           },
         },
         _count: { select: { messages: true } },
@@ -176,6 +178,7 @@ export class TicketService {
               fullname: true,
               email: true,
               avatarUrl: true,
+              lastActiveAt: true,
             },
           },
           assign: {
@@ -184,6 +187,7 @@ export class TicketService {
               fullname: true,
               email: true,
               avatarUrl: true,
+              lastActiveAt: true,
             },
           },
           messages: {
@@ -201,6 +205,7 @@ export class TicketService {
                       fullname: true,
                       email: true,
                       avatarUrl: true,
+                      lastActiveAt: true,
                     },
                   },
                 },
@@ -334,8 +339,8 @@ export class TicketService {
         ticket: {
           select: {
             id: true,
-            author: { select: { fullname: true, id: true, avatarUrl: true } },
-            assign: { select: { fullname: true, id: true, avatarUrl: true } },
+            author: { select: { fullname: true, id: true, avatarUrl: true, lastActiveAt: true } },
+            assign: { select: { fullname: true, id: true, avatarUrl: true, lastActiveAt: true } },
           },
         },
         sender: {
@@ -345,6 +350,7 @@ export class TicketService {
                 id: true,
                 fullname: true,
                 avatarUrl: true,
+                lastActiveAt: true,
               },
             },
           },
@@ -383,8 +389,8 @@ export class TicketService {
         ticket: {
           select: {
             id: true,
-            author: { select: { fullname: true, id: true, avatarUrl: true } },
-            assign: { select: { fullname: true, id: true, avatarUrl: true } },
+            author: { select: { fullname: true, id: true, avatarUrl: true, lastActiveAt: true } },
+            assign: { select: { fullname: true, id: true, avatarUrl: true, lastActiveAt: true } },
           },
         },
         sender: {
@@ -394,6 +400,7 @@ export class TicketService {
                 id: true,
                 fullname: true,
                 avatarUrl: true,
+                lastActiveAt: true,
               },
             },
           },

@@ -1,3 +1,8 @@
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
+
 export const formatDate = (dateString: string, options?: Intl.DateTimeFormatOptions) => {
 	return new Date(dateString).toLocaleDateString("en-US", {
 		year: "numeric",
@@ -5,6 +10,10 @@ export const formatDate = (dateString: string, options?: Intl.DateTimeFormatOpti
 		day: "numeric",
 		...options,
 	});
+};
+
+export const formatRelativeTime = (dateString: string) => {
+	return dayjs(dateString).fromNow();
 };
 
 export const formatCurrency = (amount: number) => {

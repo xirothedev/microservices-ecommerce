@@ -28,6 +28,7 @@ import { RedisModule } from './redis/redis.module';
 import { RedisService } from './redis/redis.service';
 import { SupabaseModule } from './supabase/supabase.module';
 import { OrdersModule } from './modules/orders/orders.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Global()
 @Module({
@@ -52,6 +53,7 @@ class GlobalJwtModule {}
     PrismaModule,
     RedisModule,
     SupabaseModule,
+    ScheduleModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),

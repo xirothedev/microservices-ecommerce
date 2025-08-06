@@ -36,12 +36,14 @@ export interface TicketResponse {
 		fullname: string;
 		email: string;
 		avatarUrl: string | null;
+		lastActiveAt: string | null;
 	};
 	assign: {
 		id: string;
 		fullname: string;
 		email: string;
 		avatarUrl: string | null;
+		lastActiveAt: string | null;
 	} | null;
 	_count: {
 		messages: number;
@@ -57,14 +59,15 @@ export interface TicketMessageResponse {
 	attachments: string[];
 	ticket: {
 		id: string;
-		author: { fullname: string; id: string; avatarUrl: string };
-		assign: { fullname: string; id: string; avatarUrl: string };
+		author: { fullname: string; id: string; avatarUrl: string; lastActiveAt: string | null };
+		assign: { fullname: string; id: string; avatarUrl: string; lastActiveAt: string | null };
 	};
 	sender: {
 		user: {
 			id: string;
 			fullname: string;
 			avatarUrl: string | null;
+			lastActiveAt: string | null;
 		};
 	};
 }

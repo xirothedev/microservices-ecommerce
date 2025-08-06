@@ -53,6 +53,13 @@ export class TicketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     return this.ticketGatewayService.handleLeaveTicketRoom(ticketId, client);
   }
 
+  @SubscribeMessage('ticket.user.typing')
+  handleUserTyping(@MessageBody() ticketId: string, @WsUser() user: User) {
+    const room = `ticket:${ticketId}`;
+    this.logger.debug(`User ${user.id} is typing in ticket ${ticketId}`);
+    this.server.to(room).emit('ticket.user.typing', user.id);
+  }
+
   broadcastNewTicket(ticket: TicketResponse) {
     this.logger.debug('📢 Broadcasting new ticket:', ticket.id);
     this.server.emit('ticket.new', ticket);
@@ -61,7 +68,6 @@ export class TicketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   broadcastNewMessage(message: TicketMessageResponse) {
     const room = `ticket:${message.ticket.id}`;
     this.logger.debug(`📢 Broadcasting new message to room ${room}:`, message.id);
-    this.logger.debug('📋 Message details:', JSON.stringify(message, null, 2));
     this.server.to(room).emit('ticket.message.new', message);
   }
 }

@@ -7,9 +7,11 @@ import axiosInstance from "@/lib/axios";
 import { cn, getFallbackString } from "@/lib/utils";
 import { Wifi, WifiOff } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MessageInput from "./message-input";
 import MessageList from "./message-list";
+import { getTicketSocket, useTicketUserTypingSocket } from "@/lib/ws/ticket";
+import { formatRelativeTime } from "@/lib/format";
 
 interface ChatInterfaceProps {
 	ticketId: string;
@@ -18,15 +20,23 @@ interface ChatInterfaceProps {
 		email: string;
 		fullname: string;
 		avatarUrl: string | null;
+		lastActiveAt: string | null;
 	} | null;
 	displayUserStatus: "online" | "offline";
 }
 
 export default function ChatInterface({ ticketId, displayUser, displayUserStatus }: ChatInterfaceProps) {
-	const [isConnected, _setIsConnected] = useState(true);
-	const [isAgentTyping, _setIsAgentTyping] = useState(false);
+	const [isConnected, setIsConnected] = useState(true);
 	const [isLoading, setIsLoading] = useState(false);
+	const { isEnemyTyping, handleSetUserTyping } = useTicketUserTypingSocket(displayUser?.id, ticketId);
 	const messagesEndRef = useRef<HTMLDivElement>(null);
+	const socket = getTicketSocket();
+
+	useEffect(() => {
+		if (socket.connected) {
+			setIsConnected(true);
+		}
+	}, [socket.connected]);
 
 	const handleSendMessage = async (content: string, attachments?: File[]) => {
 		if (!content.trim() && (!attachments || attachments.length === 0)) return;
@@ -39,7 +49,6 @@ export default function ChatInterface({ ticketId, displayUser, displayUserStatus
 				hasAttachments,
 				attachments,
 			});
-			// The backend will broadcast the new message via socket.io, so no need to add it manually
 		} catch (err) {
 			console.error("Failed to send message", err);
 		} finally {
@@ -83,7 +92,12 @@ export default function ChatInterface({ ticketId, displayUser, displayUserStatus
 									displayUserStatus === "online" ? "animate-pulse bg-green-500" : "bg-gray-400",
 								)}
 							/>
-							<span className="text-xs text-gray-600 capitalize">{displayUserStatus}</span>
+							<span className="text-xs text-gray-600 first-letter:uppercase">
+								{displayUserStatus}{" "}
+								{displayUserStatus === "offline" && displayUser?.lastActiveAt
+									? formatRelativeTime(displayUser.lastActiveAt)
+									: "recently"}
+							</span>
 						</div>
 					</div>
 				</div>
@@ -95,7 +109,7 @@ export default function ChatInterface({ ticketId, displayUser, displayUserStatus
 
 				{/* Agent Typing Indicator */}
 				<AnimatePresence>
-					{isAgentTyping && (
+					{isEnemyTyping && (
 						<motion.div
 							initial={{ opacity: 0, y: 10 }}
 							animate={{ opacity: 1, y: 0 }}
@@ -123,7 +137,7 @@ export default function ChatInterface({ ticketId, displayUser, displayUserStatus
 										style={{ animationDelay: "300ms" }}
 									/>
 								</div>
-								<span className="text-xs text-gray-600">Sarah is typing...</span>
+								<span className="text-xs text-gray-600">{displayUser?.fullname} is typing...</span>
 							</div>
 						</motion.div>
 					)}
@@ -140,6 +154,7 @@ export default function ChatInterface({ ticketId, displayUser, displayUserStatus
 					onSendMessage={handleSendMessage}
 					disabled={!isConnected || isLoading}
 					isLoading={isLoading}
+					onTyping={() => handleSetUserTyping(ticketId)}
 				/>
 			</div>
 		</div>

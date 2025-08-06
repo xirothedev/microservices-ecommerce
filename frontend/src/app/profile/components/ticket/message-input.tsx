@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback, ChangeEvent, KeyboardEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -9,11 +9,17 @@ import { motion, AnimatePresence } from "motion/react";
 
 interface MessageInputProps {
 	onSendMessage: (content: string, attachments?: File[]) => Promise<void>;
+	onTyping: () => void;
 	disabled?: boolean;
 	isLoading?: boolean;
 }
 
-export default function MessageInput({ onSendMessage, disabled = false, isLoading = false }: MessageInputProps) {
+export default function MessageInput({
+	onSendMessage,
+	disabled = false,
+	isLoading = false,
+	onTyping,
+}: MessageInputProps) {
 	const [message, setMessage] = useState("");
 	const [attachments, setAttachments] = useState<File[]>([]);
 	const [isDragOver, setIsDragOver] = useState(false);
@@ -21,6 +27,29 @@ export default function MessageInput({ onSendMessage, disabled = false, isLoadin
 	const [shouldFocusAfterSend, setShouldFocusAfterSend] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
+	const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+	// Debounced typing function
+	const debouncedTyping = useCallback(() => {
+		// Clear existing timeout
+		if (typingTimeoutRef.current) {
+			clearTimeout(typingTimeoutRef.current);
+		}
+
+		// Set new timeout
+		typingTimeoutRef.current = setTimeout(() => {
+			onTyping();
+		}, 500); // 500ms debounce
+	}, [onTyping]);
+
+	// Cleanup timeout on unmount
+	useEffect(() => {
+		return () => {
+			if (typingTimeoutRef.current) {
+				clearTimeout(typingTimeoutRef.current);
+			}
+		};
+	}, []);
 
 	// Focus textarea when loading finishes after sending
 	useEffect(() => {
@@ -96,7 +125,7 @@ export default function MessageInput({ onSendMessage, disabled = false, isLoadin
 		}
 	};
 
-	const handleKeyDown = (e: React.KeyboardEvent) => {
+	const handleKeyDown = (e: KeyboardEvent) => {
 		if (e.key === "Enter" && !e.shiftKey) {
 			e.preventDefault();
 			handleSubmit(e);
@@ -191,6 +220,11 @@ export default function MessageInput({ onSendMessage, disabled = false, isLoadin
 	// Auto-resize textarea
 	const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		setMessage(e.target.value);
+
+		// Trigger typing indicator when user is actually typing
+		if (e.target.value.length > 0) {
+			debouncedTyping();
+		}
 
 		// Auto-resize
 		const textarea = e.target;
