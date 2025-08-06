@@ -123,6 +123,7 @@ model Product {
   discountPrice Int           @map("discount_price") @db.Integer
   tags          String[]      @db.VarChar(100)
   medias        String[]      @db.VarChar(500)
+  isVerified    Boolean       @default(false) @map("is_verified")
 
   categoryId   String        @map("category_id") @db.Uuid
   category     Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -167,10 +168,10 @@ model Review {
   comment   String   @db.Text
 
   productId String  @map("product_id") @db.Uuid
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   userId String @map("user_id") @db.Uuid
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([productId, userId], name: "productUserId", map: "product_user_id")
   @@map("review")
@@ -207,30 +208,32 @@ datasource db {
 }
 
 model User {
-  id              String     @id @default(uuid()) @db.Uuid
-  fullname        String     @db.VarChar(50)
-  email           String     @unique @db.VarChar(255)
-  phone           String?    @unique @db.VarChar(20)
-  web3Wallet      String?    @unique @db.VarChar(255)
-  passwordEnabled Boolean    @default(false) @map("password_enabled")
-  hashedPassword  String?    @map("hashed_password") @db.VarChar(255)
-  avatarUrl       String?    @map("avatar_url") @db.VarChar(500)
-  address         String?    @db.VarChar(500)
-  city            String?    @db.VarChar(50)
-  state           String?    @db.VarChar(50)
-  zipCode         String?    @db.VarChar(10)
-  biography       String?    @db.Text()
+  id              String         @id @default(uuid()) @db.Uuid
+  fullname        String         @db.VarChar(50)
+  email           String         @unique @db.VarChar(255)
+  phone           String?        @unique @db.VarChar(20)
+  web3Wallet      String?        @unique @db.VarChar(255)
+  passwordEnabled Boolean        @default(false) @map("password_enabled")
+  hashedPassword  String?        @map("hashed_password") @db.VarChar(255)
+  avatarUrl       String?        @map("avatar_url") @db.VarChar(500)
+  address         String?        @db.VarChar(500)
+  city            String?        @db.VarChar(50)
+  state           String?        @db.VarChar(50)
+  zipCode         String?        @db.VarChar(10)
+  biography       String?        @db.Text()
   roles           UserRole[]
   flags           UserFlag[]
-  createdAt       DateTime   @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt       DateTime   @updatedAt @map("updated_at") @db.Timestamptz
-  credit          Int        @default(0) @db.Integer
-  isBanned        Boolean    @default(false) @map("is_banned")
-  isLocked        Boolean    @default(false) @map("is_locked")
-  isVerified      Boolean    @default(false) @map("is_verified")
-  lastActiveAt    DateTime?  @map("last_active_at") @db.Timestamptz
+  createdAt       DateTime       @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt       DateTime       @updatedAt @map("updated_at") @db.Timestamptz
+  credit          Int            @default(0) @db.Integer
+  visible         UserVisibility @default(PUBLIC)
+  isBanned        Boolean        @default(false) @map("is_banned")
+  isLocked        Boolean        @default(false) @map("is_locked")
+  isVerified      Boolean        @default(false) @map("is_verified")
+  lastActiveAt    DateTime?      @map("last_active_at") @db.Timestamptz
 
   security         UserSecurity?
+  setting          Setting?
   externalAccounts ExternalAccount[]
   auth             Authentication[]
   loginSessions    LoginSession[]
@@ -344,6 +347,14 @@ enum UserFlag {
   @@map("user_flag")
 }
 
+enum UserVisibility {
+  PUBLIC
+  PRIVATE
+  CONTACT_ONLY
+
+  @@map("user_visibility")
+}
+
 enum ProviderPlatform {
   GOOGLE
   DISCORD
@@ -380,6 +391,25 @@ enum SelectFrom {
   SERVICES
 
   @@map("select_from")
+}
+
+model Setting {
+  userId String @id @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  emailNotifications   Boolean @default(true) @map("email_notifications")
+  browserNotifications Boolean @default(false) @map("browser_notifications")
+
+  ticketNotifications       Boolean @default(true) @map("ticket_notifications")
+  promotionNotifications    Boolean @default(false) @map("promotion_notifications")
+  priceChangesNotifications Boolean @default(false) @map("price_changes_notifications")
+  loginNotifications        Boolean @default(false) @map("login_notifications")
+  suggestedProducts         Boolean @default(true) @map("suggested_products")
+  restockNotifications      Boolean @default(false) @map("restock_notifications")
+
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("setting")
 }
 
 model Ticket {

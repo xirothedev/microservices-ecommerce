@@ -21,8 +21,8 @@ model MfaSetup {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
   updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-  user      UserSecurity     @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-  userId    String   @db.Uuid
+  user   UserSecurity @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  userId String       @db.Uuid
 
   @@unique([userId, type], name: "userMfaType", map: "user_mfa_type")
   @@map("mfa_setup")
@@ -35,8 +35,8 @@ model MfaBackupCode {
   usedAt    DateTime? @map("used_at") @db.Timestamptz
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
 
-  user   UserSecurity   @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
-  userId String @db.Uuid
+  user   UserSecurity @relation(fields: [userId], references: [userId], onDelete: Cascade, onUpdate: Cascade)
+  userId String       @db.Uuid
 
   @@unique([userId, code], name: "userBackupCode", map: "user_backup_code")
   @@map("mfa_backup_code")

@@ -5,6 +5,7 @@ import { Prisma } from '@prisma/generated';
 import { Request } from 'express';
 import { UpdateUserByAdmin } from './dto/update-user-by-admin-input.dto';
 import { UpdateUserInput } from './dto/update-user-input.dto';
+import { UpdateUserSettingsDto } from './dto/update-user-settings.dto';
 
 @Injectable()
 export class UsersService {
@@ -105,6 +106,50 @@ export class UsersService {
 
     return {
       message: 'Updated user avatar successful',
+      data,
+    };
+  }
+
+  async getUserSettings(req: Request) {
+    const user = req.user;
+    const data = await this.prismaService.setting.upsert({
+      where: { userId: user.id },
+      create: {
+        userId: user.id,
+      },
+      update: {},
+      select: {
+        emailNotifications: true,
+        browserNotifications: true,
+        ticketNotifications: true,
+        suggestedProducts: true,
+        promotionNotifications: true,
+        priceChangesNotifications: true,
+        loginNotifications: true,
+        restockNotifications: true,
+      },
+    });
+
+    return {
+      message: 'Fetched user settings successful',
+      data,
+    };
+  }
+
+  async updateUserSettings(req: Request, body: UpdateUserSettingsDto) {
+    const user = req.user;
+
+    const data = await this.prismaService.setting.upsert({
+      where: { userId: user.id },
+      create: {
+        userId: user.id,
+        ...body,
+      },
+      update: body,
+    });
+
+    return {
+      message: 'Updated user settings successful',
       data,
     };
   }

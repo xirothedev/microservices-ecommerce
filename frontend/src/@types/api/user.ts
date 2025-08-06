@@ -34,3 +34,15 @@ export interface UpdateAvatarResponse
 
 // User profile data
 export type UserProfile = UserQuery;
+
+// User settings interface
+export interface UserSettings {
+	emailNotifications: boolean;
+	browserNotifications: boolean;
+	ticketNotifications: boolean;
+	suggestedProducts: boolean;
+	promotionNotifications: boolean;
+	priceChangesNotifications: boolean;
+	loginNotifications: boolean;
+	restockNotifications: boolean;
+}

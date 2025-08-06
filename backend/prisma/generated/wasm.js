@@ -190,6 +190,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   discountPrice: 'discountPrice',
   tags: 'tags',
   medias: 'medias',
+  isVerified: 'isVerified',
   categoryId: 'categoryId',
   sellerId: 'sellerId',
 };
@@ -237,6 +238,7 @@ exports.Prisma.UserScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   credit: 'credit',
+  visible: 'visible',
   isBanned: 'isBanned',
   isLocked: 'isLocked',
   isVerified: 'isVerified',
@@ -296,6 +298,19 @@ exports.Prisma.CartItemScalarFieldEnum = {
   quantity: 'quantity',
   productId: 'productId',
   userId: 'userId',
+};
+
+exports.Prisma.SettingScalarFieldEnum = {
+  userId: 'userId',
+  emailNotifications: 'emailNotifications',
+  browserNotifications: 'browserNotifications',
+  ticketNotifications: 'ticketNotifications',
+  promotionNotifications: 'promotionNotifications',
+  priceChangesNotifications: 'priceChangesNotifications',
+  loginNotifications: 'loginNotifications',
+  suggestedProducts: 'suggestedProducts',
+  restockNotifications: 'restockNotifications',
+  updatedAt: 'updatedAt',
 };
 
 exports.Prisma.TicketScalarFieldEnum = {
@@ -378,6 +393,12 @@ exports.ProductFlag = exports.$Enums.ProductFlag = {
   BEST_SELLER: 'BEST_SELLER',
   BEST_CHEAP: 'BEST_CHEAP',
   POPULAR: 'POPULAR',
+};
+
+exports.UserVisibility = exports.$Enums.UserVisibility = {
+  PUBLIC: 'PUBLIC',
+  PRIVATE: 'PRIVATE',
+  CONTACT_ONLY: 'CONTACT_ONLY',
 };
 
 exports.UserRole = exports.$Enums.UserRole = {
@@ -468,6 +489,7 @@ exports.Prisma.ModelName = {
   ExternalAccount: 'ExternalAccount',
   Bill: 'Bill',
   CartItem: 'CartItem',
+  Setting: 'Setting',
   Ticket: 'Ticket',
   TicketMember: 'TicketMember',
   TicketMessage: 'TicketMessage',

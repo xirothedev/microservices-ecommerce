@@ -87,6 +87,11 @@ export type Bill = $Result.DefaultSelection<Prisma.$BillPayload>;
  */
 export type CartItem = $Result.DefaultSelection<Prisma.$CartItemPayload>;
 /**
+ * Model Setting
+ *
+ */
+export type Setting = $Result.DefaultSelection<Prisma.$SettingPayload>;
+/**
  * Model Ticket
  *
  */
@@ -159,6 +164,14 @@ export namespace $Enums {
   };
 
   export type UserFlag = (typeof UserFlag)[keyof typeof UserFlag];
+
+  export const UserVisibility: {
+    PUBLIC: 'PUBLIC';
+    PRIVATE: 'PRIVATE';
+    CONTACT_ONLY: 'CONTACT_ONLY';
+  };
+
+  export type UserVisibility = (typeof UserVisibility)[keyof typeof UserVisibility];
 
   export const ProviderPlatform: {
     GOOGLE: 'GOOGLE';
@@ -257,6 +270,10 @@ export const UserRole: typeof $Enums.UserRole;
 export type UserFlag = $Enums.UserFlag;
 
 export const UserFlag: typeof $Enums.UserFlag;
+
+export type UserVisibility = $Enums.UserVisibility;
+
+export const UserVisibility: typeof $Enums.UserVisibility;
 
 export type ProviderPlatform = $Enums.ProviderPlatform;
 
@@ -587,6 +604,16 @@ export class PrismaClient<
    * ```
    */
   get cartItem(): Prisma.CartItemDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.setting`: Exposes CRUD operations for the **Setting** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more Settings
+   * const settings = await prisma.setting.findMany()
+   * ```
+   */
+  get setting(): Prisma.SettingDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.ticket`: Exposes CRUD operations for the **Ticket** model.
@@ -1058,6 +1085,7 @@ export namespace Prisma {
     ExternalAccount: 'ExternalAccount';
     Bill: 'Bill';
     CartItem: 'CartItem';
+    Setting: 'Setting';
     Ticket: 'Ticket';
     TicketMember: 'TicketMember';
     TicketMessage: 'TicketMessage';
@@ -1099,6 +1127,7 @@ export namespace Prisma {
         | 'externalAccount'
         | 'bill'
         | 'cartItem'
+        | 'setting'
         | 'ticket'
         | 'ticketMember'
         | 'ticketMessage'
@@ -2216,6 +2245,80 @@ export namespace Prisma {
           };
         };
       };
+      Setting: {
+        payload: Prisma.$SettingPayload<ExtArgs>;
+        fields: Prisma.SettingFieldRefs;
+        operations: {
+          findUnique: {
+            args: Prisma.SettingFindUniqueArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$SettingPayload> | null;
+          };
+          findUniqueOrThrow: {
+            args: Prisma.SettingFindUniqueOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$SettingPayload>;
+          };
+          findFirst: {
+            args: Prisma.SettingFindFirstArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$SettingPayload> | null;
+          };
+          findFirstOrThrow: {
+            args: Prisma.SettingFindFirstOrThrowArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$SettingPayload>;
+          };
+          findMany: {
+            args: Prisma.SettingFindManyArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$SettingPayload>[];
+          };
+          create: {
+            args: Prisma.SettingCreateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$SettingPayload>;
+          };
+          createMany: {
+            args: Prisma.SettingCreateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          createManyAndReturn: {
+            args: Prisma.SettingCreateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$SettingPayload>[];
+          };
+          delete: {
+            args: Prisma.SettingDeleteArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$SettingPayload>;
+          };
+          update: {
+            args: Prisma.SettingUpdateArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$SettingPayload>;
+          };
+          deleteMany: {
+            args: Prisma.SettingDeleteManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateMany: {
+            args: Prisma.SettingUpdateManyArgs<ExtArgs>;
+            result: BatchPayload;
+          };
+          updateManyAndReturn: {
+            args: Prisma.SettingUpdateManyAndReturnArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$SettingPayload>[];
+          };
+          upsert: {
+            args: Prisma.SettingUpsertArgs<ExtArgs>;
+            result: $Utils.PayloadToResult<Prisma.$SettingPayload>;
+          };
+          aggregate: {
+            args: Prisma.SettingAggregateArgs<ExtArgs>;
+            result: $Utils.Optional<AggregateSetting>;
+          };
+          groupBy: {
+            args: Prisma.SettingGroupByArgs<ExtArgs>;
+            result: $Utils.Optional<SettingGroupByOutputType>[];
+          };
+          count: {
+            args: Prisma.SettingCountArgs<ExtArgs>;
+            result: $Utils.Optional<SettingCountAggregateOutputType> | number;
+          };
+        };
+      };
       Ticket: {
         payload: Prisma.$TicketPayload<ExtArgs>;
         fields: Prisma.TicketFieldRefs;
@@ -2619,6 +2722,7 @@ export namespace Prisma {
     externalAccount?: ExternalAccountOmit;
     bill?: BillOmit;
     cartItem?: CartItemOmit;
+    setting?: SettingOmit;
     ticket?: TicketOmit;
     ticketMember?: TicketMemberOmit;
     ticketMessage?: TicketMessageOmit;
@@ -10524,6 +10628,7 @@ export namespace Prisma {
     sold: number | null;
     originalPrice: number | null;
     discountPrice: number | null;
+    isVerified: boolean | null;
     categoryId: string | null;
     sellerId: string | null;
   };
@@ -10541,6 +10646,7 @@ export namespace Prisma {
     sold: number | null;
     originalPrice: number | null;
     discountPrice: number | null;
+    isVerified: boolean | null;
     categoryId: string | null;
     sellerId: string | null;
   };
@@ -10561,6 +10667,7 @@ export namespace Prisma {
     discountPrice: number;
     tags: number;
     medias: number;
+    isVerified: number;
     categoryId: number;
     sellerId: number;
     _all: number;
@@ -10593,6 +10700,7 @@ export namespace Prisma {
     sold?: true;
     originalPrice?: true;
     discountPrice?: true;
+    isVerified?: true;
     categoryId?: true;
     sellerId?: true;
   };
@@ -10610,6 +10718,7 @@ export namespace Prisma {
     sold?: true;
     originalPrice?: true;
     discountPrice?: true;
+    isVerified?: true;
     categoryId?: true;
     sellerId?: true;
   };
@@ -10630,6 +10739,7 @@ export namespace Prisma {
     discountPrice?: true;
     tags?: true;
     medias?: true;
+    isVerified?: true;
     categoryId?: true;
     sellerId?: true;
     _all?: true;
@@ -10734,6 +10844,7 @@ export namespace Prisma {
     discountPrice: number;
     tags: string[];
     medias: string[];
+    isVerified: boolean;
     categoryId: string;
     sellerId: string;
     _count: ProductCountAggregateOutputType | null;
@@ -10772,6 +10883,7 @@ export namespace Prisma {
       discountPrice?: boolean;
       tags?: boolean;
       medias?: boolean;
+      isVerified?: boolean;
       categoryId?: boolean;
       sellerId?: boolean;
       category?: boolean | CategoryDefaultArgs<ExtArgs>;
@@ -10803,6 +10915,7 @@ export namespace Prisma {
         discountPrice?: boolean;
         tags?: boolean;
         medias?: boolean;
+        isVerified?: boolean;
         categoryId?: boolean;
         sellerId?: boolean;
         category?: boolean | CategoryDefaultArgs<ExtArgs>;
@@ -10829,6 +10942,7 @@ export namespace Prisma {
         discountPrice?: boolean;
         tags?: boolean;
         medias?: boolean;
+        isVerified?: boolean;
         categoryId?: boolean;
         sellerId?: boolean;
         category?: boolean | CategoryDefaultArgs<ExtArgs>;
@@ -10853,6 +10967,7 @@ export namespace Prisma {
     discountPrice?: boolean;
     tags?: boolean;
     medias?: boolean;
+    isVerified?: boolean;
     categoryId?: boolean;
     sellerId?: boolean;
   };
@@ -10873,6 +10988,7 @@ export namespace Prisma {
     | 'discountPrice'
     | 'tags'
     | 'medias'
+    | 'isVerified'
     | 'categoryId'
     | 'sellerId',
     ExtArgs['result']['product']
@@ -10922,6 +11038,7 @@ export namespace Prisma {
         discountPrice: number;
         tags: string[];
         medias: string[];
+        isVerified: boolean;
         categoryId: string;
         sellerId: string;
       },
@@ -11480,6 +11597,7 @@ export namespace Prisma {
     readonly discountPrice: FieldRef<'Product', 'Int'>;
     readonly tags: FieldRef<'Product', 'String[]'>;
     readonly medias: FieldRef<'Product', 'String[]'>;
+    readonly isVerified: FieldRef<'Product', 'Boolean'>;
     readonly categoryId: FieldRef<'Product', 'String'>;
     readonly sellerId: FieldRef<'Product', 'String'>;
   }
@@ -15627,6 +15745,7 @@ export namespace Prisma {
     createdAt: Date | null;
     updatedAt: Date | null;
     credit: number | null;
+    visible: $Enums.UserVisibility | null;
     isBanned: boolean | null;
     isLocked: boolean | null;
     isVerified: boolean | null;
@@ -15650,6 +15769,7 @@ export namespace Prisma {
     createdAt: Date | null;
     updatedAt: Date | null;
     credit: number | null;
+    visible: $Enums.UserVisibility | null;
     isBanned: boolean | null;
     isLocked: boolean | null;
     isVerified: boolean | null;
@@ -15675,6 +15795,7 @@ export namespace Prisma {
     createdAt: number;
     updatedAt: number;
     credit: number;
+    visible: number;
     isBanned: number;
     isLocked: number;
     isVerified: number;
@@ -15707,6 +15828,7 @@ export namespace Prisma {
     createdAt?: true;
     updatedAt?: true;
     credit?: true;
+    visible?: true;
     isBanned?: true;
     isLocked?: true;
     isVerified?: true;
@@ -15730,6 +15852,7 @@ export namespace Prisma {
     createdAt?: true;
     updatedAt?: true;
     credit?: true;
+    visible?: true;
     isBanned?: true;
     isLocked?: true;
     isVerified?: true;
@@ -15755,6 +15878,7 @@ export namespace Prisma {
     createdAt?: true;
     updatedAt?: true;
     credit?: true;
+    visible?: true;
     isBanned?: true;
     isLocked?: true;
     isVerified?: true;
@@ -15864,6 +15988,7 @@ export namespace Prisma {
     createdAt: Date;
     updatedAt: Date;
     credit: number;
+    visible: $Enums.UserVisibility;
     isBanned: boolean;
     isLocked: boolean;
     isVerified: boolean;
@@ -15907,11 +16032,13 @@ export namespace Prisma {
       createdAt?: boolean;
       updatedAt?: boolean;
       credit?: boolean;
+      visible?: boolean;
       isBanned?: boolean;
       isLocked?: boolean;
       isVerified?: boolean;
       lastActiveAt?: boolean;
       security?: boolean | User$securityArgs<ExtArgs>;
+      setting?: boolean | User$settingArgs<ExtArgs>;
       externalAccounts?: boolean | User$externalAccountsArgs<ExtArgs>;
       auth?: boolean | User$authArgs<ExtArgs>;
       loginSessions?: boolean | User$loginSessionsArgs<ExtArgs>;
@@ -15949,6 +16076,7 @@ export namespace Prisma {
         createdAt?: boolean;
         updatedAt?: boolean;
         credit?: boolean;
+        visible?: boolean;
         isBanned?: boolean;
         isLocked?: boolean;
         isVerified?: boolean;
@@ -15978,6 +16106,7 @@ export namespace Prisma {
         createdAt?: boolean;
         updatedAt?: boolean;
         credit?: boolean;
+        visible?: boolean;
         isBanned?: boolean;
         isLocked?: boolean;
         isVerified?: boolean;
@@ -16005,6 +16134,7 @@ export namespace Prisma {
     createdAt?: boolean;
     updatedAt?: boolean;
     credit?: boolean;
+    visible?: boolean;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
@@ -16030,6 +16160,7 @@ export namespace Prisma {
     | 'createdAt'
     | 'updatedAt'
     | 'credit'
+    | 'visible'
     | 'isBanned'
     | 'isLocked'
     | 'isVerified'
@@ -16038,6 +16169,7 @@ export namespace Prisma {
   >;
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     security?: boolean | User$securityArgs<ExtArgs>;
+    setting?: boolean | User$settingArgs<ExtArgs>;
     externalAccounts?: boolean | User$externalAccountsArgs<ExtArgs>;
     auth?: boolean | User$authArgs<ExtArgs>;
     loginSessions?: boolean | User$loginSessionsArgs<ExtArgs>;
@@ -16058,6 +16190,7 @@ export namespace Prisma {
     name: 'User';
     objects: {
       security: Prisma.$UserSecurityPayload<ExtArgs> | null;
+      setting: Prisma.$SettingPayload<ExtArgs> | null;
       externalAccounts: Prisma.$ExternalAccountPayload<ExtArgs>[];
       auth: Prisma.$AuthenticationPayload<ExtArgs>[];
       loginSessions: Prisma.$LoginSessionPayload<ExtArgs>[];
@@ -16090,6 +16223,7 @@ export namespace Prisma {
         createdAt: Date;
         updatedAt: Date;
         credit: number;
+        visible: $Enums.UserVisibility;
         isBanned: boolean;
         isLocked: boolean;
         isVerified: boolean;
@@ -16578,6 +16712,14 @@ export namespace Prisma {
       ExtArgs,
       GlobalOmitOptions
     >;
+    setting<T extends User$settingArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$settingArgs<ExtArgs>>,
+    ): Prisma__SettingClient<
+      $Result.GetResult<Prisma.$SettingPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
     externalAccounts<T extends User$externalAccountsArgs<ExtArgs> = {}>(
       args?: Subset<T, User$externalAccountsArgs<ExtArgs>>,
     ): Prisma.PrismaPromise<
@@ -16672,6 +16814,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<'User', 'DateTime'>;
     readonly updatedAt: FieldRef<'User', 'DateTime'>;
     readonly credit: FieldRef<'User', 'Int'>;
+    readonly visible: FieldRef<'User', 'UserVisibility'>;
     readonly isBanned: FieldRef<'User', 'Boolean'>;
     readonly isLocked: FieldRef<'User', 'Boolean'>;
     readonly isVerified: FieldRef<'User', 'Boolean'>;
@@ -17088,6 +17231,25 @@ export namespace Prisma {
      */
     include?: UserSecurityInclude<ExtArgs> | null;
     where?: UserSecurityWhereInput;
+  };
+
+  /**
+   * User.setting
+   */
+  export type User$settingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Setting
+     */
+    select?: SettingSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Setting
+     */
+    omit?: SettingOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SettingInclude<ExtArgs> | null;
+    where?: SettingWhereInput;
   };
 
   /**
@@ -22625,6 +22787,1245 @@ export namespace Prisma {
   };
 
   /**
+   * Model Setting
+   */
+
+  export type AggregateSetting = {
+    _count: SettingCountAggregateOutputType | null;
+    _min: SettingMinAggregateOutputType | null;
+    _max: SettingMaxAggregateOutputType | null;
+  };
+
+  export type SettingMinAggregateOutputType = {
+    userId: string | null;
+    emailNotifications: boolean | null;
+    browserNotifications: boolean | null;
+    ticketNotifications: boolean | null;
+    promotionNotifications: boolean | null;
+    priceChangesNotifications: boolean | null;
+    loginNotifications: boolean | null;
+    suggestedProducts: boolean | null;
+    restockNotifications: boolean | null;
+    updatedAt: Date | null;
+  };
+
+  export type SettingMaxAggregateOutputType = {
+    userId: string | null;
+    emailNotifications: boolean | null;
+    browserNotifications: boolean | null;
+    ticketNotifications: boolean | null;
+    promotionNotifications: boolean | null;
+    priceChangesNotifications: boolean | null;
+    loginNotifications: boolean | null;
+    suggestedProducts: boolean | null;
+    restockNotifications: boolean | null;
+    updatedAt: Date | null;
+  };
+
+  export type SettingCountAggregateOutputType = {
+    userId: number;
+    emailNotifications: number;
+    browserNotifications: number;
+    ticketNotifications: number;
+    promotionNotifications: number;
+    priceChangesNotifications: number;
+    loginNotifications: number;
+    suggestedProducts: number;
+    restockNotifications: number;
+    updatedAt: number;
+    _all: number;
+  };
+
+  export type SettingMinAggregateInputType = {
+    userId?: true;
+    emailNotifications?: true;
+    browserNotifications?: true;
+    ticketNotifications?: true;
+    promotionNotifications?: true;
+    priceChangesNotifications?: true;
+    loginNotifications?: true;
+    suggestedProducts?: true;
+    restockNotifications?: true;
+    updatedAt?: true;
+  };
+
+  export type SettingMaxAggregateInputType = {
+    userId?: true;
+    emailNotifications?: true;
+    browserNotifications?: true;
+    ticketNotifications?: true;
+    promotionNotifications?: true;
+    priceChangesNotifications?: true;
+    loginNotifications?: true;
+    suggestedProducts?: true;
+    restockNotifications?: true;
+    updatedAt?: true;
+  };
+
+  export type SettingCountAggregateInputType = {
+    userId?: true;
+    emailNotifications?: true;
+    browserNotifications?: true;
+    ticketNotifications?: true;
+    promotionNotifications?: true;
+    priceChangesNotifications?: true;
+    loginNotifications?: true;
+    suggestedProducts?: true;
+    restockNotifications?: true;
+    updatedAt?: true;
+    _all?: true;
+  };
+
+  export type SettingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Setting to aggregate.
+     */
+    where?: SettingWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Settings to fetch.
+     */
+    orderBy?: SettingOrderByWithRelationInput | SettingOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: SettingWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Settings from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Settings.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned Settings
+     **/
+    _count?: true | SettingCountAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: SettingMinAggregateInputType;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: SettingMaxAggregateInputType;
+  };
+
+  export type GetSettingAggregateType<T extends SettingAggregateArgs> = {
+    [P in keyof T & keyof AggregateSetting]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSetting[P]>
+      : GetScalarType<T[P], AggregateSetting[P]>;
+  };
+
+  export type SettingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SettingWhereInput;
+    orderBy?: SettingOrderByWithAggregationInput | SettingOrderByWithAggregationInput[];
+    by: SettingScalarFieldEnum[] | SettingScalarFieldEnum;
+    having?: SettingScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: SettingCountAggregateInputType | true;
+    _min?: SettingMinAggregateInputType;
+    _max?: SettingMaxAggregateInputType;
+  };
+
+  export type SettingGroupByOutputType = {
+    userId: string;
+    emailNotifications: boolean;
+    browserNotifications: boolean;
+    ticketNotifications: boolean;
+    promotionNotifications: boolean;
+    priceChangesNotifications: boolean;
+    loginNotifications: boolean;
+    suggestedProducts: boolean;
+    restockNotifications: boolean;
+    updatedAt: Date;
+    _count: SettingCountAggregateOutputType | null;
+    _min: SettingMinAggregateOutputType | null;
+    _max: SettingMaxAggregateOutputType | null;
+  };
+
+  type GetSettingGroupByPayload<T extends SettingGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SettingGroupByOutputType, T['by']> & {
+        [P in keyof T & keyof SettingGroupByOutputType]: P extends '_count'
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], SettingGroupByOutputType[P]>
+          : GetScalarType<T[P], SettingGroupByOutputType[P]>;
+      }
+    >
+  >;
+
+  export type SettingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<
+    {
+      userId?: boolean;
+      emailNotifications?: boolean;
+      browserNotifications?: boolean;
+      ticketNotifications?: boolean;
+      promotionNotifications?: boolean;
+      priceChangesNotifications?: boolean;
+      loginNotifications?: boolean;
+      suggestedProducts?: boolean;
+      restockNotifications?: boolean;
+      updatedAt?: boolean;
+      user?: boolean | UserDefaultArgs<ExtArgs>;
+    },
+    ExtArgs['result']['setting']
+  >;
+
+  export type SettingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    $Extensions.GetSelect<
+      {
+        userId?: boolean;
+        emailNotifications?: boolean;
+        browserNotifications?: boolean;
+        ticketNotifications?: boolean;
+        promotionNotifications?: boolean;
+        priceChangesNotifications?: boolean;
+        loginNotifications?: boolean;
+        suggestedProducts?: boolean;
+        restockNotifications?: boolean;
+        updatedAt?: boolean;
+        user?: boolean | UserDefaultArgs<ExtArgs>;
+      },
+      ExtArgs['result']['setting']
+    >;
+
+  export type SettingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    $Extensions.GetSelect<
+      {
+        userId?: boolean;
+        emailNotifications?: boolean;
+        browserNotifications?: boolean;
+        ticketNotifications?: boolean;
+        promotionNotifications?: boolean;
+        priceChangesNotifications?: boolean;
+        loginNotifications?: boolean;
+        suggestedProducts?: boolean;
+        restockNotifications?: boolean;
+        updatedAt?: boolean;
+        user?: boolean | UserDefaultArgs<ExtArgs>;
+      },
+      ExtArgs['result']['setting']
+    >;
+
+  export type SettingSelectScalar = {
+    userId?: boolean;
+    emailNotifications?: boolean;
+    browserNotifications?: boolean;
+    ticketNotifications?: boolean;
+    promotionNotifications?: boolean;
+    priceChangesNotifications?: boolean;
+    loginNotifications?: boolean;
+    suggestedProducts?: boolean;
+    restockNotifications?: boolean;
+    updatedAt?: boolean;
+  };
+
+  export type SettingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<
+    | 'userId'
+    | 'emailNotifications'
+    | 'browserNotifications'
+    | 'ticketNotifications'
+    | 'promotionNotifications'
+    | 'priceChangesNotifications'
+    | 'loginNotifications'
+    | 'suggestedProducts'
+    | 'restockNotifications'
+    | 'updatedAt',
+    ExtArgs['result']['setting']
+  >;
+  export type SettingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type SettingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+  export type SettingIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>;
+  };
+
+  export type $SettingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: 'Setting';
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>;
+    };
+    scalars: $Extensions.GetPayloadResult<
+      {
+        userId: string;
+        emailNotifications: boolean;
+        browserNotifications: boolean;
+        ticketNotifications: boolean;
+        promotionNotifications: boolean;
+        priceChangesNotifications: boolean;
+        loginNotifications: boolean;
+        suggestedProducts: boolean;
+        restockNotifications: boolean;
+        updatedAt: Date;
+      },
+      ExtArgs['result']['setting']
+    >;
+    composites: {};
+  };
+
+  type SettingGetPayload<S extends boolean | null | undefined | SettingDefaultArgs> = $Result.GetResult<
+    Prisma.$SettingPayload,
+    S
+  >;
+
+  type SettingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = Omit<
+    SettingFindManyArgs,
+    'select' | 'include' | 'distinct' | 'omit' | 'relationLoadStrategy'
+  > & {
+    select?: SettingCountAggregateInputType | true;
+  };
+
+  export interface SettingDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Setting']; meta: { name: 'Setting' } };
+    /**
+     * Find zero or one Setting that matches the filter.
+     * @param {SettingFindUniqueArgs} args - Arguments to find a Setting
+     * @example
+     * // Get one Setting
+     * const setting = await prisma.setting.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SettingFindUniqueArgs>(
+      args: SelectSubset<T, SettingFindUniqueArgs<ExtArgs>>,
+    ): Prisma__SettingClient<
+      $Result.GetResult<Prisma.$SettingPayload<ExtArgs>, T, 'findUnique', GlobalOmitOptions> | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find one Setting that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SettingFindUniqueOrThrowArgs} args - Arguments to find a Setting
+     * @example
+     * // Get one Setting
+     * const setting = await prisma.setting.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SettingFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, SettingFindUniqueOrThrowArgs<ExtArgs>>,
+    ): Prisma__SettingClient<
+      $Result.GetResult<Prisma.$SettingPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first Setting that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SettingFindFirstArgs} args - Arguments to find a Setting
+     * @example
+     * // Get one Setting
+     * const setting = await prisma.setting.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SettingFindFirstArgs>(
+      args?: SelectSubset<T, SettingFindFirstArgs<ExtArgs>>,
+    ): Prisma__SettingClient<
+      $Result.GetResult<Prisma.$SettingPayload<ExtArgs>, T, 'findFirst', GlobalOmitOptions> | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find the first Setting that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SettingFindFirstOrThrowArgs} args - Arguments to find a Setting
+     * @example
+     * // Get one Setting
+     * const setting = await prisma.setting.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SettingFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, SettingFindFirstOrThrowArgs<ExtArgs>>,
+    ): Prisma__SettingClient<
+      $Result.GetResult<Prisma.$SettingPayload<ExtArgs>, T, 'findFirstOrThrow', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Find zero or more Settings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SettingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Settings
+     * const settings = await prisma.setting.findMany()
+     *
+     * // Get first 10 Settings
+     * const settings = await prisma.setting.findMany({ take: 10 })
+     *
+     * // Only select the `userId`
+     * const settingWithUserIdOnly = await prisma.setting.findMany({ select: { userId: true } })
+     *
+     */
+    findMany<T extends SettingFindManyArgs>(
+      args?: SelectSubset<T, SettingFindManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SettingPayload<ExtArgs>, T, 'findMany', GlobalOmitOptions>>;
+
+    /**
+     * Create a Setting.
+     * @param {SettingCreateArgs} args - Arguments to create a Setting.
+     * @example
+     * // Create one Setting
+     * const Setting = await prisma.setting.create({
+     *   data: {
+     *     // ... data to create a Setting
+     *   }
+     * })
+     *
+     */
+    create<T extends SettingCreateArgs>(
+      args: SelectSubset<T, SettingCreateArgs<ExtArgs>>,
+    ): Prisma__SettingClient<
+      $Result.GetResult<Prisma.$SettingPayload<ExtArgs>, T, 'create', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Create many Settings.
+     * @param {SettingCreateManyArgs} args - Arguments to create many Settings.
+     * @example
+     * // Create many Settings
+     * const setting = await prisma.setting.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends SettingCreateManyArgs>(
+      args?: SelectSubset<T, SettingCreateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Create many Settings and returns the data saved in the database.
+     * @param {SettingCreateManyAndReturnArgs} args - Arguments to create many Settings.
+     * @example
+     * // Create many Settings
+     * const setting = await prisma.setting.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many Settings and only return the `userId`
+     * const settingWithUserIdOnly = await prisma.setting.createManyAndReturn({
+     *   select: { userId: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends SettingCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, SettingCreateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$SettingPayload<ExtArgs>, T, 'createManyAndReturn', GlobalOmitOptions>
+    >;
+
+    /**
+     * Delete a Setting.
+     * @param {SettingDeleteArgs} args - Arguments to delete one Setting.
+     * @example
+     * // Delete one Setting
+     * const Setting = await prisma.setting.delete({
+     *   where: {
+     *     // ... filter to delete one Setting
+     *   }
+     * })
+     *
+     */
+    delete<T extends SettingDeleteArgs>(
+      args: SelectSubset<T, SettingDeleteArgs<ExtArgs>>,
+    ): Prisma__SettingClient<
+      $Result.GetResult<Prisma.$SettingPayload<ExtArgs>, T, 'delete', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Update one Setting.
+     * @param {SettingUpdateArgs} args - Arguments to update one Setting.
+     * @example
+     * // Update one Setting
+     * const setting = await prisma.setting.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends SettingUpdateArgs>(
+      args: SelectSubset<T, SettingUpdateArgs<ExtArgs>>,
+    ): Prisma__SettingClient<
+      $Result.GetResult<Prisma.$SettingPayload<ExtArgs>, T, 'update', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Delete zero or more Settings.
+     * @param {SettingDeleteManyArgs} args - Arguments to filter Settings to delete.
+     * @example
+     * // Delete a few Settings
+     * const { count } = await prisma.setting.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends SettingDeleteManyArgs>(
+      args?: SelectSubset<T, SettingDeleteManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more Settings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SettingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Settings
+     * const setting = await prisma.setting.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends SettingUpdateManyArgs>(
+      args: SelectSubset<T, SettingUpdateManyArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<BatchPayload>;
+
+    /**
+     * Update zero or more Settings and returns the data updated in the database.
+     * @param {SettingUpdateManyAndReturnArgs} args - Arguments to update many Settings.
+     * @example
+     * // Update many Settings
+     * const setting = await prisma.setting.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more Settings and only return the `userId`
+     * const settingWithUserIdOnly = await prisma.setting.updateManyAndReturn({
+     *   select: { userId: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends SettingUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, SettingUpdateManyAndReturnArgs<ExtArgs>>,
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<Prisma.$SettingPayload<ExtArgs>, T, 'updateManyAndReturn', GlobalOmitOptions>
+    >;
+
+    /**
+     * Create or update one Setting.
+     * @param {SettingUpsertArgs} args - Arguments to update or create a Setting.
+     * @example
+     * // Update or create a Setting
+     * const setting = await prisma.setting.upsert({
+     *   create: {
+     *     // ... data to create a Setting
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Setting we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SettingUpsertArgs>(
+      args: SelectSubset<T, SettingUpsertArgs<ExtArgs>>,
+    ): Prisma__SettingClient<
+      $Result.GetResult<Prisma.$SettingPayload<ExtArgs>, T, 'upsert', GlobalOmitOptions>,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+
+    /**
+     * Count the number of Settings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SettingCountArgs} args - Arguments to filter Settings to count.
+     * @example
+     * // Count the number of Settings
+     * const count = await prisma.setting.count({
+     *   where: {
+     *     // ... the filter for the Settings we want to count
+     *   }
+     * })
+     **/
+    count<T extends SettingCountArgs>(
+      args?: Subset<T, SettingCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SettingCountAggregateOutputType>
+        : number
+    >;
+
+    /**
+     * Allows you to perform aggregations operations on a Setting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SettingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends SettingAggregateArgs>(
+      args: Subset<T, SettingAggregateArgs>,
+    ): Prisma.PrismaPromise<GetSettingAggregateType<T>>;
+
+    /**
+     * Group by Setting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SettingGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends SettingGroupByArgs,
+      HasSelectOrTake extends Or<Extends<'skip', Keys<T>>, Extends<'take', Keys<T>>>,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SettingGroupByArgs['orderBy'] }
+        : { orderBy?: SettingGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [Error, 'Field ', P, ` in "having" needs to be provided in "by"`];
+            }[HavingFields]
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, SettingGroupByArgs, OrderByArg> & InputErrors,
+    ): {} extends InputErrors ? GetSettingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    /**
+     * Fields of the Setting model
+     */
+    readonly fields: SettingFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Setting.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SettingClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>,
+    ): Prisma__UserClient<
+      $Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow', GlobalOmitOptions> | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >;
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+      onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+    ): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null,
+    ): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+  /**
+   * Fields of the Setting model
+   */
+  interface SettingFieldRefs {
+    readonly userId: FieldRef<'Setting', 'String'>;
+    readonly emailNotifications: FieldRef<'Setting', 'Boolean'>;
+    readonly browserNotifications: FieldRef<'Setting', 'Boolean'>;
+    readonly ticketNotifications: FieldRef<'Setting', 'Boolean'>;
+    readonly promotionNotifications: FieldRef<'Setting', 'Boolean'>;
+    readonly priceChangesNotifications: FieldRef<'Setting', 'Boolean'>;
+    readonly loginNotifications: FieldRef<'Setting', 'Boolean'>;
+    readonly suggestedProducts: FieldRef<'Setting', 'Boolean'>;
+    readonly restockNotifications: FieldRef<'Setting', 'Boolean'>;
+    readonly updatedAt: FieldRef<'Setting', 'DateTime'>;
+  }
+
+  // Custom InputTypes
+  /**
+   * Setting findUnique
+   */
+  export type SettingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Setting
+     */
+    select?: SettingSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Setting
+     */
+    omit?: SettingOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SettingInclude<ExtArgs> | null;
+    /**
+     * Filter, which Setting to fetch.
+     */
+    where: SettingWhereUniqueInput;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * Setting findUniqueOrThrow
+   */
+  export type SettingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Setting
+     */
+    select?: SettingSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Setting
+     */
+    omit?: SettingOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SettingInclude<ExtArgs> | null;
+    /**
+     * Filter, which Setting to fetch.
+     */
+    where: SettingWhereUniqueInput;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * Setting findFirst
+   */
+  export type SettingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Setting
+     */
+    select?: SettingSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Setting
+     */
+    omit?: SettingOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SettingInclude<ExtArgs> | null;
+    /**
+     * Filter, which Setting to fetch.
+     */
+    where?: SettingWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Settings to fetch.
+     */
+    orderBy?: SettingOrderByWithRelationInput | SettingOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for Settings.
+     */
+    cursor?: SettingWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Settings from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Settings.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Settings.
+     */
+    distinct?: SettingScalarFieldEnum | SettingScalarFieldEnum[];
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * Setting findFirstOrThrow
+   */
+  export type SettingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Setting
+     */
+    select?: SettingSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Setting
+     */
+    omit?: SettingOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SettingInclude<ExtArgs> | null;
+    /**
+     * Filter, which Setting to fetch.
+     */
+    where?: SettingWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Settings to fetch.
+     */
+    orderBy?: SettingOrderByWithRelationInput | SettingOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for Settings.
+     */
+    cursor?: SettingWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Settings from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Settings.
+     */
+    skip?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of Settings.
+     */
+    distinct?: SettingScalarFieldEnum | SettingScalarFieldEnum[];
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * Setting findMany
+   */
+  export type SettingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Setting
+     */
+    select?: SettingSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Setting
+     */
+    omit?: SettingOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SettingInclude<ExtArgs> | null;
+    /**
+     * Filter, which Settings to fetch.
+     */
+    where?: SettingWhereInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of Settings to fetch.
+     */
+    orderBy?: SettingOrderByWithRelationInput | SettingOrderByWithRelationInput[];
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing Settings.
+     */
+    cursor?: SettingWhereUniqueInput;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` Settings from the position of the cursor.
+     */
+    take?: number;
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` Settings.
+     */
+    skip?: number;
+    distinct?: SettingScalarFieldEnum | SettingScalarFieldEnum[];
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * Setting create
+   */
+  export type SettingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Setting
+     */
+    select?: SettingSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Setting
+     */
+    omit?: SettingOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SettingInclude<ExtArgs> | null;
+    /**
+     * The data needed to create a Setting.
+     */
+    data: XOR<SettingCreateInput, SettingUncheckedCreateInput>;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * Setting createMany
+   */
+  export type SettingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Settings.
+     */
+    data: SettingCreateManyInput | SettingCreateManyInput[];
+    skipDuplicates?: boolean;
+  };
+
+  /**
+   * Setting createManyAndReturn
+   */
+  export type SettingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Setting
+     */
+    select?: SettingSelectCreateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Setting
+     */
+    omit?: SettingOmit<ExtArgs> | null;
+    /**
+     * The data used to create many Settings.
+     */
+    data: SettingCreateManyInput | SettingCreateManyInput[];
+    skipDuplicates?: boolean;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SettingIncludeCreateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * Setting update
+   */
+  export type SettingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Setting
+     */
+    select?: SettingSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Setting
+     */
+    omit?: SettingOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SettingInclude<ExtArgs> | null;
+    /**
+     * The data needed to update a Setting.
+     */
+    data: XOR<SettingUpdateInput, SettingUncheckedUpdateInput>;
+    /**
+     * Choose, which Setting to update.
+     */
+    where: SettingWhereUniqueInput;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * Setting updateMany
+   */
+  export type SettingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Settings.
+     */
+    data: XOR<SettingUpdateManyMutationInput, SettingUncheckedUpdateManyInput>;
+    /**
+     * Filter which Settings to update
+     */
+    where?: SettingWhereInput;
+    /**
+     * Limit how many Settings to update.
+     */
+    limit?: number;
+  };
+
+  /**
+   * Setting updateManyAndReturn
+   */
+  export type SettingUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Setting
+     */
+    select?: SettingSelectUpdateManyAndReturn<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Setting
+     */
+    omit?: SettingOmit<ExtArgs> | null;
+    /**
+     * The data used to update Settings.
+     */
+    data: XOR<SettingUpdateManyMutationInput, SettingUncheckedUpdateManyInput>;
+    /**
+     * Filter which Settings to update
+     */
+    where?: SettingWhereInput;
+    /**
+     * Limit how many Settings to update.
+     */
+    limit?: number;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SettingIncludeUpdateManyAndReturn<ExtArgs> | null;
+  };
+
+  /**
+   * Setting upsert
+   */
+  export type SettingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Setting
+     */
+    select?: SettingSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Setting
+     */
+    omit?: SettingOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SettingInclude<ExtArgs> | null;
+    /**
+     * The filter to search for the Setting to update in case it exists.
+     */
+    where: SettingWhereUniqueInput;
+    /**
+     * In case the Setting found by the `where` argument doesn't exist, create a new Setting with this data.
+     */
+    create: XOR<SettingCreateInput, SettingUncheckedCreateInput>;
+    /**
+     * In case the Setting was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SettingUpdateInput, SettingUncheckedUpdateInput>;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * Setting delete
+   */
+  export type SettingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Setting
+     */
+    select?: SettingSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Setting
+     */
+    omit?: SettingOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SettingInclude<ExtArgs> | null;
+    /**
+     * Filter which Setting to delete.
+     */
+    where: SettingWhereUniqueInput;
+    relationLoadStrategy?: RelationLoadStrategy;
+  };
+
+  /**
+   * Setting deleteMany
+   */
+  export type SettingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Settings to delete
+     */
+    where?: SettingWhereInput;
+    /**
+     * Limit how many Settings to delete.
+     */
+    limit?: number;
+  };
+
+  /**
+   * Setting without action
+   */
+  export type SettingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Setting
+     */
+    select?: SettingSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Setting
+     */
+    omit?: SettingOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SettingInclude<ExtArgs> | null;
+  };
+
+  /**
    * Model Ticket
    */
 
@@ -27850,6 +29251,7 @@ export namespace Prisma {
     discountPrice: 'discountPrice';
     tags: 'tags';
     medias: 'medias';
+    isVerified: 'isVerified';
     categoryId: 'categoryId';
     sellerId: 'sellerId';
   };
@@ -27905,6 +29307,7 @@ export namespace Prisma {
     createdAt: 'createdAt';
     updatedAt: 'updatedAt';
     credit: 'credit';
+    visible: 'visible';
     isBanned: 'isBanned';
     isLocked: 'isLocked';
     isVerified: 'isVerified';
@@ -27977,6 +29380,21 @@ export namespace Prisma {
   };
 
   export type CartItemScalarFieldEnum = (typeof CartItemScalarFieldEnum)[keyof typeof CartItemScalarFieldEnum];
+
+  export const SettingScalarFieldEnum: {
+    userId: 'userId';
+    emailNotifications: 'emailNotifications';
+    browserNotifications: 'browserNotifications';
+    ticketNotifications: 'ticketNotifications';
+    promotionNotifications: 'promotionNotifications';
+    priceChangesNotifications: 'priceChangesNotifications';
+    loginNotifications: 'loginNotifications';
+    suggestedProducts: 'suggestedProducts';
+    restockNotifications: 'restockNotifications';
+    updatedAt: 'updatedAt';
+  };
+
+  export type SettingScalarFieldEnum = (typeof SettingScalarFieldEnum)[keyof typeof SettingScalarFieldEnum];
 
   export const TicketScalarFieldEnum: {
     id: 'id';
@@ -28160,6 +29578,16 @@ export namespace Prisma {
    * Reference to a field of type 'UserFlag'
    */
   export type EnumUserFlagFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserFlag'>;
+
+  /**
+   * Reference to a field of type 'UserVisibility'
+   */
+  export type EnumUserVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserVisibility'>;
+
+  /**
+   * Reference to a field of type 'UserVisibility[]'
+   */
+  export type ListEnumUserVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserVisibility[]'>;
 
   /**
    * Reference to a field of type 'ProviderPlatform'
@@ -28709,6 +30137,7 @@ export namespace Prisma {
     discountPrice?: IntFilter<'Product'> | number;
     tags?: StringNullableListFilter<'Product'>;
     medias?: StringNullableListFilter<'Product'>;
+    isVerified?: BoolFilter<'Product'> | boolean;
     categoryId?: UuidFilter<'Product'> | string;
     sellerId?: UuidFilter<'Product'> | string;
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>;
@@ -28735,6 +30164,7 @@ export namespace Prisma {
     discountPrice?: SortOrder;
     tags?: SortOrder;
     medias?: SortOrder;
+    isVerified?: SortOrder;
     categoryId?: SortOrder;
     sellerId?: SortOrder;
     category?: CategoryOrderByWithRelationInput;
@@ -28765,6 +30195,7 @@ export namespace Prisma {
       discountPrice?: IntFilter<'Product'> | number;
       tags?: StringNullableListFilter<'Product'>;
       medias?: StringNullableListFilter<'Product'>;
+      isVerified?: BoolFilter<'Product'> | boolean;
       categoryId?: UuidFilter<'Product'> | string;
       sellerId?: UuidFilter<'Product'> | string;
       category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>;
@@ -28793,6 +30224,7 @@ export namespace Prisma {
     discountPrice?: SortOrder;
     tags?: SortOrder;
     medias?: SortOrder;
+    isVerified?: SortOrder;
     categoryId?: SortOrder;
     sellerId?: SortOrder;
     _count?: ProductCountOrderByAggregateInput;
@@ -28821,6 +30253,7 @@ export namespace Prisma {
     discountPrice?: IntWithAggregatesFilter<'Product'> | number;
     tags?: StringNullableListFilter<'Product'>;
     medias?: StringNullableListFilter<'Product'>;
+    isVerified?: BoolWithAggregatesFilter<'Product'> | boolean;
     categoryId?: UuidWithAggregatesFilter<'Product'> | string;
     sellerId?: UuidWithAggregatesFilter<'Product'> | string;
   };
@@ -29030,11 +30463,13 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<'User'> | Date | string;
     updatedAt?: DateTimeFilter<'User'> | Date | string;
     credit?: IntFilter<'User'> | number;
+    visible?: EnumUserVisibilityFilter<'User'> | $Enums.UserVisibility;
     isBanned?: BoolFilter<'User'> | boolean;
     isLocked?: BoolFilter<'User'> | boolean;
     isVerified?: BoolFilter<'User'> | boolean;
     lastActiveAt?: DateTimeNullableFilter<'User'> | Date | string | null;
     security?: XOR<UserSecurityNullableScalarRelationFilter, UserSecurityWhereInput> | null;
+    setting?: XOR<SettingNullableScalarRelationFilter, SettingWhereInput> | null;
     externalAccounts?: ExternalAccountListRelationFilter;
     auth?: AuthenticationListRelationFilter;
     loginSessions?: LoginSessionListRelationFilter;
@@ -29067,11 +30502,13 @@ export namespace Prisma {
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
     credit?: SortOrder;
+    visible?: SortOrder;
     isBanned?: SortOrder;
     isLocked?: SortOrder;
     isVerified?: SortOrder;
     lastActiveAt?: SortOrderInput | SortOrder;
     security?: UserSecurityOrderByWithRelationInput;
+    setting?: SettingOrderByWithRelationInput;
     externalAccounts?: ExternalAccountOrderByRelationAggregateInput;
     auth?: AuthenticationOrderByRelationAggregateInput;
     loginSessions?: LoginSessionOrderByRelationAggregateInput;
@@ -29108,11 +30545,13 @@ export namespace Prisma {
       createdAt?: DateTimeFilter<'User'> | Date | string;
       updatedAt?: DateTimeFilter<'User'> | Date | string;
       credit?: IntFilter<'User'> | number;
+      visible?: EnumUserVisibilityFilter<'User'> | $Enums.UserVisibility;
       isBanned?: BoolFilter<'User'> | boolean;
       isLocked?: BoolFilter<'User'> | boolean;
       isVerified?: BoolFilter<'User'> | boolean;
       lastActiveAt?: DateTimeNullableFilter<'User'> | Date | string | null;
       security?: XOR<UserSecurityNullableScalarRelationFilter, UserSecurityWhereInput> | null;
+      setting?: XOR<SettingNullableScalarRelationFilter, SettingWhereInput> | null;
       externalAccounts?: ExternalAccountListRelationFilter;
       auth?: AuthenticationListRelationFilter;
       loginSessions?: LoginSessionListRelationFilter;
@@ -29147,6 +30586,7 @@ export namespace Prisma {
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
     credit?: SortOrder;
+    visible?: SortOrder;
     isBanned?: SortOrder;
     isLocked?: SortOrder;
     isVerified?: SortOrder;
@@ -29180,6 +30620,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<'User'> | Date | string;
     updatedAt?: DateTimeWithAggregatesFilter<'User'> | Date | string;
     credit?: IntWithAggregatesFilter<'User'> | number;
+    visible?: EnumUserVisibilityWithAggregatesFilter<'User'> | $Enums.UserVisibility;
     isBanned?: BoolWithAggregatesFilter<'User'> | boolean;
     isLocked?: BoolWithAggregatesFilter<'User'> | boolean;
     isVerified?: BoolWithAggregatesFilter<'User'> | boolean;
@@ -29550,6 +30991,89 @@ export namespace Prisma {
     quantity?: IntWithAggregatesFilter<'CartItem'> | number;
     productId?: UuidWithAggregatesFilter<'CartItem'> | string;
     userId?: UuidWithAggregatesFilter<'CartItem'> | string;
+  };
+
+  export type SettingWhereInput = {
+    AND?: SettingWhereInput | SettingWhereInput[];
+    OR?: SettingWhereInput[];
+    NOT?: SettingWhereInput | SettingWhereInput[];
+    userId?: UuidFilter<'Setting'> | string;
+    emailNotifications?: BoolFilter<'Setting'> | boolean;
+    browserNotifications?: BoolFilter<'Setting'> | boolean;
+    ticketNotifications?: BoolFilter<'Setting'> | boolean;
+    promotionNotifications?: BoolFilter<'Setting'> | boolean;
+    priceChangesNotifications?: BoolFilter<'Setting'> | boolean;
+    loginNotifications?: BoolFilter<'Setting'> | boolean;
+    suggestedProducts?: BoolFilter<'Setting'> | boolean;
+    restockNotifications?: BoolFilter<'Setting'> | boolean;
+    updatedAt?: DateTimeFilter<'Setting'> | Date | string;
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+  };
+
+  export type SettingOrderByWithRelationInput = {
+    userId?: SortOrder;
+    emailNotifications?: SortOrder;
+    browserNotifications?: SortOrder;
+    ticketNotifications?: SortOrder;
+    promotionNotifications?: SortOrder;
+    priceChangesNotifications?: SortOrder;
+    loginNotifications?: SortOrder;
+    suggestedProducts?: SortOrder;
+    restockNotifications?: SortOrder;
+    updatedAt?: SortOrder;
+    user?: UserOrderByWithRelationInput;
+  };
+
+  export type SettingWhereUniqueInput = Prisma.AtLeast<
+    {
+      userId?: string;
+      AND?: SettingWhereInput | SettingWhereInput[];
+      OR?: SettingWhereInput[];
+      NOT?: SettingWhereInput | SettingWhereInput[];
+      emailNotifications?: BoolFilter<'Setting'> | boolean;
+      browserNotifications?: BoolFilter<'Setting'> | boolean;
+      ticketNotifications?: BoolFilter<'Setting'> | boolean;
+      promotionNotifications?: BoolFilter<'Setting'> | boolean;
+      priceChangesNotifications?: BoolFilter<'Setting'> | boolean;
+      loginNotifications?: BoolFilter<'Setting'> | boolean;
+      suggestedProducts?: BoolFilter<'Setting'> | boolean;
+      restockNotifications?: BoolFilter<'Setting'> | boolean;
+      updatedAt?: DateTimeFilter<'Setting'> | Date | string;
+      user?: XOR<UserScalarRelationFilter, UserWhereInput>;
+    },
+    'userId'
+  >;
+
+  export type SettingOrderByWithAggregationInput = {
+    userId?: SortOrder;
+    emailNotifications?: SortOrder;
+    browserNotifications?: SortOrder;
+    ticketNotifications?: SortOrder;
+    promotionNotifications?: SortOrder;
+    priceChangesNotifications?: SortOrder;
+    loginNotifications?: SortOrder;
+    suggestedProducts?: SortOrder;
+    restockNotifications?: SortOrder;
+    updatedAt?: SortOrder;
+    _count?: SettingCountOrderByAggregateInput;
+    _max?: SettingMaxOrderByAggregateInput;
+    _min?: SettingMinOrderByAggregateInput;
+  };
+
+  export type SettingScalarWhereWithAggregatesInput = {
+    AND?: SettingScalarWhereWithAggregatesInput | SettingScalarWhereWithAggregatesInput[];
+    OR?: SettingScalarWhereWithAggregatesInput[];
+    NOT?: SettingScalarWhereWithAggregatesInput | SettingScalarWhereWithAggregatesInput[];
+    userId?: UuidWithAggregatesFilter<'Setting'> | string;
+    emailNotifications?: BoolWithAggregatesFilter<'Setting'> | boolean;
+    browserNotifications?: BoolWithAggregatesFilter<'Setting'> | boolean;
+    ticketNotifications?: BoolWithAggregatesFilter<'Setting'> | boolean;
+    promotionNotifications?: BoolWithAggregatesFilter<'Setting'> | boolean;
+    priceChangesNotifications?: BoolWithAggregatesFilter<'Setting'> | boolean;
+    loginNotifications?: BoolWithAggregatesFilter<'Setting'> | boolean;
+    suggestedProducts?: BoolWithAggregatesFilter<'Setting'> | boolean;
+    restockNotifications?: BoolWithAggregatesFilter<'Setting'> | boolean;
+    updatedAt?: DateTimeWithAggregatesFilter<'Setting'> | Date | string;
   };
 
   export type TicketWhereInput = {
@@ -30295,6 +31819,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    isVerified?: boolean;
     category: CategoryCreateNestedOneWithoutProductsInput;
     seller: UserCreateNestedOneWithoutProductsInput;
     cartItem?: CartItemCreateNestedManyWithoutProductInput;
@@ -30319,6 +31844,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    isVerified?: boolean;
     categoryId: string;
     sellerId: string;
     cartItem?: CartItemUncheckedCreateNestedManyWithoutProductInput;
@@ -30343,6 +31869,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
     seller?: UserUpdateOneRequiredWithoutProductsNestedInput;
     cartItem?: CartItemUpdateManyWithoutProductNestedInput;
@@ -30367,6 +31894,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
     categoryId?: StringFieldUpdateOperationsInput | string;
     sellerId?: StringFieldUpdateOperationsInput | string;
     cartItem?: CartItemUncheckedUpdateManyWithoutProductNestedInput;
@@ -30391,6 +31919,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    isVerified?: boolean;
     categoryId: string;
     sellerId: string;
   };
@@ -30411,6 +31940,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
   };
 
   export type ProductUncheckedUpdateManyInput = {
@@ -30429,6 +31959,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
     categoryId?: StringFieldUpdateOperationsInput | string;
     sellerId?: StringFieldUpdateOperationsInput | string;
   };
@@ -30625,11 +32156,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityCreateNestedOneWithoutUserInput;
+    setting?: SettingCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
@@ -30662,11 +32195,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    setting?: SettingUncheckedCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
@@ -30699,11 +32234,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    setting?: SettingUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
@@ -30736,11 +32273,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    setting?: SettingUncheckedUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
@@ -30773,6 +32312,7 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
@@ -30798,6 +32338,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
@@ -30823,6 +32364,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
@@ -31219,6 +32761,96 @@ export namespace Prisma {
     quantity?: IntFieldUpdateOperationsInput | number;
     productId?: StringFieldUpdateOperationsInput | string;
     userId?: StringFieldUpdateOperationsInput | string;
+  };
+
+  export type SettingCreateInput = {
+    emailNotifications?: boolean;
+    browserNotifications?: boolean;
+    ticketNotifications?: boolean;
+    promotionNotifications?: boolean;
+    priceChangesNotifications?: boolean;
+    loginNotifications?: boolean;
+    suggestedProducts?: boolean;
+    restockNotifications?: boolean;
+    updatedAt?: Date | string;
+    user: UserCreateNestedOneWithoutSettingInput;
+  };
+
+  export type SettingUncheckedCreateInput = {
+    userId: string;
+    emailNotifications?: boolean;
+    browserNotifications?: boolean;
+    ticketNotifications?: boolean;
+    promotionNotifications?: boolean;
+    priceChangesNotifications?: boolean;
+    loginNotifications?: boolean;
+    suggestedProducts?: boolean;
+    restockNotifications?: boolean;
+    updatedAt?: Date | string;
+  };
+
+  export type SettingUpdateInput = {
+    emailNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    browserNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    ticketNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    promotionNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    priceChangesNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    loginNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    suggestedProducts?: BoolFieldUpdateOperationsInput | boolean;
+    restockNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    user?: UserUpdateOneRequiredWithoutSettingNestedInput;
+  };
+
+  export type SettingUncheckedUpdateInput = {
+    userId?: StringFieldUpdateOperationsInput | string;
+    emailNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    browserNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    ticketNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    promotionNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    priceChangesNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    loginNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    suggestedProducts?: BoolFieldUpdateOperationsInput | boolean;
+    restockNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type SettingCreateManyInput = {
+    userId: string;
+    emailNotifications?: boolean;
+    browserNotifications?: boolean;
+    ticketNotifications?: boolean;
+    promotionNotifications?: boolean;
+    priceChangesNotifications?: boolean;
+    loginNotifications?: boolean;
+    suggestedProducts?: boolean;
+    restockNotifications?: boolean;
+    updatedAt?: Date | string;
+  };
+
+  export type SettingUpdateManyMutationInput = {
+    emailNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    browserNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    ticketNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    promotionNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    priceChangesNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    loginNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    suggestedProducts?: BoolFieldUpdateOperationsInput | boolean;
+    restockNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type SettingUncheckedUpdateManyInput = {
+    userId?: StringFieldUpdateOperationsInput | string;
+    emailNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    browserNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    ticketNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    promotionNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    priceChangesNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    loginNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    suggestedProducts?: BoolFieldUpdateOperationsInput | boolean;
+    restockNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type TicketCreateInput = {
@@ -32094,6 +33726,7 @@ export namespace Prisma {
     discountPrice?: SortOrder;
     tags?: SortOrder;
     medias?: SortOrder;
+    isVerified?: SortOrder;
     categoryId?: SortOrder;
     sellerId?: SortOrder;
   };
@@ -32118,6 +33751,7 @@ export namespace Prisma {
     sold?: SortOrder;
     originalPrice?: SortOrder;
     discountPrice?: SortOrder;
+    isVerified?: SortOrder;
     categoryId?: SortOrder;
     sellerId?: SortOrder;
   };
@@ -32135,6 +33769,7 @@ export namespace Prisma {
     sold?: SortOrder;
     originalPrice?: SortOrder;
     discountPrice?: SortOrder;
+    isVerified?: SortOrder;
     categoryId?: SortOrder;
     sellerId?: SortOrder;
   };
@@ -32289,9 +33924,21 @@ export namespace Prisma {
     isEmpty?: boolean;
   };
 
+  export type EnumUserVisibilityFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserVisibility | EnumUserVisibilityFieldRefInput<$PrismaModel>;
+    in?: $Enums.UserVisibility[] | ListEnumUserVisibilityFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.UserVisibility[] | ListEnumUserVisibilityFieldRefInput<$PrismaModel>;
+    not?: NestedEnumUserVisibilityFilter<$PrismaModel> | $Enums.UserVisibility;
+  };
+
   export type UserSecurityNullableScalarRelationFilter = {
     is?: UserSecurityWhereInput | null;
     isNot?: UserSecurityWhereInput | null;
+  };
+
+  export type SettingNullableScalarRelationFilter = {
+    is?: SettingWhereInput | null;
+    isNot?: SettingWhereInput | null;
   };
 
   export type ExternalAccountListRelationFilter = {
@@ -32383,6 +34030,7 @@ export namespace Prisma {
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
     credit?: SortOrder;
+    visible?: SortOrder;
     isBanned?: SortOrder;
     isLocked?: SortOrder;
     isVerified?: SortOrder;
@@ -32410,6 +34058,7 @@ export namespace Prisma {
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
     credit?: SortOrder;
+    visible?: SortOrder;
     isBanned?: SortOrder;
     isLocked?: SortOrder;
     isVerified?: SortOrder;
@@ -32433,6 +34082,7 @@ export namespace Prisma {
     createdAt?: SortOrder;
     updatedAt?: SortOrder;
     credit?: SortOrder;
+    visible?: SortOrder;
     isBanned?: SortOrder;
     isLocked?: SortOrder;
     isVerified?: SortOrder;
@@ -32441,6 +34091,16 @@ export namespace Prisma {
 
   export type UserSumOrderByAggregateInput = {
     credit?: SortOrder;
+  };
+
+  export type EnumUserVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserVisibility | EnumUserVisibilityFieldRefInput<$PrismaModel>;
+    in?: $Enums.UserVisibility[] | ListEnumUserVisibilityFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.UserVisibility[] | ListEnumUserVisibilityFieldRefInput<$PrismaModel>;
+    not?: NestedEnumUserVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.UserVisibility;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumUserVisibilityFilter<$PrismaModel>;
+    _max?: NestedEnumUserVisibilityFilter<$PrismaModel>;
   };
 
   export type MfaSetupListRelationFilter = {
@@ -32760,6 +34420,45 @@ export namespace Prisma {
 
   export type CartItemSumOrderByAggregateInput = {
     quantity?: SortOrder;
+  };
+
+  export type SettingCountOrderByAggregateInput = {
+    userId?: SortOrder;
+    emailNotifications?: SortOrder;
+    browserNotifications?: SortOrder;
+    ticketNotifications?: SortOrder;
+    promotionNotifications?: SortOrder;
+    priceChangesNotifications?: SortOrder;
+    loginNotifications?: SortOrder;
+    suggestedProducts?: SortOrder;
+    restockNotifications?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type SettingMaxOrderByAggregateInput = {
+    userId?: SortOrder;
+    emailNotifications?: SortOrder;
+    browserNotifications?: SortOrder;
+    ticketNotifications?: SortOrder;
+    promotionNotifications?: SortOrder;
+    priceChangesNotifications?: SortOrder;
+    loginNotifications?: SortOrder;
+    suggestedProducts?: SortOrder;
+    restockNotifications?: SortOrder;
+    updatedAt?: SortOrder;
+  };
+
+  export type SettingMinOrderByAggregateInput = {
+    userId?: SortOrder;
+    emailNotifications?: SortOrder;
+    browserNotifications?: SortOrder;
+    ticketNotifications?: SortOrder;
+    promotionNotifications?: SortOrder;
+    priceChangesNotifications?: SortOrder;
+    loginNotifications?: SortOrder;
+    suggestedProducts?: SortOrder;
+    restockNotifications?: SortOrder;
+    updatedAt?: SortOrder;
   };
 
   export type EnumTicketStatusFilter<$PrismaModel = never> = {
@@ -33706,6 +35405,12 @@ export namespace Prisma {
     connect?: UserSecurityWhereUniqueInput;
   };
 
+  export type SettingCreateNestedOneWithoutUserInput = {
+    create?: XOR<SettingCreateWithoutUserInput, SettingUncheckedCreateWithoutUserInput>;
+    connectOrCreate?: SettingCreateOrConnectWithoutUserInput;
+    connect?: SettingWhereUniqueInput;
+  };
+
   export type ExternalAccountCreateNestedManyWithoutUserInput = {
     create?:
       | XOR<ExternalAccountCreateWithoutUserInput, ExternalAccountUncheckedCreateWithoutUserInput>
@@ -33820,6 +35525,12 @@ export namespace Prisma {
     create?: XOR<UserSecurityCreateWithoutUserInput, UserSecurityUncheckedCreateWithoutUserInput>;
     connectOrCreate?: UserSecurityCreateOrConnectWithoutUserInput;
     connect?: UserSecurityWhereUniqueInput;
+  };
+
+  export type SettingUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<SettingCreateWithoutUserInput, SettingUncheckedCreateWithoutUserInput>;
+    connectOrCreate?: SettingCreateOrConnectWithoutUserInput;
+    connect?: SettingWhereUniqueInput;
   };
 
   export type ExternalAccountUncheckedCreateNestedManyWithoutUserInput = {
@@ -33942,6 +35653,10 @@ export namespace Prisma {
     push?: $Enums.UserFlag | $Enums.UserFlag[];
   };
 
+  export type EnumUserVisibilityFieldUpdateOperationsInput = {
+    set?: $Enums.UserVisibility;
+  };
+
   export type UserSecurityUpdateOneWithoutUserNestedInput = {
     create?: XOR<UserSecurityCreateWithoutUserInput, UserSecurityUncheckedCreateWithoutUserInput>;
     connectOrCreate?: UserSecurityCreateOrConnectWithoutUserInput;
@@ -33952,6 +35667,19 @@ export namespace Prisma {
     update?: XOR<
       XOR<UserSecurityUpdateToOneWithWhereWithoutUserInput, UserSecurityUpdateWithoutUserInput>,
       UserSecurityUncheckedUpdateWithoutUserInput
+    >;
+  };
+
+  export type SettingUpdateOneWithoutUserNestedInput = {
+    create?: XOR<SettingCreateWithoutUserInput, SettingUncheckedCreateWithoutUserInput>;
+    connectOrCreate?: SettingCreateOrConnectWithoutUserInput;
+    upsert?: SettingUpsertWithoutUserInput;
+    disconnect?: SettingWhereInput | boolean;
+    delete?: SettingWhereInput | boolean;
+    connect?: SettingWhereUniqueInput;
+    update?: XOR<
+      XOR<SettingUpdateToOneWithWhereWithoutUserInput, SettingUpdateWithoutUserInput>,
+      SettingUncheckedUpdateWithoutUserInput
     >;
   };
 
@@ -34164,6 +35892,19 @@ export namespace Prisma {
     update?: XOR<
       XOR<UserSecurityUpdateToOneWithWhereWithoutUserInput, UserSecurityUpdateWithoutUserInput>,
       UserSecurityUncheckedUpdateWithoutUserInput
+    >;
+  };
+
+  export type SettingUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<SettingCreateWithoutUserInput, SettingUncheckedCreateWithoutUserInput>;
+    connectOrCreate?: SettingCreateOrConnectWithoutUserInput;
+    upsert?: SettingUpsertWithoutUserInput;
+    disconnect?: SettingWhereInput | boolean;
+    delete?: SettingWhereInput | boolean;
+    connect?: SettingWhereUniqueInput;
+    update?: XOR<
+      XOR<SettingUpdateToOneWithWhereWithoutUserInput, SettingUpdateWithoutUserInput>,
+      SettingUncheckedUpdateWithoutUserInput
     >;
   };
 
@@ -34612,6 +36353,23 @@ export namespace Prisma {
     update?: XOR<
       XOR<UserUpdateToOneWithWhereWithoutCartInput, UserUpdateWithoutCartInput>,
       UserUncheckedUpdateWithoutCartInput
+    >;
+  };
+
+  export type UserCreateNestedOneWithoutSettingInput = {
+    create?: XOR<UserCreateWithoutSettingInput, UserUncheckedCreateWithoutSettingInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutSettingInput;
+    connect?: UserWhereUniqueInput;
+  };
+
+  export type UserUpdateOneRequiredWithoutSettingNestedInput = {
+    create?: XOR<UserCreateWithoutSettingInput, UserUncheckedCreateWithoutSettingInput>;
+    connectOrCreate?: UserCreateOrConnectWithoutSettingInput;
+    upsert?: UserUpsertWithoutSettingInput;
+    connect?: UserWhereUniqueInput;
+    update?: XOR<
+      XOR<UserUpdateToOneWithWhereWithoutSettingInput, UserUpdateWithoutSettingInput>,
+      UserUncheckedUpdateWithoutSettingInput
     >;
   };
 
@@ -35377,6 +37135,23 @@ export namespace Prisma {
     _max?: NestedDecimalFilter<$PrismaModel>;
   };
 
+  export type NestedEnumUserVisibilityFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserVisibility | EnumUserVisibilityFieldRefInput<$PrismaModel>;
+    in?: $Enums.UserVisibility[] | ListEnumUserVisibilityFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.UserVisibility[] | ListEnumUserVisibilityFieldRefInput<$PrismaModel>;
+    not?: NestedEnumUserVisibilityFilter<$PrismaModel> | $Enums.UserVisibility;
+  };
+
+  export type NestedEnumUserVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserVisibility | EnumUserVisibilityFieldRefInput<$PrismaModel>;
+    in?: $Enums.UserVisibility[] | ListEnumUserVisibilityFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.UserVisibility[] | ListEnumUserVisibilityFieldRefInput<$PrismaModel>;
+    not?: NestedEnumUserVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.UserVisibility;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumUserVisibilityFilter<$PrismaModel>;
+    _max?: NestedEnumUserVisibilityFilter<$PrismaModel>;
+  };
+
   export type NestedEnumProviderPlatformFilter<$PrismaModel = never> = {
     equals?: $Enums.ProviderPlatform | EnumProviderPlatformFieldRefInput<$PrismaModel>;
     in?: $Enums.ProviderPlatform[] | ListEnumProviderPlatformFieldRefInput<$PrismaModel>;
@@ -35557,11 +37332,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityCreateNestedOneWithoutUserInput;
+    setting?: SettingCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
     products?: ProductCreateNestedManyWithoutSellerInput;
@@ -35593,11 +37370,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    setting?: SettingUncheckedCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
     products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
@@ -35645,11 +37424,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    setting?: SettingUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
     products?: ProductUpdateManyWithoutSellerNestedInput;
@@ -35681,11 +37462,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    setting?: SettingUncheckedUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
     products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
@@ -35885,11 +37668,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityCreateNestedOneWithoutUserInput;
+    setting?: SettingCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     products?: ProductCreateNestedManyWithoutSellerInput;
@@ -35921,11 +37706,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    setting?: SettingUncheckedCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
@@ -35973,11 +37760,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    setting?: SettingUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     products?: ProductUpdateManyWithoutSellerNestedInput;
@@ -36009,11 +37798,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    setting?: SettingUncheckedUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
@@ -36045,11 +37836,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityCreateNestedOneWithoutUserInput;
+    setting?: SettingCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
@@ -36081,11 +37874,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    setting?: SettingUncheckedCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
@@ -36192,11 +37987,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    setting?: SettingUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
@@ -36228,11 +38025,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    setting?: SettingUncheckedUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
@@ -36327,6 +38126,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    isVerified?: boolean;
     category: CategoryCreateNestedOneWithoutProductsInput;
     seller: UserCreateNestedOneWithoutProductsInput;
     cartItem?: CartItemCreateNestedManyWithoutProductInput;
@@ -36350,6 +38150,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    isVerified?: boolean;
     categoryId: string;
     sellerId: string;
     cartItem?: CartItemUncheckedCreateNestedManyWithoutProductInput;
@@ -36433,6 +38234,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
     seller?: UserUpdateOneRequiredWithoutProductsNestedInput;
     cartItem?: CartItemUpdateManyWithoutProductNestedInput;
@@ -36456,6 +38258,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
     categoryId?: StringFieldUpdateOperationsInput | string;
     sellerId?: StringFieldUpdateOperationsInput | string;
     cartItem?: CartItemUncheckedUpdateManyWithoutProductNestedInput;
@@ -36555,11 +38358,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityCreateNestedOneWithoutUserInput;
+    setting?: SettingCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
@@ -36591,11 +38396,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    setting?: SettingUncheckedCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
@@ -36774,11 +38581,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    setting?: SettingUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
@@ -36810,11 +38619,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    setting?: SettingUncheckedUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
@@ -36943,6 +38754,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    isVerified?: boolean;
     category: CategoryCreateNestedOneWithoutProductsInput;
     seller: UserCreateNestedOneWithoutProductsInput;
     cartItem?: CartItemCreateNestedManyWithoutProductInput;
@@ -36966,6 +38778,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    isVerified?: boolean;
     categoryId: string;
     sellerId: string;
     cartItem?: CartItemUncheckedCreateNestedManyWithoutProductInput;
@@ -37028,6 +38841,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
     seller?: UserUpdateOneRequiredWithoutProductsNestedInput;
     cartItem?: CartItemUpdateManyWithoutProductNestedInput;
@@ -37051,6 +38865,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
     categoryId?: StringFieldUpdateOperationsInput | string;
     sellerId?: StringFieldUpdateOperationsInput | string;
     cartItem?: CartItemUncheckedUpdateManyWithoutProductNestedInput;
@@ -37103,6 +38918,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    isVerified?: boolean;
     seller: UserCreateNestedOneWithoutProductsInput;
     cartItem?: CartItemCreateNestedManyWithoutProductInput;
     productItems?: ProductItemCreateNestedManyWithoutProductInput;
@@ -37126,6 +38942,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    isVerified?: boolean;
     sellerId: string;
     cartItem?: CartItemUncheckedCreateNestedManyWithoutProductInput;
     productItems?: ProductItemUncheckedCreateNestedManyWithoutProductInput;
@@ -37178,6 +38995,7 @@ export namespace Prisma {
     discountPrice?: IntFilter<'Product'> | number;
     tags?: StringNullableListFilter<'Product'>;
     medias?: StringNullableListFilter<'Product'>;
+    isVerified?: BoolFilter<'Product'> | boolean;
     categoryId?: UuidFilter<'Product'> | string;
     sellerId?: UuidFilter<'Product'> | string;
   };
@@ -37198,6 +39016,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    isVerified?: boolean;
     category: CategoryCreateNestedOneWithoutProductsInput;
     seller: UserCreateNestedOneWithoutProductsInput;
     cartItem?: CartItemCreateNestedManyWithoutProductInput;
@@ -37221,6 +39040,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    isVerified?: boolean;
     categoryId: string;
     sellerId: string;
     cartItem?: CartItemUncheckedCreateNestedManyWithoutProductInput;
@@ -37252,11 +39072,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityCreateNestedOneWithoutUserInput;
+    setting?: SettingCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
@@ -37288,11 +39110,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    setting?: SettingUncheckedCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
@@ -37337,6 +39161,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
     seller?: UserUpdateOneRequiredWithoutProductsNestedInput;
     cartItem?: CartItemUpdateManyWithoutProductNestedInput;
@@ -37360,6 +39185,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
     categoryId?: StringFieldUpdateOperationsInput | string;
     sellerId?: StringFieldUpdateOperationsInput | string;
     cartItem?: CartItemUncheckedUpdateManyWithoutProductNestedInput;
@@ -37397,11 +39223,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    setting?: SettingUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
@@ -37433,11 +39261,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    setting?: SettingUncheckedUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
@@ -37487,6 +39317,35 @@ export namespace Prisma {
   export type UserSecurityCreateOrConnectWithoutUserInput = {
     where: UserSecurityWhereUniqueInput;
     create: XOR<UserSecurityCreateWithoutUserInput, UserSecurityUncheckedCreateWithoutUserInput>;
+  };
+
+  export type SettingCreateWithoutUserInput = {
+    emailNotifications?: boolean;
+    browserNotifications?: boolean;
+    ticketNotifications?: boolean;
+    promotionNotifications?: boolean;
+    priceChangesNotifications?: boolean;
+    loginNotifications?: boolean;
+    suggestedProducts?: boolean;
+    restockNotifications?: boolean;
+    updatedAt?: Date | string;
+  };
+
+  export type SettingUncheckedCreateWithoutUserInput = {
+    emailNotifications?: boolean;
+    browserNotifications?: boolean;
+    ticketNotifications?: boolean;
+    promotionNotifications?: boolean;
+    priceChangesNotifications?: boolean;
+    loginNotifications?: boolean;
+    suggestedProducts?: boolean;
+    restockNotifications?: boolean;
+    updatedAt?: Date | string;
+  };
+
+  export type SettingCreateOrConnectWithoutUserInput = {
+    where: SettingWhereUniqueInput;
+    create: XOR<SettingCreateWithoutUserInput, SettingUncheckedCreateWithoutUserInput>;
   };
 
   export type ExternalAccountCreateWithoutUserInput = {
@@ -37605,6 +39464,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    isVerified?: boolean;
     category: CategoryCreateNestedOneWithoutProductsInput;
     cartItem?: CartItemCreateNestedManyWithoutProductInput;
     productItems?: ProductItemCreateNestedManyWithoutProductInput;
@@ -37628,6 +39488,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    isVerified?: boolean;
     categoryId: string;
     cartItem?: CartItemUncheckedCreateNestedManyWithoutProductInput;
     productItems?: ProductItemUncheckedCreateNestedManyWithoutProductInput;
@@ -37920,6 +39781,41 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     mfaSetups?: MfaSetupUncheckedUpdateManyWithoutUserNestedInput;
     backupCodes?: MfaBackupCodeUncheckedUpdateManyWithoutUserNestedInput;
+  };
+
+  export type SettingUpsertWithoutUserInput = {
+    update: XOR<SettingUpdateWithoutUserInput, SettingUncheckedUpdateWithoutUserInput>;
+    create: XOR<SettingCreateWithoutUserInput, SettingUncheckedCreateWithoutUserInput>;
+    where?: SettingWhereInput;
+  };
+
+  export type SettingUpdateToOneWithWhereWithoutUserInput = {
+    where?: SettingWhereInput;
+    data: XOR<SettingUpdateWithoutUserInput, SettingUncheckedUpdateWithoutUserInput>;
+  };
+
+  export type SettingUpdateWithoutUserInput = {
+    emailNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    browserNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    ticketNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    promotionNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    priceChangesNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    loginNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    suggestedProducts?: BoolFieldUpdateOperationsInput | boolean;
+    restockNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+  };
+
+  export type SettingUncheckedUpdateWithoutUserInput = {
+    emailNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    browserNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    ticketNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    promotionNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    priceChangesNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    loginNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    suggestedProducts?: BoolFieldUpdateOperationsInput | boolean;
+    restockNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
 
   export type ExternalAccountUpsertWithWhereUniqueWithoutUserInput = {
@@ -38277,10 +40173,12 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
+    setting?: SettingCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
@@ -38313,10 +40211,12 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
+    setting?: SettingUncheckedCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
@@ -38423,10 +40323,12 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    setting?: SettingUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
@@ -38459,10 +40361,12 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    setting?: SettingUncheckedUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
@@ -38495,11 +40399,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityCreateNestedOneWithoutUserInput;
+    setting?: SettingCreateNestedOneWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
     products?: ProductCreateNestedManyWithoutSellerInput;
@@ -38531,11 +40437,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    setting?: SettingUncheckedCreateNestedOneWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
     products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
@@ -38583,11 +40491,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    setting?: SettingUpdateOneWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
     products?: ProductUpdateManyWithoutSellerNestedInput;
@@ -38619,11 +40529,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    setting?: SettingUncheckedUpdateOneWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
     products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
@@ -38678,11 +40590,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityCreateNestedOneWithoutUserInput;
+    setting?: SettingCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
@@ -38714,11 +40628,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    setting?: SettingUncheckedCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
@@ -38795,11 +40711,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    setting?: SettingUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
@@ -38831,11 +40749,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    setting?: SettingUncheckedUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
@@ -38864,6 +40784,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    isVerified?: boolean;
     category: CategoryCreateNestedOneWithoutProductsInput;
     seller: UserCreateNestedOneWithoutProductsInput;
     productItems?: ProductItemCreateNestedManyWithoutProductInput;
@@ -38887,6 +40808,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    isVerified?: boolean;
     categoryId: string;
     sellerId: string;
     productItems?: ProductItemUncheckedCreateNestedManyWithoutProductInput;
@@ -38918,11 +40840,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityCreateNestedOneWithoutUserInput;
+    setting?: SettingCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
@@ -38954,11 +40878,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    setting?: SettingUncheckedCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
@@ -39003,6 +40929,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
     seller?: UserUpdateOneRequiredWithoutProductsNestedInput;
     productItems?: ProductItemUpdateManyWithoutProductNestedInput;
@@ -39026,6 +40953,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
     categoryId?: StringFieldUpdateOperationsInput | string;
     sellerId?: StringFieldUpdateOperationsInput | string;
     productItems?: ProductItemUncheckedUpdateManyWithoutProductNestedInput;
@@ -39063,11 +40991,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    setting?: SettingUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
@@ -39099,6 +41029,175 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    setting?: SettingUncheckedUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
+    auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
+    loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
+    products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
+    ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
+    ticketAssign?: TicketUncheckedUpdateManyWithoutAssignNestedInput;
+    ticketMembers?: TicketMemberUncheckedUpdateManyWithoutUserNestedInput;
+    reviews?: ReviewUncheckedUpdateManyWithoutUserNestedInput;
+    bills?: BillUncheckedUpdateManyWithoutUserNestedInput;
+    orders?: OrderUncheckedUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserCreateWithoutSettingInput = {
+    id?: string;
+    fullname: string;
+    email: string;
+    phone?: string | null;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
+    hashedPassword?: string | null;
+    avatarUrl?: string | null;
+    address?: string | null;
+    city?: string | null;
+    state?: string | null;
+    zipCode?: string | null;
+    biography?: string | null;
+    roles?: UserCreaterolesInput | $Enums.UserRole[];
+    flags?: UserCreateflagsInput | $Enums.UserFlag[];
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    credit?: number;
+    visible?: $Enums.UserVisibility;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
+    auth?: AuthenticationCreateNestedManyWithoutUserInput;
+    loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
+    products?: ProductCreateNestedManyWithoutSellerInput;
+    cart?: CartItemCreateNestedManyWithoutUserInput;
+    ticketAuthor?: TicketCreateNestedManyWithoutAuthorInput;
+    ticketAssign?: TicketCreateNestedManyWithoutAssignInput;
+    ticketMembers?: TicketMemberCreateNestedManyWithoutUserInput;
+    reviews?: ReviewCreateNestedManyWithoutUserInput;
+    bills?: BillCreateNestedManyWithoutUserInput;
+    orders?: OrderCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserUncheckedCreateWithoutSettingInput = {
+    id?: string;
+    fullname: string;
+    email: string;
+    phone?: string | null;
+    web3Wallet?: string | null;
+    passwordEnabled?: boolean;
+    hashedPassword?: string | null;
+    avatarUrl?: string | null;
+    address?: string | null;
+    city?: string | null;
+    state?: string | null;
+    zipCode?: string | null;
+    biography?: string | null;
+    roles?: UserCreaterolesInput | $Enums.UserRole[];
+    flags?: UserCreateflagsInput | $Enums.UserFlag[];
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    credit?: number;
+    visible?: $Enums.UserVisibility;
+    isBanned?: boolean;
+    isLocked?: boolean;
+    isVerified?: boolean;
+    lastActiveAt?: Date | string | null;
+    security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
+    auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
+    loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
+    products?: ProductUncheckedCreateNestedManyWithoutSellerInput;
+    cart?: CartItemUncheckedCreateNestedManyWithoutUserInput;
+    ticketAuthor?: TicketUncheckedCreateNestedManyWithoutAuthorInput;
+    ticketAssign?: TicketUncheckedCreateNestedManyWithoutAssignInput;
+    ticketMembers?: TicketMemberUncheckedCreateNestedManyWithoutUserInput;
+    reviews?: ReviewUncheckedCreateNestedManyWithoutUserInput;
+    bills?: BillUncheckedCreateNestedManyWithoutUserInput;
+    orders?: OrderUncheckedCreateNestedManyWithoutUserInput;
+  };
+
+  export type UserCreateOrConnectWithoutSettingInput = {
+    where: UserWhereUniqueInput;
+    create: XOR<UserCreateWithoutSettingInput, UserUncheckedCreateWithoutSettingInput>;
+  };
+
+  export type UserUpsertWithoutSettingInput = {
+    update: XOR<UserUpdateWithoutSettingInput, UserUncheckedUpdateWithoutSettingInput>;
+    create: XOR<UserCreateWithoutSettingInput, UserUncheckedCreateWithoutSettingInput>;
+    where?: UserWhereInput;
+  };
+
+  export type UserUpdateToOneWithWhereWithoutSettingInput = {
+    where?: UserWhereInput;
+    data: XOR<UserUpdateWithoutSettingInput, UserUncheckedUpdateWithoutSettingInput>;
+  };
+
+  export type UserUpdateWithoutSettingInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    fullname?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    address?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    state?: NullableStringFieldUpdateOperationsInput | string | null;
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null;
+    biography?: NullableStringFieldUpdateOperationsInput | string | null;
+    roles?: UserUpdaterolesInput | $Enums.UserRole[];
+    flags?: UserUpdateflagsInput | $Enums.UserFlag[];
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
+    isBanned?: BoolFieldUpdateOperationsInput | boolean;
+    isLocked?: BoolFieldUpdateOperationsInput | boolean;
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
+    auth?: AuthenticationUpdateManyWithoutUserNestedInput;
+    loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
+    products?: ProductUpdateManyWithoutSellerNestedInput;
+    cart?: CartItemUpdateManyWithoutUserNestedInput;
+    ticketAuthor?: TicketUpdateManyWithoutAuthorNestedInput;
+    ticketAssign?: TicketUpdateManyWithoutAssignNestedInput;
+    ticketMembers?: TicketMemberUpdateManyWithoutUserNestedInput;
+    reviews?: ReviewUpdateManyWithoutUserNestedInput;
+    bills?: BillUpdateManyWithoutUserNestedInput;
+    orders?: OrderUpdateManyWithoutUserNestedInput;
+  };
+
+  export type UserUncheckedUpdateWithoutSettingInput = {
+    id?: StringFieldUpdateOperationsInput | string;
+    fullname?: StringFieldUpdateOperationsInput | string;
+    email?: StringFieldUpdateOperationsInput | string;
+    phone?: NullableStringFieldUpdateOperationsInput | string | null;
+    web3Wallet?: NullableStringFieldUpdateOperationsInput | string | null;
+    passwordEnabled?: BoolFieldUpdateOperationsInput | boolean;
+    hashedPassword?: NullableStringFieldUpdateOperationsInput | string | null;
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null;
+    address?: NullableStringFieldUpdateOperationsInput | string | null;
+    city?: NullableStringFieldUpdateOperationsInput | string | null;
+    state?: NullableStringFieldUpdateOperationsInput | string | null;
+    zipCode?: NullableStringFieldUpdateOperationsInput | string | null;
+    biography?: NullableStringFieldUpdateOperationsInput | string | null;
+    roles?: UserUpdaterolesInput | $Enums.UserRole[];
+    flags?: UserUpdateflagsInput | $Enums.UserFlag[];
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
+    credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
@@ -39108,6 +41207,7 @@ export namespace Prisma {
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
     products?: ProductUncheckedUpdateManyWithoutSellerNestedInput;
+    cart?: CartItemUncheckedUpdateManyWithoutUserNestedInput;
     ticketAuthor?: TicketUncheckedUpdateManyWithoutAuthorNestedInput;
     ticketAssign?: TicketUncheckedUpdateManyWithoutAssignNestedInput;
     ticketMembers?: TicketMemberUncheckedUpdateManyWithoutUserNestedInput;
@@ -39159,11 +41259,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityCreateNestedOneWithoutUserInput;
+    setting?: SettingCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
@@ -39195,11 +41297,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    setting?: SettingUncheckedCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
@@ -39236,11 +41340,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityCreateNestedOneWithoutUserInput;
+    setting?: SettingCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
@@ -39272,11 +41378,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    setting?: SettingUncheckedCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
@@ -39409,11 +41517,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    setting?: SettingUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
@@ -39445,11 +41555,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    setting?: SettingUncheckedUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
@@ -39492,11 +41604,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    setting?: SettingUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
@@ -39528,11 +41642,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    setting?: SettingUncheckedUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
@@ -39649,11 +41765,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityCreateNestedOneWithoutUserInput;
+    setting?: SettingCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountCreateNestedManyWithoutUserInput;
     auth?: AuthenticationCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionCreateNestedManyWithoutUserInput;
@@ -39685,11 +41803,13 @@ export namespace Prisma {
     createdAt?: Date | string;
     updatedAt?: Date | string;
     credit?: number;
+    visible?: $Enums.UserVisibility;
     isBanned?: boolean;
     isLocked?: boolean;
     isVerified?: boolean;
     lastActiveAt?: Date | string | null;
     security?: UserSecurityUncheckedCreateNestedOneWithoutUserInput;
+    setting?: SettingUncheckedCreateNestedOneWithoutUserInput;
     externalAccounts?: ExternalAccountUncheckedCreateNestedManyWithoutUserInput;
     auth?: AuthenticationUncheckedCreateNestedManyWithoutUserInput;
     loginSessions?: LoginSessionUncheckedCreateNestedManyWithoutUserInput;
@@ -39841,11 +41961,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUpdateOneWithoutUserNestedInput;
+    setting?: SettingUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUpdateManyWithoutUserNestedInput;
@@ -39877,11 +41999,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     credit?: IntFieldUpdateOperationsInput | number;
+    visible?: EnumUserVisibilityFieldUpdateOperationsInput | $Enums.UserVisibility;
     isBanned?: BoolFieldUpdateOperationsInput | boolean;
     isLocked?: BoolFieldUpdateOperationsInput | boolean;
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
     lastActiveAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     security?: UserSecurityUncheckedUpdateOneWithoutUserNestedInput;
+    setting?: SettingUncheckedUpdateOneWithoutUserNestedInput;
     externalAccounts?: ExternalAccountUncheckedUpdateManyWithoutUserNestedInput;
     auth?: AuthenticationUncheckedUpdateManyWithoutUserNestedInput;
     loginSessions?: LoginSessionUncheckedUpdateManyWithoutUserNestedInput;
@@ -40405,6 +42529,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    isVerified?: boolean;
     sellerId: string;
   };
 
@@ -40424,6 +42549,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
     seller?: UserUpdateOneRequiredWithoutProductsNestedInput;
     cartItem?: CartItemUpdateManyWithoutProductNestedInput;
     productItems?: ProductItemUpdateManyWithoutProductNestedInput;
@@ -40447,6 +42573,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
     sellerId?: StringFieldUpdateOperationsInput | string;
     cartItem?: CartItemUncheckedUpdateManyWithoutProductNestedInput;
     productItems?: ProductItemUncheckedUpdateManyWithoutProductNestedInput;
@@ -40470,6 +42597,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
     sellerId?: StringFieldUpdateOperationsInput | string;
   };
 
@@ -40524,6 +42652,7 @@ export namespace Prisma {
     discountPrice: number;
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
+    isVerified?: boolean;
     categoryId: string;
   };
 
@@ -40720,6 +42849,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
     cartItem?: CartItemUpdateManyWithoutProductNestedInput;
     productItems?: ProductItemUpdateManyWithoutProductNestedInput;
@@ -40743,6 +42873,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
     categoryId?: StringFieldUpdateOperationsInput | string;
     cartItem?: CartItemUncheckedUpdateManyWithoutProductNestedInput;
     productItems?: ProductItemUncheckedUpdateManyWithoutProductNestedInput;
@@ -40766,6 +42897,7 @@ export namespace Prisma {
     discountPrice?: IntFieldUpdateOperationsInput | number;
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
+    isVerified?: BoolFieldUpdateOperationsInput | boolean;
     categoryId?: StringFieldUpdateOperationsInput | string;
   };
 

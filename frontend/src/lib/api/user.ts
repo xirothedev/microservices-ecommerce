@@ -2,7 +2,7 @@ import axiosInstance from "@/lib/axios";
 import { apolloClient } from "@/lib/apollo-client";
 import { toast } from "@/hooks/use-toast";
 import { gql, useMutation as useMutationGql, useQuery as useQueryGql } from "@apollo/client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 import {
 	UpdateUserInput,
@@ -10,6 +10,7 @@ import {
 	UpdateUserMutationResponse,
 	UpdateAvatarResponse,
 	UserProfile,
+	UserSettings,
 } from "@/@types/api/user";
 
 // GraphQL queries and mutations
@@ -83,13 +84,29 @@ class UserApi {
 		const response = await axiosInstance.put<{ data: UserProfile }>("/users/me", data);
 		return response.data.data;
 	}
+
+	/**
+	 * Update user settings
+	 */
+	async updateUserSettings(setting: keyof UserSettings, type: boolean): Promise<UserSettings> {
+		const response = await axiosInstance.put<{ data: UserSettings }>("/users/settings", { [setting]: type });
+		return response.data.data;
+	}
+
+	/**
+	 * Get user settings
+	 */
+	async getUserSettings(): Promise<UserSettings> {
+		const response = await axiosInstance.get<{ data: UserSettings }>("/users/settings");
+		return response.data.data;
+	}
 }
 
 // Export singleton instance
 export const userApi = new UserApi();
 
 // Export individual methods for convenience
-export const { updateAvatar, getUserProfile, updateUserProfile } = userApi;
+export const { updateAvatar, getUserProfile, updateUserProfile, updateUserSettings, getUserSettings } = userApi;
 
 // ============================================================================
 // REACT HOOKS FOR USER
@@ -231,6 +248,44 @@ export function useUserProfile() {
 				description: "Failed to fetch profile. Please try again.",
 				variant: "destructive",
 			});
+		},
+	});
+}
+
+/**
+ * Hook for updating user settings with React Query
+ */
+export function useUpdateUserSettings() {
+	return useMutation<UserSettings, unknown, { setting: keyof UserSettings; type: boolean }>({
+		mutationFn: ({ setting, type }) => {
+			return userApi.updateUserSettings(setting, type);
+		},
+		onSuccess: () => {
+			toast({
+				title: "Success",
+				description: "Settings updated successfully",
+				variant: "default",
+			});
+		},
+		onError: (error: unknown) => {
+			console.error("Update settings error:", error);
+			toast({
+				title: "Error",
+				description: "Failed to update settings. Please try again.",
+				variant: "destructive",
+			});
+		},
+	});
+}
+
+/**
+ * Hook for fetching user settings with React Query
+ */
+export function useUserSettings() {
+	return useQuery<UserSettings, Error, UserSettings>({
+		queryKey: ["user-settings"],
+		queryFn: async () => {
+			return await userApi.getUserSettings();
 		},
 	});
 }

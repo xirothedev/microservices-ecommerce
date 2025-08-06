@@ -11,12 +11,12 @@ model Ticket {
   contexts       TicketContext[]
   attachments    String[]        @db.VarChar(500)
 
-  authorId   String          @map("author_id") @db.Uuid
-  author     User            @relation(name: "TicketAuthor", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  assignId   String?         @map("assign_id") @db.Uuid
-  assign     User?           @relation(name: "TicketAssign", fields: [assignId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  messages   TicketMessage[]
-  members    TicketMember[]
+  authorId String          @map("author_id") @db.Uuid
+  author   User            @relation(name: "TicketAuthor", fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  assignId String?         @map("assign_id") @db.Uuid
+  assign   User?           @relation(name: "TicketAssign", fields: [assignId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  messages TicketMessage[]
+  members  TicketMember[]
 
   @@map("ticket")
 }
