@@ -38,8 +38,8 @@ export class TicketController {
   @Get(':id')
   @ApiOperation({ summary: 'Get ticket detail by id' })
   @ApiParam({ name: 'id', required: true })
-  findOne(@Param('id') id: string) {
-    return this.ticketService.findOne(id);
+  findOne(@Req() req: Request, @Param('id') id: string) {
+    return this.ticketService.findOne(req, id);
   }
 
   @Put(':id')
@@ -70,7 +70,7 @@ export class TicketController {
   @ApiQuery({ name: 'page', required: false })
   @ApiQuery({ name: 'limit', required: false })
   @ApiQuery({ name: 'cursor', required: false })
-  findMessages(@Param('id') ticketId: string, @Query() query: FindAllTicketMessageDto) {
-    return this.ticketService.findMessages(ticketId, query);
+  findMessages(@Req() req: Request, @Param('id') ticketId: string, @Query() query: FindAllTicketMessageDto) {
+    return this.ticketService.findMessages(req, ticketId, query);
   }
 }

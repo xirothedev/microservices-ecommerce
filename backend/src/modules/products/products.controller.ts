@@ -1,5 +1,5 @@
 import { Public } from '@/common/decorators/public.decorator';
-import { Roles } from '@/common/decorators/role.decorator';
+import { Roles } from '@/common/decorators/roles.decorator';
 import { MediasInterceptor } from '@/common/interceptors/media.interceptor';
 import {
   Body,

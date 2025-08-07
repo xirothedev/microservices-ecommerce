@@ -2,13 +2,13 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useSignup } from "@/lib/api/auth";
 import { toast } from "@/hooks/use-toast";
+import { useSignup } from "@/lib/api/auth";
 import { cn } from "@/lib/utils";
 import type { SignUpForm } from "@/zods/signup";
 import { signUpSchema } from "@/zods/signup";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
+import { IconBrandDiscord, IconBrandGoogle } from "@tabler/icons-react";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -43,7 +43,7 @@ export default function SignupPage() {
 		await mutateAsync(data);
 	};
 
-	const handleSocialLogin = async (provider: "github" | "google") => {
+	const handleSocialLogin = async (provider: "discord" | "google") => {
 		try {
 			window.open(`${process.env.NEXT_PUBLIC_API_URL}/auth/${provider}/login`);
 		} catch {
@@ -143,11 +143,11 @@ export default function SignupPage() {
 					<Button
 						className="group/btn hover:bg-bg-gray-50 shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_#262626]"
 						type="button"
-						onClick={() => handleSocialLogin("github")}
+						onClick={() => handleSocialLogin("discord")}
 						disabled={isPending}
 					>
-						<IconBrandGithub className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-						<span className="text-sm text-neutral-700 dark:text-neutral-300">GitHub</span>
+						<IconBrandDiscord className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
+						<span className="text-sm text-neutral-700 dark:text-neutral-300">Discord</span>
 						<BottomGradient />
 					</Button>
 					<Button

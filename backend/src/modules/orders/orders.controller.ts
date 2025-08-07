@@ -1,4 +1,4 @@
-import { Roles } from '@/common/decorators/role.decorator';
+import { Roles } from '@/common/decorators/roles.decorator';
 import { Body, Controller, Get, Param, Patch, Post, Query, Req, Res } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';

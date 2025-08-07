@@ -1,4 +1,4 @@
-import { Roles } from '@/common/decorators/role.decorator';
+import { Roles } from '@/common/decorators/roles.decorator';
 import { GqlContext } from '@/typings/gql';
 import { Args, Context, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { CartService } from '../cart/cart.service';

@@ -2,7 +2,7 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { SupabaseService } from '@/supabase/supabase.service';
 import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { Prisma } from '@prisma/generated';
+import { Prisma, UserRole } from '@prisma/generated';
 import { Request } from 'express';
 import { CreateTicketMessageDto } from './dto/create-ticket-message.dto';
 import { CreateTicketDto } from './dto/create-ticket.dto';
@@ -17,6 +17,35 @@ export class TicketService {
     private readonly supabaseService: SupabaseService,
     private readonly eventEmitter: EventEmitter2,
   ) {}
+
+  /**
+   * Check if user has admin privileges (ROOT or ADMINISTRATOR)
+   */
+  private isAdminUser(user: any): boolean {
+    return user?.roles?.includes(UserRole.ROOT) || user?.roles?.includes(UserRole.ADMINISTRATOR);
+  }
+
+  /**
+   * Check if user has access to a specific ticket
+   */
+  private async hasTicketAccess(userId: string, ticketId: string): Promise<boolean> {
+    const ticket = await this.prismaService.ticket.findUnique({
+      where: { id: ticketId },
+      select: {
+        authorId: true,
+        assignId: true,
+        members: {
+          where: { userId },
+          select: { id: true },
+        },
+      },
+    });
+
+    if (!ticket) return false;
+
+    // User has access if they are author, assignee, or member
+    return ticket.authorId === userId || ticket.assignId === userId || ticket.members.length > 0;
+  }
 
   public async create(req: Request, body: CreateTicketDto, attachments?: Express.Multer.File[]) {
     const creater = req.user;
@@ -73,9 +102,12 @@ export class TicketService {
       skip = (page - 1) * take;
     }
 
-    const where: Prisma.TicketWhereInput = {
-      authorId: req.user.id,
-    };
+    const where: Prisma.TicketWhereInput = {};
+
+    // Admin users can see all tickets, regular users only see their own tickets
+    if (!this.isAdminUser(req.user)) {
+      where.OR = [{ authorId: req.user.id }, { assignId: req.user.id }, { members: { some: { userId: req.user.id } } }];
+    }
 
     if (category) {
       where.category = category;
@@ -156,8 +188,16 @@ export class TicketService {
     };
   }
 
-  public async findOne(id: string) {
+  public async findOne(req: Request, id: string) {
     try {
+      // Check if user has access to this ticket (unless admin)
+      if (!this.isAdminUser(req.user)) {
+        const hasAccess = await this.hasTicketAccess(req.user.id, id);
+        if (!hasAccess) {
+          throw new ForbiddenException('You do not have permission to view this ticket');
+        }
+      }
+
       const ticket = await this.prismaService.ticket.findUniqueOrThrow({
         where: { id },
         select: {
@@ -233,17 +273,19 @@ export class TicketService {
     });
 
     if (!ticket) throw new NotFoundException('Ticket not found');
-    // Only author can update all fields
-    // Assign user can only update status
+
+    // Admin users can update all fields
+    const isAdmin = this.isAdminUser(user);
     const isAuthor = ticket.authorId === user.id;
     const isAssign = ticket.assignId === user.id;
-    if (!isAuthor && !isAssign) {
+
+    if (!isAdmin && !isAuthor && !isAssign) {
       throw new ForbiddenException('You do not have permission to update this ticket');
     }
     // Build update data
     let updateData: Prisma.TicketUpdateInput = {};
-    if (isAuthor) {
-      // Author can update all fields
+    if (isAdmin || isAuthor) {
+      // Admin and author can update all fields
       updateData = { ...body };
     } else if (isAssign) {
       // Assign can only update status
@@ -270,17 +312,22 @@ export class TicketService {
     attachments?: Express.Multer.File[],
   ) {
     const user = req.user;
-    // Check ticket exists and get author/assign
+
+    // Admin users can send messages to any ticket
+    if (!this.isAdminUser(user)) {
+      // Check if user has access to this ticket
+      const hasAccess = await this.hasTicketAccess(user.id, ticketId);
+      if (!hasAccess) {
+        throw new ForbiddenException('You do not have permission to send message to this ticket');
+      }
+    }
+
+    // Check ticket exists
     const ticket = await this.prismaService.ticket.findUnique({
       where: { id: ticketId },
-      select: { authorId: true, assignId: true },
+      select: { id: true },
     });
     if (!ticket) throw new NotFoundException('Ticket not found');
-    const isAuthor = ticket.authorId === user.id;
-    const isAssign = ticket.assignId === user.id;
-    if (!isAuthor && !isAssign) {
-      throw new ForbiddenException('You do not have permission to send message to this ticket');
-    }
 
     // Ensure user is a member of the ticket
     let ticketMember = await this.prismaService.ticketMember.findUnique({
@@ -364,7 +411,15 @@ export class TicketService {
     return { message: 'Create ticket message successful', data: message };
   }
 
-  public async findMessages(ticketId: string, query: FindAllTicketMessageDto) {
+  public async findMessages(req: Request, ticketId: string, query: FindAllTicketMessageDto) {
+    // Admin users can view messages from any ticket
+    if (!this.isAdminUser(req.user)) {
+      // Check if user has access to this ticket
+      const hasAccess = await this.hasTicketAccess(req.user.id, ticketId);
+      if (!hasAccess) {
+        throw new ForbiddenException('You do not have permission to view messages from this ticket');
+      }
+    }
     const { page, limit, cursor } = query;
     const take = limit ?? 20;
     let skip: number | undefined = undefined;
