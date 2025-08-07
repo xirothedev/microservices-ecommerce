@@ -91,7 +91,10 @@ export class WsAuthGuard implements CanActivate {
       return true;
     } catch (error) {
       if (error instanceof WsException) {
-        throw error;
+        throw new WsException({
+          message: 'User not found',
+          code: 'USER_NOT_FOUND',
+        });
       }
 
       this.logger.error(`Authentication failed: ${error.message}`);

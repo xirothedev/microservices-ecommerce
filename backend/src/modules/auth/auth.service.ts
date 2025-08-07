@@ -21,7 +21,7 @@ import { CreateAuthDto } from './dto/create-auth.dto';
 import { LoginDto } from './dto/login.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { MfaService } from './mfa.service';
+import { MfaService } from './services/mfa.service';
 
 export const MINIMUM_RETRY_TIME = 60_000;
 export const MAXINUM_AVAILABLE_TIME = 5 * 60 * 1000;
@@ -120,31 +120,17 @@ export class AuthService {
       }
     }
 
-    // Generate JWT token
-    const payload: Payload = {
-      sub: user.id,
-      email: user.email,
-      timestamp: new Date().toISOString(),
-    };
-
-    const { accessToken, refreshToken } = this.generateToken(payload);
-
-    const session = await this.storageSession(user.id, refreshToken, sessionId);
-
-    // Set cookie
-    res
-      .cookie('access_token', accessToken, cookieOptions)
-      .cookie('refresh_token', refreshToken, cookieOptions)
-      .cookie('session_id', session.sessionId, cookieOptions);
+    // Create session and tokens using the centralized method
+    const sessionResult = await this.createUserSession(user, res, sessionId);
 
     const { hashedPassword: _hashedPassword, ...data } = user;
 
     return {
       message: 'Login successful',
       data,
-      '@accessToken': accessToken,
-      '@refreshToken': refreshToken,
-      '@sessionId': sessionId,
+      '@accessToken': sessionResult.accessToken,
+      '@refreshToken': sessionResult.refreshToken,
+      '@sessionId': sessionResult.sessionId,
       '@data': {
         hasMfa,
       },
@@ -383,6 +369,37 @@ export class AuthService {
     return {
       message: 'Logout successful',
       data: null,
+    };
+  }
+
+  public async createUserSession(user: { id: string; email: string }, res: Response, sessionId?: string) {
+    // Generate JWT token payload
+    const payload: Payload = {
+      sub: user.id,
+      email: user.email,
+      timestamp: new Date().toISOString(),
+    };
+
+    // Generate tokens
+    const { accessToken, refreshToken } = this.generateToken(payload);
+
+    // Create/update session in database
+    const session = await this.storageSession(user.id, refreshToken, sessionId);
+
+    // Set cookies
+    res
+      .cookie('access_token', accessToken, cookieOptions)
+      .cookie('refresh_token', refreshToken, cookieOptions)
+      .cookie('session_id', session.sessionId, cookieOptions);
+
+    return {
+      accessToken,
+      refreshToken,
+      sessionId: session.sessionId,
+      user: {
+        id: user.id,
+        email: user.email,
+      },
     };
   }
 

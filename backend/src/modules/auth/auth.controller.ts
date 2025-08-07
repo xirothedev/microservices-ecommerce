@@ -11,6 +11,7 @@ import {
   Query,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
@@ -22,7 +23,10 @@ import { MfaVerificationDto, RequestMfaCodeDto } from './dto/mfa-verification.dt
 import { SetupMfaDto, ToggleMfaDto, VerifyMfaSetupDto } from './dto/setup-mfa.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { MfaService } from './mfa.service';
+import { MfaService } from './services/mfa.service';
+import { DiscordAuthGuard } from './guards/discord.guard';
+import { GoogleAuthGuard } from './guards/google.guard';
+import { AuthSocialService } from './services/auth-social.service';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -30,6 +34,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly mfaService: MfaService,
+    private readonly authSocialService: AuthSocialService,
   ) {}
 
   @Public()
@@ -175,5 +180,87 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     return this.authService.logout(refreshToken, sessionId, res);
+  }
+
+  @ApiOperation({
+    summary: 'Initiate Google OAuth login',
+    description: 'Redirects user to Google for OAuth authentication. This endpoint starts the Google OAuth flow.',
+    tags: ['Social Authentication'],
+  })
+  @ApiResponse({
+    status: 302,
+    description: 'Redirects to Google OAuth authorization page',
+  })
+  @Get('google/login')
+  @UseGuards(GoogleAuthGuard)
+  @Public()
+  googleLogin() {
+    return;
+  }
+
+  @ApiOperation({
+    summary: 'Google OAuth callback',
+    description:
+      'Handles the callback from Google OAuth after successful authentication. Creates or logs in user and sets authentication cookies.',
+    tags: ['Social Authentication'],
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Authentication successful, user logged in with cookies set',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Google authentication failed',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal server error during authentication process',
+  })
+  @Get('google/callback')
+  @UseGuards(GoogleAuthGuard)
+  @Public()
+  googleCallback(@Req() req, @Res({ passthrough: false }) res: Response) {
+    return this.authSocialService.handleGoogleCallback(req.user, res);
+  }
+
+  @ApiOperation({
+    summary: 'Initiate Discord OAuth login',
+    description: 'Redirects user to Discord for OAuth authentication. This endpoint starts the Discord OAuth flow.',
+    tags: ['Social Authentication'],
+  })
+  @ApiResponse({
+    status: 302,
+    description: 'Redirects to Discord OAuth authorization page',
+  })
+  @Get('discord/login')
+  @Public()
+  @UseGuards(DiscordAuthGuard)
+  discordLogin() {
+    return;
+  }
+
+  @ApiOperation({
+    summary: 'Discord OAuth callback',
+    description:
+      'Handles the callback from Discord OAuth after successful authentication. Creates or logs in user and sets authentication cookies.',
+    tags: ['Social Authentication'],
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Authentication successful, user logged in with cookies set',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Discord authentication failed',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal server error during authentication process',
+  })
+  @Public()
+  @Get('discord/callback')
+  @UseGuards(DiscordAuthGuard)
+  discordCallback(@Req() req, @Res({ passthrough: false }) res: Response) {
+    return this.authSocialService.handleDiscordCallback(req.user, res);
   }
 }

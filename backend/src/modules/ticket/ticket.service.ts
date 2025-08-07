@@ -267,7 +267,7 @@ export class TicketService {
     req: Request,
     ticketId: string,
     body: CreateTicketMessageDto,
-    attachments: Express.Multer.File[],
+    attachments?: Express.Multer.File[],
   ) {
     const user = req.user;
     // Check ticket exists and get author/assign
@@ -308,16 +308,18 @@ export class TicketService {
 
     const urls: string[] = [];
 
-    for (let i = 0; i < attachments.length; i++) {
-      const { error, path } = await this.supabaseService.uploadFile(attachments[i], {
-        contentType: attachments[i].mimetype,
-      });
+    if (attachments && attachments.length > 0) {
+      for (let i = 0; i < attachments.length; i++) {
+        const { error, path } = await this.supabaseService.uploadFile(attachments[i], {
+          contentType: attachments[i].mimetype,
+        });
 
-      if (error) {
-        throw new InternalServerErrorException(`Failed to upload file: ${attachments[i].originalname}`);
+        if (error) {
+          throw new InternalServerErrorException(`Failed to upload file: ${attachments[i].originalname}`);
+        }
+
+        urls.push(path);
       }
-
-      urls.push(path);
     }
 
     // Create message

@@ -6,6 +6,7 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
   ValidationArguments,
+  IsBooleanString,
 } from 'class-validator';
 
 @ValidatorConstraint({ name: 'ContentOrAttachments', async: false })
@@ -38,6 +39,7 @@ export class CreateTicketMessageDto {
     description: 'Flag indicating if attachments are present (set automatically)',
     required: false,
   })
+  @IsBooleanString()
   @IsOptional()
   hasAttachments?: boolean | string;
 }

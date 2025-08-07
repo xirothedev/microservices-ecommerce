@@ -1,32 +1,30 @@
 import { DiscordProfile } from '@/modules/auth/auth.interface';
-// import { SocialService } from '@/modules/auth/social.service' // TODO: Create SocialService
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-discord';
+import { AuthSocialService } from '../services/auth-social.service';
 
 @Injectable()
 export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
   private logger = new Logger(DiscordStrategy.name);
 
   constructor(
-    private readonly configService: ConfigService,
-    // private readonly socialService: SocialService, // TODO: Create SocialService
+    readonly configService: ConfigService,
+    private readonly authSocialService: AuthSocialService,
   ) {
     super({
-      clientID: configService.getOrThrow<string>('discord.oauthClientId'),
-      clientSecret: configService.getOrThrow<string>('discord.oauthClientSecret'),
-      callbackURL: configService.getOrThrow<string>('discord.oauthCallbackUrl'),
+      clientID: configService.getOrThrow<string>('DISCORD_OAUTH_CLIENT_ID'),
+      clientSecret: configService.getOrThrow<string>('DISCORD_OAUTH_CLIENT_SECRET'),
+      callbackURL: configService.getOrThrow<string>('DISCORD_OAUTH_REDIRECT_URI'),
       scope: ['identify', 'email'],
     });
   }
 
-  validate(accessToken: string, refreshToken: string, profile: DiscordProfile) {
+  async validate(_accessToken: string, _refreshToken: string, profile: DiscordProfile) {
     try {
-      // TODO: Implement social service
-      // const user = await this.socialService.validateDiscordUser(profile)
-      // return user
-      throw new Error('SocialService not implemented yet');
+      const user = await this.authSocialService.validateDiscordUser(profile);
+      return user;
     } catch (error) {
       this.logger.error('Discord Strategy - Error validating user:', error);
       throw error;

@@ -46,23 +46,6 @@ export default function AccountSettings() {
 					if ((key === "emailNotifications" || key === "browserNotifications") && !checked) {
 						const otherPrimaryType =
 							key === "emailNotifications" ? "browserNotifications" : "emailNotifications";
-						if (!data[otherPrimaryType]) {
-							// Disable all other notification types
-							const otherNotificationTypes: (keyof UserSettings)[] = [
-								"ticketNotifications",
-								"suggestedProducts",
-								"promotionNotifications",
-								"priceChangesNotifications",
-								"loginNotifications",
-								"restockNotifications",
-							];
-
-							otherNotificationTypes.forEach((notificationType) => {
-								if (data[notificationType]) {
-									updateSettings({ setting: notificationType, type: false });
-								}
-							});
-						}
 					}
 				},
 			},

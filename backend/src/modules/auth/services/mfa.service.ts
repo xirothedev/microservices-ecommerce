@@ -5,9 +5,9 @@ import { Prisma } from '@prisma/generated';
 import { Request } from 'express';
 import { randomBytes, randomInt } from 'node:crypto';
 import { authenticator } from 'otplib';
-import { MfaStatus } from './auth.interface';
-import { MfaVerificationDto, RequestMfaCodeDto } from './dto/mfa-verification.dto';
-import { SetupMfaDto, ToggleMfaDto, VerifyMfaSetupDto } from './dto/setup-mfa.dto';
+import { MfaStatus } from '../auth.interface';
+import { MfaVerificationDto, RequestMfaCodeDto } from '../dto/mfa-verification.dto';
+import { SetupMfaDto, ToggleMfaDto, VerifyMfaSetupDto } from '../dto/setup-mfa.dto';
 
 export const MFA_CODE_EXPIRY = 5 * 60 * 1000;
 export const BACKUP_CODE_COUNT = 10;

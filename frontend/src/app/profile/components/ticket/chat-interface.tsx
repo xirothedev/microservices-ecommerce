@@ -41,12 +41,18 @@ export default function ChatInterface({ ticketId, displayUser, displayUserStatus
 		if (!content.trim() && (!attachments || attachments.length === 0)) return;
 		setIsLoading(true);
 		try {
-			const hasAttachments = attachments && attachments.length > 0;
+			const formData = new FormData();
+			formData.append("content", content);
+			formData.append("hasAttachments", attachments && attachments.length > 0 ? "true" : "false");
 
-			await axiosInstance.postForm(`/ticket/${ticketId}/message`, {
-				content,
-				hasAttachments,
-				attachments,
+			attachments?.forEach((file, index) => {
+				formData.append("attachments", file);
+			});
+
+			await axiosInstance.post(`/ticket/${ticketId}/message`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
 			});
 		} catch (err) {
 			console.error("Failed to send message", err);

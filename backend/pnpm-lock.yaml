@@ -142,6 +142,9 @@ importers:
       passport-discord:
         specifier: ^0.1.4
         version: 0.1.4
+      passport-google-oauth20:
+        specifier: ^2.0.0
+        version: 2.0.0
       passport-jwt:
         specifier: 4.0.1
         version: 4.0.1
@@ -215,6 +218,12 @@ importers:
       '@types/passport':
         specifier: ^1.0.17
         version: 1.0.17
+      '@types/passport-discord':
+        specifier: ^0.1.14
+        version: 0.1.14
+      '@types/passport-google-oauth20':
+        specifier: ^2.0.16
+        version: 2.0.16
       '@types/passport-jwt':
         specifier: 4.0.1
         version: 4.0.1
@@ -2108,9 +2117,25 @@ packages:
     resolution:
       { integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA== }
 
+  '@types/oauth@0.9.6':
+    resolution:
+      { integrity: sha512-H9TRCVKBNOhZZmyHLqFt9drPM9l+ShWiqqJijU1B8P3DX3ub84NjxDuy+Hjrz+fEca5Kwip3qPMKNyiLgNJtIA== }
+
+  '@types/passport-discord@0.1.14':
+    resolution:
+      { integrity: sha512-JE7Wbtr4bqqV9poWAbwB+aeVkd3/TM6wgGTtn4Ym6KPLJlJju73BEIH3uS+EeR+D7tY3lP1MtUpJPbxC86PXzA== }
+
+  '@types/passport-google-oauth20@2.0.16':
+    resolution:
+      { integrity: sha512-ayXK2CJ7uVieqhYOc6k/pIr5pcQxOLB6kBev+QUGS7oEZeTgIs1odDobXRqgfBPvXzl0wXCQHftV5220czZCPA== }
+
   '@types/passport-jwt@4.0.1':
     resolution:
       { integrity: sha512-Y0Ykz6nWP4jpxgEUYq8NoVZeCQPo1ZndJLfapI249g1jHChvRfZRO/LS3tqu26YgAS/laI1qx98sYGz0IalRXQ== }
+
+  '@types/passport-oauth2@1.8.0':
+    resolution:
+      { integrity: sha512-6//z+4orIOy/g3zx17HyQ71GSRK4bs7Sb+zFasRoc2xzlv7ZCJ+vkDBYFci8U6HY+or6Zy7ajf4mz4rK7nsWJQ== }
 
   '@types/passport-strategy@0.2.38':
     resolution:
@@ -5614,6 +5639,11 @@ packages:
     resolution:
       { integrity: sha512-VJWPYqSOmh7SaCLw/C+k1ZqCzJnn2frrmQRx1YrcPJ3MQ+Oa31XclbbmqFICSvl8xv3Fqd6YWQ4H4p1MpIN9rA== }
 
+  passport-google-oauth20@2.0.0:
+    resolution:
+      { integrity: sha512-KSk6IJ15RoxuGq7D1UKK/8qKhNfzbLeLrG3gkLZ7p4A6DBCcv7xpyQwuXtWdpyR0+E0mwkpjY1VfPOhxQrKzdQ== }
+    engines: { node: '>= 0.4.0' }
+
   passport-jwt@4.0.1:
     resolution:
       { integrity: sha512-UCKMDYhNuGOBE9/9Ycuoyh7vP6jpeTp/+sfMJl7nLff/t6dps+iaeE0hhNkKN8/HZHcJ7lCdOyDxHdDoxoSvdQ== }
@@ -8801,10 +8831,32 @@ snapshots:
 
   '@types/normalize-package-data@2.4.4': {}
 
+  '@types/oauth@0.9.6':
+    dependencies:
+      '@types/node': 22.16.3
+
+  '@types/passport-discord@0.1.14':
+    dependencies:
+      '@types/express': 5.0.3
+      '@types/passport': 1.0.17
+      '@types/passport-oauth2': 1.8.0
+
+  '@types/passport-google-oauth20@2.0.16':
+    dependencies:
+      '@types/express': 5.0.3
+      '@types/passport': 1.0.17
+      '@types/passport-oauth2': 1.8.0
+
   '@types/passport-jwt@4.0.1':
     dependencies:
       '@types/jsonwebtoken': 9.0.10
       '@types/passport-strategy': 0.2.38
+
+  '@types/passport-oauth2@1.8.0':
+    dependencies:
+      '@types/express': 5.0.3
+      '@types/oauth': 0.9.6
+      '@types/passport': 1.0.17
 
   '@types/passport-strategy@0.2.38':
     dependencies:
@@ -12337,6 +12389,10 @@ snapshots:
       passport-strategy: 1.0.0
 
   passport-discord@0.1.4:
+    dependencies:
+      passport-oauth2: 1.8.0
+
+  passport-google-oauth20@2.0.0:
     dependencies:
       passport-oauth2: 1.8.0
 
