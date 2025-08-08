@@ -5,11 +5,11 @@ import { gql, useMutation as useMutationGql, useQuery as useQueryGql } from "@ap
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 import {
-	UpdateUserInput,
-	UserQueryResponse,
-	UpdateUserMutationResponse,
-	UpdateAvatarResponse,
+	UserQuery,
 	UserProfile,
+	UpdateUserInput,
+	UpdateAvatarResponse,
+	UpdateUserMutationResponse,
 	UserSettings,
 } from "@/@types/api/user";
 
@@ -116,7 +116,7 @@ export const { updateAvatar, getUserProfile, updateUserProfile, updateUserSettin
  * Hook for fetching user data with Apollo GraphQL
  */
 export function useUserQuery() {
-	const res = useQueryGql<UserQueryResponse>(ME_QUERY, {
+	const res = useQueryGql<UserQuery>(ME_QUERY, {
 		fetchPolicy: "cache-and-network",
 		nextFetchPolicy: "cache-first",
 		errorPolicy: "all",

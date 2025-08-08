@@ -75,7 +75,6 @@ export default function TicketForm() {
 			priority: TicketPriority.MEDIUM,
 			description: "",
 			contexts: [],
-			attachments: [],
 		},
 	});
 

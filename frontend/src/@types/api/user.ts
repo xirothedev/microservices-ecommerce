@@ -64,7 +64,36 @@ export enum UserVisibility {
 }
 
 export interface SafeUser extends Omit<User, "hashedPassword"> {}
-export interface UserQuery extends SafeUser {}
+
+// GraphQL query response interface
+export interface UserQuery {
+	me: SafeUser;
+}
+
+// User profile type (alias for SafeUser for REST API)
+export interface UserProfile extends SafeUser {}
+
+// Update user input interface (matches backend DTO)
+export interface UpdateUserInput {
+	fullname?: string;
+	address?: string;
+	city?: string;
+	state?: string;
+	zipCode?: string;
+	biography?: string;
+}
+
+// Update avatar response interface
+export interface UpdateAvatarResponse {
+	message: string;
+	data: SafeUser;
+	timestamp?: number;
+}
+
+// GraphQL mutation response interface
+export interface UpdateUserMutationResponse {
+	updateUser: SafeUser;
+}
 
 export const profileSchema = z.object({
 	fullname: z.string().min(1, "Full name is required"),

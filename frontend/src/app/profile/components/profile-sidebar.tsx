@@ -75,13 +75,7 @@ export default function ProfileSidebar({ setSidebarOpen }: ProfileSidebarProps) 
 				{/* User Profile Header */}
 				<div className="mb-6 text-center">
 					<Avatar className="mx-auto mb-4 h-20 w-20">
-						<AvatarImage
-							src={
-								data.me.avatarUrl ||
-								"https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg"
-							}
-							alt={data.me.fullname}
-						/>
+						<AvatarImage src={data.me.avatarUrl ?? undefined} alt={data.me.fullname} />
 						<AvatarFallback className="text-lg">{fallbackAvatar}</AvatarFallback>
 					</Avatar>
 					<h2 className="text-xl font-semibold text-gray-900">{data.me.fullname}</h2>

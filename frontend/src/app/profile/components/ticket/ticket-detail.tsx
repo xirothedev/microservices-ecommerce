@@ -210,6 +210,10 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<div>
+								<h4 className="mb-2 font-medium text-gray-900">Title</h4>
+								<p className="mb-2 text-gray-700">{data?.title}</p>
+							</div>
+							<div>
 								<h4 className="mb-2 font-medium text-gray-900">Description</h4>
 								<div className="prose prose-sm max-w-none text-gray-700">
 									{data?.description?.split("\n").map((paragraph, index) => (

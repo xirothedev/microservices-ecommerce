@@ -19,21 +19,21 @@ import {
 } from "@/@types/api/order";
 
 class OrdersApi {
-	/**
-	 * Create a new order
-	 */
-	async createOrder(data: CreateOrderRequest): Promise<CreateOrderResponse> {
-		const response = await axiosInstance.post<CreateOrderResponse>("/orders", data);
-		return response.data;
-	}
+	// /**
+	//  * Create a new order
+	//  */
+	// async createOrder(data: CreateOrderRequest): Promise<CreateOrderResponse> {
+	// 	const response = await axiosInstance.post<CreateOrderResponse>("/orders", data);
+	// 	return response.data;
+	// }
 
-	/**
-	 * Create order from cart
-	 */
-	async createOrderFromCart(data: CreateOrderFromCartRequest): Promise<CreateOrderResponse> {
-		const response = await axiosInstance.post<CreateOrderResponse>(`/orders/from-cart`, data);
-		return response.data;
-	}
+	// /**
+	//  * Create order from cart
+	//  */
+	// async createOrderFromCart(data: CreateOrderFromCartRequest): Promise<CreateOrderResponse> {
+	// 	const response = await axiosInstance.post<CreateOrderResponse>(`/orders/from-cart`, data);
+	// 	return response.data;
+	// }
 
 	/**
 	 * Get user orders (for users to see their own orders)
@@ -43,13 +43,13 @@ class OrdersApi {
 		return response.data;
 	}
 
-	/**
-	 * Get seller orders (for sellers to see orders of their products)
-	 */
-	async getSellerOrders(params?: FindAllOrdersRequest): Promise<OrdersListResponse> {
-		const response = await axiosInstance.get<OrdersListResponse>(`/orders/seller`, { params });
-		return response.data;
-	}
+	// /**
+	//  * Get seller orders (for sellers to see orders of their products)
+	//  */
+	// async getSellerOrders(params?: FindAllOrdersRequest): Promise<OrdersListResponse> {
+	// 	const response = await axiosInstance.get<OrdersListResponse>(`/orders/seller`, { params });
+	// 	return response.data;
+	// }
 
 	/**
 	 * Get order by ID
@@ -59,29 +59,29 @@ class OrdersApi {
 		return response.data;
 	}
 
-	/**
-	 * Get order items details
-	 */
-	async getOrderItems(orderId: string): Promise<OrderItemsResponse> {
-		const response = await axiosInstance.get<OrderItemsResponse>(`/orders/${orderId}/items`);
-		return response.data;
-	}
+	// /**
+	//  * Get order items details
+	//  */
+	// async getOrderItems(orderId: string): Promise<OrderItemsResponse> {
+	// 	const response = await axiosInstance.get<OrderItemsResponse>(`/orders/${orderId}/items`);
+	// 	return response.data;
+	// }
 
-	/**
-	 * Cancel an order
-	 */
-	async cancelOrder(orderId: string): Promise<ApiResponse<null>> {
-		const response = await axiosInstance.patch<ApiResponse<null>>(`/orders/${orderId}/cancel`);
-		return response.data;
-	}
+	// /**
+	//  * Cancel an order
+	//  */
+	// async cancelOrder(orderId: string): Promise<ApiResponse<null>> {
+	// 	const response = await axiosInstance.patch<ApiResponse<null>>(`/orders/${orderId}/cancel`);
+	// 	return response.data;
+	// }
 
-	/**
-	 * Refund an order (seller/admin only)
-	 */
-	async refundOrder(orderId: string): Promise<ApiResponse<null>> {
-		const response = await axiosInstance.patch<ApiResponse<null>>(`/orders/${orderId}/refund`);
-		return response.data;
-	}
+	// /**
+	//  * Refund an order (seller/admin only)
+	//  */
+	// async refundOrder(orderId: string): Promise<ApiResponse<null>> {
+	// 	const response = await axiosInstance.patch<ApiResponse<null>>(`/orders/${orderId}/refund`);
+	// 	return response.data;
+	// }
 
 	/**
 	 * Download order invoice as PDF
@@ -107,17 +107,7 @@ class OrdersApi {
 export const ordersApi = new OrdersApi();
 
 // Export individual methods for convenience
-export const {
-	createOrder,
-	createOrderFromCart,
-	getUserOrders,
-	getSellerOrders,
-	getOrderById,
-	getOrderItems,
-	cancelOrder,
-	refundOrder,
-	downloadInvoice,
-} = ordersApi;
+export const { getUserOrders, getOrderById, downloadInvoice } = ordersApi;
 
 // ============================================================================
 // REACT HOOKS FOR ORDERS
@@ -182,71 +172,71 @@ export function useUserOrders(params?: FindAllOrdersRequest) {
 /**
  * Hook for fetching seller orders
  */
-export function useSellerOrders(params?: FindAllOrdersRequest) {
-	const [orders, setOrders] = useState<OrderListData[]>([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
-	const [totalItems, setTotalItems] = useState(0);
-	const [nextCursor, setNextCursor] = useState<string | null>(null);
-	const [hasNextPage, setHasNextPage] = useState(false);
-	const { toast } = useToast();
+// export function useSellerOrders(params?: FindAllOrdersRequest) {
+// 	const [orders, setOrders] = useState<OrderListData[]>([]);
+// 	const [loading, setLoading] = useState(true);
+// 	const [error, setError] = useState<string | null>(null);
+// 	const [totalItems, setTotalItems] = useState(0);
+// 	const [nextCursor, setNextCursor] = useState<string | null>(null);
+// 	const [hasNextPage, setHasNextPage] = useState(false);
+// 	const { toast } = useToast();
 
-	const fetchOrders = useCallback(
-		async (resetData = false) => {
-			try {
-				setLoading(true);
-				setError(null);
+// 	const fetchOrders = useCallback(
+// 		async (resetData = false) => {
+// 			try {
+// 				setLoading(true);
+// 				setError(null);
 
-				const response = await ordersApi.getSellerOrders(params);
+// 				const response = await ordersApi.getSellerOrders(params);
 
-				if (resetData) {
-					setOrders(response.data);
-				} else {
-					setOrders((prev) => [...prev, ...response.data]);
-				}
+// 				if (resetData) {
+// 					setOrders(response.data);
+// 				} else {
+// 					setOrders((prev) => [...prev, ...response.data]);
+// 				}
 
-				setTotalItems(response["@data"]?.totalItems || 0);
-				setNextCursor(response["@data"]?.nextCursor || null);
-				setHasNextPage(response["@data"]?.hasNextPage || false);
-			} catch (err) {
-				const error = err as ApiError;
-				setError(error.message || "Failed to fetch seller orders");
-				toast({
-					title: "Failed to fetch seller orders",
-					description: error.message || "Failed to fetch seller orders",
-					variant: "destructive",
-				});
-			} finally {
-				setLoading(false);
-			}
-		},
-		[params, toast],
-	);
+// 				setTotalItems(response["@data"]?.totalItems || 0);
+// 				setNextCursor(response["@data"]?.nextCursor || null);
+// 				setHasNextPage(response["@data"]?.hasNextPage || false);
+// 			} catch (err) {
+// 				const error = err as ApiError;
+// 				setError(error.message || "Failed to fetch seller orders");
+// 				toast({
+// 					title: "Failed to fetch seller orders",
+// 					description: error.message || "Failed to fetch seller orders",
+// 					variant: "destructive",
+// 				});
+// 			} finally {
+// 				setLoading(false);
+// 			}
+// 		},
+// 		[params, toast],
+// 	);
 
-	const loadMore = useCallback(() => {
-		if (hasNextPage && nextCursor && !loading) {
-			fetchOrders(false);
-		}
-	}, [hasNextPage, nextCursor, loading, fetchOrders]);
+// 	const loadMore = useCallback(() => {
+// 		if (hasNextPage && nextCursor && !loading) {
+// 			fetchOrders(false);
+// 		}
+// 	}, [hasNextPage, nextCursor, loading, fetchOrders]);
 
-	const refresh = useCallback(() => {
-		fetchOrders(true);
-	}, [fetchOrders]);
+// 	const refresh = useCallback(() => {
+// 		fetchOrders(true);
+// 	}, [fetchOrders]);
 
-	useEffect(() => {
-		fetchOrders(true);
-	}, [fetchOrders]);
+// 	useEffect(() => {
+// 		fetchOrders(true);
+// 	}, [fetchOrders]);
 
-	return {
-		orders,
-		loading,
-		error,
-		totalItems,
-		hasNextPage,
-		loadMore,
-		refresh,
-	};
-}
+// 	return {
+// 		orders,
+// 		loading,
+// 		error,
+// 		totalItems,
+// 		hasNextPage,
+// 		loadMore,
+// 		refresh,
+// 	};
+// }
 
 /**
  * Hook for fetching single order
@@ -294,158 +284,158 @@ export function useOrder(orderId: string | null) {
 /**
  * Hook for fetching order items
  */
-export function useOrderItems(orderId: string | null) {
-	const [items, setItems] = useState<OrderItem[]>([]);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState<string | null>(null);
-	const { toast } = useToast();
+// export function useOrderItems(orderId: string | null) {
+// 	const [items, setItems] = useState<OrderItem[]>([]);
+// 	const [loading, setLoading] = useState(false);
+// 	const [error, setError] = useState<string | null>(null);
+// 	const { toast } = useToast();
 
-	const fetchItems = useCallback(async () => {
-		if (!orderId) return;
+// 	const fetchItems = useCallback(async () => {
+// 		if (!orderId) return;
 
-		try {
-			setLoading(true);
-			setError(null);
+// 		try {
+// 			setLoading(true);
+// 			setError(null);
 
-			const response = await ordersApi.getOrderItems(orderId);
-			setItems(response.data);
-		} catch (err) {
-			const error = err as ApiError;
-			setError(error.message || "Failed to fetch order items");
-			toast({
-				title: "Failed to fetch order items",
-				description: error.message || "Failed to fetch order items",
-				variant: "destructive",
-			});
-		} finally {
-			setLoading(false);
-		}
-	}, [orderId, toast]);
+// 			const response = await ordersApi.getOrderItems(orderId);
+// 			setItems(response.data);
+// 		} catch (err) {
+// 			const error = err as ApiError;
+// 			setError(error.message || "Failed to fetch order items");
+// 			toast({
+// 				title: "Failed to fetch order items",
+// 				description: error.message || "Failed to fetch order items",
+// 				variant: "destructive",
+// 			});
+// 		} finally {
+// 			setLoading(false);
+// 		}
+// 	}, [orderId, toast]);
 
-	useEffect(() => {
-		fetchItems();
-	}, [fetchItems]);
+// 	useEffect(() => {
+// 		fetchItems();
+// 	}, [fetchItems]);
 
-	return {
-		items,
-		loading,
-		error,
-		refresh: fetchItems,
-	};
-}
+// 	return {
+// 		items,
+// 		loading,
+// 		error,
+// 		refresh: fetchItems,
+// 	};
+// }
 
 /**
  * Hook for order mutations (create, cancel, refund)
  */
-export function useOrderMutations() {
-	const [loading, setLoading] = useState(false);
-	const { toast } = useToast();
+// export function useOrderMutations() {
+// 	const [loading, setLoading] = useState(false);
+// 	const { toast } = useToast();
 
-	const createOrder = useCallback(
-		async (data: CreateOrderRequest): Promise<Order | null> => {
-			try {
-				setLoading(true);
-				const response = await ordersApi.createOrder(data);
-				toast({
-					title: "Order created successfully",
-					description: "Order created successfully",
-				});
-				return response.data;
-			} catch (err) {
-				const error = err as ApiError;
-				toast({
-					title: "Failed to create order",
-					description: error.message || "Failed to create order",
-					variant: "destructive",
-				});
-				return null;
-			} finally {
-				setLoading(false);
-			}
-		},
-		[toast],
-	);
+// 	const createOrder = useCallback(
+// 		async (data: CreateOrderRequest): Promise<Order | null> => {
+// 			try {
+// 				setLoading(true);
+// 				const response = await ordersApi.createOrder(data);
+// 				toast({
+// 					title: "Order created successfully",
+// 					description: "Order created successfully",
+// 				});
+// 				return response.data;
+// 			} catch (err) {
+// 				const error = err as ApiError;
+// 				toast({
+// 					title: "Failed to create order",
+// 					description: error.message || "Failed to create order",
+// 					variant: "destructive",
+// 				});
+// 				return null;
+// 			} finally {
+// 				setLoading(false);
+// 			}
+// 		},
+// 		[toast],
+// 	);
 
-	const createOrderFromCart = useCallback(
-		async (data: CreateOrderFromCartRequest): Promise<Order | null> => {
-			try {
-				setLoading(true);
-				const response = await ordersApi.createOrderFromCart(data);
-				toast({
-					title: "Order created from cart successfully",
-					description: "Order created from cart successfully",
-				});
-				return response.data;
-			} catch (err) {
-				const error = err as ApiError;
-				toast({
-					title: "Failed to create order from cart",
-					description: error.message || "Failed to create order from cart",
-					variant: "destructive",
-				});
-				return null;
-			} finally {
-				setLoading(false);
-			}
-		},
-		[toast],
-	);
+// 	const createOrderFromCart = useCallback(
+// 		async (data: CreateOrderFromCartRequest): Promise<Order | null> => {
+// 			try {
+// 				setLoading(true);
+// 				const response = await ordersApi.createOrderFromCart(data);
+// 				toast({
+// 					title: "Order created from cart successfully",
+// 					description: "Order created from cart successfully",
+// 				});
+// 				return response.data;
+// 			} catch (err) {
+// 				const error = err as ApiError;
+// 				toast({
+// 					title: "Failed to create order from cart",
+// 					description: error.message || "Failed to create order from cart",
+// 					variant: "destructive",
+// 				});
+// 				return null;
+// 			} finally {
+// 				setLoading(false);
+// 			}
+// 		},
+// 		[toast],
+// 	);
 
-	const cancelOrder = useCallback(
-		async (orderId: string): Promise<boolean> => {
-			try {
-				setLoading(true);
-				await ordersApi.cancelOrder(orderId);
-				toast({
-					title: "Order cancelled successfully",
-					description: "Order cancelled successfully",
-				});
-				return true;
-			} catch (err) {
-				const error = err as ApiError;
-				toast({
-					title: "Failed to cancel order",
-					description: error.message || "Failed to cancel order",
-					variant: "destructive",
-				});
-				return false;
-			} finally {
-				setLoading(false);
-			}
-		},
-		[toast],
-	);
+// 	const cancelOrder = useCallback(
+// 		async (orderId: string): Promise<boolean> => {
+// 			try {
+// 				setLoading(true);
+// 				await ordersApi.cancelOrder(orderId);
+// 				toast({
+// 					title: "Order cancelled successfully",
+// 					description: "Order cancelled successfully",
+// 				});
+// 				return true;
+// 			} catch (err) {
+// 				const error = err as ApiError;
+// 				toast({
+// 					title: "Failed to cancel order",
+// 					description: error.message || "Failed to cancel order",
+// 					variant: "destructive",
+// 				});
+// 				return false;
+// 			} finally {
+// 				setLoading(false);
+// 			}
+// 		},
+// 		[toast],
+// 	);
 
-	const refundOrder = useCallback(
-		async (orderId: string): Promise<boolean> => {
-			try {
-				setLoading(true);
-				await ordersApi.refundOrder(orderId);
-				toast({
-					title: "Order refunded successfully",
-					description: "Order refunded successfully",
-				});
-				return true;
-			} catch (err) {
-				const error = err as ApiError;
-				toast({
-					title: "Failed to refund order",
-					description: error.message || "Failed to refund order",
-					variant: "destructive",
-				});
-				return false;
-			} finally {
-				setLoading(false);
-			}
-		},
-		[toast],
-	);
+// 	const refundOrder = useCallback(
+// 		async (orderId: string): Promise<boolean> => {
+// 			try {
+// 				setLoading(true);
+// 				await ordersApi.refundOrder(orderId);
+// 				toast({
+// 					title: "Order refunded successfully",
+// 					description: "Order refunded successfully",
+// 				});
+// 				return true;
+// 			} catch (err) {
+// 				const error = err as ApiError;
+// 				toast({
+// 					title: "Failed to refund order",
+// 					description: error.message || "Failed to refund order",
+// 					variant: "destructive",
+// 				});
+// 				return false;
+// 			} finally {
+// 				setLoading(false);
+// 			}
+// 		},
+// 		[toast],
+// 	);
 
-	return {
-		loading,
-		createOrder,
-		createOrderFromCart,
-		cancelOrder,
-		refundOrder,
-	};
-}
+// 	return {
+// 		loading,
+// 		createOrder,
+// 		createOrderFromCart,
+// 		cancelOrder,
+// 		refundOrder,
+// 	};
+// }

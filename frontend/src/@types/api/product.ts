@@ -27,7 +27,6 @@ export interface ProductItem {
 	isSold: boolean;
 	soldAt: string | null;
 }
-
 export interface Category {
 	id: string;
 	name: string;

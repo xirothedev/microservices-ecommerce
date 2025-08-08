@@ -141,7 +141,6 @@ export interface OrdersListResponse extends ApiResponse<OrderListData[]> {
 export interface OrderResponse extends ApiResponse<OrderData> {}
 export interface OrderItemsResponse extends ApiResponse<OrderItem[]> {}
 export interface CreateOrderResponse extends ApiResponse<Order> {}
-
 // Error types
 export interface ApiError {
 	message: string;

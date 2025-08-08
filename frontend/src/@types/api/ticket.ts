@@ -65,7 +65,7 @@ export interface TicketMessageResponse {
 	ticket: {
 		id: string;
 		author: { fullname: string; id: string; avatarUrl: string; lastActiveAt: string | null };
-		assign: { fullname: string; id: string; avatarUrl: string; lastActiveAt: string | null };
+		assign: { fullname: string; id: string; avatarUrl: string; lastActiveAt: string | null } | null;
 	};
 	sender: {
 		user: {

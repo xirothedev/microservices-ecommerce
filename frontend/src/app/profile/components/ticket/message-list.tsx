@@ -47,6 +47,9 @@ export default function MessageList({ ticketId }: MessageListProps) {
 		.flatMap((page) => page.data || [])
 		.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
+	// Get total items from the first page response
+	const totalItems = data?.pages?.[0]?.["@data"]?.totalItems ?? 0;
+
 	const handleFetchPreviousPage = () => {
 		if (scrollableRef.current) {
 			// Before fetching, save the current scroll state
@@ -96,7 +99,7 @@ export default function MessageList({ ticketId }: MessageListProps) {
 			next={handleFetchPreviousPage}
 			hasMore={!!hasPreviousPage}
 			loader={<MessageLoading />}
-			endMessage={<MessageEnded />}
+			endMessage={totalItems > PAGE_SIZE ? <MessageEnded /> : null}
 			scrollThreshold={0.8}
 			inverse={true}
 			scrollableTarget="scrollableDiv"
@@ -104,7 +107,7 @@ export default function MessageList({ ticketId }: MessageListProps) {
 		>
 			<div className="space-y-0">
 				{messages.map((message, index) => {
-					const isAgent = message.sender.user.id === message.ticket.assign.id;
+					const isAgent = message.sender.user.id === message.ticket.assign?.id;
 
 					// Since messages are sorted chronologically, we can use simple index logic
 					const prevMessage = messages[index - 1]; // Previous (older) message
