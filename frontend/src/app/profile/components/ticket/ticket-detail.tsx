@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { useUserQuery } from "@/lib/api/user";
 import axiosInstance from "@/lib/axios";
 import { IAxiosError } from "@/@types";
-import { TicketResponse } from "@/@types/backend";
+import { TicketContextType, TicketResponse } from "@/@types/api/ticket";
 import { useQuery } from "@tanstack/react-query";
 import {
 	AlertCircle,
@@ -92,10 +92,10 @@ const priorityConfig = {
 };
 
 const contextIcons = {
-	order: "🛒",
-	product: "📦",
-	transaction: "💳",
-	account: "👤",
+	ORDER: "🛒",
+	PRODUCT: "📦",
+	TRANSACTION: "💳",
+	ACCOUNT: "👤",
 };
 
 export default function TicketDetail({ ticketId }: TicketDetailProps) {
@@ -226,7 +226,7 @@ export default function TicketDetail({ ticketId }: TicketDetailProps) {
 									<div className="flex flex-wrap gap-2">
 										{data.contexts.map((context, index) => (
 											<Badge key={index} variant="outline" className="flex items-center gap-1">
-												<span>{contextIcons[context.type as keyof typeof contextIcons]}</span>
+												<span>{contextIcons[context.type as TicketContextType]}</span>
 												{context.label}
 											</Badge>
 										))}

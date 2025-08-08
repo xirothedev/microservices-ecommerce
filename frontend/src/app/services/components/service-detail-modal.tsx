@@ -6,7 +6,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCart } from "@/lib/api/cart";
-import { ProductWithAverageRating } from "@/@types/backend";
+import { ProductFlag, ProductWithAverageRating } from "@/@types/api/product";
 import { Check, Heart, Minus, Plus, ShoppingCart, Star } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
@@ -59,7 +59,7 @@ export default function ServiceDetailModal({ service, isOpen, onClose, isAddingT
 
 											{/* Badges */}
 											<div className="absolute top-4 left-4 z-10 flex gap-2">
-												{service.flags.includes("POPULAR") && (
+												{service.flags.includes(ProductFlag.POPULAR) && (
 													<Badge className="bg-red-500 text-white">Popular</Badge>
 												)}
 												{discount > 0 && (

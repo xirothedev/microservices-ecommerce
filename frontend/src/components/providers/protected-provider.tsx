@@ -2,13 +2,13 @@
 
 import { useUserQuery } from "@/lib/api/user";
 import { setProtectedContext } from "@/lib/refresh-token";
-import { UserRole } from "@/@types/backend";
+import { UserRole } from "@/@types/api/user";
 import { forbidden, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function ProtectedProvider({
 	children,
-	roles = ["USER"],
+	roles = [UserRole.USER],
 }: {
 	children: React.ReactNode;
 	roles?: UserRole[];

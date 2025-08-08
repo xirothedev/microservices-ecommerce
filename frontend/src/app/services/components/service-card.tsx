@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useCart, useUpdateCart } from "@/lib/api/cart";
-import { ProductWithAverageRating } from "@/@types/backend";
+import { ProductFlag, ProductWithAverageRating } from "@/@types/api/product";
 import { Eye, ShoppingCart, Star } from "lucide-react";
 import { motion } from "motion/react";
 import Image from "next/image";
@@ -50,7 +50,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 
 						{/* Overlays */}
 						<div className="absolute top-3 left-3 flex gap-2">
-							{service.flags.includes("POPULAR") && (
+							{service.flags.includes(ProductFlag.POPULAR) && (
 								<Badge className="bg-red-500 text-white">Popular</Badge>
 							)}
 							{discount > 0 && <Badge className="bg-green-500 text-white">{discount}% OFF</Badge>}

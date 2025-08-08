@@ -1,4 +1,25 @@
-import type { CartItemWithProduct } from "@/@types/backend";
+import { ProductWithCategory } from "./product";
+
+export interface CartItem {
+	id: string;
+	createdAt: string;
+	updatedAt: string;
+	quantity: number;
+	productId: string;
+	userId: string;
+}
+
+export interface CartItemDetail extends CartItem {
+	title: string;
+	price: number;
+	image: string | null;
+	category: string;
+}
+
+export interface CartItemWithProduct extends CartItem {
+	product: ProductWithCategory;
+	productId: string;
+}
 
 // Base API response interface
 export interface ApiResponse<T> {
@@ -27,6 +48,7 @@ export interface CartItemGQL {
 	quantity: number;
 	createdAt: string;
 	updatedAt: string;
+	userId: string;
 	product: {
 		id: string;
 		name: string;
@@ -37,15 +59,4 @@ export interface CartItemGQL {
 			name: string;
 		};
 	};
-}
-
-// Transformed cart item for UI components
-export interface CartItem {
-	id: string;
-	title: string;
-	price: number;
-	quantity: number;
-	image: string | null;
-	category: string;
-	productId: string;
 }

@@ -1,5 +1,7 @@
 "use client";
 
+import { IAxiosError } from "@/@types";
+import { TicketResponse } from "@/@types/api/ticket";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,11 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useDebounce } from "@/hooks/use-debounce";
 import axiosInstance from "@/lib/axios";
 import { formatDate } from "@/lib/format";
-import { IAxiosError } from "@/@types";
-import { TicketResponse } from "@/@types/backend";
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { TicketSocketEvents, useTicketSocket } from "@/lib/ws/ticket";
+import { getFallbackString } from "@/lib/utils";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
 	AlertCircle,
 	ArrowRight,
@@ -27,8 +26,8 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
+import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { getFallbackString } from "@/lib/utils";
 
 const PAGE_SIZE = 10;
 
@@ -53,8 +52,6 @@ export default function TicketHistory() {
 	const [priorityFilter, setPriorityFilter] = useState<string>("all");
 
 	const debouncedSearchQuery = useDebounce(searchQuery, 500);
-	const queryClient = useQueryClient();
-	const ticketSocket = useTicketSocket();
 
 	const { data, isLoading, isError, fetchNextPage, hasNextPage, refetch } = useInfiniteQuery<
 		{

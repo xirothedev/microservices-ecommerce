@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "@/hooks/use-toast";
 import axiosInstance from "@/lib/axios";
 import { IAxiosError } from "@/@types";
-import { Ticket, TicketCategory, TicketPriority } from "@/@types/backend";
+import { Ticket, TicketCategory, TicketPriority } from "@/@types/api/ticket";
 import { TicketInput, ticketSchema } from "@/zods/ticket";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -23,19 +23,19 @@ import ImageUpload from "./image-upload";
 import RichTextEditor from "./rich-text-editor";
 
 const categories: { value: TicketCategory; label: string }[] = [
-	{ value: "TECHNICAL_SUPPORT", label: "Technical Support" },
-	{ value: "BILLING_PAYMENT", label: "Billing & Payment" },
-	{ value: "ACCOUNT_ISSUE", label: "Account Issues" },
-	{ value: "SERVICE_REQUEST", label: "Service Request" },
-	{ value: "REFUND_REQUEST", label: "Refund Request" },
-	{ value: "GENERAL_INQUIRY", label: "General Inquiry" },
+	{ value: TicketCategory.TECHNICAL_SUPPORT, label: "Technical Support" },
+	{ value: TicketCategory.BILLING_PAYMENT, label: "Billing & Payment" },
+	{ value: TicketCategory.ACCOUNT_ISSUE, label: "Account Issues" },
+	{ value: TicketCategory.SERVICE_REQUEST, label: "Service Request" },
+	{ value: TicketCategory.REFUND_REQUEST, label: "Refund Request" },
+	{ value: TicketCategory.GENERAL_INQUIRY, label: "General Inquiry" },
 ];
 
 const priorities: { value: TicketPriority; label: string; description: string }[] = [
-	{ value: "LOW", label: "Low", description: "General questions, non-urgent" },
-	{ value: "MEDIUM", label: "Medium", description: "Standard support request" },
-	{ value: "HIGH", label: "High", description: "Important issue affecting service" },
-	{ value: "URGENT", label: "Urgent", description: "Critical issue, service down" },
+	{ value: TicketPriority.LOW, label: "Low", description: "General questions, non-urgent" },
+	{ value: TicketPriority.MEDIUM, label: "Medium", description: "Standard support request" },
+	{ value: TicketPriority.HIGH, label: "High", description: "Important issue affecting service" },
+	{ value: TicketPriority.URGENT, label: "Urgent", description: "Critical issue, service down" },
 ];
 
 export default function TicketForm() {
@@ -71,8 +71,8 @@ export default function TicketForm() {
 		resolver: zodResolver(ticketSchema),
 		defaultValues: {
 			title: "",
-			category: undefined,
-			priority: "MEDIUM",
+			category: TicketCategory.GENERAL_INQUIRY,
+			priority: TicketPriority.MEDIUM,
 			description: "",
 			contexts: [],
 			attachments: [],

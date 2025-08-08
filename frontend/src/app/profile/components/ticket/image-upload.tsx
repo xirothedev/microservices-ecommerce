@@ -129,7 +129,7 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 					);
 
 					return uploadingFile.file;
-				} catch (error) {
+				} catch {
 					setUploadingFiles((prev) =>
 						prev.map((f) => (f.file === uploadingFile.file ? { ...f, status: "error" as const } : f)),
 					);

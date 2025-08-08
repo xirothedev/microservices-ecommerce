@@ -36,6 +36,13 @@ export default function RichTextEditor({
 	const [isActive, setIsActive] = useState(false);
 	const editorRef = useRef<HTMLDivElement>(null);
 
+	const updateContent = useCallback(() => {
+		if (editorRef.current) {
+			const content = editorRef.current.innerHTML;
+			onChange(content);
+		}
+	}, [onChange]);
+
 	const applyFormat = useCallback(
 		(format: string, value?: string) => {
 			if (disabled || !editorRef.current) return;
@@ -88,15 +95,8 @@ export default function RichTextEditor({
 
 			updateContent();
 		},
-		[disabled],
+		[disabled, updateContent],
 	);
-
-	const updateContent = useCallback(() => {
-		if (editorRef.current) {
-			const content = editorRef.current.innerHTML;
-			onChange(content);
-		}
-	}, [onChange]);
 
 	const handleInput = useCallback(() => {
 		updateContent();

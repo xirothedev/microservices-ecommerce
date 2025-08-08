@@ -1,4 +1,6 @@
-import { TicketMessageResponse, TicketResponse } from "@/@types/backend";
+/* eslint-disable react-hooks/exhaustive-deps */
+
+import { TicketMessageResponse, TicketResponse } from "@/@types/api/ticket";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";

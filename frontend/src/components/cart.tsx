@@ -1,11 +1,11 @@
 "use client";
 
+import { CartItemGQL } from "@/@types/api/cart";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useCart, useUpdateCart } from "@/lib/api/cart";
-import { CartItemWithProduct } from "@/@types/backend";
 import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
@@ -18,7 +18,7 @@ interface CartProps {
 
 // Tách CartItem thành component riêng để tránh re-render không cần thiết
 interface CartItemProps {
-	item: CartItemWithProduct;
+	item: CartItemGQL;
 	addMutate: (params: { productId: string; quantity: number }) => Promise<any>;
 	removeMutate: (params: { productId: string; quantity: number }) => Promise<any>;
 	addPending: boolean;

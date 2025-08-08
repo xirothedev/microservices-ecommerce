@@ -4,7 +4,7 @@ import { useDebounce } from "@/hooks/use-debounce";
 import axiosInstance from "@/lib/axios";
 import { useFilterStore } from "@/store/use-filter-store";
 import { IAxiosError } from "@/@types";
-import { ProductWithAverageRating } from "@/@types/backend";
+import { ProductWithAverageRating } from "@/@types/api/product";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import InfiniteScroll from "react-infinite-scroll-component";

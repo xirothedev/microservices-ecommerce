@@ -1,8 +1,8 @@
-import axiosInstance from "@/lib/axios";
+import { CartItemDetail, CartItemsQueryResponse, UpdateCartRequest, UpdateCartResponse } from "@/@types/api/cart";
 import { toast } from "@/hooks/use-toast";
-import { useMutation } from "@tanstack/react-query";
+import axiosInstance from "@/lib/axios";
 import { gql, useQuery } from "@apollo/client";
-import { UpdateCartRequest, UpdateCartResponse, CartItemsQueryResponse, CartItem } from "./types/cart";
+import { useMutation } from "@tanstack/react-query";
 
 class CartApi {
 	/**
@@ -83,6 +83,7 @@ export function useCart() {
 					quantity
 					createdAt
 					updatedAt
+					userId
 					product {
 						id
 						name
@@ -114,21 +115,18 @@ export function useCart() {
 	);
 
 	// Transform GraphQL data to expected format with stable sorting
-	const items: CartItem[] = (queryResult.data?.cartItems || [])
-		.slice() // Create a copy to avoid mutating the original array
-		.sort((a, b) => {
-			// Sort by createdAt (oldest first) to maintain stable order
-			return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-		})
-		.map((cartItem) => ({
-			id: cartItem.id,
-			title: cartItem.product.name,
-			price: cartItem.product.discountPrice,
-			quantity: cartItem.quantity,
-			image: cartItem.product.medias[0] || null,
-			category: cartItem.product.category.name,
-			productId: cartItem.productId,
-		}));
+	const items: CartItemDetail[] = (queryResult.data?.cartItems || []).map((cartItem) => ({
+		id: cartItem.id,
+		title: cartItem.product.name,
+		price: cartItem.product.discountPrice,
+		quantity: cartItem.quantity,
+		image: cartItem.product.medias[0] || null,
+		category: cartItem.product.category.name,
+		productId: cartItem.productId,
+		createdAt: cartItem.createdAt,
+		updatedAt: cartItem.updatedAt,
+		userId: cartItem.userId,
+	}));
 
 	// Utility functions
 	const getTotalItems = () => {

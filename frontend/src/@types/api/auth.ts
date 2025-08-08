@@ -1,6 +1,6 @@
-import type { SafeUser } from "@/@types/backend";
 import type { LoginForm } from "@/zods/login";
 import type { SignUpForm } from "@/zods/signup";
+import { SafeUser } from "./user";
 
 // Base API response interface
 export interface ApiResponse<T> {

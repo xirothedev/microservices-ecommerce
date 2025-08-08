@@ -16,7 +16,7 @@ import {
 	OrderItem,
 	OrderListData,
 	OrderData,
-} from "@/@types/api/orders";
+} from "@/@types/api/order";
 
 class OrdersApi {
 	/**

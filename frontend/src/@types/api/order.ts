@@ -1,4 +1,4 @@
-import { Category, ProductItem } from "../backend";
+import { ProductItem } from "./product";
 
 // Order related types
 export interface OrderItem {

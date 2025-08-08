@@ -1,14 +1,13 @@
 "use client";
 
+import { IAxiosError } from "@/@types";
+import { TicketMessageResponse } from "@/@types/api/ticket";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { useUserQuery } from "@/lib/api/user";
 import axiosInstance from "@/lib/axios";
-import { useTicketMessageSocket } from "@/lib/ws/ticket";
 import { getFallbackString } from "@/lib/utils";
-import { IAxiosError } from "@/@types";
-import { TicketMessageResponse } from "@/@types/backend";
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useTicketMessageSocket } from "@/lib/ws/ticket";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useLayoutEffect, useRef } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";

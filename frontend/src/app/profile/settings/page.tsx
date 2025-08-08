@@ -40,13 +40,6 @@ export default function AccountSettings() {
 			{
 				onSuccess(data) {
 					setSettings(data);
-
-					// If disabling a primary notification and no primary notifications will be left,
-					// automatically disable all other notification types
-					if ((key === "emailNotifications" || key === "browserNotifications") && !checked) {
-						const otherPrimaryType =
-							key === "emailNotifications" ? "browserNotifications" : "emailNotifications";
-					}
 				},
 			},
 		);
@@ -150,7 +143,11 @@ export default function AccountSettings() {
 										</p>
 									</div>
 									<Switch
-										checked={settings?.[settingKey] || false}
+										checked={
+											typeof settings?.[settingKey] === "boolean"
+												? (settings[settingKey] as boolean)
+												: false
+										}
 										onCheckedChange={(checked) => handleSettingUpdate(settingKey, checked)}
 										disabled={isDisabled || isOtherNotificationDisabled}
 									/>

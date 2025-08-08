@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback, ChangeEvent, KeyboardEvent } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { Send, Paperclip, ImageIcon, X, Loader2, Smile, Bold, Italic } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
 import { useThrottle } from "@/hooks/use-throttle";
+import { Bold, ImageIcon, Italic, Loader2, Paperclip, Send, Smile, X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
 
 interface MessageInputProps {
 	onSendMessage: (content: string, attachments?: File[]) => Promise<void>;

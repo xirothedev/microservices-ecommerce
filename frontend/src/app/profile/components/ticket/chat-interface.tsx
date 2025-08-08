@@ -45,7 +45,7 @@ export default function ChatInterface({ ticketId, displayUser, displayUserStatus
 			formData.append("content", content);
 			formData.append("hasAttachments", attachments && attachments.length > 0 ? "true" : "false");
 
-			attachments?.forEach((file, index) => {
+			attachments?.forEach((file) => {
 				formData.append("attachments", file);
 			});
 
