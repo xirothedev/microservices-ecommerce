@@ -9,7 +9,7 @@ import Navbar from "@/components/navbar";
 export default function Home() {
 	return (
 		<>
-			<Navbar
+			{/* <Navbar
 				navItems={[
 					{ name: "Home", href: "/" },
 					{ name: "Services", href: "#services" },
@@ -17,7 +17,7 @@ export default function Home() {
 					{ name: "About", href: "#about" },
 					{ name: "Contact", href: "#contact" },
 				]}
-			/>
+			/> */}
 			<main className="min-h-screen">
 				<Hero />
 				<Services />

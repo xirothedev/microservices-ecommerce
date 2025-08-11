@@ -1,5 +1,6 @@
 import ClickSpark from "@/components/click-spark";
 import { CookieConsent } from "@/components/cookie-consent";
+import Header from "@/components/header";
 import QueryProvider from "@/components/providers/query-provider";
 import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 			<body className={inter.className}>
 				<QueryProvider>
 					<ClickSpark sparkColor="#f9fafb" sparkSize={10} sparkRadius={15} sparkCount={8} duration={400}>
+						<Header />
 						{children}
 						<CookieConsent />
 						<Toaster />
