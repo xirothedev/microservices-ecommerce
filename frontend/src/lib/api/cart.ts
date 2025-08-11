@@ -87,6 +87,7 @@ export function useCart() {
 					product {
 						id
 						name
+						isActive
 						discountPrice
 						medias
 						category {
@@ -105,11 +106,17 @@ export function useCart() {
 			ssr: true,
 			onError: (error) => {
 				console.error("Error fetching cart items:", error);
-				toast({
-					title: "Error",
-					description: "Could not load your cart. Please try again.",
-					variant: "destructive",
-				});
+				if (error.graphQLErrors) {
+					error.graphQLErrors.forEach((err) => {
+						if (err.extensions?.code !== "UNAUTHENTICATED") {
+							toast({
+								title: "Error",
+								description: "Could not load your cart. Please try again.",
+								variant: "destructive",
+							});
+						}
+					});
+				}
 			},
 		},
 	);
@@ -120,6 +127,7 @@ export function useCart() {
 		title: cartItem.product.name,
 		price: cartItem.product.discountPrice,
 		quantity: cartItem.quantity,
+		isActive: cartItem.product.isActive,
 		image: cartItem.product.medias[0] || null,
 		category: cartItem.product.category.name,
 		productId: cartItem.productId,

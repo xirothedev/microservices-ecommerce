@@ -54,6 +54,7 @@ export interface CartItemGQL {
 		name: string;
 		discountPrice: number;
 		medias: string[];
+		isActive: boolean;
 		category: {
 			id: string;
 			name: string;

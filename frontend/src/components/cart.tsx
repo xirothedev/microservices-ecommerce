@@ -10,6 +10,7 @@ import { Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import { Dispatch, SetStateAction, memo, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface CartProps {
 	isOpen: boolean;
@@ -92,6 +93,7 @@ const CartItem = memo(({ item, addMutate, removeMutate, addPending, removePendin
 CartItem.displayName = "CartItem";
 
 export default function Cart({ isOpen, setIsOpen }: CartProps) {
+	const router = useRouter();
 	const [isCheckingOut, setIsCheckingOut] = useState(false);
 	const { data, refetch, loading } = useCart();
 	const { mutateAsync: addMutate, isPending: addPending } = useUpdateCart(false, refetch);
@@ -99,11 +101,9 @@ export default function Cart({ isOpen, setIsOpen }: CartProps) {
 
 	const handleCheckout = async () => {
 		setIsCheckingOut(true);
-		// Simulate checkout process
-		await new Promise((resolve) => setTimeout(resolve, 2000));
-		setIsCheckingOut(false);
-		// In a real app, you would navigate to checkout page or process payment
-		alert("Checkout functionality would be implemented here!");
+		// Close cart and redirect to payment page
+		setIsOpen(false);
+		router.push("/payment");
 	};
 
 	const toggleCart = () => setIsOpen(!isOpen);

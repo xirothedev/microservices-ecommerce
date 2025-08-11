@@ -206,7 +206,12 @@ export class ProductsService {
     }
 
     // Build Prisma where clause for filtering
-    const where: Prisma.ProductWhereInput = {};
+    const where: Prisma.ProductWhereInput = {
+      isActive: true,
+      stock: {
+        gt: 0,
+      },
+    };
     if (categoryId && categoryId !== 'all') {
       where.categoryId = categoryId;
     }
@@ -237,7 +242,7 @@ export class ProductsService {
           },
         },
       },
-      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+      orderBy: [{ sold: 'desc' }, { createdAt: 'desc' }, { id: 'desc' }],
       take: take + 1,
       skip,
       ...(cursorObj && { cursor: cursorObj }),
