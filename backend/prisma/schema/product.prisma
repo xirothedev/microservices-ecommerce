@@ -15,6 +15,7 @@ model Product {
   tags          String[]      @db.VarChar(100)
   medias        String[]      @db.VarChar(500)
   isVerified    Boolean       @default(false) @map("is_verified")
+  service       ServiceType  @default(OTHER)
 
   categoryId   String        @map("category_id") @db.Uuid
   category     Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
@@ -75,4 +76,33 @@ enum ProductFlag {
   POPULAR
 
   @@map("product_flag")
+}
+
+enum ServiceType {
+  YOUTUBE
+  NETFLIX
+  SPOTIFY
+  DISNEY_PLUS
+  APPLE_TV
+  AMAZON_PRIME
+  HBO_MAX
+  HULU
+  PARAMOUNT_PLUS
+  CRUNCHYROLL
+  FUNIMATION
+  TWITCH
+  DISCORD_NITRO
+  STEAM
+  XBOX_GAME_PASS
+  PLAYSTATION_PLUS
+  NINTENDO_ONLINE
+  ADOBE_CREATIVE_CLOUD
+  MICROSOFT_365
+  GOOGLE_WORKSPACE
+  NOTION
+  FIGMA
+  CANVA_PRO
+  OTHER
+
+  @@map("service_type")
 }

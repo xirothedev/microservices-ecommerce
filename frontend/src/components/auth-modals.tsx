@@ -44,8 +44,7 @@ export default function AuthModal({ isOpen, onClose, mode, setMode }: AuthModalP
 	};
 
 	const handleSocialLogin = (provider: "google" | "discord") => {
-		console.log(`Logging in with ${provider}`);
-		// Handle social login here
+		window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/${provider}/login`;
 	};
 
 	return (

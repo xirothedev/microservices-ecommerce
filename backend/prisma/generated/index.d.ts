@@ -143,6 +143,35 @@ export namespace $Enums {
 
   export type ProductFlag = (typeof ProductFlag)[keyof typeof ProductFlag];
 
+  export const ServiceType: {
+    YOUTUBE: 'YOUTUBE';
+    NETFLIX: 'NETFLIX';
+    SPOTIFY: 'SPOTIFY';
+    DISNEY_PLUS: 'DISNEY_PLUS';
+    APPLE_TV: 'APPLE_TV';
+    AMAZON_PRIME: 'AMAZON_PRIME';
+    HBO_MAX: 'HBO_MAX';
+    HULU: 'HULU';
+    PARAMOUNT_PLUS: 'PARAMOUNT_PLUS';
+    CRUNCHYROLL: 'CRUNCHYROLL';
+    FUNIMATION: 'FUNIMATION';
+    TWITCH: 'TWITCH';
+    DISCORD_NITRO: 'DISCORD_NITRO';
+    STEAM: 'STEAM';
+    XBOX_GAME_PASS: 'XBOX_GAME_PASS';
+    PLAYSTATION_PLUS: 'PLAYSTATION_PLUS';
+    NINTENDO_ONLINE: 'NINTENDO_ONLINE';
+    ADOBE_CREATIVE_CLOUD: 'ADOBE_CREATIVE_CLOUD';
+    MICROSOFT_365: 'MICROSOFT_365';
+    GOOGLE_WORKSPACE: 'GOOGLE_WORKSPACE';
+    NOTION: 'NOTION';
+    FIGMA: 'FIGMA';
+    CANVA_PRO: 'CANVA_PRO';
+    OTHER: 'OTHER';
+  };
+
+  export type ServiceType = (typeof ServiceType)[keyof typeof ServiceType];
+
   export const UserRole: {
     ROOT: 'ROOT';
     ADMINISTRATOR: 'ADMINISTRATOR';
@@ -262,6 +291,10 @@ export const MfaType: typeof $Enums.MfaType;
 export type ProductFlag = $Enums.ProductFlag;
 
 export const ProductFlag: typeof $Enums.ProductFlag;
+
+export type ServiceType = $Enums.ServiceType;
+
+export const ServiceType: typeof $Enums.ServiceType;
 
 export type UserRole = $Enums.UserRole;
 
@@ -10629,6 +10662,7 @@ export namespace Prisma {
     originalPrice: number | null;
     discountPrice: number | null;
     isVerified: boolean | null;
+    service: $Enums.ServiceType | null;
     categoryId: string | null;
     sellerId: string | null;
   };
@@ -10647,6 +10681,7 @@ export namespace Prisma {
     originalPrice: number | null;
     discountPrice: number | null;
     isVerified: boolean | null;
+    service: $Enums.ServiceType | null;
     categoryId: string | null;
     sellerId: string | null;
   };
@@ -10668,6 +10703,7 @@ export namespace Prisma {
     tags: number;
     medias: number;
     isVerified: number;
+    service: number;
     categoryId: number;
     sellerId: number;
     _all: number;
@@ -10701,6 +10737,7 @@ export namespace Prisma {
     originalPrice?: true;
     discountPrice?: true;
     isVerified?: true;
+    service?: true;
     categoryId?: true;
     sellerId?: true;
   };
@@ -10719,6 +10756,7 @@ export namespace Prisma {
     originalPrice?: true;
     discountPrice?: true;
     isVerified?: true;
+    service?: true;
     categoryId?: true;
     sellerId?: true;
   };
@@ -10740,6 +10778,7 @@ export namespace Prisma {
     tags?: true;
     medias?: true;
     isVerified?: true;
+    service?: true;
     categoryId?: true;
     sellerId?: true;
     _all?: true;
@@ -10845,6 +10884,7 @@ export namespace Prisma {
     tags: string[];
     medias: string[];
     isVerified: boolean;
+    service: $Enums.ServiceType;
     categoryId: string;
     sellerId: string;
     _count: ProductCountAggregateOutputType | null;
@@ -10884,6 +10924,7 @@ export namespace Prisma {
       tags?: boolean;
       medias?: boolean;
       isVerified?: boolean;
+      service?: boolean;
       categoryId?: boolean;
       sellerId?: boolean;
       category?: boolean | CategoryDefaultArgs<ExtArgs>;
@@ -10916,6 +10957,7 @@ export namespace Prisma {
         tags?: boolean;
         medias?: boolean;
         isVerified?: boolean;
+        service?: boolean;
         categoryId?: boolean;
         sellerId?: boolean;
         category?: boolean | CategoryDefaultArgs<ExtArgs>;
@@ -10943,6 +10985,7 @@ export namespace Prisma {
         tags?: boolean;
         medias?: boolean;
         isVerified?: boolean;
+        service?: boolean;
         categoryId?: boolean;
         sellerId?: boolean;
         category?: boolean | CategoryDefaultArgs<ExtArgs>;
@@ -10968,6 +11011,7 @@ export namespace Prisma {
     tags?: boolean;
     medias?: boolean;
     isVerified?: boolean;
+    service?: boolean;
     categoryId?: boolean;
     sellerId?: boolean;
   };
@@ -10989,6 +11033,7 @@ export namespace Prisma {
     | 'tags'
     | 'medias'
     | 'isVerified'
+    | 'service'
     | 'categoryId'
     | 'sellerId',
     ExtArgs['result']['product']
@@ -11039,6 +11084,7 @@ export namespace Prisma {
         tags: string[];
         medias: string[];
         isVerified: boolean;
+        service: $Enums.ServiceType;
         categoryId: string;
         sellerId: string;
       },
@@ -11598,6 +11644,7 @@ export namespace Prisma {
     readonly tags: FieldRef<'Product', 'String[]'>;
     readonly medias: FieldRef<'Product', 'String[]'>;
     readonly isVerified: FieldRef<'Product', 'Boolean'>;
+    readonly service: FieldRef<'Product', 'ServiceType'>;
     readonly categoryId: FieldRef<'Product', 'String'>;
     readonly sellerId: FieldRef<'Product', 'String'>;
   }
@@ -22801,10 +22848,10 @@ export namespace Prisma {
     emailNotifications: boolean | null;
     browserNotifications: boolean | null;
     ticketNotifications: boolean | null;
+    suggestedProducts: boolean | null;
     promotionNotifications: boolean | null;
     priceChangesNotifications: boolean | null;
     loginNotifications: boolean | null;
-    suggestedProducts: boolean | null;
     restockNotifications: boolean | null;
     updatedAt: Date | null;
   };
@@ -22814,10 +22861,10 @@ export namespace Prisma {
     emailNotifications: boolean | null;
     browserNotifications: boolean | null;
     ticketNotifications: boolean | null;
+    suggestedProducts: boolean | null;
     promotionNotifications: boolean | null;
     priceChangesNotifications: boolean | null;
     loginNotifications: boolean | null;
-    suggestedProducts: boolean | null;
     restockNotifications: boolean | null;
     updatedAt: Date | null;
   };
@@ -22827,10 +22874,10 @@ export namespace Prisma {
     emailNotifications: number;
     browserNotifications: number;
     ticketNotifications: number;
+    suggestedProducts: number;
     promotionNotifications: number;
     priceChangesNotifications: number;
     loginNotifications: number;
-    suggestedProducts: number;
     restockNotifications: number;
     updatedAt: number;
     _all: number;
@@ -22841,10 +22888,10 @@ export namespace Prisma {
     emailNotifications?: true;
     browserNotifications?: true;
     ticketNotifications?: true;
+    suggestedProducts?: true;
     promotionNotifications?: true;
     priceChangesNotifications?: true;
     loginNotifications?: true;
-    suggestedProducts?: true;
     restockNotifications?: true;
     updatedAt?: true;
   };
@@ -22854,10 +22901,10 @@ export namespace Prisma {
     emailNotifications?: true;
     browserNotifications?: true;
     ticketNotifications?: true;
+    suggestedProducts?: true;
     promotionNotifications?: true;
     priceChangesNotifications?: true;
     loginNotifications?: true;
-    suggestedProducts?: true;
     restockNotifications?: true;
     updatedAt?: true;
   };
@@ -22867,10 +22914,10 @@ export namespace Prisma {
     emailNotifications?: true;
     browserNotifications?: true;
     ticketNotifications?: true;
+    suggestedProducts?: true;
     promotionNotifications?: true;
     priceChangesNotifications?: true;
     loginNotifications?: true;
-    suggestedProducts?: true;
     restockNotifications?: true;
     updatedAt?: true;
     _all?: true;
@@ -22950,10 +22997,10 @@ export namespace Prisma {
     emailNotifications: boolean;
     browserNotifications: boolean;
     ticketNotifications: boolean;
+    suggestedProducts: boolean;
     promotionNotifications: boolean;
     priceChangesNotifications: boolean;
     loginNotifications: boolean;
-    suggestedProducts: boolean;
     restockNotifications: boolean;
     updatedAt: Date;
     _count: SettingCountAggregateOutputType | null;
@@ -22979,10 +23026,10 @@ export namespace Prisma {
       emailNotifications?: boolean;
       browserNotifications?: boolean;
       ticketNotifications?: boolean;
+      suggestedProducts?: boolean;
       promotionNotifications?: boolean;
       priceChangesNotifications?: boolean;
       loginNotifications?: boolean;
-      suggestedProducts?: boolean;
       restockNotifications?: boolean;
       updatedAt?: boolean;
       user?: boolean | UserDefaultArgs<ExtArgs>;
@@ -22997,10 +23044,10 @@ export namespace Prisma {
         emailNotifications?: boolean;
         browserNotifications?: boolean;
         ticketNotifications?: boolean;
+        suggestedProducts?: boolean;
         promotionNotifications?: boolean;
         priceChangesNotifications?: boolean;
         loginNotifications?: boolean;
-        suggestedProducts?: boolean;
         restockNotifications?: boolean;
         updatedAt?: boolean;
         user?: boolean | UserDefaultArgs<ExtArgs>;
@@ -23015,10 +23062,10 @@ export namespace Prisma {
         emailNotifications?: boolean;
         browserNotifications?: boolean;
         ticketNotifications?: boolean;
+        suggestedProducts?: boolean;
         promotionNotifications?: boolean;
         priceChangesNotifications?: boolean;
         loginNotifications?: boolean;
-        suggestedProducts?: boolean;
         restockNotifications?: boolean;
         updatedAt?: boolean;
         user?: boolean | UserDefaultArgs<ExtArgs>;
@@ -23031,10 +23078,10 @@ export namespace Prisma {
     emailNotifications?: boolean;
     browserNotifications?: boolean;
     ticketNotifications?: boolean;
+    suggestedProducts?: boolean;
     promotionNotifications?: boolean;
     priceChangesNotifications?: boolean;
     loginNotifications?: boolean;
-    suggestedProducts?: boolean;
     restockNotifications?: boolean;
     updatedAt?: boolean;
   };
@@ -23044,10 +23091,10 @@ export namespace Prisma {
     | 'emailNotifications'
     | 'browserNotifications'
     | 'ticketNotifications'
+    | 'suggestedProducts'
     | 'promotionNotifications'
     | 'priceChangesNotifications'
     | 'loginNotifications'
-    | 'suggestedProducts'
     | 'restockNotifications'
     | 'updatedAt',
     ExtArgs['result']['setting']
@@ -23073,10 +23120,10 @@ export namespace Prisma {
         emailNotifications: boolean;
         browserNotifications: boolean;
         ticketNotifications: boolean;
+        suggestedProducts: boolean;
         promotionNotifications: boolean;
         priceChangesNotifications: boolean;
         loginNotifications: boolean;
-        suggestedProducts: boolean;
         restockNotifications: boolean;
         updatedAt: Date;
       },
@@ -23598,10 +23645,10 @@ export namespace Prisma {
     readonly emailNotifications: FieldRef<'Setting', 'Boolean'>;
     readonly browserNotifications: FieldRef<'Setting', 'Boolean'>;
     readonly ticketNotifications: FieldRef<'Setting', 'Boolean'>;
+    readonly suggestedProducts: FieldRef<'Setting', 'Boolean'>;
     readonly promotionNotifications: FieldRef<'Setting', 'Boolean'>;
     readonly priceChangesNotifications: FieldRef<'Setting', 'Boolean'>;
     readonly loginNotifications: FieldRef<'Setting', 'Boolean'>;
-    readonly suggestedProducts: FieldRef<'Setting', 'Boolean'>;
     readonly restockNotifications: FieldRef<'Setting', 'Boolean'>;
     readonly updatedAt: FieldRef<'Setting', 'DateTime'>;
   }
@@ -29252,6 +29299,7 @@ export namespace Prisma {
     tags: 'tags';
     medias: 'medias';
     isVerified: 'isVerified';
+    service: 'service';
     categoryId: 'categoryId';
     sellerId: 'sellerId';
   };
@@ -29386,10 +29434,10 @@ export namespace Prisma {
     emailNotifications: 'emailNotifications';
     browserNotifications: 'browserNotifications';
     ticketNotifications: 'ticketNotifications';
+    suggestedProducts: 'suggestedProducts';
     promotionNotifications: 'promotionNotifications';
     priceChangesNotifications: 'priceChangesNotifications';
     loginNotifications: 'loginNotifications';
-    suggestedProducts: 'suggestedProducts';
     restockNotifications: 'restockNotifications';
     updatedAt: 'updatedAt';
   };
@@ -29548,6 +29596,16 @@ export namespace Prisma {
    * Reference to a field of type 'ProductFlag'
    */
   export type EnumProductFlagFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductFlag'>;
+
+  /**
+   * Reference to a field of type 'ServiceType'
+   */
+  export type EnumServiceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ServiceType'>;
+
+  /**
+   * Reference to a field of type 'ServiceType[]'
+   */
+  export type ListEnumServiceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ServiceType[]'>;
 
   /**
    * Reference to a field of type 'Decimal'
@@ -30138,6 +30196,7 @@ export namespace Prisma {
     tags?: StringNullableListFilter<'Product'>;
     medias?: StringNullableListFilter<'Product'>;
     isVerified?: BoolFilter<'Product'> | boolean;
+    service?: EnumServiceTypeFilter<'Product'> | $Enums.ServiceType;
     categoryId?: UuidFilter<'Product'> | string;
     sellerId?: UuidFilter<'Product'> | string;
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>;
@@ -30165,6 +30224,7 @@ export namespace Prisma {
     tags?: SortOrder;
     medias?: SortOrder;
     isVerified?: SortOrder;
+    service?: SortOrder;
     categoryId?: SortOrder;
     sellerId?: SortOrder;
     category?: CategoryOrderByWithRelationInput;
@@ -30196,6 +30256,7 @@ export namespace Prisma {
       tags?: StringNullableListFilter<'Product'>;
       medias?: StringNullableListFilter<'Product'>;
       isVerified?: BoolFilter<'Product'> | boolean;
+      service?: EnumServiceTypeFilter<'Product'> | $Enums.ServiceType;
       categoryId?: UuidFilter<'Product'> | string;
       sellerId?: UuidFilter<'Product'> | string;
       category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>;
@@ -30225,6 +30286,7 @@ export namespace Prisma {
     tags?: SortOrder;
     medias?: SortOrder;
     isVerified?: SortOrder;
+    service?: SortOrder;
     categoryId?: SortOrder;
     sellerId?: SortOrder;
     _count?: ProductCountOrderByAggregateInput;
@@ -30254,6 +30316,7 @@ export namespace Prisma {
     tags?: StringNullableListFilter<'Product'>;
     medias?: StringNullableListFilter<'Product'>;
     isVerified?: BoolWithAggregatesFilter<'Product'> | boolean;
+    service?: EnumServiceTypeWithAggregatesFilter<'Product'> | $Enums.ServiceType;
     categoryId?: UuidWithAggregatesFilter<'Product'> | string;
     sellerId?: UuidWithAggregatesFilter<'Product'> | string;
   };
@@ -31001,10 +31064,10 @@ export namespace Prisma {
     emailNotifications?: BoolFilter<'Setting'> | boolean;
     browserNotifications?: BoolFilter<'Setting'> | boolean;
     ticketNotifications?: BoolFilter<'Setting'> | boolean;
+    suggestedProducts?: BoolFilter<'Setting'> | boolean;
     promotionNotifications?: BoolFilter<'Setting'> | boolean;
     priceChangesNotifications?: BoolFilter<'Setting'> | boolean;
     loginNotifications?: BoolFilter<'Setting'> | boolean;
-    suggestedProducts?: BoolFilter<'Setting'> | boolean;
     restockNotifications?: BoolFilter<'Setting'> | boolean;
     updatedAt?: DateTimeFilter<'Setting'> | Date | string;
     user?: XOR<UserScalarRelationFilter, UserWhereInput>;
@@ -31015,10 +31078,10 @@ export namespace Prisma {
     emailNotifications?: SortOrder;
     browserNotifications?: SortOrder;
     ticketNotifications?: SortOrder;
+    suggestedProducts?: SortOrder;
     promotionNotifications?: SortOrder;
     priceChangesNotifications?: SortOrder;
     loginNotifications?: SortOrder;
-    suggestedProducts?: SortOrder;
     restockNotifications?: SortOrder;
     updatedAt?: SortOrder;
     user?: UserOrderByWithRelationInput;
@@ -31033,10 +31096,10 @@ export namespace Prisma {
       emailNotifications?: BoolFilter<'Setting'> | boolean;
       browserNotifications?: BoolFilter<'Setting'> | boolean;
       ticketNotifications?: BoolFilter<'Setting'> | boolean;
+      suggestedProducts?: BoolFilter<'Setting'> | boolean;
       promotionNotifications?: BoolFilter<'Setting'> | boolean;
       priceChangesNotifications?: BoolFilter<'Setting'> | boolean;
       loginNotifications?: BoolFilter<'Setting'> | boolean;
-      suggestedProducts?: BoolFilter<'Setting'> | boolean;
       restockNotifications?: BoolFilter<'Setting'> | boolean;
       updatedAt?: DateTimeFilter<'Setting'> | Date | string;
       user?: XOR<UserScalarRelationFilter, UserWhereInput>;
@@ -31049,10 +31112,10 @@ export namespace Prisma {
     emailNotifications?: SortOrder;
     browserNotifications?: SortOrder;
     ticketNotifications?: SortOrder;
+    suggestedProducts?: SortOrder;
     promotionNotifications?: SortOrder;
     priceChangesNotifications?: SortOrder;
     loginNotifications?: SortOrder;
-    suggestedProducts?: SortOrder;
     restockNotifications?: SortOrder;
     updatedAt?: SortOrder;
     _count?: SettingCountOrderByAggregateInput;
@@ -31068,10 +31131,10 @@ export namespace Prisma {
     emailNotifications?: BoolWithAggregatesFilter<'Setting'> | boolean;
     browserNotifications?: BoolWithAggregatesFilter<'Setting'> | boolean;
     ticketNotifications?: BoolWithAggregatesFilter<'Setting'> | boolean;
+    suggestedProducts?: BoolWithAggregatesFilter<'Setting'> | boolean;
     promotionNotifications?: BoolWithAggregatesFilter<'Setting'> | boolean;
     priceChangesNotifications?: BoolWithAggregatesFilter<'Setting'> | boolean;
     loginNotifications?: BoolWithAggregatesFilter<'Setting'> | boolean;
-    suggestedProducts?: BoolWithAggregatesFilter<'Setting'> | boolean;
     restockNotifications?: BoolWithAggregatesFilter<'Setting'> | boolean;
     updatedAt?: DateTimeWithAggregatesFilter<'Setting'> | Date | string;
   };
@@ -31820,6 +31883,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     isVerified?: boolean;
+    service?: $Enums.ServiceType;
     category: CategoryCreateNestedOneWithoutProductsInput;
     seller: UserCreateNestedOneWithoutProductsInput;
     cartItem?: CartItemCreateNestedManyWithoutProductInput;
@@ -31845,6 +31909,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     isVerified?: boolean;
+    service?: $Enums.ServiceType;
     categoryId: string;
     sellerId: string;
     cartItem?: CartItemUncheckedCreateNestedManyWithoutProductInput;
@@ -31870,6 +31935,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    service?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType;
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
     seller?: UserUpdateOneRequiredWithoutProductsNestedInput;
     cartItem?: CartItemUpdateManyWithoutProductNestedInput;
@@ -31895,6 +31961,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    service?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType;
     categoryId?: StringFieldUpdateOperationsInput | string;
     sellerId?: StringFieldUpdateOperationsInput | string;
     cartItem?: CartItemUncheckedUpdateManyWithoutProductNestedInput;
@@ -31920,6 +31987,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     isVerified?: boolean;
+    service?: $Enums.ServiceType;
     categoryId: string;
     sellerId: string;
   };
@@ -31941,6 +32009,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    service?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType;
   };
 
   export type ProductUncheckedUpdateManyInput = {
@@ -31960,6 +32029,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    service?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType;
     categoryId?: StringFieldUpdateOperationsInput | string;
     sellerId?: StringFieldUpdateOperationsInput | string;
   };
@@ -32767,10 +32837,10 @@ export namespace Prisma {
     emailNotifications?: boolean;
     browserNotifications?: boolean;
     ticketNotifications?: boolean;
+    suggestedProducts?: boolean;
     promotionNotifications?: boolean;
     priceChangesNotifications?: boolean;
     loginNotifications?: boolean;
-    suggestedProducts?: boolean;
     restockNotifications?: boolean;
     updatedAt?: Date | string;
     user: UserCreateNestedOneWithoutSettingInput;
@@ -32781,10 +32851,10 @@ export namespace Prisma {
     emailNotifications?: boolean;
     browserNotifications?: boolean;
     ticketNotifications?: boolean;
+    suggestedProducts?: boolean;
     promotionNotifications?: boolean;
     priceChangesNotifications?: boolean;
     loginNotifications?: boolean;
-    suggestedProducts?: boolean;
     restockNotifications?: boolean;
     updatedAt?: Date | string;
   };
@@ -32793,10 +32863,10 @@ export namespace Prisma {
     emailNotifications?: BoolFieldUpdateOperationsInput | boolean;
     browserNotifications?: BoolFieldUpdateOperationsInput | boolean;
     ticketNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    suggestedProducts?: BoolFieldUpdateOperationsInput | boolean;
     promotionNotifications?: BoolFieldUpdateOperationsInput | boolean;
     priceChangesNotifications?: BoolFieldUpdateOperationsInput | boolean;
     loginNotifications?: BoolFieldUpdateOperationsInput | boolean;
-    suggestedProducts?: BoolFieldUpdateOperationsInput | boolean;
     restockNotifications?: BoolFieldUpdateOperationsInput | boolean;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
     user?: UserUpdateOneRequiredWithoutSettingNestedInput;
@@ -32807,10 +32877,10 @@ export namespace Prisma {
     emailNotifications?: BoolFieldUpdateOperationsInput | boolean;
     browserNotifications?: BoolFieldUpdateOperationsInput | boolean;
     ticketNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    suggestedProducts?: BoolFieldUpdateOperationsInput | boolean;
     promotionNotifications?: BoolFieldUpdateOperationsInput | boolean;
     priceChangesNotifications?: BoolFieldUpdateOperationsInput | boolean;
     loginNotifications?: BoolFieldUpdateOperationsInput | boolean;
-    suggestedProducts?: BoolFieldUpdateOperationsInput | boolean;
     restockNotifications?: BoolFieldUpdateOperationsInput | boolean;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -32820,10 +32890,10 @@ export namespace Prisma {
     emailNotifications?: boolean;
     browserNotifications?: boolean;
     ticketNotifications?: boolean;
+    suggestedProducts?: boolean;
     promotionNotifications?: boolean;
     priceChangesNotifications?: boolean;
     loginNotifications?: boolean;
-    suggestedProducts?: boolean;
     restockNotifications?: boolean;
     updatedAt?: Date | string;
   };
@@ -32832,10 +32902,10 @@ export namespace Prisma {
     emailNotifications?: BoolFieldUpdateOperationsInput | boolean;
     browserNotifications?: BoolFieldUpdateOperationsInput | boolean;
     ticketNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    suggestedProducts?: BoolFieldUpdateOperationsInput | boolean;
     promotionNotifications?: BoolFieldUpdateOperationsInput | boolean;
     priceChangesNotifications?: BoolFieldUpdateOperationsInput | boolean;
     loginNotifications?: BoolFieldUpdateOperationsInput | boolean;
-    suggestedProducts?: BoolFieldUpdateOperationsInput | boolean;
     restockNotifications?: BoolFieldUpdateOperationsInput | boolean;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -32845,10 +32915,10 @@ export namespace Prisma {
     emailNotifications?: BoolFieldUpdateOperationsInput | boolean;
     browserNotifications?: BoolFieldUpdateOperationsInput | boolean;
     ticketNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    suggestedProducts?: BoolFieldUpdateOperationsInput | boolean;
     promotionNotifications?: BoolFieldUpdateOperationsInput | boolean;
     priceChangesNotifications?: BoolFieldUpdateOperationsInput | boolean;
     loginNotifications?: BoolFieldUpdateOperationsInput | boolean;
-    suggestedProducts?: BoolFieldUpdateOperationsInput | boolean;
     restockNotifications?: BoolFieldUpdateOperationsInput | boolean;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -33675,6 +33745,13 @@ export namespace Prisma {
     isEmpty?: boolean;
   };
 
+  export type EnumServiceTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceType | EnumServiceTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.ServiceType[] | ListEnumServiceTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.ServiceType[] | ListEnumServiceTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumServiceTypeFilter<$PrismaModel> | $Enums.ServiceType;
+  };
+
   export type CategoryScalarRelationFilter = {
     is?: CategoryWhereInput;
     isNot?: CategoryWhereInput;
@@ -33727,6 +33804,7 @@ export namespace Prisma {
     tags?: SortOrder;
     medias?: SortOrder;
     isVerified?: SortOrder;
+    service?: SortOrder;
     categoryId?: SortOrder;
     sellerId?: SortOrder;
   };
@@ -33752,6 +33830,7 @@ export namespace Prisma {
     originalPrice?: SortOrder;
     discountPrice?: SortOrder;
     isVerified?: SortOrder;
+    service?: SortOrder;
     categoryId?: SortOrder;
     sellerId?: SortOrder;
   };
@@ -33770,6 +33849,7 @@ export namespace Prisma {
     originalPrice?: SortOrder;
     discountPrice?: SortOrder;
     isVerified?: SortOrder;
+    service?: SortOrder;
     categoryId?: SortOrder;
     sellerId?: SortOrder;
   };
@@ -33779,6 +33859,16 @@ export namespace Prisma {
     sold?: SortOrder;
     originalPrice?: SortOrder;
     discountPrice?: SortOrder;
+  };
+
+  export type EnumServiceTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceType | EnumServiceTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.ServiceType[] | ListEnumServiceTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.ServiceType[] | ListEnumServiceTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumServiceTypeWithAggregatesFilter<$PrismaModel> | $Enums.ServiceType;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumServiceTypeFilter<$PrismaModel>;
+    _max?: NestedEnumServiceTypeFilter<$PrismaModel>;
   };
 
   export type OrderItemNullableScalarRelationFilter = {
@@ -34427,10 +34517,10 @@ export namespace Prisma {
     emailNotifications?: SortOrder;
     browserNotifications?: SortOrder;
     ticketNotifications?: SortOrder;
+    suggestedProducts?: SortOrder;
     promotionNotifications?: SortOrder;
     priceChangesNotifications?: SortOrder;
     loginNotifications?: SortOrder;
-    suggestedProducts?: SortOrder;
     restockNotifications?: SortOrder;
     updatedAt?: SortOrder;
   };
@@ -34440,10 +34530,10 @@ export namespace Prisma {
     emailNotifications?: SortOrder;
     browserNotifications?: SortOrder;
     ticketNotifications?: SortOrder;
+    suggestedProducts?: SortOrder;
     promotionNotifications?: SortOrder;
     priceChangesNotifications?: SortOrder;
     loginNotifications?: SortOrder;
-    suggestedProducts?: SortOrder;
     restockNotifications?: SortOrder;
     updatedAt?: SortOrder;
   };
@@ -34453,10 +34543,10 @@ export namespace Prisma {
     emailNotifications?: SortOrder;
     browserNotifications?: SortOrder;
     ticketNotifications?: SortOrder;
+    suggestedProducts?: SortOrder;
     promotionNotifications?: SortOrder;
     priceChangesNotifications?: SortOrder;
     loginNotifications?: SortOrder;
-    suggestedProducts?: SortOrder;
     restockNotifications?: SortOrder;
     updatedAt?: SortOrder;
   };
@@ -35068,6 +35158,10 @@ export namespace Prisma {
   export type ProductUpdatemediasInput = {
     set?: string[];
     push?: string | string[];
+  };
+
+  export type EnumServiceTypeFieldUpdateOperationsInput = {
+    set?: $Enums.ServiceType;
   };
 
   export type CategoryUpdateOneRequiredWithoutProductsNestedInput = {
@@ -37108,6 +37202,23 @@ export namespace Prisma {
     _max?: NestedEnumSelectFromFilter<$PrismaModel>;
   };
 
+  export type NestedEnumServiceTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceType | EnumServiceTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.ServiceType[] | ListEnumServiceTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.ServiceType[] | ListEnumServiceTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumServiceTypeFilter<$PrismaModel> | $Enums.ServiceType;
+  };
+
+  export type NestedEnumServiceTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ServiceType | EnumServiceTypeFieldRefInput<$PrismaModel>;
+    in?: $Enums.ServiceType[] | ListEnumServiceTypeFieldRefInput<$PrismaModel>;
+    notIn?: $Enums.ServiceType[] | ListEnumServiceTypeFieldRefInput<$PrismaModel>;
+    not?: NestedEnumServiceTypeWithAggregatesFilter<$PrismaModel> | $Enums.ServiceType;
+    _count?: NestedIntFilter<$PrismaModel>;
+    _min?: NestedEnumServiceTypeFilter<$PrismaModel>;
+    _max?: NestedEnumServiceTypeFilter<$PrismaModel>;
+  };
+
   export type NestedDecimalFilter<$PrismaModel = never> = {
     equals?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>;
     in?: Decimal[] | DecimalJsLike[] | number[] | string[] | ListDecimalFieldRefInput<$PrismaModel>;
@@ -38127,6 +38238,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     isVerified?: boolean;
+    service?: $Enums.ServiceType;
     category: CategoryCreateNestedOneWithoutProductsInput;
     seller: UserCreateNestedOneWithoutProductsInput;
     cartItem?: CartItemCreateNestedManyWithoutProductInput;
@@ -38151,6 +38263,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     isVerified?: boolean;
+    service?: $Enums.ServiceType;
     categoryId: string;
     sellerId: string;
     cartItem?: CartItemUncheckedCreateNestedManyWithoutProductInput;
@@ -38235,6 +38348,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    service?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType;
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
     seller?: UserUpdateOneRequiredWithoutProductsNestedInput;
     cartItem?: CartItemUpdateManyWithoutProductNestedInput;
@@ -38259,6 +38373,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    service?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType;
     categoryId?: StringFieldUpdateOperationsInput | string;
     sellerId?: StringFieldUpdateOperationsInput | string;
     cartItem?: CartItemUncheckedUpdateManyWithoutProductNestedInput;
@@ -38755,6 +38870,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     isVerified?: boolean;
+    service?: $Enums.ServiceType;
     category: CategoryCreateNestedOneWithoutProductsInput;
     seller: UserCreateNestedOneWithoutProductsInput;
     cartItem?: CartItemCreateNestedManyWithoutProductInput;
@@ -38779,6 +38895,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     isVerified?: boolean;
+    service?: $Enums.ServiceType;
     categoryId: string;
     sellerId: string;
     cartItem?: CartItemUncheckedCreateNestedManyWithoutProductInput;
@@ -38842,6 +38959,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    service?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType;
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
     seller?: UserUpdateOneRequiredWithoutProductsNestedInput;
     cartItem?: CartItemUpdateManyWithoutProductNestedInput;
@@ -38866,6 +38984,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    service?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType;
     categoryId?: StringFieldUpdateOperationsInput | string;
     sellerId?: StringFieldUpdateOperationsInput | string;
     cartItem?: CartItemUncheckedUpdateManyWithoutProductNestedInput;
@@ -38919,6 +39038,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     isVerified?: boolean;
+    service?: $Enums.ServiceType;
     seller: UserCreateNestedOneWithoutProductsInput;
     cartItem?: CartItemCreateNestedManyWithoutProductInput;
     productItems?: ProductItemCreateNestedManyWithoutProductInput;
@@ -38943,6 +39063,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     isVerified?: boolean;
+    service?: $Enums.ServiceType;
     sellerId: string;
     cartItem?: CartItemUncheckedCreateNestedManyWithoutProductInput;
     productItems?: ProductItemUncheckedCreateNestedManyWithoutProductInput;
@@ -38996,6 +39117,7 @@ export namespace Prisma {
     tags?: StringNullableListFilter<'Product'>;
     medias?: StringNullableListFilter<'Product'>;
     isVerified?: BoolFilter<'Product'> | boolean;
+    service?: EnumServiceTypeFilter<'Product'> | $Enums.ServiceType;
     categoryId?: UuidFilter<'Product'> | string;
     sellerId?: UuidFilter<'Product'> | string;
   };
@@ -39017,6 +39139,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     isVerified?: boolean;
+    service?: $Enums.ServiceType;
     category: CategoryCreateNestedOneWithoutProductsInput;
     seller: UserCreateNestedOneWithoutProductsInput;
     cartItem?: CartItemCreateNestedManyWithoutProductInput;
@@ -39041,6 +39164,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     isVerified?: boolean;
+    service?: $Enums.ServiceType;
     categoryId: string;
     sellerId: string;
     cartItem?: CartItemUncheckedCreateNestedManyWithoutProductInput;
@@ -39162,6 +39286,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    service?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType;
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
     seller?: UserUpdateOneRequiredWithoutProductsNestedInput;
     cartItem?: CartItemUpdateManyWithoutProductNestedInput;
@@ -39186,6 +39311,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    service?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType;
     categoryId?: StringFieldUpdateOperationsInput | string;
     sellerId?: StringFieldUpdateOperationsInput | string;
     cartItem?: CartItemUncheckedUpdateManyWithoutProductNestedInput;
@@ -39323,10 +39449,10 @@ export namespace Prisma {
     emailNotifications?: boolean;
     browserNotifications?: boolean;
     ticketNotifications?: boolean;
+    suggestedProducts?: boolean;
     promotionNotifications?: boolean;
     priceChangesNotifications?: boolean;
     loginNotifications?: boolean;
-    suggestedProducts?: boolean;
     restockNotifications?: boolean;
     updatedAt?: Date | string;
   };
@@ -39335,10 +39461,10 @@ export namespace Prisma {
     emailNotifications?: boolean;
     browserNotifications?: boolean;
     ticketNotifications?: boolean;
+    suggestedProducts?: boolean;
     promotionNotifications?: boolean;
     priceChangesNotifications?: boolean;
     loginNotifications?: boolean;
-    suggestedProducts?: boolean;
     restockNotifications?: boolean;
     updatedAt?: Date | string;
   };
@@ -39465,6 +39591,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     isVerified?: boolean;
+    service?: $Enums.ServiceType;
     category: CategoryCreateNestedOneWithoutProductsInput;
     cartItem?: CartItemCreateNestedManyWithoutProductInput;
     productItems?: ProductItemCreateNestedManyWithoutProductInput;
@@ -39489,6 +39616,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     isVerified?: boolean;
+    service?: $Enums.ServiceType;
     categoryId: string;
     cartItem?: CartItemUncheckedCreateNestedManyWithoutProductInput;
     productItems?: ProductItemUncheckedCreateNestedManyWithoutProductInput;
@@ -39798,10 +39926,10 @@ export namespace Prisma {
     emailNotifications?: BoolFieldUpdateOperationsInput | boolean;
     browserNotifications?: BoolFieldUpdateOperationsInput | boolean;
     ticketNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    suggestedProducts?: BoolFieldUpdateOperationsInput | boolean;
     promotionNotifications?: BoolFieldUpdateOperationsInput | boolean;
     priceChangesNotifications?: BoolFieldUpdateOperationsInput | boolean;
     loginNotifications?: BoolFieldUpdateOperationsInput | boolean;
-    suggestedProducts?: BoolFieldUpdateOperationsInput | boolean;
     restockNotifications?: BoolFieldUpdateOperationsInput | boolean;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -39810,10 +39938,10 @@ export namespace Prisma {
     emailNotifications?: BoolFieldUpdateOperationsInput | boolean;
     browserNotifications?: BoolFieldUpdateOperationsInput | boolean;
     ticketNotifications?: BoolFieldUpdateOperationsInput | boolean;
+    suggestedProducts?: BoolFieldUpdateOperationsInput | boolean;
     promotionNotifications?: BoolFieldUpdateOperationsInput | boolean;
     priceChangesNotifications?: BoolFieldUpdateOperationsInput | boolean;
     loginNotifications?: BoolFieldUpdateOperationsInput | boolean;
-    suggestedProducts?: BoolFieldUpdateOperationsInput | boolean;
     restockNotifications?: BoolFieldUpdateOperationsInput | boolean;
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string;
   };
@@ -40785,6 +40913,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     isVerified?: boolean;
+    service?: $Enums.ServiceType;
     category: CategoryCreateNestedOneWithoutProductsInput;
     seller: UserCreateNestedOneWithoutProductsInput;
     productItems?: ProductItemCreateNestedManyWithoutProductInput;
@@ -40809,6 +40938,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     isVerified?: boolean;
+    service?: $Enums.ServiceType;
     categoryId: string;
     sellerId: string;
     productItems?: ProductItemUncheckedCreateNestedManyWithoutProductInput;
@@ -40930,6 +41060,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    service?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType;
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
     seller?: UserUpdateOneRequiredWithoutProductsNestedInput;
     productItems?: ProductItemUpdateManyWithoutProductNestedInput;
@@ -40954,6 +41085,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    service?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType;
     categoryId?: StringFieldUpdateOperationsInput | string;
     sellerId?: StringFieldUpdateOperationsInput | string;
     productItems?: ProductItemUncheckedUpdateManyWithoutProductNestedInput;
@@ -42530,6 +42662,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     isVerified?: boolean;
+    service?: $Enums.ServiceType;
     sellerId: string;
   };
 
@@ -42550,6 +42683,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    service?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType;
     seller?: UserUpdateOneRequiredWithoutProductsNestedInput;
     cartItem?: CartItemUpdateManyWithoutProductNestedInput;
     productItems?: ProductItemUpdateManyWithoutProductNestedInput;
@@ -42574,6 +42708,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    service?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType;
     sellerId?: StringFieldUpdateOperationsInput | string;
     cartItem?: CartItemUncheckedUpdateManyWithoutProductNestedInput;
     productItems?: ProductItemUncheckedUpdateManyWithoutProductNestedInput;
@@ -42598,6 +42733,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    service?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType;
     sellerId?: StringFieldUpdateOperationsInput | string;
   };
 
@@ -42653,6 +42789,7 @@ export namespace Prisma {
     tags?: ProductCreatetagsInput | string[];
     medias?: ProductCreatemediasInput | string[];
     isVerified?: boolean;
+    service?: $Enums.ServiceType;
     categoryId: string;
   };
 
@@ -42850,6 +42987,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    service?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType;
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput;
     cartItem?: CartItemUpdateManyWithoutProductNestedInput;
     productItems?: ProductItemUpdateManyWithoutProductNestedInput;
@@ -42874,6 +43012,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    service?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType;
     categoryId?: StringFieldUpdateOperationsInput | string;
     cartItem?: CartItemUncheckedUpdateManyWithoutProductNestedInput;
     productItems?: ProductItemUncheckedUpdateManyWithoutProductNestedInput;
@@ -42898,6 +43037,7 @@ export namespace Prisma {
     tags?: ProductUpdatetagsInput | string[];
     medias?: ProductUpdatemediasInput | string[];
     isVerified?: BoolFieldUpdateOperationsInput | boolean;
+    service?: EnumServiceTypeFieldUpdateOperationsInput | $Enums.ServiceType;
     categoryId?: StringFieldUpdateOperationsInput | string;
   };
 

@@ -191,6 +191,7 @@ exports.Prisma.ProductScalarFieldEnum = {
   tags: 'tags',
   medias: 'medias',
   isVerified: 'isVerified',
+  service: 'service',
   categoryId: 'categoryId',
   sellerId: 'sellerId',
 };
@@ -305,10 +306,10 @@ exports.Prisma.SettingScalarFieldEnum = {
   emailNotifications: 'emailNotifications',
   browserNotifications: 'browserNotifications',
   ticketNotifications: 'ticketNotifications',
+  suggestedProducts: 'suggestedProducts',
   promotionNotifications: 'promotionNotifications',
   priceChangesNotifications: 'priceChangesNotifications',
   loginNotifications: 'loginNotifications',
-  suggestedProducts: 'suggestedProducts',
   restockNotifications: 'restockNotifications',
   updatedAt: 'updatedAt',
 };
@@ -386,6 +387,33 @@ exports.MfaType = exports.$Enums.MfaType = {
 exports.SelectFrom = exports.$Enums.SelectFrom = {
   CART: 'CART',
   SERVICES: 'SERVICES',
+};
+
+exports.ServiceType = exports.$Enums.ServiceType = {
+  YOUTUBE: 'YOUTUBE',
+  NETFLIX: 'NETFLIX',
+  SPOTIFY: 'SPOTIFY',
+  DISNEY_PLUS: 'DISNEY_PLUS',
+  APPLE_TV: 'APPLE_TV',
+  AMAZON_PRIME: 'AMAZON_PRIME',
+  HBO_MAX: 'HBO_MAX',
+  HULU: 'HULU',
+  PARAMOUNT_PLUS: 'PARAMOUNT_PLUS',
+  CRUNCHYROLL: 'CRUNCHYROLL',
+  FUNIMATION: 'FUNIMATION',
+  TWITCH: 'TWITCH',
+  DISCORD_NITRO: 'DISCORD_NITRO',
+  STEAM: 'STEAM',
+  XBOX_GAME_PASS: 'XBOX_GAME_PASS',
+  PLAYSTATION_PLUS: 'PLAYSTATION_PLUS',
+  NINTENDO_ONLINE: 'NINTENDO_ONLINE',
+  ADOBE_CREATIVE_CLOUD: 'ADOBE_CREATIVE_CLOUD',
+  MICROSOFT_365: 'MICROSOFT_365',
+  GOOGLE_WORKSPACE: 'GOOGLE_WORKSPACE',
+  NOTION: 'NOTION',
+  FIGMA: 'FIGMA',
+  CANVA_PRO: 'CANVA_PRO',
+  OTHER: 'OTHER',
 };
 
 exports.ProductFlag = exports.$Enums.ProductFlag = {
