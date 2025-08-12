@@ -72,7 +72,7 @@ export default function PaymentProcessor({ onPaymentComplete, onPaymentError }: 
 
 		try {
 			// Process payment
-			const isSuccess = await processPayment(selectedPayment);
+			const isSuccess = await processPayment();
 
 			// Store order data in localStorage for billing page
 			const orderData = {

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Pacifico } from "next/font/google";
-import { Search, ShoppingCart, User } from "lucide-react";
+import { Search, ShoppingCart, User, Clock, TrendingUp, X } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
 import { useUserQuery } from "@/lib/api/user";
 import { useCart } from "@/lib/api/cart";
@@ -29,15 +29,73 @@ const rotatingMessages: string[] = [
 	"Hỗ trợ 24/7 cực nhanh",
 ];
 
+// Dữ liệu mẫu cho từ khóa nổi bật và gợi ý tìm kiếm
+const popularKeywords = [
+	"Netflix Premium",
+	"YouTube Premium",
+	"Spotify Premium",
+	"Microsoft 365",
+	"Google One",
+	"Disney+",
+	"Coursera Plus",
+	"Adobe Creative Cloud",
+	"Canva Pro",
+	"Grammarly Premium",
+];
+
+const searchSuggestions = [
+	"Netflix Premium 12 tháng",
+	"YouTube Premium gia đình",
+	"Spotify Premium cá nhân",
+	"Microsoft 365 Business",
+	"Google One 100GB",
+	"Disney+ hàng năm",
+	"Coursera Plus tháng",
+	"Adobe Photoshop",
+	"Canva Pro team",
+	"Grammarly Premium",
+];
+
 export default function Header() {
 	const [messageIndex, setMessageIndex] = useState<number>(0);
 	const [isVisible, setIsVisible] = useState<boolean>(true);
 	const [isPaused, setIsPaused] = useState<boolean>(false);
+	const [searchQuery, setSearchQuery] = useState<string>("");
+	const [isSearchFocused, setIsSearchFocused] = useState<boolean>(false);
+	const [recentSearches, setRecentSearches] = useState<string[]>([]);
 	const { openAuthModal } = useAuth();
 	const { data: userData } = useUserQuery();
 	const { getTotalItems } = useCart();
 	const timersRef = useRef<Array<ReturnType<typeof setTimeout>>>([]);
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+	const searchRef = useRef<HTMLDivElement>(null);
+
+	// Load recent searches from localStorage
+	useEffect(() => {
+		const saved = localStorage.getItem("recentSearches");
+		if (saved) {
+			setRecentSearches(JSON.parse(saved));
+		}
+	}, []);
+
+	// Save recent searches to localStorage
+	useEffect(() => {
+		if (recentSearches.length > 0) {
+			localStorage.setItem("recentSearches", JSON.stringify(recentSearches));
+		}
+	}, [recentSearches]);
+
+	// Close search dropdown when clicking outside
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+				setIsSearchFocused(false);
+			}
+		};
+
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => document.removeEventListener("mousedown", handleClickOutside);
+	}, []);
 
 	useEffect(() => {
 		if (!isPaused) {
@@ -57,6 +115,33 @@ export default function Header() {
 			timersRef.current = [];
 		};
 	}, [isPaused]);
+
+	// Add search to recent searches
+	const addToRecentSearches = (query: string) => {
+		if (query.trim()) {
+			setRecentSearches((prev) => {
+				const filtered = prev.filter((item) => item !== query);
+				return [query, ...filtered].slice(0, 5); // Keep only 5 most recent
+			});
+		}
+	};
+
+	// Handle search submission
+	const handleSearch = (query: string) => {
+		if (query.trim()) {
+			addToRecentSearches(query);
+			// TODO: Implement actual search functionality
+			console.log("Searching for:", query);
+			setIsSearchFocused(false);
+		}
+	};
+
+	// Filter suggestions based on search query
+	const filteredSuggestions = searchQuery.trim()
+		? searchSuggestions
+				.filter((suggestion) => suggestion.toLowerCase().includes(searchQuery.toLowerCase()))
+				.slice(0, 5)
+		: [];
 
 	return (
 		<header>
@@ -100,14 +185,104 @@ export default function Header() {
 					</div>
 
 					{/* Search Bar */}
-					<div className="mx-8 max-w-md flex-1">
+					<div className="mx-8 max-w-md flex-1" ref={searchRef}>
 						<div className="relative">
 							<Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
 							<input
 								type="text"
+								value={searchQuery}
+								onChange={(e) => setSearchQuery(e.target.value)}
+								onFocus={() => setIsSearchFocused(true)}
+								onKeyDown={(e) => {
+									if (e.key === "Enter") {
+										handleSearch(searchQuery);
+									}
+								}}
 								placeholder="Tìm kiếm sản phẩm..."
 								className="w-full rounded-md bg-white px-10 py-2 text-gray-800 focus:ring-2 focus:ring-blue-300 focus:outline-none"
 							/>
+
+							{/* Search Dropdown */}
+							{isSearchFocused && (
+								<div className="absolute top-full right-0 left-0 z-50 mt-1 rounded-md border border-gray-200 bg-white shadow-lg">
+									{/* Recent Searches */}
+									{recentSearches.length > 0 && (
+										<div className="border-b border-gray-100 p-3">
+											<div className="mb-2 flex items-center text-sm font-medium text-gray-700">
+												<Clock className="mr-2 h-4 w-4" />
+												Tìm kiếm gần đây
+											</div>
+											<div className="space-y-1">
+												{recentSearches.map((search, index) => (
+													<button
+														key={index}
+														onClick={() => handleSearch(search)}
+														className="flex w-full items-center justify-between rounded px-2 py-1 text-sm text-gray-600 hover:bg-gray-100"
+													>
+														<span className="truncate">{search}</span>
+														<button
+															onClick={(e) => {
+																e.stopPropagation();
+																setRecentSearches((prev) =>
+																	prev.filter((_, i) => i !== index),
+																);
+															}}
+															className="ml-2 text-gray-400 hover:text-gray-600"
+														>
+															<X className="h-3 w-3" />
+														</button>
+													</button>
+												))}
+											</div>
+										</div>
+									)}
+
+									{/* Popular Keywords */}
+									<div className="border-b border-gray-100 p-3">
+										<div className="mb-2 flex items-center text-sm font-medium text-gray-700">
+											<TrendingUp className="mr-2 h-4 w-4" />
+											Từ khóa nổi bật
+										</div>
+										<div className="flex flex-wrap gap-2">
+											{popularKeywords.map((keyword, index) => (
+												<button
+													key={index}
+													onClick={() => handleSearch(keyword)}
+													className="rounded-full bg-blue-50 px-3 py-1 text-xs text-blue-600 hover:bg-blue-100"
+												>
+													{keyword}
+												</button>
+											))}
+										</div>
+									</div>
+
+									{/* Search Suggestions */}
+									{searchQuery.trim() && filteredSuggestions.length > 0 && (
+										<div className="p-3">
+											<div className="mb-2 text-sm font-medium text-gray-700">Gợi ý tìm kiếm</div>
+											<div className="space-y-1">
+												{filteredSuggestions.map((suggestion, index) => (
+													<button
+														key={index}
+														onClick={() => handleSearch(suggestion)}
+														className="flex w-full items-center rounded px-2 py-1 text-sm text-gray-600 hover:bg-gray-100"
+													>
+														<Search className="mr-2 h-3 w-3 text-gray-400" />
+														<span className="truncate">{suggestion}</span>
+													</button>
+												))}
+											</div>
+										</div>
+									)}
+
+									{/* No results message */}
+									{searchQuery.trim() && filteredSuggestions.length === 0 && (
+										<div className="p-3 text-center text-sm text-gray-500">
+											Không tìm thấy gợi ý nào
+										</div>
+									)}
+								</div>
+							)}
 						</div>
 					</div>
 
