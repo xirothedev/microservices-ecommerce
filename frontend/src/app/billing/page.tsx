@@ -203,10 +203,10 @@ export default function BillingPage() {
 													</span>
 													<div className="text-right">
 														<p className="font-semibold text-blue-600">
-															${(item.price * item.quantity).toFixed(2)}
+															{(item.price * item.quantity).toLocaleString()}đ
 														</p>
 														<p className="text-sm text-gray-500">
-															${item.price} mỗi sản phẩm
+															{item.price}đ mỗi sản phẩm
 														</p>
 													</div>
 												</div>
@@ -252,22 +252,24 @@ export default function BillingPage() {
 										Tạm tính ({orderData.items.reduce((sum, item) => sum + item.quantity, 0)} sản
 										phẩm)
 									</span>
-									<span>${orderData.subtotal.toFixed(2)}</span>
+									<span>{orderData.subtotal.toLocaleString()}đ</span>
 								</div>
 								<div className="flex justify-between text-sm">
 									<span>Vận chuyển</span>
 									<span>
-										{orderData.shipping === 0 ? "Miễn phí" : `$${orderData.shipping.toFixed(2)}`}
+										{orderData.shipping === 0
+											? "Miễn phí"
+											: `${orderData.shipping.toLocaleString()}đ`}
 									</span>
 								</div>
 								<div className="flex justify-between text-sm">
 									<span>Thuế</span>
-									<span>${orderData.tax.toFixed(2)}</span>
+									<span>{orderData.tax.toLocaleString()}đ</span>
 								</div>
 								<Separator />
 								<div className="flex justify-between text-lg font-semibold">
 									<span>Tổng thanh toán</span>
-									<span className="text-blue-600">${orderData.total.toFixed(2)}</span>
+									<span className="text-blue-600">{orderData.total.toLocaleString()}đ</span>
 								</div>
 								<div className="pt-4 text-center">
 									<Badge className="border-green-200 bg-green-100 text-green-800">

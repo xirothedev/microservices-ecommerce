@@ -158,9 +158,9 @@ export default function CartContent() {
 												</div>
 												<div className="text-right">
 													<p className="text-lg font-bold text-blue-600">
-														${(item.price * item.quantity).toFixed(2)}
+														{(item.price * item.quantity).toLocaleString()}đ
 													</p>
-													<p className="text-sm text-gray-500">${item.price} mỗi sản phẩm</p>
+													<p className="text-sm text-gray-500">{item.price}đ mỗi sản phẩm</p>
 												</div>
 											</div>
 										</div>
@@ -195,7 +195,7 @@ export default function CartContent() {
 							</div>
 							{discount > 0 && (
 								<p className="text-sm text-green-600">
-									Mã khuyến mãi đã được áp dụng! Bạn đã tiết kiệm ${discount.toFixed(2)}
+									Mã khuyến mãi đã được áp dụng! Bạn đã tiết kiệm {discount.toLocaleString()}đ
 								</p>
 							)}
 							<div className="text-xs text-gray-500">
@@ -213,36 +213,28 @@ export default function CartContent() {
 							<div className="space-y-3">
 								<div className="flex justify-between text-sm">
 									<span>Tạm tính ({totalItems} sản phẩm)</span>
-									<span>${subtotal.toFixed(2)}</span>
+									<span>{subtotal.toLocaleString()}đ</span>
 								</div>
 								<div className="flex justify-between text-sm">
 									<span>Vận chuyển</span>
-									<span>{shipping === 0 ? "Miễn phí" : `$${shipping.toFixed(2)}`}</span>
+									<span>{shipping === 0 ? "Miễn phí" : `${shipping.toLocaleString()}đ`}</span>
 								</div>
 								<div className="flex justify-between text-sm">
 									<span>Thuế</span>
-									<span>${tax.toFixed(2)}</span>
+									<span>{tax.toLocaleString()}đ</span>
 								</div>
 								{discount > 0 && (
 									<div className="flex justify-between text-sm text-green-600">
 										<span>Giảm giá</span>
-										<span>-${discount.toFixed(2)}</span>
+										<span>-{discount.toLocaleString()}đ</span>
 									</div>
 								)}
 								<Separator />
 								<div className="flex justify-between text-lg font-semibold">
 									<span>Tổng cộng</span>
-									<span>${total.toFixed(2)}</span>
+									<span>{total.toLocaleString()}đ</span>
 								</div>
 							</div>
-
-							{shipping > 0 && (
-								<div className="rounded-lg bg-blue-50 p-3">
-									<p className="text-sm text-blue-700">
-										Thêm ${(500 - subtotal).toFixed(2)} nữa để được miễn phí vận chuyển!
-									</p>
-								</div>
-							)}
 
 							<Link href="/payment" className="block">
 								<Button size="lg" className="w-full bg-blue-600 hover:bg-blue-700">

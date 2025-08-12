@@ -64,9 +64,9 @@ export default function Banner() {
 	}, [api]);
 
 	return (
-		<div className="my-10 flex gap-4 overflow-hidden text-sm">
+		<div className="my-6 grid grid-cols-1 flex-col gap-4 md:my-8 md:grid-cols-[5fr_3fr] md:flex-row">
 			{/* Carousel - Left side */}
-			<div className="flex-[2]">
+			<div className="flex-2">
 				<Carousel
 					setApi={setApi}
 					className="w-full"
@@ -79,11 +79,13 @@ export default function Banner() {
 						{bannerData.map((banner) => (
 							<CarouselItem key={banner.id} className="pl-0">
 								<div
-									className={`${banner.bgColor} ${banner.textColor} flex h-[430px] w-full items-center justify-center rounded-md px-4 text-center transition-all duration-300 hover:scale-105`}
+									className={`${banner.bgColor} ${banner.textColor} flex aspect-video w-full items-center justify-center rounded-md px-3 text-center transition-all duration-300 hover:scale-105 md:aspect-[8/5]`}
 								>
 									<div className="flex flex-col items-center justify-center">
-										<span className="text-xs leading-tight font-semibold">{banner.title}</span>
-										<span className="text-xs opacity-90">{banner.description}</span>
+										<span className="text-sm leading-tight font-semibold md:text-base">
+											{banner.title}
+										</span>
+										<span className="text-xs opacity-90 md:text-sm">{banner.description}</span>
 									</div>
 								</div>
 							</CarouselItem>
@@ -91,13 +93,13 @@ export default function Banner() {
 					</CarouselContent>
 
 					{/* Dots indicator */}
-					<div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 transform space-x-2">
+					<div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 transform space-x-2 md:bottom-4">
 						{bannerData.map((_, index) => (
 							<button
 								key={index}
 								onClick={() => api?.scrollTo(index)}
 								className={`h-2 rounded-full transition-all duration-300 ${
-									current === index ? "w-8 bg-gray-400" : "w-2 bg-gray-300 hover:bg-gray-400"
+									current === index ? "w-6 bg-gray-400 md:w-8" : "w-2 bg-gray-300 hover:bg-gray-400"
 								}`}
 							/>
 						))}
@@ -106,25 +108,25 @@ export default function Banner() {
 			</div>
 
 			{/* Right side images - Vertical layout */}
-			<div className="flex flex-1 flex-col justify-between">
-				<div className="relative overflow-hidden rounded-md">
+			<div className="flex h-full flex-row justify-between gap-4 md:flex-col">
+				<div className="relative aspect-[2/1] overflow-hidden rounded-md">
 					<Image
 						width={0}
 						height={0}
 						sizes="100vw"
 						src="/banner/ai.png"
 						alt="AI Banner"
-						className="h-full w-auto object-contain"
+						className="h-full w-full object-cover"
 					/>
 				</div>
-				<div className="relative overflow-hidden rounded-md">
+				<div className="relative aspect-[2/1] overflow-hidden rounded-md">
 					<Image
 						width={0}
 						height={0}
 						sizes="100vw"
 						src="/banner/vpn.png"
 						alt="VPN Banner"
-						className="h-full w-auto object-contain"
+						className="h-full w-full object-cover"
 					/>
 				</div>
 			</div>

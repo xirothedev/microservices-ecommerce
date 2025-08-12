@@ -4,11 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Pacifico } from "next/font/google";
-import { Search, ShoppingCart, User, Clock, TrendingUp, X } from "lucide-react";
+import { Search, ShoppingCart, User, Clock, TrendingUp, X, Menu } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
 import { useUserQuery } from "@/lib/api/user";
 import { useCart } from "@/lib/api/cart";
 import { Button } from "./ui/button";
+import { useFilterStore } from "@/store/use-filter-store";
+import { useRouter } from "next/navigation";
 
 const pacifico = Pacifico({
 	weight: "400",
@@ -60,15 +62,19 @@ export default function Header() {
 	const [messageIndex, setMessageIndex] = useState<number>(0);
 	const [isVisible, setIsVisible] = useState<boolean>(true);
 	const [isPaused, setIsPaused] = useState<boolean>(false);
-	const [searchQuery, setSearchQuery] = useState<string>("");
+	const { searchQuery, setSearchQuery } = useFilterStore();
 	const [isSearchFocused, setIsSearchFocused] = useState<boolean>(false);
 	const [recentSearches, setRecentSearches] = useState<string[]>([]);
+	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+	const [isMobileSearchOpen, setIsMobileSearchOpen] = useState<boolean>(false);
 	const { openAuthModal } = useAuth();
 	const { data: userData } = useUserQuery();
 	const { getTotalItems } = useCart();
+	const router = useRouter();
 	const timersRef = useRef<Array<ReturnType<typeof setTimeout>>>([]);
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 	const searchRef = useRef<HTMLDivElement>(null);
+	const mobileMenuRef = useRef<HTMLDivElement>(null);
 
 	// Load recent searches from localStorage
 	useEffect(() => {
@@ -91,11 +97,20 @@ export default function Header() {
 			if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
 				setIsSearchFocused(false);
 			}
+			if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target as Node)) {
+				setIsMobileMenuOpen(false);
+			}
 		};
 
 		document.addEventListener("mousedown", handleClickOutside);
 		return () => document.removeEventListener("mousedown", handleClickOutside);
 	}, []);
+
+	// Close mobile menu when route changes
+	useEffect(() => {
+		setIsMobileMenuOpen(false);
+		setIsMobileSearchOpen(false);
+	}, [router]);
 
 	useEffect(() => {
 		if (!isPaused) {
@@ -130,9 +145,11 @@ export default function Header() {
 	const handleSearch = (query: string) => {
 		if (query.trim()) {
 			addToRecentSearches(query);
-			// TODO: Implement actual search functionality
-			console.log("Searching for:", query);
+			setSearchQuery(query);
+			// Điều hướng đến trang dịch vụ để đồng bộ kết quả tìm kiếm
+			router.push("/services");
 			setIsSearchFocused(false);
+			setIsMobileSearchOpen(false);
 		}
 	};
 
@@ -145,7 +162,8 @@ export default function Header() {
 
 	return (
 		<header>
-			<div className="bg-blue-600 text-sm text-white">
+			{/* Top banner - hidden on mobile */}
+			<div className="hidden bg-blue-600 text-sm text-white sm:block">
 				<div className="mx-auto flex h-8 max-w-7xl justify-between bg-blue-600 px-4 text-sm sm:px-6 lg:px-8">
 					<div className="flex items-center">
 						{/* Logo */}
@@ -156,7 +174,7 @@ export default function Header() {
 							onMouseEnter={() => setIsPaused(true)}
 							onMouseLeave={() => setIsPaused(false)}
 						>
-							Mua hàng cùng Digital Pro — {rotatingMessages[messageIndex]}
+							{rotatingMessages[messageIndex]}
 						</span>
 					</div>
 					<div className="flex items-center space-x-4">
@@ -175,17 +193,19 @@ export default function Header() {
 
 			<div className="bg-blue-500">
 				<div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+					{/* Logo */}
 					<div className="flex items-center">
-						<div className="flex gap-5">
-							<Image src="/next.svg" className="" alt="Digital Pro" width={100} height={100} />
-							<Link href="/" className={`text-3xl font-bold ${pacifico.className}`}>
+						<Link href="/" className="flex gap-2 sm:gap-5">
+							<span
+								className={`text-xl font-bold text-white sm:text-2xl lg:text-3xl ${pacifico.className}`}
+							>
 								Digital Pro
-							</Link>
-						</div>
+							</span>
+						</Link>
 					</div>
 
-					{/* Search Bar */}
-					<div className="mx-8 max-w-md flex-1" ref={searchRef}>
+					{/* Desktop Search Bar - hidden on mobile */}
+					<div className="mx-8 hidden max-w-md flex-1 lg:block" ref={searchRef}>
 						<div className="relative">
 							<Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
 							<input
@@ -217,7 +237,7 @@ export default function Header() {
 													<button
 														key={index}
 														onClick={() => handleSearch(search)}
-														className="flex w-full items-center justify-between rounded px-2 py-1 text-sm text-gray-600 hover:bg-gray-100"
+														className="flex w-full cursor-pointer items-center justify-between rounded px-2 py-1 text-sm text-gray-600 hover:bg-gray-100"
 													>
 														<span className="truncate">{search}</span>
 														<button
@@ -229,7 +249,7 @@ export default function Header() {
 															}}
 															className="ml-2 text-gray-400 hover:text-gray-600"
 														>
-															<X className="h-3 w-3" />
+															<X className="h-3 w-3 cursor-pointer" />
 														</button>
 													</button>
 												))}
@@ -286,8 +306,18 @@ export default function Header() {
 						</div>
 					</div>
 
-					{/* User Actions - Show avatar + cart if logged in, otherwise show login/register buttons */}
-					<div className="flex items-center gap-3">
+					{/* User Actions */}
+					<div className="flex items-center gap-2 sm:gap-3">
+						{/* Mobile Search Button */}
+						<Button
+							variant="ghost"
+							size="sm"
+							onClick={() => setIsMobileSearchOpen(!isMobileSearchOpen)}
+							className="border border-white bg-transparent p-2 text-white transition-colors duration-200 hover:bg-white/10 hover:text-white lg:hidden"
+						>
+							<Search className="h-5 w-5" />
+						</Button>
+
 						{userData?.me ? (
 							<>
 								{/* Shopping Cart */}
@@ -295,7 +325,7 @@ export default function Header() {
 									<Button
 										variant="ghost"
 										size="sm"
-										className="relative border border-white bg-transparent px-3 py-2 text-white transition-colors duration-200 hover:bg-white/10 hover:text-white"
+										className="relative border border-white bg-transparent p-2 text-white transition-colors duration-200 hover:bg-white/10 hover:text-white sm:px-3 sm:py-2"
 									>
 										<ShoppingCart className="h-5 w-5" />
 										{getTotalItems() > 0 && (
@@ -311,7 +341,7 @@ export default function Header() {
 									<Button
 										variant="ghost"
 										size="sm"
-										className="flex h-10 w-10 items-center justify-center rounded-full border border-white bg-transparent p-0 text-white transition-colors duration-200 hover:bg-white/10 hover:text-white"
+										className="flex h-8 w-8 items-center justify-center rounded-full border border-white bg-transparent p-0 text-white transition-colors duration-200 hover:bg-white/10 hover:text-white sm:h-10 sm:w-10"
 									>
 										{userData.me.avatarUrl ? (
 											<Image
@@ -319,30 +349,172 @@ export default function Header() {
 												alt={userData.me.fullname || "User"}
 												width={32}
 												height={32}
-												className="h-8 w-8 rounded-full object-cover"
+												className="h-6 w-6 rounded-full object-cover sm:h-8 sm:w-8"
 											/>
 										) : (
-											<User className="h-5 w-5" />
+											<User className="h-4 w-4 sm:h-5 sm:w-5" />
 										)}
 									</Button>
 								</Link>
 							</>
 						) : (
 							<>
-								<Button
-									onClick={() => openAuthModal("login")}
-									className="border border-white bg-transparent px-4 py-2 text-white transition-colors duration-200 hover:bg-white/10 hover:text-white"
-								>
-									Đăng nhập
-								</Button>
-								<Button
-									onClick={() => openAuthModal("register")}
-									className="rounded-lg bg-white px-4 py-2 font-medium text-blue-600 transition-colors duration-200 hover:bg-gray-100"
-								>
-									Đăng ký
-								</Button>
+								{/* Desktop Auth Buttons - hidden on mobile */}
+								<div className="hidden items-center gap-3 sm:flex">
+									<Button
+										onClick={() => openAuthModal("login")}
+										className="border border-white bg-transparent px-4 py-2 text-white transition-colors duration-200 hover:bg-white/10 hover:text-white"
+									>
+										Đăng nhập
+									</Button>
+									<Button
+										onClick={() => openAuthModal("register")}
+										className="rounded-lg bg-white px-4 py-2 font-medium text-blue-600 transition-colors duration-200 hover:bg-gray-100"
+									>
+										Đăng ký
+									</Button>
+								</div>
 							</>
 						)}
+
+						{/* Mobile Menu Button */}
+						<Button
+							variant="ghost"
+							size="sm"
+							onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+							className="border border-white bg-transparent p-2 text-white transition-colors duration-200 hover:bg-white/10 hover:text-white lg:hidden"
+						>
+							<Menu className="h-5 w-5" />
+						</Button>
+					</div>
+				</div>
+
+				{/* Mobile Search Bar */}
+				{isMobileSearchOpen && (
+					<div className="border-t border-blue-400 bg-blue-500 px-4 py-3 lg:hidden">
+						<div className="relative">
+							<Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
+							<input
+								type="text"
+								value={searchQuery}
+								onChange={(e) => setSearchQuery(e.target.value)}
+								onKeyDown={(e) => {
+									if (e.key === "Enter") {
+										handleSearch(searchQuery);
+									}
+								}}
+								placeholder="Tìm kiếm sản phẩm..."
+								className="w-full rounded-md bg-white px-10 py-2 text-gray-800 focus:ring-2 focus:ring-blue-300 focus:outline-none"
+								autoFocus
+							/>
+						</div>
+					</div>
+				)}
+			</div>
+
+			{/* Mobile Menu */}
+			<div className="lg:hidden">
+				{/* Overlay */}
+				<div
+					className={`fixed inset-0 z-40 bg-black transition-opacity duration-300 ${
+						isMobileMenuOpen ? "opacity-50" : "pointer-events-none opacity-0"
+					}`}
+					onClick={() => setIsMobileMenuOpen(false)}
+				/>
+
+				{/* Menu Panel */}
+				<div
+					ref={mobileMenuRef}
+					className={`fixed top-0 right-0 z-50 h-full w-80 bg-white shadow-lg transition-transform duration-300 ease-in-out ${
+						isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+					}`}
+				>
+					<div className="flex h-16 items-center justify-between border-b border-gray-200 bg-blue-500 px-4">
+						<span className="text-lg font-semibold text-white">Menu</span>
+						<Button
+							variant="ghost"
+							size="sm"
+							onClick={() => setIsMobileMenuOpen(false)}
+							className="text-white hover:bg-white/10"
+						>
+							<X className="h-5 w-5" />
+						</Button>
+					</div>
+
+					<div className="p-4">
+						{/* Mobile Navigation Links */}
+						<div className="mb-6">
+							<div className="mb-4 text-sm font-medium text-gray-700">Liên kết nhanh</div>
+							<div className="space-y-2">
+								<Link
+									href="#"
+									className="block rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100"
+									onClick={() => setIsMobileMenuOpen(false)}
+								>
+									Hướng dẫn mua hàng
+								</Link>
+								<Link
+									href="#"
+									className="block rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100"
+									onClick={() => setIsMobileMenuOpen(false)}
+								>
+									Thành viên
+								</Link>
+								<Link
+									href="#"
+									className="block rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100"
+									onClick={() => setIsMobileMenuOpen(false)}
+								>
+									Thông tin liên hệ
+								</Link>
+							</div>
+						</div>
+
+						{/* Mobile Auth Buttons */}
+						{!userData?.me && (
+							<div className="mb-6">
+								<div className="mb-4 text-sm font-medium text-gray-700">Tài khoản</div>
+								<div className="space-y-2">
+									<Button
+										onClick={() => {
+											openAuthModal("login");
+											setIsMobileMenuOpen(false);
+										}}
+										className="w-full justify-center border border-blue-500 bg-transparent text-blue-600 hover:bg-blue-50"
+									>
+										Đăng nhập
+									</Button>
+									<Button
+										onClick={() => {
+											openAuthModal("register");
+											setIsMobileMenuOpen(false);
+										}}
+										className="w-full justify-center bg-blue-600 text-white hover:bg-blue-700"
+									>
+										Đăng ký
+									</Button>
+								</div>
+							</div>
+						)}
+
+						{/* Mobile Popular Keywords */}
+						<div>
+							<div className="mb-4 text-sm font-medium text-gray-700">Từ khóa nổi bật</div>
+							<div className="flex flex-wrap gap-2">
+								{popularKeywords.slice(0, 6).map((keyword, index) => (
+									<button
+										key={index}
+										onClick={() => {
+											handleSearch(keyword);
+											setIsMobileMenuOpen(false);
+										}}
+										className="rounded-full bg-blue-50 px-3 py-1 text-xs text-blue-600 hover:bg-blue-100"
+									>
+										{keyword}
+									</button>
+								))}
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

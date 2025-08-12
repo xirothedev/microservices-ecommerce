@@ -113,13 +113,15 @@ export default function FeaturedProducts() {
 	};
 
 	return (
-		<section className="py-8">
+		<section className="py-6 sm:py-8">
 			<div className="mb-6">
-				<h2 className="mb-2 text-2xl font-bold text-gray-800">Sản phẩm nổi bật</h2>
-				<p className="text-gray-600">Danh sách những sản phẩm theo xu hướng mà có thể bạn sẽ thích</p>
+				<h2 className="mb-2 text-xl font-bold text-gray-800 sm:text-2xl">Sản phẩm nổi bật</h2>
+				<p className="text-sm text-gray-600 sm:text-base">
+					Danh sách những sản phẩm theo xu hướng mà có thể bạn sẽ thích
+				</p>
 			</div>
 
-			<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+			<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
 				{products.map((product) => (
 					<Link key={product.id} href={`/product/${product.id}`} className="flex flex-col gap-2">
 						<Image
@@ -128,7 +130,8 @@ export default function FeaturedProducts() {
 							sizes="100vw"
 							src={product.image}
 							alt={product.name}
-							className="h-auto w-full rounded-md"
+							className="h-auto w-full rounded-md object-cover"
+							loading="lazy"
 						/>
 						<span className="text-[14.5px] text-gray-800">{product.name}</span>
 						<div className="flex gap-2 text-sm">

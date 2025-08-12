@@ -2,43 +2,49 @@
 
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/auth-context";
+import { useUserQuery } from "@/lib/api/user";
 
 export default function Footer() {
 	const { openAuthModal } = useAuth();
+	const { data } = useUserQuery();
 
 	return (
 		<footer className="w-full">
 			{/* Account Registration Promotion */}
-			<section className="w-full bg-black px-8 py-12 text-white">
-				<div className="mx-auto max-w-4xl text-center">
-					<h2 className="mb-6 text-3xl font-bold">Bạn chưa có tài khoản?</h2>
-					<p className="mb-8 text-lg leading-relaxed text-gray-300">
-						Hãy tạo ngay một tài khoản để sử dụng đầy đủ các tính năng, tích lũy ưu đãi khi thanh toán các
-						sản phẩm và tham gia vào chương trình{" "}
-						<span className="font-semibold text-yellow-400">Giới thiệu bạn bè nhận hoa hồng vĩnh viễn</span>{" "}
-						tại Shop.
-					</p>
+			{!data?.me && (
+				<section className="w-full bg-black px-8 py-12 text-white">
+					<div className="mx-auto max-w-4xl text-center">
+						<h2 className="mb-6 text-3xl font-bold">Bạn chưa có tài khoản?</h2>
+						<p className="mb-8 text-lg leading-relaxed text-gray-300">
+							Hãy tạo ngay một tài khoản để sử dụng đầy đủ các tính năng, tích lũy ưu đãi khi thanh toán
+							các sản phẩm và tham gia vào chương trình{" "}
+							<span className="font-semibold text-yellow-400">
+								Giới thiệu bạn bè nhận hoa hồng vĩnh viễn
+							</span>{" "}
+							tại Shop.
+						</p>
 
-					<div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-						<Button
-							onClick={() => openAuthModal("register")}
-							className="rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:from-blue-700 hover:to-purple-700 hover:shadow-lg active:scale-95"
-						>
-							Đăng ký ngay
-						</Button>
-
-						<div className="flex items-center gap-2 text-gray-300">
-							<span>Bạn đã có tài khoản?</span>
+						<div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
 							<Button
-								onClick={() => openAuthModal("login")}
-								className="font-semibold text-blue-400 underline transition-colors duration-200 hover:text-blue-300"
+								onClick={() => openAuthModal("register")}
+								className="rounded-lg bg-blue-500 bg-gradient-to-r px-8 py-3 text-lg font-semibold text-white transition-all duration-300 hover:bg-blue-600 active:scale-95"
 							>
-								Đăng nhập
+								Đăng ký ngay
 							</Button>
+
+							<div className="flex items-center gap-2 text-gray-300">
+								<span>Bạn đã có tài khoản?</span>
+								<button
+									onClick={() => openAuthModal("login")}
+									className="cursor-pointer font-semibold text-blue-400 underline transition-colors duration-200 hover:text-blue-300"
+								>
+									Đăng nhập
+								</button>
+							</div>
 						</div>
 					</div>
-				</div>
-			</section>
+				</section>
+			)}
 
 			{/* Footer Content */}
 			<div className="bg-gray-200 px-8 py-8 text-gray-800">
