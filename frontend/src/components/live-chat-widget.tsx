@@ -20,7 +20,7 @@ interface Message {
 const initialMessages: Message[] = [
 	{
 		id: "1",
-		content: "👋 Hi there! How can I help you today?",
+		content: "👋 Xin chào! Tôi có thể giúp gì cho bạn hôm nay?",
 		sender: "agent",
 		timestamp: new Date(Date.now() - 1000 * 60 * 5), // 5 minutes ago
 	},
@@ -28,15 +28,15 @@ const initialMessages: Message[] = [
 
 const autoResponses: { [key: string]: string } = {
 	pricing:
-		"Our pricing plans start at $29/month for the Starter plan. Would you like me to tell you more about our different plans?",
+		"Gói cước của chúng tôi bắt đầu từ $29/tháng cho gói Starter. Bạn có muốn tôi kể thêm về các gói khác nhau không?",
 	features:
-		"Our platform offers analytics, server management, security features, and much more. What specific features are you interested in?",
+		"Nền tảng của chúng tôi cung cấp phân tích, quản lý máy chủ, tính năng bảo mật và nhiều hơn nữa. Bạn quan tâm đến tính năng cụ thể nào?",
 	support:
-		"We offer 24/7 support via chat, email, and phone for our Professional and Enterprise plans. Starter plan includes email support during business hours.",
-	trial: "Yes! We offer a 14-day free trial with no credit card required. You'll get full access to all features during the trial period.",
-	demo: "I'd be happy to arrange a demo for you! Could you please provide your email address so our team can contact you?",
+		"Chúng tôi cung cấp hỗ trợ 24/7 qua chat, email và điện thoại cho gói Professional và Enterprise. Gói Starter bao gồm hỗ trợ email trong giờ làm việc.",
+	trial: "Có! Chúng tôi cung cấp dùng thử miễn phí 14 ngày không cần thẻ tín dụng. Bạn sẽ có quyền truy cập đầy đủ vào tất cả tính năng trong thời gian dùng thử.",
+	demo: "Tôi rất vui được sắp xếp demo cho bạn! Bạn có thể cung cấp địa chỉ email để đội ngũ của chúng tôi liên hệ không?",
 	default:
-		"Thank you for your message. One of our support agents will respond shortly. In the meantime, is there anything else I can help you with?",
+		"Cảm ơn tin nhắn của bạn. Một trong những nhân viên hỗ trợ sẽ phản hồi sớm. Trong khi chờ đợi, có gì khác tôi có thể giúp bạn không?",
 };
 
 export function LiveChatWidget() {
@@ -200,7 +200,7 @@ export function LiveChatWidget() {
 				<Button
 					onClick={() => setIsOpen(!isOpen)}
 					className="h-14 w-14 rounded-full shadow-lg"
-					aria-label={isOpen ? "Close chat" : "Open chat"}
+					aria-label={isOpen ? "Đóng chat" : "Mở chat"}
 				>
 					{isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
 				</Button>
@@ -221,22 +221,17 @@ export function LiveChatWidget() {
 						<div className="flex items-center justify-between border-b p-4">
 							<div className="flex items-center gap-3">
 								<Avatar>
-									<AvatarImage src="/placeholder.svg?height=40&width=40" alt="Support Agent" />
-									<AvatarFallback>SA</AvatarFallback>
+									<AvatarImage src="/placeholder.svg?height=40&width=40" alt="Nhân viên hỗ trợ" />
+									<AvatarFallback>NH</AvatarFallback>
 								</Avatar>
 								<div>
-									<div className="font-medium">Support Team</div>
+									<div className="font-medium">Đội ngũ hỗ trợ</div>
 									<div className="text-muted-foreground text-xs">
-										{isAiEnabled ? "AI-Powered" : "Auto-Response"} | Online
+										{isAiEnabled ? "Hỗ trợ AI" : "Tự động phản hồi"} | Trực tuyến
 									</div>
 								</div>
 							</div>
-							<Button
-								variant="ghost"
-								size="icon"
-								onClick={() => setIsOpen(false)}
-								aria-label="Close chat"
-							>
+							<Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} aria-label="Đóng chat">
 								<X className="h-4 w-4" />
 							</Button>
 						</div>
@@ -286,7 +281,7 @@ export function LiveChatWidget() {
 						{/* Chat Input */}
 						<div className="border-t p-4">
 							<div className="flex items-center gap-2">
-								<Button variant="ghost" size="icon" aria-label="Attach file">
+								<Button variant="ghost" size="icon" aria-label="Đính kèm tệp">
 									<Paperclip className="h-4 w-4" />
 								</Button>
 								<Input
@@ -294,22 +289,22 @@ export function LiveChatWidget() {
 									value={inputValue}
 									onChange={(e) => setInputValue(e.target.value)}
 									onKeyDown={handleKeyDown}
-									placeholder="Type your message..."
+									placeholder="Nhập tin nhắn của bạn..."
 									className="flex-1"
 								/>
-								<Button variant="ghost" size="icon" aria-label="Insert emoji">
+								<Button variant="ghost" size="icon" aria-label="Chèn emoji">
 									<Smile className="h-4 w-4" />
 								</Button>
 								<Button
 									onClick={handleSendMessage}
 									disabled={!inputValue.trim()}
-									aria-label="Send message"
+									aria-label="Gửi tin nhắn"
 								>
 									<Send className="h-4 w-4" />
 								</Button>
 							</div>
 							<div className="text-muted-foreground mt-2 text-center text-xs">
-								Powered by Terminal Support
+								Được hỗ trợ bởi Terminal Support
 							</div>
 						</div>
 					</motion.div>

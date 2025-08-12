@@ -34,10 +34,10 @@ const maxFiles = 5;
 
 const validateFile = (file: File): string | null => {
 	if (!acceptedTypes.includes(file.type)) {
-		return `${file.name}: Invalid file type. Please upload images or PDF files.`;
+		return `${file.name}: Loại tệp không hợp lệ. Vui lòng tải lên hình ảnh hoặc tệp PDF.`;
 	}
 	if (file.size > maxSize) {
-		return `${file.name}: File too large. Maximum size is 5MB.`;
+		return `${file.name}: Tệp quá lớn. Kích thước tối đa là 5MB.`;
 	}
 	return null;
 };
@@ -113,7 +113,7 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 			const currentTotal = images.length + newFiles.length;
 
 			if (currentTotal > maxFiles) {
-				alert(`You can only upload up to ${maxFiles} files total.`);
+				alert(`Bạn chỉ có thể tải lên tối đa ${maxFiles} tệp.`);
 				return;
 			}
 
@@ -251,13 +251,13 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 			>
 				<Upload className="mx-auto mb-2 h-8 w-8 text-gray-400 dark:text-gray-500" />
 				<p className="mb-1 text-sm text-gray-600 dark:text-gray-300">
-					<span className="font-medium">Click to upload</span> or drag and drop
+					<span className="font-medium">Nhấp để tải lên</span> hoặc kéo và thả
 				</p>
 				<p className="text-xs text-gray-500 dark:text-gray-400">
-					PNG, JPG, GIF, WebP or PDF up to 5MB each (max {maxFiles} files)
+					PNG, JPG, GIF, WebP hoặc PDF tối đa 5MB mỗi tệp (tối đa {maxFiles} tệp)
 				</p>
 				<p className="mt-1 text-xs text-blue-600 dark:text-blue-400">
-					Images will open crop editor automatically
+					Hình ảnh sẽ mở trình chỉnh sửa cắt tự động
 				</p>
 
 				<input
@@ -295,8 +295,8 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 								</p>
 								<Badge variant={uploadingFile.status === "success" ? "default" : "secondary"}>
 									{uploadingFile.status === "uploading" && `${Math.round(uploadingFile.progress)}%`}
-									{uploadingFile.status === "success" && "Uploaded"}
-									{uploadingFile.status === "error" && "Failed"}
+									{uploadingFile.status === "success" && "Đã tải lên"}
+									{uploadingFile.status === "error" && "Thất bại"}
 								</Badge>
 							</div>
 							<div className="flex items-center gap-2">
@@ -334,7 +334,7 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 									onClick={() => cropImage(index)}
 									disabled={disabled}
 									className="h-8 w-8 flex-shrink-0 p-0 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-									title="Crop image"
+									title="Cắt hình ảnh"
 								>
 									<Crop className="h-4 w-4" />
 								</Button>
@@ -357,7 +357,7 @@ export default function ImageUpload({ images, onImagesChange, disabled = false, 
 			{/* File Count Info */}
 			{images.length > 0 && (
 				<div className="text-center text-xs text-gray-500 dark:text-gray-400">
-					{images.length} of {maxFiles} files uploaded
+					{images.length} trong số {maxFiles} tệp đã tải lên
 				</div>
 			)}
 

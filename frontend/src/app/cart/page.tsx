@@ -43,15 +43,15 @@ export default function CartContent() {
 		return (
 			<div className="py-16 text-center">
 				<ShoppingCart className="mx-auto mb-6 h-24 w-24 text-gray-300" />
-				<h1 className="mb-4 text-3xl font-bold text-gray-900">Your cart is empty</h1>
+				<h1 className="mb-4 text-3xl font-bold text-gray-900">Giỏ hàng của bạn trống</h1>
 				<p className="mx-auto mb-8 max-w-md text-gray-600">
-					Looks like you haven&apos;t added any services to your cart yet. Browse our services and find
-					something you like!
+					Có vẻ như bạn chưa thêm dịch vụ nào vào giỏ hàng. Hãy duyệt các dịch vụ của chúng tôi và tìm thứ bạn
+					thích!
 				</p>
 				<Link href="/services">
 					<Button size="lg" className="bg-blue-600 hover:bg-blue-700">
 						<ArrowLeft className="mr-2 h-4 w-4" />
-						Continue Shopping
+						Tiếp tục mua sắm
 					</Button>
 				</Link>
 			</div>
@@ -63,15 +63,15 @@ export default function CartContent() {
 			{/* Header */}
 			<div className="flex items-center justify-between">
 				<div>
-					<h1 className="text-3xl font-bold text-gray-900">Shopping Cart</h1>
+					<h1 className="text-3xl font-bold text-gray-900">Giỏ hàng</h1>
 					<p className="mt-2 text-gray-600">
-						{totalItems} {totalItems === 1 ? "item" : "items"} in your cart
+						{totalItems} {totalItems === 1 ? "sản phẩm" : "sản phẩm"} trong giỏ hàng
 					</p>
 				</div>
 				<Link href="/services">
 					<Button variant="outline" className="bg-transparent">
 						<ArrowLeft className="mr-2 h-4 w-4" />
-						Continue Shopping
+						Tiếp tục mua sắm
 					</Button>
 				</Link>
 			</div>
@@ -81,14 +81,14 @@ export default function CartContent() {
 				<div className="space-y-4 lg:col-span-2">
 					<Card>
 						<CardHeader className="flex flex-row items-center justify-between">
-							<CardTitle>Cart Items</CardTitle>
+							<CardTitle>Sản phẩm trong giỏ</CardTitle>
 							<Button
 								variant="ghost"
 								size="sm"
 								onClick={clearCart}
 								className="text-red-500 hover:text-red-700"
 							>
-								Clear All
+								Xóa tất cả
 							</Button>
 						</CardHeader>
 						<CardContent className="space-y-4">
@@ -160,7 +160,7 @@ export default function CartContent() {
 													<p className="text-lg font-bold text-blue-600">
 														${(item.price * item.quantity).toFixed(2)}
 													</p>
-													<p className="text-sm text-gray-500">${item.price} each</p>
+													<p className="text-sm text-gray-500">${item.price} mỗi sản phẩm</p>
 												</div>
 											</div>
 										</div>
@@ -176,12 +176,12 @@ export default function CartContent() {
 					{/* Promo Code */}
 					<Card>
 						<CardHeader>
-							<CardTitle>Promo Code</CardTitle>
+							<CardTitle>Mã khuyến mãi</CardTitle>
 						</CardHeader>
 						<CardContent className="space-y-3">
 							<div className="flex gap-2">
 								<Input
-									placeholder="Enter promo code"
+									placeholder="Nhập mã khuyến mãi"
 									value={promoCode}
 									onChange={(e) => setPromoCode(e.target.value)}
 								/>
@@ -190,16 +190,16 @@ export default function CartContent() {
 									disabled={!promoCode || isApplyingPromo}
 									className="bg-blue-600 hover:bg-blue-700"
 								>
-									{isApplyingPromo ? "Applying..." : "Apply"}
+									{isApplyingPromo ? "Đang áp dụng..." : "Áp dụng"}
 								</Button>
 							</div>
 							{discount > 0 && (
 								<p className="text-sm text-green-600">
-									Promo code applied! You saved ${discount.toFixed(2)}
+									Mã khuyến mãi đã được áp dụng! Bạn đã tiết kiệm ${discount.toFixed(2)}
 								</p>
 							)}
 							<div className="text-xs text-gray-500">
-								<p>Try: SAVE10 or WELCOME20</p>
+								<p>Thử: SAVE10 hoặc WELCOME20</p>
 							</div>
 						</CardContent>
 					</Card>
@@ -207,31 +207,31 @@ export default function CartContent() {
 					{/* Order Summary */}
 					<Card>
 						<CardHeader>
-							<CardTitle>Order Summary</CardTitle>
+							<CardTitle>Tóm tắt đơn hàng</CardTitle>
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<div className="space-y-3">
 								<div className="flex justify-between text-sm">
-									<span>Subtotal ({totalItems} items)</span>
+									<span>Tạm tính ({totalItems} sản phẩm)</span>
 									<span>${subtotal.toFixed(2)}</span>
 								</div>
 								<div className="flex justify-between text-sm">
-									<span>Shipping</span>
-									<span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+									<span>Vận chuyển</span>
+									<span>{shipping === 0 ? "Miễn phí" : `$${shipping.toFixed(2)}`}</span>
 								</div>
 								<div className="flex justify-between text-sm">
-									<span>Tax</span>
+									<span>Thuế</span>
 									<span>${tax.toFixed(2)}</span>
 								</div>
 								{discount > 0 && (
 									<div className="flex justify-between text-sm text-green-600">
-										<span>Discount</span>
+										<span>Giảm giá</span>
 										<span>-${discount.toFixed(2)}</span>
 									</div>
 								)}
 								<Separator />
 								<div className="flex justify-between text-lg font-semibold">
-									<span>Total</span>
+									<span>Tổng cộng</span>
 									<span>${total.toFixed(2)}</span>
 								</div>
 							</div>
@@ -239,20 +239,20 @@ export default function CartContent() {
 							{shipping > 0 && (
 								<div className="rounded-lg bg-blue-50 p-3">
 									<p className="text-sm text-blue-700">
-										Add ${(500 - subtotal).toFixed(2)} more to get free shipping!
+										Thêm ${(500 - subtotal).toFixed(2)} nữa để được miễn phí vận chuyển!
 									</p>
 								</div>
 							)}
 
 							<Link href="/payment" className="block">
 								<Button size="lg" className="w-full bg-blue-600 hover:bg-blue-700">
-									Proceed to Checkout
+									Tiến hành thanh toán
 									<ArrowRight className="ml-2 h-4 w-4" />
 								</Button>
 							</Link>
 
 							<div className="text-center">
-								<p className="text-xs text-gray-500">Secure checkout powered by SSL encryption</p>
+								<p className="text-xs text-gray-500">Thanh toán an toàn được bảo vệ bởi mã hóa SSL</p>
 							</div>
 						</CardContent>
 					</Card>

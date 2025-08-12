@@ -54,7 +54,7 @@ export default function BillingPage() {
 
 	const handleDownloadInvoice = () => {
 		// In a real app, this would generate and download a PDF
-		alert("Invoice download functionality would be implemented here!");
+		alert("Chức năng tải hóa đơn sẽ được triển khai tại đây!");
 	};
 
 	const handlePrintInvoice = () => {
@@ -63,7 +63,7 @@ export default function BillingPage() {
 
 	const handleEmailInvoice = () => {
 		// In a real app, this would send the invoice via email
-		alert("Invoice email functionality would be implemented here!");
+		alert("Chức năng gửi hóa đơn qua email sẽ được triển khai tại đây!");
 	};
 
 	if (isLoading) {
@@ -71,7 +71,7 @@ export default function BillingPage() {
 			<div className="flex min-h-screen items-center justify-center bg-gray-50 pt-20">
 				<div className="text-center">
 					<div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-blue-600"></div>
-					<p className="text-gray-600">Loading your invoice...</p>
+					<p className="text-gray-600">Đang tải hóa đơn của bạn...</p>
 				</div>
 			</div>
 		);
@@ -81,13 +81,13 @@ export default function BillingPage() {
 		return (
 			<div className="min-h-screen bg-gray-50 pt-20">
 				<div className="mx-auto max-w-2xl px-4 py-16 text-center sm:px-6 lg:px-8">
-					<h1 className="mb-4 text-3xl font-bold text-gray-900">No Invoice Found</h1>
+					<h1 className="mb-4 text-3xl font-bold text-gray-900">Không tìm thấy hóa đơn</h1>
 					<p className="mb-8 text-gray-600">
-						We couldn&apos;t find any recent orders. Please make a purchase first.
+						Chúng tôi không thể tìm thấy đơn hàng gần đây nào. Vui lòng mua hàng trước.
 					</p>
 					<Link href="/services">
 						<Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-							Browse Services
+							Duyệt dịch vụ
 						</Button>
 					</Link>
 				</div>
@@ -96,8 +96,8 @@ export default function BillingPage() {
 	}
 
 	const paymentMethodNames = {
-		momo: "MoMo E-Wallet",
-		vietqr: "VietQR Banking",
+		momo: "Ví điện tử MoMo",
+		vietqr: "Ngân hàng VietQR",
 		paypal: "PayPal",
 	};
 
@@ -107,13 +107,13 @@ export default function BillingPage() {
 				{/* Header */}
 				<div className="mb-8 flex items-center justify-between">
 					<div>
-						<h1 className="text-3xl font-bold text-gray-900">Invoice</h1>
-						<p className="mt-2 text-gray-600">Order #{orderData.id}</p>
+						<h1 className="text-3xl font-bold text-gray-900">Hóa đơn</h1>
+						<p className="mt-2 text-gray-600">Đơn hàng #{orderData.id}</p>
 					</div>
 					<div className="flex gap-2">
 						<Button variant="outline" onClick={handlePrintInvoice} className="bg-transparent">
 							<Print className="mr-2 h-4 w-4" />
-							Print
+							In
 						</Button>
 						<Button variant="outline" onClick={handleEmailInvoice} className="bg-transparent">
 							<Mail className="mr-2 h-4 w-4" />
@@ -121,7 +121,7 @@ export default function BillingPage() {
 						</Button>
 						<Button onClick={handleDownloadInvoice} className="bg-blue-600 hover:bg-blue-700">
 							<Download className="mr-2 h-4 w-4" />
-							Download PDF
+							Tải PDF
 						</Button>
 					</div>
 				</div>
@@ -135,9 +135,9 @@ export default function BillingPage() {
 								<div className="mb-4 flex items-center gap-3">
 									<CheckCircle className="h-6 w-6 text-green-500" />
 									<div>
-										<h3 className="font-semibold text-green-800">Payment Successful</h3>
+										<h3 className="font-semibold text-green-800">Thanh toán thành công</h3>
 										<p className="text-sm text-green-600">
-											Your order has been confirmed and is being processed
+											Đơn hàng của bạn đã được xác nhận và đang được xử lý
 										</p>
 									</div>
 								</div>
@@ -145,7 +145,7 @@ export default function BillingPage() {
 									<div className="flex items-center gap-2">
 										<Calendar className="h-4 w-4 text-gray-400" />
 										<div>
-											<p className="text-gray-500">Order Date</p>
+											<p className="text-gray-500">Ngày đặt hàng</p>
 											<p className="font-medium">
 												{new Date(orderData.timestamp).toLocaleDateString()}
 											</p>
@@ -154,7 +154,7 @@ export default function BillingPage() {
 									<div className="flex items-center gap-2">
 										<CreditCard className="h-4 w-4 text-gray-400" />
 										<div>
-											<p className="text-gray-500">Payment Method</p>
+											<p className="text-gray-500">Phương thức thanh toán</p>
 											<p className="font-medium">
 												{
 													paymentMethodNames[
@@ -167,7 +167,7 @@ export default function BillingPage() {
 									<div className="flex items-center gap-2">
 										<User className="h-4 w-4 text-gray-400" />
 										<div>
-											<p className="text-gray-500">Customer</p>
+											<p className="text-gray-500">Khách hàng</p>
 											<p className="font-medium">{orderData.customer.name}</p>
 										</div>
 									</div>
@@ -178,7 +178,7 @@ export default function BillingPage() {
 						{/* Order Items */}
 						<Card>
 							<CardHeader>
-								<CardTitle>Order Items</CardTitle>
+								<CardTitle>Sản phẩm đặt hàng</CardTitle>
 							</CardHeader>
 							<CardContent>
 								<div className="space-y-4">
@@ -199,13 +199,15 @@ export default function BillingPage() {
 												</Badge>
 												<div className="mt-2 flex items-center justify-between">
 													<span className="text-sm text-gray-600">
-														Quantity: {item.quantity}
+														Số lượng: {item.quantity}
 													</span>
 													<div className="text-right">
 														<p className="font-semibold text-blue-600">
 															${(item.price * item.quantity).toFixed(2)}
 														</p>
-														<p className="text-sm text-gray-500">${item.price} each</p>
+														<p className="text-sm text-gray-500">
+															${item.price} mỗi sản phẩm
+														</p>
 													</div>
 												</div>
 											</div>
@@ -221,11 +223,11 @@ export default function BillingPage() {
 						{/* Customer Information */}
 						<Card>
 							<CardHeader>
-								<CardTitle>Customer Information</CardTitle>
+								<CardTitle>Thông tin khách hàng</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-3">
 								<div>
-									<p className="text-sm text-gray-500">Name</p>
+									<p className="text-sm text-gray-500">Tên</p>
 									<p className="font-medium">{orderData.customer.name}</p>
 								</div>
 								<div>
@@ -233,7 +235,7 @@ export default function BillingPage() {
 									<p className="font-medium">{orderData.customer.email}</p>
 								</div>
 								<div>
-									<p className="text-sm text-gray-500">Phone</p>
+									<p className="text-sm text-gray-500">Điện thoại</p>
 									<p className="font-medium">{orderData.customer.phone}</p>
 								</div>
 							</CardContent>
@@ -242,33 +244,34 @@ export default function BillingPage() {
 						{/* Payment Summary */}
 						<Card>
 							<CardHeader>
-								<CardTitle>Payment Summary</CardTitle>
+								<CardTitle>Tóm tắt thanh toán</CardTitle>
 							</CardHeader>
 							<CardContent className="space-y-3">
 								<div className="flex justify-between text-sm">
 									<span>
-										Subtotal ({orderData.items.reduce((sum, item) => sum + item.quantity, 0)} items)
+										Tạm tính ({orderData.items.reduce((sum, item) => sum + item.quantity, 0)} sản
+										phẩm)
 									</span>
 									<span>${orderData.subtotal.toFixed(2)}</span>
 								</div>
 								<div className="flex justify-between text-sm">
-									<span>Shipping</span>
+									<span>Vận chuyển</span>
 									<span>
-										{orderData.shipping === 0 ? "Free" : `$${orderData.shipping.toFixed(2)}`}
+										{orderData.shipping === 0 ? "Miễn phí" : `$${orderData.shipping.toFixed(2)}`}
 									</span>
 								</div>
 								<div className="flex justify-between text-sm">
-									<span>Tax</span>
+									<span>Thuế</span>
 									<span>${orderData.tax.toFixed(2)}</span>
 								</div>
 								<Separator />
 								<div className="flex justify-between text-lg font-semibold">
-									<span>Total Paid</span>
+									<span>Tổng thanh toán</span>
 									<span className="text-blue-600">${orderData.total.toFixed(2)}</span>
 								</div>
 								<div className="pt-4 text-center">
 									<Badge className="border-green-200 bg-green-100 text-green-800">
-										Payment Confirmed
+										Đã xác nhận thanh toán
 									</Badge>
 								</div>
 							</CardContent>
@@ -279,12 +282,12 @@ export default function BillingPage() {
 							<Link href="/services" className="block">
 								<Button variant="outline" className="w-full bg-transparent">
 									<ArrowLeft className="mr-2 h-4 w-4" />
-									Continue Shopping
+									Tiếp tục mua sắm
 								</Button>
 							</Link>
 							<Link href="/profile/orders" className="block">
 								<Button variant="outline" className="w-full bg-transparent">
-									View All Orders
+									Xem tất cả đơn hàng
 								</Button>
 							</Link>
 						</div>
@@ -293,9 +296,7 @@ export default function BillingPage() {
 
 				{/* Footer */}
 				<div className="mt-12 border-t pt-8 text-center text-sm text-gray-500">
-					<p>
-						Thank you for choosing DigitalPro! If you have any questions, please contact our support team.
-					</p>
+					<p>Cảm ơn bạn đã chọn DigitalPro! Nếu bạn có câu hỏi nào, vui lòng liên hệ đội ngũ hỗ trợ.</p>
 					<p className="mt-2">support@digitalpro.com | +1 (555) 123-4567</p>
 				</div>
 			</div>

@@ -46,20 +46,20 @@ export default function PaymentSuccessPage() {
 						>
 							<CheckCircle className="h-20 w-20 text-green-500" />
 						</motion.div>
-						<CardTitle className="mb-2 text-3xl font-bold text-gray-900">Payment Successful!</CardTitle>
+						<CardTitle className="mb-2 text-3xl font-bold text-gray-900">Thanh toán thành công!</CardTitle>
 						<p className="text-lg text-gray-600">
-							Thank you for your purchase. Your order has been confirmed.
+							Cảm ơn bạn đã mua hàng. Đơn hàng của bạn đã được xác nhận.
 						</p>
 					</CardHeader>
 
 					<CardContent className="space-y-6">
 						<div className="rounded-lg bg-green-50 p-6">
-							<h3 className="mb-2 font-semibold text-green-800">What happens next?</h3>
+							<h3 className="mb-2 font-semibold text-green-800">Điều gì xảy ra tiếp theo?</h3>
 							<ul className="space-y-1 text-sm text-green-700">
-								<li>• You&apos;ll receive an email confirmation shortly</li>
-								<li>• Our team will start working on your services</li>
-								<li>• You can track progress in your dashboard</li>
-								<li>• We&apos;ll notify you of any updates</li>
+								<li>• Bạn sẽ nhận được email xác nhận trong thời gian ngắn</li>
+								<li>• Đội ngũ của chúng tôi sẽ bắt đầu xử lý dịch vụ của bạn</li>
+								<li>• Bạn có thể theo dõi tiến độ trong bảng điều khiển</li>
+								<li>• Chúng tôi sẽ thông báo cho bạn về mọi cập nhật</li>
 							</ul>
 						</div>
 
@@ -67,24 +67,24 @@ export default function PaymentSuccessPage() {
 							<Link href="/billing" className="flex-1">
 								<Button size="lg" className="w-full bg-blue-600 hover:bg-blue-700">
 									<Download className="mr-2 h-4 w-4" />
-									View Invoice
+									Xem hóa đơn
 								</Button>
 							</Link>
 							<Link href="/" className="flex-1">
 								<Button size="lg" variant="outline" className="w-full bg-transparent">
 									<Home className="mr-2 h-4 w-4" />
-									Go Home
+									Về trang chủ
 								</Button>
 							</Link>
 						</div>
 
 						<div className="text-center">
 							<p className="mb-2 text-sm text-gray-500">
-								Redirecting to your invoice in {countdown} seconds...
+								Chuyển hướng đến hóa đơn của bạn trong {countdown} giây...
 							</p>
 							<Link href="/billing">
 								<Button variant="link" className="text-blue-600 hover:text-blue-700">
-									Go to Invoice Now
+									Đến hóa đơn ngay
 									<ArrowRight className="ml-1 h-4 w-4" />
 								</Button>
 							</Link>
@@ -92,7 +92,7 @@ export default function PaymentSuccessPage() {
 
 						<div className="border-t pt-4">
 							<p className="text-center text-xs text-gray-500">
-								Need help? Contact our support team at support@digitalpro.com
+								Cần giúp đỡ? Liên hệ đội ngũ hỗ trợ tại support@digitalpro.com
 							</p>
 						</div>
 					</CardContent>

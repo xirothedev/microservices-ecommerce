@@ -23,17 +23,17 @@ export default function ServicesHero() {
 				>
 					<Badge className="border-white/30 bg-white/20 text-white backdrop-blur-sm">
 						<Sparkles className="mr-2 h-4 w-4" />
-						Premium Digital Services
+						Dịch vụ số cao cấp
 					</Badge>
 
 					<div className="space-y-4">
 						<h1 className="text-4xl leading-tight font-bold md:text-6xl">
-							Explore Our
-							<span className="block text-yellow-300">Digital Solutions</span>
+							Khám phá
+							<span className="block text-yellow-300">Giải pháp số</span>
 						</h1>
 						<p className="mx-auto max-w-3xl text-xl leading-relaxed text-blue-100 md:text-2xl">
-							Discover our comprehensive range of professional digital services designed to enhance your
-							online presence and streamline your digital experience.
+							Khám phá danh mục toàn diện các dịch vụ số chuyên nghiệp được thiết kế để nâng cao sự hiện
+							diện trực tuyến và tối ưu hóa trải nghiệm số của bạn.
 						</p>
 					</div>
 
@@ -43,7 +43,7 @@ export default function ServicesHero() {
 							className="bg-white px-8 py-3 text-lg text-blue-600 hover:bg-gray-100"
 							onClick={scrollToServices}
 						>
-							Browse Services
+							Duyệt dịch vụ
 							<ArrowDown className="ml-2 h-5 w-5" />
 						</Button>
 						<Button
@@ -51,7 +51,7 @@ export default function ServicesHero() {
 							variant="outline"
 							className="border-white bg-transparent px-8 py-3 text-lg text-white hover:bg-white hover:text-blue-600"
 						>
-							Custom Quote
+							Báo giá tùy chỉnh
 						</Button>
 					</div>
 
@@ -63,7 +63,7 @@ export default function ServicesHero() {
 							className="text-center"
 						>
 							<div className="text-3xl font-bold">50+</div>
-							<div className="text-blue-200">Services Available</div>
+							<div className="text-blue-200">Dịch vụ có sẵn</div>
 						</motion.div>
 						<motion.div
 							initial={{ opacity: 0, y: 20 }}
@@ -72,7 +72,7 @@ export default function ServicesHero() {
 							className="text-center"
 						>
 							<div className="text-3xl font-bold">24h</div>
-							<div className="text-blue-200">Average Delivery</div>
+							<div className="text-blue-200">Thời gian giao hàng trung bình</div>
 						</motion.div>
 						<motion.div
 							initial={{ opacity: 0, y: 20 }}
@@ -81,7 +81,7 @@ export default function ServicesHero() {
 							className="text-center"
 						>
 							<div className="text-3xl font-bold">99.9%</div>
-							<div className="text-blue-200">Success Rate</div>
+							<div className="text-blue-200">Tỷ lệ thành công</div>
 						</motion.div>
 						<motion.div
 							initial={{ opacity: 0, y: 20 }}
@@ -90,7 +90,7 @@ export default function ServicesHero() {
 							className="text-center"
 						>
 							<div className="text-3xl font-bold">24/7</div>
-							<div className="text-blue-200">Support</div>
+							<div className="text-blue-200">Hỗ trợ</div>
 						</motion.div>
 					</div>
 				</motion.div>

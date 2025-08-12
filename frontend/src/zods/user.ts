@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const profileSchema = z.object({
-	fullname: z.string().min(1, "Full name is required"),
+	fullname: z.string().min(1, "Họ và tên là bắt buộc"),
 	address: z.string().optional(),
 	city: z.string().optional(),
 	state: z.string().optional(),

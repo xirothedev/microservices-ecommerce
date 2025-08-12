@@ -1,5 +1,3 @@
-import Navbar from "@/components/navbar";
-import ServicesHero from "@/app/services/components/services-hero";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,12 +9,8 @@ export const metadata: Metadata = {
 
 export default function ServiceLayout({ children }: { children: React.ReactElement }) {
 	return (
-		<>
-			<Navbar navItems={[]} />
-			<main className="min-h-screen pt-16">
-				<ServicesHero />
-				<section className="bg-gray-50 py-12">{children}</section>
-			</main>
-		</>
+		<main className="min-h-screen">
+			<section className="bg-gray-50 py-12">{children}</section>
+		</main>
 	);
 }

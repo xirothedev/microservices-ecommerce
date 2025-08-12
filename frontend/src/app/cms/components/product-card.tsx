@@ -118,7 +118,7 @@ export default function ProductCard({ product, viewMode, onEdit, onDelete, onPre
 										</div>
 										<div className="flex items-center gap-1 text-sm text-gray-600">
 											<Package className="h-4 w-4" />
-											{product.inventory} in stock
+											{product.inventory} trong kho
 										</div>
 										<div className="flex items-center gap-1 text-sm text-gray-600">
 											<Calendar className="h-4 w-4" />
@@ -138,11 +138,11 @@ export default function ProductCard({ product, viewMode, onEdit, onDelete, onPre
 										<DropdownMenuContent align="end">
 											<DropdownMenuItem onClick={onPreview}>
 												<Eye className="mr-2 h-4 w-4" />
-												Preview
+												Xem trước
 											</DropdownMenuItem>
 											<DropdownMenuItem onClick={onEdit}>
 												<Edit className="mr-2 h-4 w-4" />
-												Edit
+												Chỉnh sửa
 											</DropdownMenuItem>
 											<DropdownMenuSeparator />
 											<DropdownMenuItem
@@ -150,7 +150,7 @@ export default function ProductCard({ product, viewMode, onEdit, onDelete, onPre
 												className="text-red-600"
 											>
 												<Trash2 className="mr-2 h-4 w-4" />
-												Delete
+												Xóa
 											</DropdownMenuItem>
 										</DropdownMenuContent>
 									</DropdownMenu>
@@ -198,17 +198,17 @@ export default function ProductCard({ product, viewMode, onEdit, onDelete, onPre
 
 						<div className="space-y-2">
 							<div className="flex items-center justify-between text-sm">
-								<span className="text-gray-600">Price:</span>
+								<span className="text-gray-600">Giá:</span>
 								<span className="font-semibold">${product.price}</span>
 							</div>
 							<div className="flex items-center justify-between text-sm">
-								<span className="text-gray-600">Stock:</span>
+								<span className="text-gray-600">Tồn kho:</span>
 								<span className={product.inventory > 0 ? "text-green-600" : "text-red-600"}>
 									{product.inventory}
 								</span>
 							</div>
 							<div className="flex items-center justify-between text-sm">
-								<span className="text-gray-600">Updated:</span>
+								<span className="text-gray-600">Cập nhật:</span>
 								<span>{formatDate(product.updatedAt)}</span>
 							</div>
 						</div>
@@ -235,11 +235,11 @@ export default function ProductCard({ product, viewMode, onEdit, onDelete, onPre
 						<div className="flex w-full gap-2">
 							<Button variant="outline" size="sm" onClick={onPreview} className="flex-1 bg-transparent">
 								<Eye className="mr-1 h-4 w-4" />
-								Preview
+								Xem trước
 							</Button>
 							<Button variant="outline" size="sm" onClick={onEdit} className="flex-1 bg-transparent">
 								<Edit className="mr-1 h-4 w-4" />
-								Edit
+								Chỉnh sửa
 							</Button>
 							<Button
 								variant="outline"
@@ -257,13 +257,13 @@ export default function ProductCard({ product, viewMode, onEdit, onDelete, onPre
 			<AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						<AlertDialogTitle>Delete Product</AlertDialogTitle>
+						<AlertDialogTitle>Xóa sản phẩm</AlertDialogTitle>
 						<AlertDialogDescription>
-							Are you sure you want to delete &quot;{product.name}&quot;? This action cannot be undone.
+							Bạn có chắc chắn muốn xóa &quot;{product.name}&quot;? Hành động này không thể hoàn tác.
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
-						<AlertDialogCancel>Cancel</AlertDialogCancel>
+						<AlertDialogCancel>Hủy</AlertDialogCancel>
 						<AlertDialogAction
 							onClick={() => {
 								onDelete();
@@ -271,7 +271,7 @@ export default function ProductCard({ product, viewMode, onEdit, onDelete, onPre
 							}}
 							className="bg-red-600 hover:bg-red-700"
 						>
-							Delete
+							Xóa
 						</AlertDialogAction>
 					</AlertDialogFooter>
 				</AlertDialogContent>

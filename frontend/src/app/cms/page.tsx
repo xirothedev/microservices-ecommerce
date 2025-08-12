@@ -58,23 +58,23 @@ export default function CmsLayout() {
 		const mockProducts: Product[] = [
 			{
 				id: "1",
-				name: "Premium SEO Package",
+				name: "Gói SEO cao cấp",
 				description:
-					"<p>Comprehensive SEO optimization for your website including keyword research, on-page optimization, and monthly reporting.</p>",
+					"<p>Tối ưu hóa SEO toàn diện cho website của bạn bao gồm nghiên cứu từ khóa, tối ưu hóa trên trang và báo cáo hàng tháng.</p>",
 				price: 299,
 				images: [
 					"https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=300&width=300",
 				],
-				categories: ["SEO", "Digital Marketing"],
+				categories: ["SEO", "Tiếp thị số"],
 				inventory: 50,
 				variations: [
 					{
 						id: "duration",
-						name: "Duration",
+						name: "Thời hạn",
 						options: [
-							{ id: "1month", value: "1 Month", price: 299, inventory: 50 },
-							{ id: "3months", value: "3 Months", price: 799, inventory: 30 },
-							{ id: "6months", value: "6 Months", price: 1499, inventory: 20 },
+							{ id: "1month", value: "1 tháng", price: 299, inventory: 50 },
+							{ id: "3months", value: "3 tháng", price: 799, inventory: 30 },
+							{ id: "6months", value: "6 tháng", price: 1499, inventory: 20 },
 						],
 					},
 				],
@@ -84,23 +84,23 @@ export default function CmsLayout() {
 			},
 			{
 				id: "2",
-				name: "Social Media Management",
+				name: "Quản lý mạng xã hội",
 				description:
-					"<p>Complete social media management including content creation, posting schedule, and engagement tracking.</p>",
+					"<p>Quản lý mạng xã hội hoàn chỉnh bao gồm tạo nội dung, lịch đăng bài và theo dõi tương tác.</p>",
 				price: 199,
 				images: [
 					"https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=300&width=300",
 				],
-				categories: ["Social Media", "Content Marketing"],
+				categories: ["Mạng xã hội", "Tiếp thị nội dung"],
 				inventory: 25,
 				variations: [
 					{
 						id: "platforms",
-						name: "Platforms",
+						name: "Nền tảng",
 						options: [
-							{ id: "basic", value: "Basic (2 platforms)", price: 199, inventory: 25 },
-							{ id: "standard", value: "Standard (4 platforms)", price: 349, inventory: 15 },
-							{ id: "premium", value: "Premium (6+ platforms)", price: 499, inventory: 10 },
+							{ id: "basic", value: "Cơ bản (2 nền tảng)", price: 199, inventory: 25 },
+							{ id: "standard", value: "Tiêu chuẩn (4 nền tảng)", price: 349, inventory: 15 },
+							{ id: "premium", value: "Cao cấp (6+ nền tảng)", price: 499, inventory: 10 },
 						],
 					},
 				],
@@ -110,22 +110,23 @@ export default function CmsLayout() {
 			},
 			{
 				id: "3",
-				name: "Website Design & Development",
-				description: "<p>Custom website design and development with responsive layout and modern features.</p>",
+				name: "Thiết kế & Phát triển website",
+				description:
+					"<p>Thiết kế và phát triển website tùy chỉnh với bố cục đáp ứng và tính năng hiện đại.</p>",
 				price: 1299,
 				images: [
 					"https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=300&width=300",
 				],
-				categories: ["Web Development", "Design"],
+				categories: ["Phát triển web", "Thiết kế"],
 				inventory: 10,
 				variations: [
 					{
 						id: "pages",
-						name: "Pages",
+						name: "Trang",
 						options: [
-							{ id: "basic", value: "Basic (5 pages)", price: 1299, inventory: 10 },
-							{ id: "standard", value: "Standard (10 pages)", price: 1999, inventory: 8 },
-							{ id: "premium", value: "Premium (15+ pages)", price: 2999, inventory: 5 },
+							{ id: "basic", value: "Cơ bản (5 trang)", price: 1299, inventory: 10 },
+							{ id: "standard", value: "Tiêu chuẩn (10 trang)", price: 1999, inventory: 8 },
+							{ id: "premium", value: "Cao cấp (15+ trang)", price: 2999, inventory: 5 },
 						],
 					},
 				],
@@ -256,13 +257,13 @@ export default function CmsLayout() {
 			{/* Header */}
 			<div className="mb-8 flex flex-col lg:flex-row lg:items-center lg:justify-between">
 				<div>
-					<h1 className="mb-2 text-3xl font-bold">Content Management System</h1>
-					<p className="text-gray-600">Manage your product listings and content</p>
+					<h1 className="mb-2 text-3xl font-bold">Hệ thống quản lý nội dung</h1>
+					<p className="text-gray-600">Quản lý danh sách sản phẩm và nội dung của bạn</p>
 				</div>
 				<div className="mt-4 flex items-center gap-4 lg:mt-0">
 					<Button onClick={handleCreateProduct} variant="default">
 						<Plus className="mr-2 h-4 w-4" />
-						Add Product
+						Thêm sản phẩm
 					</Button>
 				</div>
 			</div>
@@ -271,19 +272,19 @@ export default function CmsLayout() {
 			<div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
 				<div className="rounded-lg border bg-white p-4 shadow-sm">
 					<div className="text-2xl font-bold text-gray-900">{stats.total}</div>
-					<div className="text-sm text-gray-600">Total Products</div>
+					<div className="text-sm text-gray-600">Tổng sản phẩm</div>
 				</div>
 				<div className="rounded-lg border bg-white p-4 shadow-sm">
 					<div className="text-2xl font-bold text-green-600">{stats.active}</div>
-					<div className="text-sm text-gray-600">Active</div>
+					<div className="text-sm text-gray-600">Đang hoạt động</div>
 				</div>
 				<div className="rounded-lg border bg-white p-4 shadow-sm">
 					<div className="text-2xl font-bold text-yellow-600">{stats.draft}</div>
-					<div className="text-sm text-gray-600">Draft</div>
+					<div className="text-sm text-gray-600">Bản nháp</div>
 				</div>
 				<div className="rounded-lg border bg-white p-4 shadow-sm">
 					<div className="text-2xl font-bold text-gray-600">{stats.archived}</div>
-					<div className="text-sm text-gray-600">Archived</div>
+					<div className="text-sm text-gray-600">Đã lưu trữ</div>
 				</div>
 			</div>
 
@@ -294,7 +295,7 @@ export default function CmsLayout() {
 						<div className="relative">
 							<Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
 							<Input
-								placeholder="Search products by name or category..."
+								placeholder="Tìm kiếm sản phẩm theo tên hoặc danh mục..."
 								value={searchQuery}
 								onChange={(e) => setSearchQuery(e.target.value)}
 								className="pl-10"

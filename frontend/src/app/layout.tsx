@@ -1,36 +1,36 @@
 import ClickSpark from "@/components/click-spark";
 import { CookieConsent } from "@/components/cookie-consent";
+import Footer from "@/components/footer";
 import Header from "@/components/header";
 import QueryProvider from "@/components/providers/query-provider";
 import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { AuthProvider } from "@/contexts/auth-context";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-	title: {
-		template: "Digital Pro - %s",
-		default: "Digital Pro",
-	},
-	description:
-		"Professional digital services including Apple ID setup, social media management, and premium subscriptions. Trusted by thousands of customers worldwide.",
-	keywords: "digital services, Apple ID, Facebook management, YouTube Premium, digital solutions",
+	title: "Web Store",
+	description: "Chuyên cung cấp các dịch vụ số chất lượng cao",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang="en" className="scroll-smooth bg-gray-50" suppressHydrationWarning>
+		<html lang="en">
 			<body className={inter.className}>
-				<QueryProvider>
-					<ClickSpark sparkColor="#f9fafb" sparkSize={10} sparkRadius={15} sparkCount={8} duration={400}>
-						<Header />
-						{children}
-						<CookieConsent />
-						<Toaster />
-					</ClickSpark>
-				</QueryProvider>
+				<AuthProvider>
+					<QueryProvider>
+						<ClickSpark sparkColor="#f9fafb" sparkSize={10} sparkRadius={15} sparkCount={8} duration={400}>
+							<Header />
+							{children}
+							<Footer />
+							<CookieConsent />
+							<Toaster />
+						</ClickSpark>
+					</QueryProvider>
+				</AuthProvider>
 			</body>
 		</html>
 	);

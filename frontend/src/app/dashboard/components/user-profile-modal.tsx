@@ -57,35 +57,35 @@ const mockActivityLogs: ActivityLog[] = [
 	{
 		id: "1",
 		action: "login",
-		description: "User logged in",
+		description: "Người dùng đã đăng nhập",
 		timestamp: "2024-01-15T14:30:00Z",
 		ipAddress: "192.168.1.100",
 	},
 	{
 		id: "2",
 		action: "purchase",
-		description: "Purchased Apple ID Premium Setup",
+		description: "Đã mua Apple ID Premium Setup",
 		timestamp: "2024-01-15T12:15:00Z",
 		ipAddress: "192.168.1.100",
 	},
 	{
 		id: "3",
 		action: "profile_update",
-		description: "Updated profile information",
+		description: "Đã cập nhật thông tin hồ sơ",
 		timestamp: "2024-01-14T16:45:00Z",
 		ipAddress: "192.168.1.100",
 	},
 	{
 		id: "4",
 		action: "password_change",
-		description: "Changed account password",
+		description: "Đã thay đổi mật khẩu tài khoản",
 		timestamp: "2024-01-13T10:20:00Z",
 		ipAddress: "192.168.1.100",
 	},
 	{
 		id: "5",
 		action: "support_ticket",
-		description: "Created support ticket #TKT-123456",
+		description: "Đã tạo phiếu hỗ trợ #TKT-123456",
 		timestamp: "2024-01-12T14:30:00Z",
 		ipAddress: "192.168.1.100",
 	},
@@ -101,14 +101,14 @@ const mockOrders: Order[] = [
 	},
 	{
 		id: "ORD-002",
-		service: "Social Media Management",
+		service: "Quản lý mạng xã hội",
 		amount: 99.99,
 		status: "completed",
 		date: "2024-01-10T09:30:00Z",
 	},
 	{
 		id: "ORD-003",
-		service: "SEO Optimization",
+		service: "Tối ưu hóa SEO",
 		amount: 149.99,
 		status: "pending",
 		date: "2024-01-08T15:45:00Z",
@@ -139,7 +139,7 @@ export default function UserProfileModal({
 
 	const formatDate = (dateString: string) => {
 		const date = new Date(dateString);
-		return date.toLocaleDateString("en-US", {
+		return date.toLocaleDateString("vi-VN", {
 			month: "long",
 			day: "numeric",
 			year: "numeric",
@@ -149,7 +149,7 @@ export default function UserProfileModal({
 	};
 
 	const formatCurrency = (amount: number) => {
-		return new Intl.NumberFormat("en-US", {
+		return new Intl.NumberFormat("vi-VN", {
 			style: "currency",
 			currency: "USD",
 		}).format(amount);
@@ -158,11 +158,11 @@ export default function UserProfileModal({
 	const getStatusBadge = (status: string) => {
 		switch (status) {
 			case "active":
-				return <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Active</Badge>;
+				return <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Hoạt động</Badge>;
 			case "inactive":
-				return <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">Inactive</Badge>;
+				return <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">Không hoạt động</Badge>;
 			case "banned":
-				return <Badge className="bg-red-100 text-red-800 hover:bg-red-100">Banned</Badge>;
+				return <Badge className="bg-red-100 text-red-800 hover:bg-red-100">Bị cấm</Badge>;
 			default:
 				return <Badge variant="secondary">{status}</Badge>;
 		}
@@ -171,11 +171,11 @@ export default function UserProfileModal({
 	const getRoleBadge = (role: string) => {
 		switch (role) {
 			case "admin":
-				return <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-100">Admin</Badge>;
+				return <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-100">Quản trị viên</Badge>;
 			case "premium":
-				return <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100">Premium</Badge>;
+				return <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100">Cao cấp</Badge>;
 			case "user":
-				return <Badge variant="outline">User</Badge>;
+				return <Badge variant="outline">Người dùng</Badge>;
 			default:
 				return <Badge variant="secondary">{role}</Badge>;
 		}
@@ -184,11 +184,11 @@ export default function UserProfileModal({
 	const getOrderStatusBadge = (status: string) => {
 		switch (status) {
 			case "completed":
-				return <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Completed</Badge>;
+				return <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Hoàn thành</Badge>;
 			case "pending":
-				return <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">Pending</Badge>;
+				return <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">Đang chờ</Badge>;
 			case "cancelled":
-				return <Badge className="bg-red-100 text-red-800 hover:bg-red-100">Cancelled</Badge>;
+				return <Badge className="bg-red-100 text-red-800 hover:bg-red-100">Đã hủy</Badge>;
 			default:
 				return <Badge variant="secondary">{status}</Badge>;
 		}
@@ -237,8 +237,8 @@ export default function UserProfileModal({
 		<Dialog open={isOpen} onOpenChange={onClose}>
 			<DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[60vw]">
 				<DialogHeader>
-					<DialogTitle>User Profile</DialogTitle>
-					<DialogDescription>View and manage user account details and activity</DialogDescription>
+					<DialogTitle>Hồ sơ người dùng</DialogTitle>
+					<DialogDescription>Xem và quản lý chi tiết tài khoản và hoạt động của người dùng</DialogDescription>
 				</DialogHeader>
 
 				<div className="space-y-6">
@@ -279,16 +279,16 @@ export default function UserProfileModal({
 										)}
 										<div className="flex items-center gap-2">
 											<Calendar className="h-4 w-4" />
-											Joined {formatDate(user.joinDate)}
+											Tham gia {formatDate(user.joinDate)}
 										</div>
 										<div className="flex items-center gap-2">
 											<Activity className="h-4 w-4" />
-											Last active {formatDate(user.lastActivity)}
+											Hoạt động cuối {formatDate(user.lastActivity)}
 										</div>
 									</div>
 								</div>
 								<div className="text-right">
-									<div className="mb-1 text-sm text-gray-600">Account Credits</div>
+									<div className="mb-1 text-sm text-gray-600">Tín dụng tài khoản</div>
 									<div className="flex items-center gap-2">
 										{isEditingCredits ? (
 											<div className="flex items-center gap-2">
@@ -343,7 +343,7 @@ export default function UserProfileModal({
 									</div>
 									<div>
 										<div className="text-2xl font-bold">{user.totalOrders}</div>
-										<div className="text-sm text-gray-600">Total Orders</div>
+										<div className="text-sm text-gray-600">Tổng đơn hàng</div>
 									</div>
 								</div>
 							</CardContent>
@@ -356,7 +356,7 @@ export default function UserProfileModal({
 									</div>
 									<div>
 										<div className="text-2xl font-bold">{formatCurrency(user.totalSpent)}</div>
-										<div className="text-sm text-gray-600">Total Spent</div>
+										<div className="text-sm text-gray-600">Tổng chi tiêu</div>
 									</div>
 								</div>
 							</CardContent>
@@ -369,7 +369,7 @@ export default function UserProfileModal({
 									</div>
 									<div>
 										<div className="text-2xl font-bold">{activityLogs.length}</div>
-										<div className="text-sm text-gray-600">Activities</div>
+										<div className="text-sm text-gray-600">Hoạt động</div>
 									</div>
 								</div>
 							</CardContent>
@@ -379,16 +379,18 @@ export default function UserProfileModal({
 					{/* Tabs */}
 					<Tabs defaultValue="activity" className="space-y-4">
 						<TabsList>
-							<TabsTrigger value="activity">Activity Log</TabsTrigger>
-							<TabsTrigger value="orders">Order History</TabsTrigger>
-							<TabsTrigger value="actions">Admin Actions</TabsTrigger>
+							<TabsTrigger value="activity">Nhật ký hoạt động</TabsTrigger>
+							<TabsTrigger value="orders">Lịch sử đơn hàng</TabsTrigger>
+							<TabsTrigger value="actions">Hành động quản trị</TabsTrigger>
 						</TabsList>
 
 						<TabsContent value="activity" className="space-y-4">
 							<Card>
 								<CardHeader>
-									<CardTitle>Recent Activity</CardTitle>
-									<CardDescription>User&apos;s recent actions and system events</CardDescription>
+									<CardTitle>Hoạt động gần đây</CardTitle>
+									<CardDescription>
+										Hành động gần đây và sự kiện hệ thống của người dùng
+									</CardDescription>
 								</CardHeader>
 								<CardContent>
 									<div className="space-y-4">
@@ -423,18 +425,20 @@ export default function UserProfileModal({
 						<TabsContent value="orders" className="space-y-4">
 							<Card>
 								<CardHeader>
-									<CardTitle>Order History</CardTitle>
-									<CardDescription>Complete list of user&apos;s orders and purchases</CardDescription>
+									<CardTitle>Lịch sử đơn hàng</CardTitle>
+									<CardDescription>
+										Danh sách đầy đủ các đơn hàng và mua hàng của người dùng
+									</CardDescription>
 								</CardHeader>
 								<CardContent>
 									<Table>
 										<TableHeader>
 											<TableRow>
-												<TableHead>Order ID</TableHead>
-												<TableHead>Service</TableHead>
-												<TableHead>Amount</TableHead>
-												<TableHead>Status</TableHead>
-												<TableHead>Date</TableHead>
+												<TableHead>Mã đơn hàng</TableHead>
+												<TableHead>Dịch vụ</TableHead>
+												<TableHead>Số tiền</TableHead>
+												<TableHead>Trạng thái</TableHead>
+												<TableHead>Ngày</TableHead>
 											</TableRow>
 										</TableHeader>
 										<TableBody>
@@ -456,8 +460,8 @@ export default function UserProfileModal({
 						<TabsContent value="actions" className="space-y-4">
 							<Card>
 								<CardHeader>
-									<CardTitle>Administrative Actions</CardTitle>
-									<CardDescription>Manage user account and permissions</CardDescription>
+									<CardTitle>Hành động quản trị</CardTitle>
+									<CardDescription>Quản lý tài khoản và quyền hạn của người dùng</CardDescription>
 								</CardHeader>
 								<CardContent className="space-y-4">
 									<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -472,24 +476,24 @@ export default function UserProfileModal({
 											}
 										>
 											<Ban className="mr-2 h-4 w-4" />
-											{user.status === "banned" ? "Unban User" : "Ban User"}
+											{user.status === "banned" ? "Bỏ cấm người dùng" : "Cấm người dùng"}
 										</Button>
 										<Button variant="destructive" onClick={handleDelete} disabled={loading}>
 											<Trash2 className="mr-2 h-4 w-4" />
-											Delete Account
+											Xóa tài khoản
 										</Button>
 									</div>
 									<Separator />
 									<div className="text-sm text-gray-600">
 										<p className="mb-2">
-											<strong>Note:</strong> Administrative actions are logged and cannot be
-											undone.
+											<strong>Lưu ý:</strong> Các hành động quản trị được ghi lại và không thể
+											hoàn tác.
 										</p>
 										<ul className="list-inside list-disc space-y-1">
-											<li>Banning a user will prevent them from accessing their account</li>
-											<li>Deleting an account will permanently remove all user data</li>
-											<li>Credit adjustments are applied immediately</li>
-											<li>Profile information can only be modified by the user</li>
+											<li>Cấm người dùng sẽ ngăn họ truy cập vào tài khoản</li>
+											<li>Xóa tài khoản sẽ xóa vĩnh viễn tất cả dữ liệu người dùng</li>
+											<li>Điều chỉnh tín dụng được áp dụng ngay lập tức</li>
+											<li>Thông tin hồ sơ chỉ có thể được người dùng chỉnh sửa</li>
 										</ul>
 									</div>
 								</CardContent>

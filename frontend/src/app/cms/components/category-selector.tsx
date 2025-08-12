@@ -14,17 +14,17 @@ interface CategorySelectorProps {
 
 const PREDEFINED_CATEGORIES = [
 	"SEO",
-	"Digital Marketing",
-	"Social Media",
-	"Content Marketing",
-	"Web Development",
-	"Design",
-	"Analytics",
-	"Email Marketing",
-	"PPC Advertising",
-	"Branding",
-	"Consulting",
-	"Strategy",
+	"Tiếp thị số",
+	"Mạng xã hội",
+	"Tiếp thị nội dung",
+	"Phát triển web",
+	"Thiết kế",
+	"Phân tích",
+	"Tiếp thị email",
+	"Quảng cáo PPC",
+	"Xây dựng thương hiệu",
+	"Tư vấn",
+	"Chiến lược",
 ];
 
 export default function CategorySelector({ selectedCategories, onChange }: CategorySelectorProps) {
@@ -77,7 +77,7 @@ export default function CategorySelector({ selectedCategories, onChange }: Categ
 				<PopoverTrigger asChild>
 					<Button variant="outline" className="w-full justify-start bg-transparent">
 						<Plus className="mr-2 h-4 w-4" />
-						Add Categories
+						Thêm danh mục
 					</Button>
 				</PopoverTrigger>
 				<PopoverContent className="w-80" align="start">
@@ -85,19 +85,19 @@ export default function CategorySelector({ selectedCategories, onChange }: Categ
 						{/* Add New Category */}
 						<div className="flex gap-2">
 							<Input
-								placeholder="Add new category"
+								placeholder="Thêm danh mục mới"
 								value={newCategory}
 								onChange={(e) => setNewCategory(e.target.value)}
 								onKeyPress={(e) => e.key === "Enter" && addNewCategory()}
 							/>
 							<Button size="sm" onClick={addNewCategory} disabled={!newCategory.trim()}>
-								Add
+								Thêm
 							</Button>
 						</div>
 
 						{/* Predefined Categories */}
 						<div className="space-y-2">
-							<h4 className="text-sm font-medium">Predefined Categories</h4>
+							<h4 className="text-sm font-medium">Danh mục có sẵn</h4>
 							<div className="grid max-h-48 grid-cols-1 gap-1 overflow-y-auto">
 								{PREDEFINED_CATEGORIES.map((category) => (
 									<Button

@@ -56,7 +56,7 @@ export default function PreviewModal({ product, onClose }: PreviewModalProps) {
 				className="max-h-[90vh] w-full max-w-[60vw] overflow-hidden rounded-lg bg-white shadow-xl"
 			>
 				<div className="flex items-center justify-between border-b p-6">
-					<h2 className="text-xl font-semibold">Product Preview</h2>
+					<h2 className="text-xl font-semibold">Xem trước sản phẩm</h2>
 					<Button variant="ghost" size="sm" onClick={onClose}>
 						<X className="h-4 w-4" />
 					</Button>
@@ -137,7 +137,7 @@ export default function PreviewModal({ product, onClose }: PreviewModalProps) {
 											<span className="ml-1 text-sm text-gray-600">(4.0)</span>
 										</div>
 										<span className="text-sm text-gray-600">
-											{product.inventory > 0 ? `${product.inventory} in stock` : "Out of stock"}
+											{product.inventory > 0 ? `${product.inventory} trong kho` : "Hết hàng"}
 										</span>
 									</div>
 
@@ -157,7 +157,7 @@ export default function PreviewModal({ product, onClose }: PreviewModalProps) {
 								<Separator />
 
 								<div>
-									<h3 className="mb-2 font-semibold text-gray-900">Description</h3>
+									<h3 className="mb-2 font-semibold text-gray-900">Mô tả</h3>
 									<div
 										className="prose prose-sm max-w-none text-gray-600"
 										dangerouslySetInnerHTML={{ __html: product.description }}
@@ -180,7 +180,7 @@ export default function PreviewModal({ product, onClose }: PreviewModalProps) {
 																<CardContent className="flex flex-col items-center p-3">
 																	<div className="font-medium">{option.value}</div>
 																	<div className="text-sm text-gray-600">
-																		${option.price} • {option.inventory} available
+																		${option.price} • {option.inventory} có sẵn
 																	</div>
 																</CardContent>
 															</Card>
@@ -197,17 +197,17 @@ export default function PreviewModal({ product, onClose }: PreviewModalProps) {
 								<div className="space-y-3">
 									<Button className="w-full" size="lg">
 										<ShoppingCart className="mr-2 h-4 w-4" />
-										Add to Cart
+										Thêm vào giỏ hàng
 									</Button>
 									<Button variant="outline" className="w-full bg-transparent" size="lg">
-										Contact for Quote
+										Liên hệ để báo giá
 									</Button>
 								</div>
 
 								<div className="space-y-1 text-xs text-gray-500">
-									<p>✓ Free consultation included</p>
-									<p>✓ 30-day money-back guarantee</p>
-									<p>✓ 24/7 customer support</p>
+									<p>✓ Tư vấn miễn phí</p>
+									<p>✓ Đảm bảo hoàn tiền trong 30 ngày</p>
+									<p>✓ Hỗ trợ khách hàng 24/7</p>
 								</div>
 							</div>
 						</div>

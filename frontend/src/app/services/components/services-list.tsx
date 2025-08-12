@@ -63,7 +63,7 @@ export default function ServicesList() {
 			<div id="services-list" className="space-y-8">
 				<div className="flex items-center justify-between">
 					<div>
-						<h2 className="text-2xl font-bold text-gray-900">Available Services</h2>
+						<h2 className="text-2xl font-bold text-gray-900">Dịch vụ khả dụng</h2>
 						<p className="mt-1 text-gray-600">Loading services...</p>
 					</div>
 				</div>
@@ -82,7 +82,7 @@ export default function ServicesList() {
 			<div id="services-list" className="space-y-8">
 				<div className="flex items-center justify-between">
 					<div>
-						<h2 className="text-2xl font-bold text-gray-900">Available Services</h2>
+						<h2 className="text-2xl font-bold text-gray-900">Dịch vụ khả dụng</h2>
 						<p className="mt-1 text-red-600">Failed to load services</p>
 					</div>
 				</div>
@@ -109,14 +109,14 @@ export default function ServicesList() {
 			<div id="services-list" className="space-y-8">
 				<div className="flex items-center justify-between">
 					<div>
-						<h2 className="text-2xl font-bold text-gray-900">Available Services</h2>
-						<p className="mt-1 text-gray-600">No services available</p>
+						<h2 className="text-2xl font-bold text-gray-900">Dịch vụ khả dụng</h2>
+						<p className="mt-1 text-gray-600">Không có dịch vụ nào</p>
 					</div>
 				</div>
 				<div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
 					<div className="mb-4 text-6xl">📦</div>
-					<h3 className="mb-2 text-lg font-semibold text-gray-900">No services found</h3>
-					<p className="text-gray-600">There are currently no services available. Please check back later.</p>
+					<h3 className="mb-2 text-lg font-semibold text-gray-900">Không tìm thấy dịch vụ</h3>
+					<p className="text-gray-600">Hiện tại không có dịch vụ nào</p>
 				</div>
 			</div>
 		);
@@ -126,8 +126,8 @@ export default function ServicesList() {
 		<div id="services-list" className="space-y-8">
 			<div className="flex items-center justify-between">
 				<div>
-					<h2 className="text-2xl font-bold text-gray-900">Available Services</h2>
-					<p className="mt-1 text-gray-600">{data?.pages[0]["@data"]?.totalItems ?? 0} services available</p>
+					<h2 className="text-2xl font-bold text-gray-900">Dịch vụ khả dụng</h2>
+					<p className="mt-1 text-gray-600">{data?.pages[0]["@data"]?.totalItems ?? 0} dịch vụ khả dụng</p>
 				</div>
 			</div>
 

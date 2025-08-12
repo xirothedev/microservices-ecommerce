@@ -16,7 +16,7 @@ interface Category {
 }
 
 const priceRanges = [
-	{ id: "under-50", name: "Under $50", min: 0, max: 50, count: 12 },
+	{ id: "under-50", name: "Dưới $50", min: 0, max: 50, count: 12 },
 	{ id: "50-100", name: "$50 - $100", min: 50, max: 100, count: 8 },
 	{ id: "100-200", name: "$100 - $200", min: 100, max: 200, count: 4 },
 ];
@@ -43,17 +43,17 @@ export default function ServicesFilter() {
 				<div className="flex flex-col gap-6 lg:flex-row">
 					<div className="flex-1">
 						<div className="relative">
-							<Input disabled placeholder="Loading services..." className="h-12 animate-pulse pl-10" />
+							<Input disabled placeholder="Đang tải dịch vụ..." className="h-12 animate-pulse pl-10" />
 						</div>
 					</div>
 					<Button variant="outline" disabled className="h-12 animate-pulse lg:hidden">
 						<Filter className="mr-2 h-4 w-4" />
-						Filters
+						Bộ lọc
 					</Button>
 				</div>
 				<div className="mt-6 space-y-6">
 					<div>
-						<h3 className="mb-3 text-sm font-semibold text-gray-900">Categories</h3>
+						<h3 className="mb-3 text-sm font-semibold text-gray-900">Danh mục</h3>
 						<div className="flex flex-wrap gap-2">
 							{Array.from({ length: 4 }).map((_, i) => (
 								<Button
@@ -67,7 +67,7 @@ export default function ServicesFilter() {
 						</div>
 					</div>
 					<div>
-						<h3 className="mb-3 text-sm font-semibold text-gray-900">Price Range</h3>
+						<h3 className="mb-3 text-sm font-semibold text-gray-900">Khoảng giá</h3>
 						<div className="flex flex-wrap gap-2">
 							{priceRanges.map((range) => (
 								<Button
@@ -91,16 +91,16 @@ export default function ServicesFilter() {
 				<div className="flex flex-col gap-6 lg:flex-row">
 					<div className="flex-1">
 						<div className="relative">
-							<Input disabled placeholder="Failed to load filters" className="h-12 pl-10" />
+							<Input disabled placeholder="Không thể tải bộ lọc" className="h-12 pl-10" />
 						</div>
 					</div>
 					<Button variant="outline" disabled className="h-12 lg:hidden">
 						<Filter className="mr-2 h-4 w-4" />
-						Filters
+						Bộ lọc
 					</Button>
 				</div>
 				<div className="mt-6 text-center text-red-600">
-					<p>⚠️ Failed to load filter options. Please try again later.</p>
+					<p>⚠️ Không thể tải tùy chọn bộ lọc. Vui lòng thử lại sau.</p>
 				</div>
 			</div>
 		);
@@ -113,7 +113,7 @@ export default function ServicesFilter() {
 					<div className="flex-1">
 						<div className="relative">
 							<Input
-								placeholder="Search services..."
+								placeholder="Tìm kiếm dịch vụ..."
 								value={searchQuery}
 								onChange={(e) => setSearchQuery(e.target.value)}
 								className="h-12 pl-10"
@@ -122,11 +122,11 @@ export default function ServicesFilter() {
 					</div>
 					<Button variant="outline" onClick={() => setShowFilters(!showFilters)} className="h-12 lg:hidden">
 						<Filter className="mr-2 h-4 w-4" />
-						Filters
+						Bộ lọc
 					</Button>
 				</div>
 				<div className="mt-6 text-center text-gray-600">
-					<p>📦 No categories available.</p>
+					<p>📦 Không có danh mục nào khả dụng.</p>
 				</div>
 			</div>
 		);
@@ -140,7 +140,7 @@ export default function ServicesFilter() {
 					<div className="relative">
 						<Search className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 transform text-gray-400" />
 						<Input
-							placeholder="Search services..."
+							placeholder="Tìm kiếm dịch vụ..."
 							value={searchQuery}
 							onChange={(e) => setSearchQuery(e.target.value)}
 							className="h-12 pl-10"
@@ -151,7 +151,7 @@ export default function ServicesFilter() {
 				{/* Filter Toggle */}
 				<Button variant="outline" onClick={() => setShowFilters(!showFilters)} className="h-12 lg:hidden">
 					<Filter className="mr-2 h-4 w-4" />
-					Filters
+					Bộ lọc
 				</Button>
 			</div>
 
@@ -159,7 +159,7 @@ export default function ServicesFilter() {
 			<div className={`mt-6 space-y-6 ${showFilters ? "block" : "hidden lg:block"}`}>
 				{/* Categories */}
 				<div>
-					<h3 className="mb-3 text-sm font-semibold text-gray-900">Categories</h3>
+					<h3 className="mb-3 text-sm font-semibold text-gray-900">Danh mục</h3>
 					<div className="flex flex-wrap gap-2">
 						{categories.map((category) => (
 							<Button
@@ -180,7 +180,7 @@ export default function ServicesFilter() {
 
 				{/* Price Ranges */}
 				<div>
-					<h3 className="mb-3 text-sm font-semibold text-gray-900">Price Range</h3>
+					<h3 className="mb-3 text-sm font-semibold text-gray-900">Khoảng giá</h3>
 					<div className="flex flex-wrap gap-2">
 						{priceRanges.map((range) => (
 							<Button
@@ -207,7 +207,7 @@ export default function ServicesFilter() {
 								onClick={() => setActivePriceRange(null)}
 								className="h-8 text-xs text-gray-500"
 							>
-								Clear Price
+								Xóa giá
 							</Button>
 						)}
 					</div>
@@ -216,7 +216,7 @@ export default function ServicesFilter() {
 				{/* Active Filters */}
 				{(activeCategory !== "all" || searchQuery || activePriceRange) && (
 					<div>
-						<h3 className="mb-3 text-sm font-semibold text-gray-900">Active Filters</h3>
+						<h3 className="mb-3 text-sm font-semibold text-gray-900">Bộ lọc đang hoạt động</h3>
 						<div className="flex flex-wrap gap-2">
 							{activeCategory !== "all" && (
 								<Badge
@@ -234,7 +234,7 @@ export default function ServicesFilter() {
 									className="flex cursor-pointer items-center gap-1"
 									onClick={() => setSearchQuery("")}
 								>
-									Search: {searchQuery}
+									Tìm kiếm: {searchQuery}
 									<X className="h-3 w-3" />
 								</Badge>
 							)}
@@ -244,7 +244,7 @@ export default function ServicesFilter() {
 									className="flex cursor-pointer items-center gap-1"
 									onClick={() => setActivePriceRange(null)}
 								>
-									Price: {activePriceRange.min} - {activePriceRange.max}
+									Giá: {activePriceRange.min} - {activePriceRange.max}
 									<X className="h-3 w-3" />
 								</Badge>
 							)}

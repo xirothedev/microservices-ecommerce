@@ -53,7 +53,7 @@ const mockRecentActivity: RecentActivity[] = [
 	{
 		id: "1",
 		type: "user_registered",
-		description: "New user registered",
+		description: "Người dùng mới đăng ký",
 		timestamp: "2024-01-15T14:30:00Z",
 		user: {
 			name: "Alice Johnson",
@@ -63,7 +63,7 @@ const mockRecentActivity: RecentActivity[] = [
 	{
 		id: "2",
 		type: "ticket_created",
-		description: "New support ticket created",
+		description: "Phiếu hỗ trợ mới được tạo",
 		timestamp: "2024-01-15T14:15:00Z",
 		user: {
 			name: "Bob Smith",
@@ -73,7 +73,7 @@ const mockRecentActivity: RecentActivity[] = [
 	{
 		id: "3",
 		type: "ticket_resolved",
-		description: "Support ticket resolved",
+		description: "Phiếu hỗ trợ đã được giải quyết",
 		timestamp: "2024-01-15T13:45:00Z",
 		user: {
 			name: "Carol Davis",
@@ -83,7 +83,7 @@ const mockRecentActivity: RecentActivity[] = [
 	{
 		id: "4",
 		type: "payment_received",
-		description: "Payment received for Apple ID Premium Setup",
+		description: "Đã nhận thanh toán cho Apple ID Premium Setup",
 		timestamp: "2024-01-15T13:20:00Z",
 		user: {
 			name: "David Wilson",
@@ -93,7 +93,7 @@ const mockRecentActivity: RecentActivity[] = [
 	{
 		id: "5",
 		type: "user_registered",
-		description: "New user registered",
+		description: "Người dùng mới đăng ký",
 		timestamp: "2024-01-15T12:55:00Z",
 		user: {
 			name: "Eva Martinez",
@@ -188,12 +188,12 @@ export default function DashboardOverview() {
 				>
 					<Card>
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium">Total Users</CardTitle>
+							<CardTitle className="text-sm font-medium">Tổng người dùng</CardTitle>
 							<Users className="text-muted-foreground h-4 w-4" />
 						</CardHeader>
 						<CardContent>
 							<div className="text-2xl font-bold">{stats.totalUsers.toLocaleString()}</div>
-							<p className="text-muted-foreground text-xs">{stats.activeUsers} active users</p>
+							<p className="text-muted-foreground text-xs">{stats.activeUsers} người dùng hoạt động</p>
 						</CardContent>
 					</Card>
 				</motion.div>
@@ -205,13 +205,13 @@ export default function DashboardOverview() {
 				>
 					<Card>
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium">Support Tickets</CardTitle>
+							<CardTitle className="text-sm font-medium">Phiếu hỗ trợ</CardTitle>
 							<Ticket className="text-muted-foreground h-4 w-4" />
 						</CardHeader>
 						<CardContent>
 							<div className="text-2xl font-bold">{stats.totalTickets}</div>
 							<p className="text-muted-foreground text-xs">
-								{stats.openTickets} open, {stats.resolvedTickets} resolved
+								{stats.openTickets} đang mở, {stats.resolvedTickets} đã giải quyết
 							</p>
 						</CardContent>
 					</Card>
@@ -224,12 +224,12 @@ export default function DashboardOverview() {
 				>
 					<Card>
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+							<CardTitle className="text-sm font-medium">Tổng doanh thu</CardTitle>
 							<DollarSign className="text-muted-foreground h-4 w-4" />
 						</CardHeader>
 						<CardContent>
 							<div className="text-2xl font-bold">{formatCurrency(stats.totalRevenue)}</div>
-							<p className="text-muted-foreground text-xs">This month</p>
+							<p className="text-muted-foreground text-xs">Tháng này</p>
 						</CardContent>
 					</Card>
 				</motion.div>
@@ -241,12 +241,12 @@ export default function DashboardOverview() {
 				>
 					<Card>
 						<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-							<CardTitle className="text-sm font-medium">Growth Rate</CardTitle>
+							<CardTitle className="text-sm font-medium">Tỷ lệ tăng trưởng</CardTitle>
 							<TrendingUp className="text-muted-foreground h-4 w-4" />
 						</CardHeader>
 						<CardContent>
 							<div className="text-2xl font-bold">+{stats.monthlyGrowth}%</div>
-							<p className="text-muted-foreground text-xs">From last month</p>
+							<p className="text-muted-foreground text-xs">So với tháng trước</p>
 						</CardContent>
 					</Card>
 				</motion.div>
@@ -261,8 +261,8 @@ export default function DashboardOverview() {
 				>
 					<Card>
 						<CardHeader>
-							<CardTitle>Recent Activity</CardTitle>
-							<CardDescription>Latest system activities and user actions</CardDescription>
+							<CardTitle>Hoạt động gần đây</CardTitle>
+							<CardDescription>Hoạt động hệ thống và hành động người dùng mới nhất</CardDescription>
 						</CardHeader>
 						<CardContent>
 							<div className="space-y-4">
@@ -316,8 +316,8 @@ export default function DashboardOverview() {
 				>
 					<Card>
 						<CardHeader>
-							<CardTitle>Quick Actions</CardTitle>
-							<CardDescription>Common administrative tasks</CardDescription>
+							<CardTitle>Hành động nhanh</CardTitle>
+							<CardDescription>Các tác vụ quản trị phổ biến</CardDescription>
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<div className="grid grid-cols-1 gap-3">
@@ -327,8 +327,10 @@ export default function DashboardOverview() {
 											<Users className="h-4 w-4 text-blue-600" />
 										</div>
 										<div className="text-left">
-											<div className="font-medium">Manage Users</div>
-											<div className="text-sm text-gray-600">View and manage user accounts</div>
+											<div className="font-medium">Quản lý người dùng</div>
+											<div className="text-sm text-gray-600">
+												Xem và quản lý tài khoản người dùng
+											</div>
 										</div>
 									</div>
 								</Button>
@@ -339,8 +341,8 @@ export default function DashboardOverview() {
 											<Ticket className="h-4 w-4 text-orange-600" />
 										</div>
 										<div className="text-left">
-											<div className="font-medium">Review Tickets</div>
-											<div className="text-sm text-gray-600">Handle support requests</div>
+											<div className="font-medium">Xem xét phiếu hỗ trợ</div>
+											<div className="text-sm text-gray-600">Xử lý yêu cầu hỗ trợ</div>
 										</div>
 									</div>
 								</Button>
@@ -351,10 +353,10 @@ export default function DashboardOverview() {
 											<AlertCircle className="h-4 w-4 text-red-600" />
 										</div>
 										<div className="text-left">
-											<div className="font-medium">System Alerts</div>
+											<div className="font-medium">Cảnh báo hệ thống</div>
 											<div className="text-sm text-gray-600">
 												<Badge variant="destructive" className="text-xs">
-													3 alerts
+													3 cảnh báo
 												</Badge>
 											</div>
 										</div>
@@ -367,8 +369,8 @@ export default function DashboardOverview() {
 											<CheckCircle className="h-4 w-4 text-green-600" />
 										</div>
 										<div className="text-left">
-											<div className="font-medium">Generate Reports</div>
-											<div className="text-sm text-gray-600">Create system reports</div>
+											<div className="font-medium">Tạo báo cáo</div>
+											<div className="text-sm text-gray-600">Tạo báo cáo hệ thống</div>
 										</div>
 									</div>
 								</Button>

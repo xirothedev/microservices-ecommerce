@@ -110,11 +110,14 @@ export function CookieConsent() {
 						<div className="container mx-auto">
 							<div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
 								<div className="flex-1">
-									<h2 className="mb-2 text-lg font-semibold">We value your privacy</h2>
+									<h2 className="mb-2 text-lg font-semibold">
+										Chúng tôi coi trọng quyền riêng tư của bạn
+									</h2>
 									<p className="text-muted-foreground text-sm">
-										We use cookies to enhance your browsing experience, serve personalized ads or
-										content, and analyze our traffic. By clicking &quot;Accept All&quot;, you
-										consent to our use of cookies. Read our{" "}
+										Chúng tôi sử dụng cookie để cải thiện trải nghiệm duyệt web, cung cấp quảng cáo
+										hoặc nội dung cá nhân hóa, và phân tích lưu lượng truy cập. Bằng cách nhấp vào
+										&quot;Chấp nhận tất cả&quot;, bạn đồng ý với việc sử dụng cookie của chúng tôi.
+										Đọc{" "}
 										<button
 											onClick={() => {
 												setActiveTab("privacy");
@@ -123,19 +126,19 @@ export function CookieConsent() {
 											type="button"
 											className="text-primary font-medium underline underline-offset-4"
 										>
-											Privacy Policy
+											Chính sách bảo mật
 										</button>{" "}
-										for more information.
+										để biết thêm thông tin.
 									</p>
 								</div>
 								<div className="flex flex-col gap-2 sm:flex-row">
 									<Button variant="outline" onClick={handleRejectNonEssential}>
-										Essential Only
+										Chỉ cần thiết
 									</Button>
 									<Button variant="outline" onClick={openPreferences}>
-										Customize
+										Tùy chỉnh
 									</Button>
-									<Button onClick={handleAcceptAll}>Accept All</Button>
+									<Button onClick={handleAcceptAll}>Chấp nhận tất cả</Button>
 								</div>
 							</div>
 						</div>
@@ -147,19 +150,19 @@ export function CookieConsent() {
 			<Dialog open={showPreferences} onOpenChange={setShowPreferences}>
 				<DialogContent className="max-h-[90vh] overflow-auto sm:max-w-[600px]">
 					<DialogHeader>
-						<DialogTitle>Privacy Preferences Center</DialogTitle>
+						<DialogTitle>Trung tâm tùy chọn quyền riêng tư</DialogTitle>
 						<DialogDescription>
-							Manage your cookie preferences. Essential cookies cannot be disabled as they are required
-							for the website to function properly.
+							Quản lý tùy chọn cookie của bạn. Cookie cần thiết không thể bị vô hiệu hóa vì chúng cần
+							thiết để website hoạt động bình thường.
 						</DialogDescription>
 					</DialogHeader>
 
 					<Tabs value={activeTab} onValueChange={setActiveTab} className="mt-4">
 						<TabsList className="grid w-full grid-cols-3">
 							{[
-								{ value: "privacy", label: "Privacy Policy" },
-								{ value: "cookies", label: "Cookie Policy" },
-								{ value: "settings", label: "Cookie Settings" },
+								{ value: "privacy", label: "Chính sách bảo mật" },
+								{ value: "cookies", label: "Chính sách cookie" },
+								{ value: "settings", label: "Cài đặt cookie" },
 							].map((tab) => (
 								<TabsTrigger key={tab.value} value={tab.value}>
 									{tab.label}
@@ -168,17 +171,17 @@ export function CookieConsent() {
 						</TabsList>
 
 						<TabsContent value="privacy" className="mt-4 space-y-4">
-							<h3 className="text-lg font-semibold">Privacy Policy</h3>
+							<h3 className="text-lg font-semibold">Chính sách bảo mật</h3>
 							<div className="text-muted-foreground space-y-2 text-sm">
 								<p>
-									At The Terminal Viet Nam, we take your privacy seriously. This Privacy Policy
-									explains how we collect, use, disclose, and safeguard your information when you
-									visit our website.
+									Tại The Terminal Viet Nam, chúng tôi coi trọng quyền riêng tư của bạn. Chính sách
+									bảo mật này giải thích cách chúng tôi thu thập, sử dụng, tiết lộ và bảo vệ thông tin
+									của bạn khi bạn truy cập website của chúng tôi.
 								</p>
 								<p>
-									<strong>More information:</strong>{" "}
+									<strong>Thông tin chi tiết:</strong>{" "}
 									<Link href="/privacy-policy" className="hover:text-black dark:hover:text-white">
-										click here
+										nhấp vào đây
 									</Link>
 									.
 								</p>
@@ -186,36 +189,37 @@ export function CookieConsent() {
 						</TabsContent>
 
 						<TabsContent value="cookies" className="mt-4 space-y-4">
-							<h3 className="text-lg font-semibold">Cookie Policy</h3>
+							<h3 className="text-lg font-semibold">Chính sách cookie</h3>
 							<div className="text-muted-foreground space-y-2 text-sm">
 								<p>
-									Our website uses cookies to enhance your browsing experience. Cookies are small text
-									files that are stored on your device when you visit our website.
+									Website của chúng tôi sử dụng cookie để cải thiện trải nghiệm duyệt web. Cookie là
+									các tệp văn bản nhỏ được lưu trữ trên thiết bị của bạn khi bạn truy cập website của
+									chúng tôi.
 								</p>
 								<p>
-									<strong>Types of Cookies We Use:</strong>
+									<strong>Các loại cookie chúng tôi sử dụng:</strong>
 								</p>
 								<ul className="list-disc space-y-1 pl-5">
 									{[
 										{
-											type: "Essential Cookies",
+											type: "Cookie cần thiết",
 											description:
-												"These cookies are necessary for the website to function properly and cannot be disabled.",
+												"Những cookie này cần thiết để website hoạt động bình thường và không thể bị vô hiệu hóa.",
 										},
 										{
-											type: "Functional Cookies",
+											type: "Cookie chức năng",
 											description:
-												"These cookies enable personalized features and remember your preferences.",
+												"Những cookie này cho phép các tính năng cá nhân hóa và ghi nhớ tùy chọn của bạn.",
 										},
 										{
-											type: "Analytics Cookies",
+											type: "Cookie phân tích",
 											description:
-												"These cookies help us understand how visitors interact with our website, allowing us to improve our services.",
+												"Những cookie này giúp chúng tôi hiểu cách khách truy cập tương tác với website, cho phép chúng tôi cải thiện dịch vụ.",
 										},
 										{
-											type: "Marketing Cookies",
+											type: "Cookie tiếp thị",
 											description:
-												"These cookies are used to track visitors across websites to display relevant advertisements.",
+												"Những cookie này được sử dụng để theo dõi khách truy cập trên các website để hiển thị quảng cáo liên quan.",
 										},
 									].map((cookie) => (
 										<li key={cookie.type}>
@@ -224,25 +228,25 @@ export function CookieConsent() {
 									))}
 								</ul>
 								<p>
-									<strong>Managing Cookies:</strong> You can manage your cookie preferences through
-									our Cookie Settings tab. You can also control cookies through your browser settings,
-									although blocking some types of cookies may impact your experience on our website.
+									<strong>Quản lý cookie:</strong> Bạn có thể quản lý tùy chọn cookie thông qua tab
+									Cài đặt cookie. Bạn cũng có thể kiểm soát cookie thông qua cài đặt trình duyệt, mặc
+									dù chặn một số loại cookie có thể ảnh hưởng đến trải nghiệm của bạn trên website.
 								</p>
 								<p>
-									<strong>Last Updated:</strong> May 12, 2025
+									<strong>Cập nhật lần cuối:</strong> 12 tháng 5, 2025
 								</p>
 							</div>
 						</TabsContent>
 
 						<TabsContent value="settings" className="mt-4 space-y-4">
-							<h3 className="text-lg font-semibold">Cookie Settings</h3>
+							<h3 className="text-lg font-semibold">Cài đặt cookie</h3>
 							<div className="space-y-4">
 								<div className="flex items-center justify-between">
 									<div>
-										<h4 className="font-medium">Essential Cookies</h4>
+										<h4 className="font-medium">Cookie cần thiết</h4>
 										<p className="text-muted-foreground text-sm">
-											These cookies are necessary for the website to function properly and cannot
-											be disabled.
+											Những cookie này cần thiết để website hoạt động bình thường và không thể bị
+											vô hiệu hóa.
 										</p>
 									</div>
 									<Switch
@@ -254,43 +258,45 @@ export function CookieConsent() {
 
 								<div className="flex items-center justify-between">
 									<div>
-										<h4 className="font-medium">Functional Cookies</h4>
+										<h4 className="font-medium">Cookie chức năng</h4>
 										<p className="text-muted-foreground text-sm">
-											These cookies enable personalized features and remember your preferences.
+											Những cookie này cho phép các tính năng cá nhân hóa và ghi nhớ tùy chọn của
+											bạn.
 										</p>
 									</div>
 									<Switch
 										checked={preferences.functional}
 										onCheckedChange={() => handleToggle("functional")}
-										aria-label="Toggle functional cookies"
+										aria-label="Bật/tắt cookie chức năng"
 									/>
 								</div>
 
 								<div className="flex items-center justify-between">
 									<div>
-										<h4 className="font-medium">Analytics Cookies</h4>
+										<h4 className="font-medium">Cookie phân tích</h4>
 										<p className="text-muted-foreground text-sm">
-											These cookies help us understand how visitors interact with our website.
+											Những cookie này giúp chúng tôi hiểu cách khách truy cập tương tác với
+											website.
 										</p>
 									</div>
 									<Switch
 										checked={preferences.analytics}
 										onCheckedChange={() => handleToggle("analytics")}
-										aria-label="Toggle analytics cookies"
+										aria-label="Bật/tắt cookie phân tích"
 									/>
 								</div>
 
 								<div className="flex items-center justify-between">
 									<div>
-										<h4 className="font-medium">Marketing Cookies</h4>
+										<h4 className="font-medium">Cookie tiếp thị</h4>
 										<p className="text-muted-foreground text-sm">
-											These cookies are used to display relevant advertisements.
+											Những cookie này được sử dụng để hiển thị quảng cáo liên quan.
 										</p>
 									</div>
 									<Switch
 										checked={preferences.marketing}
 										onCheckedChange={() => handleToggle("marketing")}
-										aria-label="Toggle marketing cookies"
+										aria-label="Bật/tắt cookie tiếp thị"
 									/>
 								</div>
 							</div>
@@ -299,13 +305,13 @@ export function CookieConsent() {
 
 					<DialogFooter className="mt-4 flex flex-col-reverse sm:flex-row sm:justify-between sm:space-x-2">
 						<Button variant="outline" onClick={() => setShowPreferences(false)}>
-							Cancel
+							Hủy
 						</Button>
 						<div className="mb-2 flex flex-col gap-2 sm:mb-0 sm:flex-row">
 							<Button variant="outline" onClick={handleRejectNonEssential}>
-								Essential Only
+								Chỉ cần thiết
 							</Button>
-							<Button onClick={handleSavePreferences}>Save Preferences</Button>
+							<Button onClick={handleSavePreferences}>Lưu tùy chọn</Button>
 						</div>
 					</DialogFooter>
 				</DialogContent>
@@ -318,7 +324,7 @@ export function CookieConsent() {
 					showBanner ? "pointer-events-none opacity-0" : "opacity-100",
 				)}
 				onClick={openPreferences}
-				aria-label="Cookie Settings"
+				aria-label="Cài đặt cookie"
 			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

@@ -81,23 +81,23 @@ export default function ProductForm({ product, onSave, onClose }: ProductFormPro
 		const newErrors: Record<string, string> = {};
 
 		if (!formData.name.trim()) {
-			newErrors.name = "Product name is required";
+			newErrors.name = "Tên sản phẩm là bắt buộc";
 		}
 
 		if (!formData.description.trim()) {
-			newErrors.description = "Product description is required";
+			newErrors.description = "Mô tả sản phẩm là bắt buộc";
 		}
 
 		if (formData.price <= 0) {
-			newErrors.price = "Price must be greater than 0";
+			newErrors.price = "Giá phải lớn hơn 0";
 		}
 
 		if (formData.inventory < 0) {
-			newErrors.inventory = "Inventory cannot be negative";
+			newErrors.inventory = "Tồn kho không thể âm";
 		}
 
 		if (formData.categories.length === 0) {
-			newErrors.categories = "At least one category is required";
+			newErrors.categories = "Ít nhất một danh mục là bắt buộc";
 		}
 
 		setErrors(newErrors);
@@ -146,7 +146,7 @@ export default function ProductForm({ product, onSave, onClose }: ProductFormPro
 				className="max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-lg bg-white shadow-xl"
 			>
 				<div className="flex items-center justify-between border-b p-6">
-					<h2 className="text-xl font-semibold">{product ? "Edit Product" : "Create New Product"}</h2>
+					<h2 className="text-xl font-semibold">{product ? "Chỉnh sửa sản phẩm" : "Tạo sản phẩm mới"}</h2>
 					<Button variant="ghost" size="sm" onClick={onClose}>
 						<X className="h-4 w-4" />
 					</Button>
@@ -156,28 +156,28 @@ export default function ProductForm({ product, onSave, onClose }: ProductFormPro
 					<form onSubmit={handleSubmit} className="p-6">
 						<Tabs defaultValue="basic" className="w-full">
 							<TabsList className="grid w-full grid-cols-4">
-								<TabsTrigger value="basic">Basic Info</TabsTrigger>
-								<TabsTrigger value="media">Media</TabsTrigger>
-								<TabsTrigger value="variations">Variations</TabsTrigger>
-								<TabsTrigger value="settings">Settings</TabsTrigger>
+								<TabsTrigger value="basic">Thông tin cơ bản</TabsTrigger>
+								<TabsTrigger value="media">Phương tiện</TabsTrigger>
+								<TabsTrigger value="variations">Biến thể</TabsTrigger>
+								<TabsTrigger value="settings">Cài đặt</TabsTrigger>
 							</TabsList>
 
 							<TabsContent value="basic" className="mt-6 space-y-6">
 								<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 									<div className="space-y-2">
-										<Label htmlFor="name">Product Name *</Label>
+										<Label htmlFor="name">Tên sản phẩm *</Label>
 										<Input
 											id="name"
 											value={formData.name}
 											onChange={(e) => handleInputChange("name", e.target.value)}
-											placeholder="Enter product name"
+											placeholder="Nhập tên sản phẩm"
 											className={errors.name ? "border-red-500" : ""}
 										/>
 										{errors.name && <p className="text-sm text-red-600">{errors.name}</p>}
 									</div>
 
 									<div className="space-y-2">
-										<Label htmlFor="price">Price *</Label>
+										<Label htmlFor="price">Giá *</Label>
 										<Input
 											id="price"
 											type="number"
@@ -195,18 +195,18 @@ export default function ProductForm({ product, onSave, onClose }: ProductFormPro
 								</div>
 
 								<div className="space-y-2">
-									<Label htmlFor="description">Description *</Label>
+									<Label htmlFor="description">Mô tả *</Label>
 									<RichTextEditor
 										value={formData.description}
 										onChange={(value) => handleInputChange("description", value)}
-										placeholder="Enter product description"
+										placeholder="Nhập mô tả sản phẩm"
 									/>
 									{errors.description && <p className="text-sm text-red-600">{errors.description}</p>}
 								</div>
 
 								<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
 									<div className="space-y-2">
-										<Label htmlFor="inventory">Inventory *</Label>
+										<Label htmlFor="inventory">Tồn kho *</Label>
 										<Input
 											id="inventory"
 											type="number"
@@ -222,7 +222,7 @@ export default function ProductForm({ product, onSave, onClose }: ProductFormPro
 									</div>
 
 									<div className="space-y-2">
-										<Label>Categories *</Label>
+										<Label>Danh mục *</Label>
 										<CategorySelector
 											selectedCategories={formData.categories}
 											onChange={(categories) => handleInputChange("categories", categories)}
@@ -236,7 +236,7 @@ export default function ProductForm({ product, onSave, onClose }: ProductFormPro
 
 							<TabsContent value="media" className="mt-6 space-y-6">
 								<div className="space-y-2">
-									<Label>Product Images</Label>
+									<Label>Hình ảnh sản phẩm</Label>
 									<ImageManager
 										images={formData.images}
 										onChange={(images) => handleInputChange("images", images)}
@@ -246,7 +246,7 @@ export default function ProductForm({ product, onSave, onClose }: ProductFormPro
 
 							<TabsContent value="variations" className="mt-6 space-y-6">
 								<div className="space-y-2">
-									<Label>Product Variations</Label>
+									<Label>Biến thể sản phẩm</Label>
 									<VariationsManager
 										variations={formData.variations}
 										onChange={(variations) => handleInputChange("variations", variations)}
@@ -256,7 +256,7 @@ export default function ProductForm({ product, onSave, onClose }: ProductFormPro
 
 							<TabsContent value="settings" className="mt-6 space-y-6">
 								<div className="space-y-2">
-									<Label htmlFor="status">Status</Label>
+									<Label htmlFor="status">Trạng thái</Label>
 									<Select
 										value={formData.status}
 										onValueChange={(value) => handleInputChange("status", value)}
@@ -265,9 +265,9 @@ export default function ProductForm({ product, onSave, onClose }: ProductFormPro
 											<SelectValue />
 										</SelectTrigger>
 										<SelectContent>
-											<SelectItem value="draft">Draft</SelectItem>
-											<SelectItem value="active">Active</SelectItem>
-											<SelectItem value="archived">Archived</SelectItem>
+											<SelectItem value="draft">Bản nháp</SelectItem>
+											<SelectItem value="active">Đang hoạt động</SelectItem>
+											<SelectItem value="archived">Đã lưu trữ</SelectItem>
 										</SelectContent>
 									</Select>
 								</div>
@@ -278,7 +278,7 @@ export default function ProductForm({ product, onSave, onClose }: ProductFormPro
 
 				<div className="flex items-center justify-end gap-4 border-t bg-gray-50 p-6">
 					<Button variant="outline" onClick={onClose} disabled={isLoading}>
-						Cancel
+						Hủy
 					</Button>
 					<Button onClick={handleSubmit} disabled={isLoading}>
 						{isLoading ? (
@@ -286,7 +286,7 @@ export default function ProductForm({ product, onSave, onClose }: ProductFormPro
 						) : (
 							<Save className="mr-2 h-4 w-4" />
 						)}
-						{product ? "Update Product" : "Create Product"}
+						{product ? "Cập nhật sản phẩm" : "Tạo sản phẩm"}
 					</Button>
 				</div>
 			</motion.div>

@@ -2,8 +2,8 @@ import { TicketContextType, TicketPriority, TicketCategory } from "@/@types/api/
 import { z } from "zod";
 
 export const ticketSchema = z.object({
-	title: z.string().min(1, "Title is required").max(255, "Title must be at most 255 characters"),
-	description: z.string().min(1, "Description is required"),
+	title: z.string().min(1, "Tiêu đề là bắt buộc").max(255, "Tiêu đề phải có tối đa 255 ký tự"),
+	description: z.string().min(1, "Mô tả là bắt buộc"),
 	category: z.enum(
 		[
 			TicketCategory.TECHNICAL_SUPPORT,
@@ -13,11 +13,11 @@ export const ticketSchema = z.object({
 			TicketCategory.REFUND_REQUEST,
 			TicketCategory.GENERAL_INQUIRY,
 		],
-		"Ticket category is required",
+		"Danh mục phiếu hỗ trợ là bắt buộc",
 	),
 	priority: z.enum(
 		[TicketPriority.URGENT, TicketPriority.HIGH, TicketPriority.MEDIUM, TicketPriority.LOW],
-		"Ticket priority is required",
+		"Mức độ ưu tiên phiếu hỗ trợ là bắt buộc",
 	),
 	contexts: z
 		.array(
@@ -28,8 +28,8 @@ export const ticketSchema = z.object({
 					TicketContextType.TRANSACTION,
 					TicketContextType.ACCOUNT,
 				]),
-				labelId: z.string().min(1, "Context label id is required"),
-				label: z.string().min(1, "Context label is required"),
+				labelId: z.string().min(1, "ID nhãn ngữ cảnh là bắt buộc"),
+				label: z.string().min(1, "Nhãn ngữ cảnh là bắt buộc"),
 			}),
 		)
 		.optional(),

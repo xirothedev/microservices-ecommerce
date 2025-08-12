@@ -19,16 +19,16 @@ interface SearchFiltersProps {
 
 export default function SearchFilters({ sortBy, sortOrder, onSortChange }: SearchFiltersProps) {
 	const sortOptions = [
-		{ value: "updatedAt", label: "Last Updated" },
-		{ value: "createdAt", label: "Date Created" },
-		{ value: "name", label: "Name" },
-		{ value: "price", label: "Price" },
-		{ value: "inventory", label: "Inventory" },
+		{ value: "updatedAt", label: "Cập nhật gần đây" },
+		{ value: "createdAt", label: "Ngày tạo" },
+		{ value: "name", label: "Tên" },
+		{ value: "price", label: "Giá" },
+		{ value: "inventory", label: "Tồn kho" },
 	];
 
 	const getCurrentSortLabel = () => {
 		const option = sortOptions.find((opt) => opt.value === sortBy);
-		return option ? `${option.label} (${sortOrder === "asc" ? "A-Z" : "Z-A"})` : "Sort";
+		return option ? `${option.label} (${sortOrder === "asc" ? "A-Z" : "Z-A"})` : "Sắp xếp";
 	};
 
 	return (
@@ -40,7 +40,7 @@ export default function SearchFilters({ sortBy, sortOrder, onSortChange }: Searc
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end" className="w-48">
-				<DropdownMenuLabel>Sort by</DropdownMenuLabel>
+				<DropdownMenuLabel>Sắp xếp theo</DropdownMenuLabel>
 				<DropdownMenuSeparator />
 				{sortOptions.map((option) => (
 					<div key={option.value}>

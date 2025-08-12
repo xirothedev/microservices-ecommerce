@@ -44,10 +44,10 @@ export default function PaymentProcessor({ onPaymentComplete, onPaymentError }: 
 		{
 			id: "vietqr",
 			name: "VietQR",
-			description: "Scan QR code to pay via banking app",
+			description: "Quét mã QR để thanh toán qua ứng dụng ngân hàng",
 			icon: <QrCode className="h-5 w-5" />,
 			color: "bg-blue-500",
-			details: "Scan QR code with your banking app to pay",
+			details: "Quét mã QR bằng ứng dụng ngân hàng để thanh toán",
 		},
 	];
 
@@ -56,7 +56,7 @@ export default function PaymentProcessor({ onPaymentComplete, onPaymentError }: 
 		return true;
 	};
 
-	const processPayment = async (paymentMethod: string) => {
+	const processPayment = async () => {
 		// Simulate QR code payment processing
 		await new Promise((resolve) => setTimeout(resolve, 3000));
 		return Math.random() > 0.05; // 95% success rate
@@ -119,12 +119,14 @@ export default function PaymentProcessor({ onPaymentComplete, onPaymentError }: 
 			<div className="py-16 text-center">
 				<div className="mx-auto max-w-md">
 					<AlertCircle className="mx-auto mb-4 h-16 w-16 text-gray-400" />
-					<h1 className="mb-4 text-3xl font-bold text-gray-900">No items to checkout</h1>
-					<p className="mb-8 text-gray-600">Your cart is empty. Add some services to proceed with payment.</p>
+					<h1 className="mb-4 text-3xl font-bold text-gray-900">Không có sản phẩm để thanh toán</h1>
+					<p className="mb-8 text-gray-600">
+						Giỏ hàng của bạn trống. Hãy thêm một số dịch vụ để tiến hành thanh toán.
+					</p>
 					<Link href="/services">
 						<Button size="lg" className="bg-blue-600 hover:bg-blue-700">
 							<ArrowLeft className="mr-2 h-4 w-4" />
-							Browse Services
+							Duyệt dịch vụ
 						</Button>
 					</Link>
 				</div>
@@ -141,13 +143,13 @@ export default function PaymentProcessor({ onPaymentComplete, onPaymentError }: 
 					{/* Header */}
 					<div className="flex items-center justify-between">
 						<div>
-							<h1 className="text-3xl font-bold text-gray-900">Quick QR Payment</h1>
-							<p className="mt-2 text-gray-600">Scan QR code to complete your purchase instantly</p>
+							<h1 className="text-3xl font-bold text-gray-900">Thanh toán QR nhanh chóng</h1>
+							<p className="mt-2 text-gray-600">Quét mã QR để hoàn tất mua hàng ngay lập tức</p>
 						</div>
 						<Link href="/cart">
 							<Button variant="outline" className="bg-transparent">
 								<ArrowLeft className="mr-2 h-4 w-4" />
-								Back to Cart
+								Quay lại giỏ hàng
 							</Button>
 						</Link>
 					</div>
@@ -170,7 +172,7 @@ export default function PaymentProcessor({ onPaymentComplete, onPaymentError }: 
 								<CardHeader>
 									<CardTitle className="flex items-center gap-2">
 										<Lock className="h-5 w-5 text-blue-500" />
-										Payment Method
+										Phương thức thanh toán
 									</CardTitle>
 								</CardHeader>
 								<CardContent>
@@ -208,7 +210,7 @@ export default function PaymentProcessor({ onPaymentComplete, onPaymentError }: 
 											</div>
 											<p className="text-sm text-gray-700">{selectedMethod?.details}</p>
 											<p className="mt-2 text-xs text-gray-500">
-												Scan this QR code with your banking app to complete the payment
+												Quét mã QR này bằng ứng dụng ngân hàng để hoàn tất thanh toán
 											</p>
 										</div>
 									</div>
@@ -221,7 +223,7 @@ export default function PaymentProcessor({ onPaymentComplete, onPaymentError }: 
 							{/* Order Items */}
 							<Card>
 								<CardHeader>
-									<CardTitle>Order Summary</CardTitle>
+									<CardTitle>Tóm tắt đơn hàng</CardTitle>
 								</CardHeader>
 								<CardContent className="space-y-4">
 									<div className="max-h-60 space-y-3 overflow-y-auto">
@@ -253,20 +255,20 @@ export default function PaymentProcessor({ onPaymentComplete, onPaymentError }: 
 
 									<div className="space-y-2">
 										<div className="flex justify-between text-sm">
-											<span>Subtotal ({totalItems} items)</span>
+											<span>Tạm tính ({totalItems} sản phẩm)</span>
 											<span>${subtotal.toFixed(2)}</span>
 										</div>
 										<div className="flex justify-between text-sm">
-											<span>Shipping</span>
-											<span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+											<span>Vận chuyển</span>
+											<span>{shipping === 0 ? "Miễn phí" : `$${shipping.toFixed(2)}`}</span>
 										</div>
 										<div className="flex justify-between text-sm">
-											<span>Tax</span>
+											<span>Thuế</span>
 											<span>${tax.toFixed(2)}</span>
 										</div>
 										<Separator />
 										<div className="flex justify-between text-lg font-semibold">
-											<span>Total</span>
+											<span>Tổng cộng</span>
 											<span>${total.toFixed(2)}</span>
 										</div>
 									</div>
@@ -280,16 +282,16 @@ export default function PaymentProcessor({ onPaymentComplete, onPaymentError }: 
 										{isProcessing ? (
 											<>
 												<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-												Processing Payment...
+												Đang xử lý thanh toán...
 											</>
 										) : (
-											`Pay $${total.toFixed(2)}`
+											`Thanh toán $${total.toFixed(2)}`
 										)}
 									</Button>
 
 									<div className="text-center">
 										<p className="text-xs text-gray-500">
-											🔒 Your payment information is secure and encrypted
+											🔒 Thông tin thanh toán của bạn được bảo mật và mã hóa
 										</p>
 									</div>
 								</CardContent>

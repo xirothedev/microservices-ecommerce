@@ -93,9 +93,9 @@ export default function ImageManager({ images, onChange, maxImages = 10 }: Image
 						<Upload className="h-6 w-6 text-gray-600" />
 					</div>
 					<div>
-						<p className="text-lg font-medium text-gray-900">Drop images here or click to upload</p>
+						<p className="text-lg font-medium text-gray-900">Kéo hình ảnh vào đây hoặc nhấp để tải lên</p>
 						<p className="mt-1 text-sm text-gray-600">
-							PNG, JPG, GIF up to 10MB each ({images.length}/{maxImages} images)
+							PNG, JPG, GIF tối đa 10MB mỗi ảnh ({images.length}/{maxImages} ảnh)
 						</p>
 					</div>
 					<Button
@@ -105,7 +105,7 @@ export default function ImageManager({ images, onChange, maxImages = 10 }: Image
 						disabled={images.length >= maxImages}
 					>
 						<Plus className="mr-2 h-4 w-4" />
-						Choose Files
+						Chọn tệp
 					</Button>
 				</div>
 			</div>
@@ -145,9 +145,7 @@ export default function ImageManager({ images, onChange, maxImages = 10 }: Image
 								{/* Primary Image Badge */}
 								{index === 0 && (
 									<div className="absolute top-2 left-2">
-										<span className="rounded bg-blue-600 px-2 py-1 text-xs text-white">
-											Primary
-										</span>
+										<span className="rounded bg-blue-600 px-2 py-1 text-xs text-white">Chính</span>
 									</div>
 								)}
 							</CardContent>
@@ -159,7 +157,7 @@ export default function ImageManager({ images, onChange, maxImages = 10 }: Image
 			{images.length === 0 && (
 				<div className="py-8 text-center text-gray-500">
 					<ImageIcon className="mx-auto mb-4 h-12 w-12 text-gray-300" />
-					<p>No images uploaded yet</p>
+					<p>Chưa tải lên hình ảnh nào</p>
 				</div>
 			)}
 		</div>

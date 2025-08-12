@@ -34,7 +34,7 @@ export function usePayment() {
 	const [isProcessing, setIsProcessing] = useState(false);
 	const [errors, setErrors] = useState<PaymentError[]>([]);
 
-	const processPayment = useCallback(async (paymentMethod: string): Promise<boolean> => {
+	const processPayment = useCallback(async (): Promise<boolean> => {
 		// Simulate QR code payment processing
 		await new Promise((resolve) => setTimeout(resolve, 3000));
 		return Math.random() > 0.05; // 95% success rate

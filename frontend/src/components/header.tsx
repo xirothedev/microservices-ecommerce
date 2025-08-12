@@ -4,8 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Pacifico } from "next/font/google";
-import { Search } from "lucide-react";
-import AuthModal from "./auth-modals";
+import { Search, ShoppingCart, User } from "lucide-react";
+import { useAuth } from "@/contexts/auth-context";
+import { useUserQuery } from "@/lib/api/user";
+import { useCart } from "@/lib/api/cart";
+import { Button } from "./ui/button";
 
 const pacifico = Pacifico({
 	weight: "400",
@@ -30,8 +33,9 @@ export default function Header() {
 	const [messageIndex, setMessageIndex] = useState<number>(0);
 	const [isVisible, setIsVisible] = useState<boolean>(true);
 	const [isPaused, setIsPaused] = useState<boolean>(false);
-	const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
-	const [authMode, setAuthMode] = useState<"login" | "register">("login");
+	const { openAuthModal } = useAuth();
+	const { data: userData } = useUserQuery();
+	const { getTotalItems } = useCart();
 	const timersRef = useRef<Array<ReturnType<typeof setTimeout>>>([]);
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -54,19 +58,10 @@ export default function Header() {
 		};
 	}, [isPaused]);
 
-	const openAuthModal = (mode: "login" | "register") => {
-		setAuthMode(mode);
-		setIsAuthModalOpen(true);
-	};
-
-	const closeAuthModal = () => {
-		setIsAuthModalOpen(false);
-	};
-
 	return (
 		<header>
 			<div className="bg-blue-600 text-sm text-white">
-				<div className="mx-auto flex h-8 max-w-7xl justify-between bg-blue-600 px-4 text-sm text-white sm:px-6 lg:px-8">
+				<div className="mx-auto flex h-8 max-w-7xl justify-between bg-blue-600 px-4 text-sm sm:px-6 lg:px-8">
 					<div className="flex items-center">
 						{/* Logo */}
 						<span
@@ -93,12 +88,12 @@ export default function Header() {
 				</div>
 			</div>
 
-			<div className="bg-blue-500 text-white">
+			<div className="bg-blue-500">
 				<div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
 					<div className="flex items-center">
 						<div className="flex gap-5">
 							<Image src="/next.svg" className="" alt="Digital Pro" width={100} height={100} />
-							<Link href="/" className={`text-3xl font-bold text-white ${pacifico.className}`}>
+							<Link href="/" className={`text-3xl font-bold ${pacifico.className}`}>
 								Digital Pro
 							</Link>
 						</div>
@@ -116,26 +111,66 @@ export default function Header() {
 						</div>
 					</div>
 
-					{/* Login/Register Buttons */}
+					{/* User Actions - Show avatar + cart if logged in, otherwise show login/register buttons */}
 					<div className="flex items-center gap-3">
-						<button
-							onClick={() => openAuthModal("login")}
-							className="px-4 py-2 text-white transition-colors duration-200 hover:text-blue-200"
-						>
-							Đăng nhập
-						</button>
-						<button
-							onClick={() => openAuthModal("register")}
-							className="rounded-lg bg-white px-4 py-2 font-medium text-blue-600 transition-colors duration-200 hover:bg-gray-100"
-						>
-							Đăng ký
-						</button>
+						{userData?.me ? (
+							<>
+								{/* Shopping Cart */}
+								<Link href="/cart">
+									<Button
+										variant="ghost"
+										size="sm"
+										className="relative border border-white bg-transparent px-3 py-2 text-white transition-colors duration-200 hover:bg-white/10 hover:text-white"
+									>
+										<ShoppingCart className="h-5 w-5" />
+										{getTotalItems() > 0 && (
+											<span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+												{getTotalItems()}
+											</span>
+										)}
+									</Button>
+								</Link>
+
+								{/* User Avatar */}
+								<Link href="/profile">
+									<Button
+										variant="ghost"
+										size="sm"
+										className="flex h-10 w-10 items-center justify-center rounded-full border border-white bg-transparent p-0 text-white transition-colors duration-200 hover:bg-white/10 hover:text-white"
+									>
+										{userData.me.avatarUrl ? (
+											<Image
+												src={userData.me.avatarUrl}
+												alt={userData.me.fullname || "User"}
+												width={32}
+												height={32}
+												className="h-8 w-8 rounded-full object-cover"
+											/>
+										) : (
+											<User className="h-5 w-5" />
+										)}
+									</Button>
+								</Link>
+							</>
+						) : (
+							<>
+								<Button
+									onClick={() => openAuthModal("login")}
+									className="border border-white bg-transparent px-4 py-2 text-white transition-colors duration-200 hover:bg-white/10 hover:text-white"
+								>
+									Đăng nhập
+								</Button>
+								<Button
+									onClick={() => openAuthModal("register")}
+									className="rounded-lg bg-white px-4 py-2 font-medium text-blue-600 transition-colors duration-200 hover:bg-gray-100"
+								>
+									Đăng ký
+								</Button>
+							</>
+						)}
 					</div>
 				</div>
 			</div>
-
-			{/* Auth Modal */}
-			<AuthModal isOpen={isAuthModalOpen} onClose={closeAuthModal} mode={authMode} setMode={setAuthMode} />
 		</header>
 	);
 }

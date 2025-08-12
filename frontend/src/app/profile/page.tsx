@@ -99,15 +99,15 @@ export default function PersonalInformation() {
 		// Check if file is an image
 		const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
 		if (!allowedTypes.includes(file.type)) {
-			alert("Only accept PNG, JPEG, JPG, WEBP.");
+			alert("Chỉ chấp nhận PNG, JPEG, JPG, WEBP.");
 			return;
 		}
 
 		// Check file size (max 5MB)
 		if (file.size > 5 * 1024 * 1024) {
 			toast({
-				title: "File too large",
-				description: "Please select an image smaller than 5MB",
+				title: "Tệp quá lớn",
+				description: "Vui lòng chọn hình ảnh nhỏ hơn 5MB",
 				variant: "destructive",
 			});
 			return;
@@ -135,8 +135,8 @@ export default function PersonalInformation() {
 				<Card>
 					<CardHeader className="flex flex-row items-center justify-between">
 						<div>
-							<CardTitle>Personal Information</CardTitle>
-							<CardDescription>Manage your personal details and contact information</CardDescription>
+							<CardTitle>Thông tin cá nhân</CardTitle>
+							<CardDescription>Quản lý thông tin cá nhân và thông tin liên hệ của bạn</CardDescription>
 						</div>
 						<Button
 							variant={isEditing ? "outline" : "default"}
@@ -144,7 +144,7 @@ export default function PersonalInformation() {
 							className="flex items-center gap-2"
 						>
 							{isEditing ? <X className="h-4 w-4" /> : <Edit className="h-4 w-4" />}
-							{isEditing ? "Cancel" : "Edit"}
+							{isEditing ? "Hủy" : "Chỉnh sửa"}
 						</Button>
 					</CardHeader>
 					<CardContent className="space-y-6">
@@ -156,16 +156,16 @@ export default function PersonalInformation() {
 										data?.me.avatarUrl ??
 										"https://preview-nextjs-digital-marketing-site-kzmk65g4en0d6uad4ktq.vusercontent.net/placeholder.svg?height=96&width=96"
 									}
-									alt="Profile"
+									alt="Hồ sơ"
 								/>
 								<AvatarFallback className="text-2xl">{fallbackAvatar}</AvatarFallback>
 							</Avatar>
 							<div className="space-y-2">
 								<div className="flex items-center gap-2">
-									<h3 className="text-lg font-semibold">Profile Picture</h3>
+									<h3 className="text-lg font-semibold">Ảnh đại diện</h3>
 									<Badge variant="secondary">Premium</Badge>
 								</div>
-								<p className="text-sm text-gray-600">Upload a new profile picture</p>
+								<p className="text-sm text-gray-600">Tải lên ảnh đại diện mới</p>
 								{isEditing && (
 									<>
 										<input
@@ -185,7 +185,7 @@ export default function PersonalInformation() {
 											}}
 										>
 											<Upload className="h-4 w-4" />
-											Upload New Photo
+											Tải lên ảnh mới
 										</Button>
 									</>
 								)}
@@ -195,50 +195,50 @@ export default function PersonalInformation() {
 						{/* Form Fields */}
 						<form className="grid gap-6 md:grid-cols-2" onSubmit={handleSave}>
 							<div className="space-y-2 md:col-span-2">
-								<Label htmlFor="fullname">Full name</Label>
+								<Label htmlFor="fullname">Họ và tên</Label>
 								<Input id="fullname" {...form.register("fullname")} disabled={!isEditing} />
 								{form.formState.errors.fullname && (
 									<p className="text-sm text-red-600">{form.formState.errors.fullname.message}</p>
 								)}
 							</div>
 							<div className="space-y-2">
-								<Label htmlFor="email">Email Address</Label>
+								<Label htmlFor="email">Địa chỉ email</Label>
 								<Input id="email" value={data.me.email} type="email" disabled />
 							</div>
 							<div className="space-y-2">
-								<Label htmlFor="phone">Phone Number</Label>
+								<Label htmlFor="phone">Số điện thoại</Label>
 								<Input id="phone" value={data.me.phone ?? undefined} disabled />
 							</div>
 							<div className="space-y-2 md:col-span-2">
-								<Label htmlFor="address">Address</Label>
+								<Label htmlFor="address">Địa chỉ</Label>
 								<Input id="address" {...form.register("address")} disabled={!isEditing} />
 								{form.formState.errors.address && (
 									<p className="text-sm text-red-600">{form.formState.errors.address.message}</p>
 								)}
 							</div>
 							<div className="space-y-2">
-								<Label htmlFor="city">City</Label>
+								<Label htmlFor="city">Thành phố</Label>
 								<Input id="city" {...form.register("city")} disabled={!isEditing} />
 								{form.formState.errors.city && (
 									<p className="text-sm text-red-600">{form.formState.errors.city.message}</p>
 								)}
 							</div>
 							<div className="space-y-2">
-								<Label htmlFor="state">State</Label>
+								<Label htmlFor="state">Tỉnh/Bang</Label>
 								<Input id="state" {...form.register("state")} disabled={!isEditing} />
 								{form.formState.errors.state && (
 									<p className="text-sm text-red-600">{form.formState.errors.state.message}</p>
 								)}
 							</div>
 							<div className="space-y-2">
-								<Label htmlFor="zipCode">ZIP Code</Label>
+								<Label htmlFor="zipCode">Mã bưu điện</Label>
 								<Input id="zipCode" {...form.register("zipCode")} disabled={!isEditing} />
 								{form.formState.errors.zipCode && (
 									<p className="text-sm text-red-600">{form.formState.errors.zipCode.message}</p>
 								)}
 							</div>
 							<div className="space-y-2 md:col-span-2">
-								<Label htmlFor="biography">Biography</Label>
+								<Label htmlFor="biography">Tiểu sử</Label>
 								<Textarea
 									id="biography"
 									{...form.register("biography")}
@@ -257,11 +257,11 @@ export default function PersonalInformation() {
 									className="flex justify-end space-x-2 md:col-span-2"
 								>
 									<Button variant="outline" type="button" onClick={handleCancel}>
-										Cancel
+										Hủy
 									</Button>
 									<Button type="submit" className="flex items-center gap-2">
 										<Save className="h-4 w-4" />
-										Save Changes
+										Lưu thay đổi
 									</Button>
 								</motion.div>
 							)}
@@ -272,24 +272,24 @@ export default function PersonalInformation() {
 				{/* Account Status Card */}
 				<Card>
 					<CardHeader>
-						<CardTitle>Account Status</CardTitle>
-						<CardDescription>Your account information and membership details</CardDescription>
+						<CardTitle>Trạng thái tài khoản</CardTitle>
+						<CardDescription>Thông tin tài khoản và chi tiết thành viên của bạn</CardDescription>
 					</CardHeader>
 					<CardContent>
 						<div className="grid gap-4 md:grid-cols-3">
 							<div className="rounded-lg bg-blue-50 p-4 text-center">
 								<div className="text-2xl font-bold text-blue-600">Premium</div>
-								<div className="text-sm text-gray-600">Account Type</div>
+								<div className="text-sm text-gray-600">Loại tài khoản</div>
 							</div>
 							<div className="rounded-lg bg-green-50 p-4 text-center">
-								<div className="text-2xl font-bold text-green-600">Active</div>
-								<div className="text-sm text-gray-600">Status</div>
+								<div className="text-2xl font-bold text-green-600">Hoạt động</div>
+								<div className="text-sm text-gray-600">Trạng thái</div>
 							</div>
 							<div className="rounded-lg bg-purple-50 p-4 text-center">
 								<div className="text-2xl font-bold text-purple-600">
 									{data?.me.createdAt ? dayjs(data.me.createdAt).format("MMM YYYY") : ""}
 								</div>
-								<div className="text-sm text-gray-600">Member Since</div>
+								<div className="text-sm text-gray-600">Thành viên từ</div>
 							</div>
 						</div>
 					</CardContent>

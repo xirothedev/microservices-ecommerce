@@ -1,22 +1,15 @@
-import axiosInstance from "@/lib/axios";
+import {
+	ApiError,
+	FindAllOrdersRequest,
+	OrderData,
+	OrderListData,
+	OrderResponse,
+	OrdersListResponse,
+} from "@/@types/api/order";
 import { useToast } from "@/hooks/use-toast";
+import axiosInstance from "@/lib/axios";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
-import {
-	CreateOrderRequest,
-	CreateOrderFromCartRequest,
-	FindAllOrdersRequest,
-	OrdersListResponse,
-	OrderResponse,
-	OrderItemsResponse,
-	CreateOrderResponse,
-	ApiResponse,
-	ApiError,
-	Order,
-	OrderItem,
-	OrderListData,
-	OrderData,
-} from "@/@types/api/order";
 
 class OrdersApi {
 	// /**

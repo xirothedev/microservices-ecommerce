@@ -48,8 +48,8 @@ export default function SignupPage() {
 			window.open(`${process.env.NEXT_PUBLIC_API_URL}/auth/${provider}/login`);
 		} catch {
 			toast({
-				title: "Error",
-				description: "An error occurred during social login",
+				title: "Lỗi",
+				description: "Đã xảy ra lỗi trong quá trình đăng nhập xã hội",
 				variant: "destructive",
 			});
 		}
@@ -60,13 +60,13 @@ export default function SignupPage() {
 			<div className="mb-8">
 				<Link href="/" className="text-muted-foreground hover:text-foreground flex items-center text-sm">
 					<ArrowLeft className="mr-2 h-4 w-4" />
-					Back to Homepage
+					Quay về trang chủ
 				</Link>
 			</div>
 
-			<h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">Welcome to Digital Pro</h2>
+			<h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">Chào mừng đến với Digital Pro</h2>
 			<p className="mt-2 max-w-sm text-sm text-neutral-600 dark:text-neutral-300">
-				Sign up if you can because we don&apos;t have a register flow yet
+				Đăng ký nếu bạn có thể vì chúng tôi chưa có luồng đăng ký
 			</p>
 
 			<form className="my-8 text-black dark:text-white" onSubmit={form.handleSubmit(onSubmit)}>
@@ -80,7 +80,7 @@ export default function SignupPage() {
 					</div>
 				)}
 				<LabelInputContainer className="mb-4">
-					<Label htmlFor="fullname">Full Name</Label>
+					<Label htmlFor="fullname">Họ và tên</Label>
 					<Input
 						id="fullname"
 						placeholder="John Smith"
@@ -91,7 +91,7 @@ export default function SignupPage() {
 					/>
 				</LabelInputContainer>
 				<LabelInputContainer className="mb-4">
-					<Label htmlFor="email">Email Address</Label>
+					<Label htmlFor="email">Địa chỉ Email</Label>
 					<Input
 						id="email"
 						placeholder="xiro@theterminal.com"
@@ -102,7 +102,7 @@ export default function SignupPage() {
 					/>
 				</LabelInputContainer>
 				<LabelInputContainer className="mb-4">
-					<Label htmlFor="password">Password</Label>
+					<Label htmlFor="password">Mật khẩu</Label>
 					<Input
 						id="password"
 						placeholder="••••••••"
@@ -133,7 +133,7 @@ export default function SignupPage() {
 					type="submit"
 					disabled={isPending}
 				>
-					{isPending ? "Signing up..." : "Sign up"}
+					{isPending ? "Đang đăng ký..." : "Đăng ký"}
 					<BottomGradient />
 				</Button>
 
@@ -162,9 +162,9 @@ export default function SignupPage() {
 					</Button>
 
 					<div className="mt-6 text-center text-sm text-neutral-600 dark:text-neutral-300">
-						Already have an account?{" "}
+						Đã có tài khoản?{" "}
 						<Link href="/login" className="text-blue-600 hover:underline dark:text-blue-400">
-							Log in
+							Đăng nhập
 						</Link>
 					</div>
 				</div>

@@ -16,8 +16,8 @@ export default function DashboardPage() {
 			<div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 				{/* Header */}
 				<div className="mb-8">
-					<h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-					<p className="mt-2 text-gray-600">Manage users, support tickets, and system operations</p>
+					<h1 className="text-3xl font-bold text-gray-900">Bảng điều khiển quản trị</h1>
+					<p className="mt-2 text-gray-600">Quản lý người dùng, phiếu hỗ trợ và hoạt động hệ thống</p>
 				</div>
 
 				{/* Dashboard Tabs */}
@@ -25,19 +25,19 @@ export default function DashboardPage() {
 					<TabsList className="grid w-full grid-cols-4 lg:w-auto lg:grid-cols-4">
 						<TabsTrigger value="overview" className="flex items-center gap-2">
 							<BarChart3 className="h-4 w-4" />
-							<span className="hidden sm:inline">Overview</span>
+							<span className="hidden sm:inline">Tổng quan</span>
 						</TabsTrigger>
 						<TabsTrigger value="users" className="flex items-center gap-2">
 							<Users className="h-4 w-4" />
-							<span className="hidden sm:inline">Users</span>
+							<span className="hidden sm:inline">Người dùng</span>
 						</TabsTrigger>
 						<TabsTrigger value="tickets" className="flex items-center gap-2">
 							<Ticket className="h-4 w-4" />
-							<span className="hidden sm:inline">Tickets</span>
+							<span className="hidden sm:inline">Phiếu hỗ trợ</span>
 						</TabsTrigger>
 						<TabsTrigger value="settings" className="flex items-center gap-2">
 							<Settings className="h-4 w-4" />
-							<span className="hidden sm:inline">Settings</span>
+							<span className="hidden sm:inline">Cài đặt</span>
 						</TabsTrigger>
 					</TabsList>
 
@@ -56,13 +56,13 @@ export default function DashboardPage() {
 					<TabsContent value="settings" className="space-y-6">
 						<Card>
 							<CardHeader>
-								<CardTitle>System Settings</CardTitle>
-								<CardDescription>Configure system-wide settings and preferences</CardDescription>
+								<CardTitle>Cài đặt hệ thống</CardTitle>
+								<CardDescription>Cấu hình cài đặt và tùy chọn toàn hệ thống</CardDescription>
 							</CardHeader>
 							<CardContent>
 								<div className="py-12 text-center">
 									<Settings className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-									<p className="text-gray-600">System settings panel coming soon...</p>
+									<p className="text-gray-600">Bảng cài đặt hệ thống sẽ sớm có...</p>
 								</div>
 							</CardContent>
 						</Card>
