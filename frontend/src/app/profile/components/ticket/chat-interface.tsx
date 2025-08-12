@@ -76,7 +76,7 @@ export default function ChatInterface({ ticketId, displayUser, displayUserStatus
 					</div>
 					{isConnected && (
 						<Badge variant="secondary" className="bg-green-100 text-xs text-green-800">
-							Live Chat
+							Nhắn tin trực tiếp
 						</Badge>
 					)}
 				</div>

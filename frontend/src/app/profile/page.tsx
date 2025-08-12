@@ -59,21 +59,52 @@ export default function PersonalInformation() {
 		if (!data?.me) return;
 
 		const changed: UpdateUserInput = {};
-		if (values.fullname !== data.me.fullname) changed.fullname = values.fullname;
-		if ((values.address || null) !== (data.me.address || null))
-			changed.address = values.address === "" ? null : values.address;
-		if ((values.city || null) !== (data.me.city || null)) changed.city = values.city === "" ? null : values.city;
-		if ((values.state || null) !== (data.me.state || null))
-			changed.state = values.state === "" ? null : values.state;
-		if ((values.zipCode || null) !== (data.me.zipCode || null))
-			changed.zipCode = values.zipCode === "" ? null : values.zipCode;
-		if ((values.biography || null) !== (data.me.biography || null))
-			changed.biography = values.biography === "" ? null : values.biography;
+
+		// Check if fullname has changed
+		if (values.fullname !== data.me.fullname) {
+			changed.fullname = values.fullname;
+		}
+
+		// Check if address has changed (handle empty string as undefined)
+		const currentAddress = data.me.address || undefined;
+		const newAddress = values.address || undefined;
+		if (currentAddress !== newAddress) {
+			changed.address = newAddress;
+		}
+
+		// Check if city has changed
+		const currentCity = data.me.city || undefined;
+		const newCity = values.city || undefined;
+		if (currentCity !== newCity) {
+			changed.city = newCity;
+		}
+
+		// Check if state has changed
+		const currentState = data.me.state || undefined;
+		const newState = values.state || undefined;
+		if (currentState !== newState) {
+			changed.state = newState;
+		}
+
+		// Check if zipCode has changed
+		const currentZipCode = data.me.zipCode || undefined;
+		const newZipCode = values.zipCode || undefined;
+		if (currentZipCode !== newZipCode) {
+			changed.zipCode = newZipCode;
+		}
+
+		// Check if biography has changed
+		const currentBiography = data.me.biography || undefined;
+		const newBiography = values.biography || undefined;
+		if (currentBiography !== newBiography) {
+			changed.biography = newBiography;
+		}
 
 		if (Object.keys(changed).length === 0) {
 			setIsEditing(false);
 			return;
 		}
+
 		await mutateUpdateUser(changed);
 		setIsEditing(false);
 	});
@@ -81,7 +112,7 @@ export default function PersonalInformation() {
 	const handleCancel = () => {
 		if (data?.me) {
 			form.reset({
-				fullname: data.me.fullname,
+				fullname: data.me.fullname || "",
 				address: data.me.address || "",
 				city: data.me.city || "",
 				state: data.me.state || "",

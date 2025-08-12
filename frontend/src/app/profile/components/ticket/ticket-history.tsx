@@ -89,7 +89,7 @@ export default function TicketHistory() {
 		return (
 			<Badge variant="secondary" className={`${config.bg} ${config.color} border-0`}>
 				{getStatusIcon(status)}
-				<span className="ml-1">{config.label}</span>
+				<span className="ml-1 hidden sm:inline">{config.label}</span>
 			</Badge>
 		);
 	};
@@ -112,15 +112,15 @@ export default function TicketHistory() {
 	};
 
 	return (
-		<div className="space-y-6">
+		<div className="space-y-4 sm:space-y-6">
 			{/* Filters */}
 			<Card>
-				<CardContent className="p-4">
-					<div className="flex flex-col gap-4 sm:flex-row">
+				<CardContent className="p-3 sm:p-4">
+					<div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
 						<div className="relative flex-1">
 							<Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform text-gray-400" />
 							<Input
-								placeholder="Search tickets by subject or ID..."
+								placeholder="Tìm kiếm theo tiêu đề, ID..."
 								value={searchQuery}
 								onChange={(e) => setSearchQuery(e.target.value)}
 								className="pl-10"
@@ -128,7 +128,7 @@ export default function TicketHistory() {
 						</div>
 						<div className="flex gap-2">
 							<Select value={statusFilter} onValueChange={setStatusFilter}>
-								<SelectTrigger className="w-32 cursor-pointer">
+								<SelectTrigger className="w-28 cursor-pointer sm:w-32">
 									<SelectValue placeholder="Status" />
 								</SelectTrigger>
 								<SelectContent>
@@ -147,7 +147,7 @@ export default function TicketHistory() {
 								</SelectContent>
 							</Select>
 							<Select value={priorityFilter} onValueChange={setPriorityFilter}>
-								<SelectTrigger className="w-32 cursor-pointer">
+								<SelectTrigger className="w-28 cursor-pointer sm:w-32">
 									<SelectValue placeholder="Priority" />
 								</SelectTrigger>
 								<SelectContent>
@@ -170,7 +170,7 @@ export default function TicketHistory() {
 			</Card>
 
 			{/* Tickets List */}
-			<div className="space-y-4">
+			<div className="space-y-3 sm:space-y-4">
 				{isLoading ? (
 					<div className="text-center text-gray-500">Loading tickets...</div>
 				) : isError ? (
@@ -193,10 +193,12 @@ export default function TicketHistory() {
 							{tickets.length === 0 ? (
 								<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
 									<Card>
-										<CardContent className="p-8 text-center">
-											<MessageCircle className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-											<h3 className="mb-2 text-lg font-medium text-gray-900">No tickets found</h3>
-											<p className="text-gray-600">
+										<CardContent className="p-6 text-center sm:p-8">
+											<MessageCircle className="mx-auto mb-4 h-10 w-10 text-gray-400 sm:h-12 sm:w-12" />
+											<h3 className="mb-2 text-base font-medium text-gray-900 sm:text-lg">
+												No tickets found
+											</h3>
+											<p className="text-sm text-gray-600 sm:text-base">
 												{searchQuery || statusFilter !== "all" || priorityFilter !== "all"
 													? "Try adjusting your search or filters"
 													: "You haven't submitted any support tickets yet"}
@@ -213,37 +215,39 @@ export default function TicketHistory() {
 										exit={{ opacity: 0, y: -20 }}
 										transition={{ duration: 0.3, delay: index * 0.05 }}
 									>
-										<Card className="mt-2 transition-shadow hover:shadow-md">
-											<CardContent className="p-6">
-												<div className="flex items-start justify-between">
+										<Card className="mb-4 transition-shadow hover:shadow-md">
+											<CardContent className="p-4 sm:p-6">
+												<div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
 													<div className="min-w-0 flex-1">
-														<div className="mb-2 flex items-center gap-3">
-															<h3 className="truncate text-lg font-semibold text-gray-900">
+														<div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+															<h3 className="line-clamp-2 text-base font-semibold text-gray-900 sm:line-clamp-1 sm:text-lg">
 																{ticket.title}
 															</h3>
 															{isNewTicket(ticket) && (
-																<Badge variant="destructive" className="text-xs">
+																<Badge variant="destructive" className="w-fit text-xs">
 																	New
 																</Badge>
 															)}
 														</div>
 
-														<div className="mb-3 flex items-center gap-4 text-sm text-gray-600">
+														<div className="mb-3 flex flex-col gap-2 text-sm text-gray-600 sm:flex-col sm:gap-1">
 															<span className="font-medium">#{ticket.id}</span>
-															<div className="flex items-center gap-1">
-																<Calendar className="h-4 w-4" />
-																{formatDate(ticket.createdAt, {
-																	hour: "2-digit",
-																	minute: "2-digit",
-																})}
-															</div>
-															<div className="flex items-center gap-1">
-																<MessageCircle className="h-4 w-4" />
-																{ticket._count?.messages || 0} messages
+															<div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
+																<div className="flex items-center gap-1">
+																	<Calendar className="h-4 w-4" />
+																	{formatDate(ticket.createdAt, {
+																		hour: "2-digit",
+																		minute: "2-digit",
+																	})}
+																</div>
+																<div className="flex items-center gap-1">
+																	<MessageCircle className="h-4 w-4" />
+																	{ticket._count?.messages || 0} messages
+																</div>
 															</div>
 														</div>
 
-														<div className="mb-4 flex items-center gap-3">
+														<div className="mb-4 flex flex-wrap items-center gap-2 sm:gap-3">
 															{getStatusBadge(ticket.status)}
 															{getPriorityBadge(ticket.priority)}
 															<Badge variant="outline" className="capitalize">
@@ -255,7 +259,8 @@ export default function TicketHistory() {
 														{ticket.assign && (
 															<div className="flex items-center gap-2 text-sm text-gray-600">
 																<User className="h-4 w-4" />
-																<span>Assigned to:</span>
+																<span className="hidden sm:inline">Assigned to:</span>
+																<span className="sm:hidden">Agent:</span>
 																<div className="flex items-center gap-2">
 																	<Avatar className="h-5 w-5">
 																		<AvatarImage
@@ -266,7 +271,7 @@ export default function TicketHistory() {
 																			{getFallbackString(ticket.assign.fullname)}
 																		</AvatarFallback>
 																	</Avatar>
-																	<span className="font-medium">
+																	<span className="max-w-32 truncate font-medium sm:max-w-none">
 																		{ticket.assign.fullname}
 																	</span>
 																</div>
@@ -274,7 +279,7 @@ export default function TicketHistory() {
 														)}
 													</div>
 
-													<div className="ml-4 flex flex-col items-end gap-2">
+													<div className="flex flex-col items-start gap-2 sm:ml-4 sm:items-end">
 														<div className="text-xs text-gray-500">
 															Updated{" "}
 															{formatDate(ticket.updatedAt, {
@@ -282,13 +287,17 @@ export default function TicketHistory() {
 																minute: "2-digit",
 															})}
 														</div>
-														<Link href={`/profile/tickets/${ticket.id}`}>
+														<Link
+															href={`/profile/tickets/${ticket.id}`}
+															className="w-full sm:w-auto"
+														>
 															<Button
 																variant="outline"
 																size="sm"
-																className="flex items-center gap-2 bg-transparent"
+																className="flex w-full items-center justify-center gap-2 bg-transparent sm:w-auto"
 															>
-																View Details
+																<span className="hidden sm:inline">View Details</span>
+																<span className="sm:hidden">View</span>
 																<ArrowRight className="h-4 w-4" />
 															</Button>
 														</Link>
@@ -307,14 +316,14 @@ export default function TicketHistory() {
 			{/* Summary Stats */}
 			{tickets.length > 0 && (
 				<Card>
-					<CardContent className="p-4">
-						<div className="grid grid-cols-2 gap-4 text-center md:grid-cols-5">
+					<CardContent className="p-3 sm:p-4">
+						<div className="grid grid-cols-3 gap-2 text-center sm:grid-cols-5 sm:gap-4">
 							{Object.entries(statusConfig).map(([status, config]) => {
 								const count = tickets.filter((t) => t.status === status).length;
 								return (
 									<div key={status} className="space-y-1">
-										<div className={`text-2xl font-bold ${config.color}`}>{count}</div>
-										<div className="text-xs text-gray-600">{config.label}</div>
+										<div className={`text-lg font-bold sm:text-2xl ${config.color}`}>{count}</div>
+										<div className="hidden text-xs text-gray-600 sm:block">{config.label}</div>
 									</div>
 								);
 							})}
