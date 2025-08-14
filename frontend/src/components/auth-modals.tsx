@@ -1,16 +1,16 @@
 "use client";
 
+import { toast } from "@/hooks/use-toast";
+import { useLogin, useSignup } from "@/lib/api/auth";
+import { loginSchema, type LoginForm } from "@/zods/login";
+import { signUpSchema } from "@/zods/signup";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
-import { Button } from "./ui/button";
-import { useLogin, useSignup } from "@/lib/api/auth";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, type LoginForm } from "@/zods/login";
-import { signUpSchema, type SignUpForm } from "@/zods/signup";
-import { toast } from "@/hooks/use-toast";
 import { z } from "zod";
+import { Button } from "./ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "./ui/dialog";
 
 interface AuthModalProps {
 	isOpen: boolean;
@@ -69,9 +69,11 @@ export default function AuthModal({ isOpen, onClose, mode, setMode }: AuthModalP
 
 	const handleSignupSubmit = async (data: SignUpWithConfirmForm) => {
 		try {
-			// Remove confirmPassword before sending to API
-			const { confirmPassword, ...signupData } = data;
-			await signupAsync(signupData);
+			await signupAsync({
+				email: data.email,
+				fullname: data.fullname,
+				password: data.password,
+			});
 			onClose();
 		} catch (error) {
 			console.error("Signup error:", error);

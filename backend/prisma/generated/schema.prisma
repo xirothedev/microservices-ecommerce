@@ -97,12 +97,12 @@ model OrderItem {
   quantity Int        @default(1) @db.SmallInt
   price    Int        @db.Integer
 
-  productId     String      @map("product_id") @db.Uuid
-  product       Product     @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  productItemId String      @unique @map("product_item_id") @db.Uuid
-  productItem   ProductItem @relation(fields: [productItemId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  orderId       String      @map("order_id") @db.Uuid
-  order         Order       @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productId     String       @map("product_id") @db.Uuid
+  product       Product      @relation(fields: [productId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  productItemId String?      @map("product_item_id") @db.Uuid
+  productItem   ProductItem? @relation(fields: [productItemId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  orderId       String       @map("order_id") @db.Uuid
+  order         Order        @relation(fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@map("order_item")
 }
@@ -147,7 +147,7 @@ model ProductItem {
   isSold Boolean   @default(false) @map("is_sold")
   soldAt DateTime? @map("sold_at") @db.Timestamptz
 
-  order OrderItem?
+  orderItems OrderItem[]
 
   @@map("product_item")
 }

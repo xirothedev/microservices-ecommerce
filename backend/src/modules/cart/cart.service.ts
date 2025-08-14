@@ -98,7 +98,6 @@ export class CartService {
   }
 
   public async findCartByUserId(id: string) {
-    // eslint-disable-next-line prisma/require-select
     const carts = await this.prismaService.cartItem.findMany({
       where: { userId: id },
       orderBy: { createdAt: 'desc' },

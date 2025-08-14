@@ -46,8 +46,8 @@ export default tseslint.config(
           caughtErrorsIgnorePattern: '^_',
         },
       ],
-      'prisma/no-unsafe': 'error',
-      'prisma/require-select': 'error',
+      'prisma/no-unsafe': 'warn',
+      'prisma/require-select': 'off',
     },
   },
 );

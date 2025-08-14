@@ -1,13 +1,14 @@
 {
+	"name": "web-store",
+	"version": "1.0.0",
+	"workspaces": [
+		"backend",
+		"frontend"
+	],
 	"dependencies": {
-		"decimal.js": "^10.6.0",
-		"husky": "^9.1.7",
-		"pdfkit": "^0.17.1"
+		"husky": "^9.1.7"
 	},
 	"scripts": {
 		"prepare": "husky"
-	},
-	"devDependencies": {
-		"@types/pdfkit": "^0.17.2"
 	}
 }

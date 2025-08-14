@@ -5,6 +5,7 @@ import { Request, Response } from 'express';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { FindAllOrdersDto } from './dto/find-all-orders.dto';
 import { OrdersService } from './orders.service';
+import { CreateOrderFromCartDto } from './dto/create-order-from-cart.dto';
 
 @ApiTags('Orders')
 @ApiBearerAuth()
@@ -35,7 +36,7 @@ export class OrdersController {
       },
     },
   })
-  createFromCart(@Req() req: Request, @Body() body: { paymentMethod: string; note?: string }) {
+  createFromCart(@Req() req: Request, @Body() body: CreateOrderFromCartDto) {
     return this.ordersService.createFromCart(req, body);
   }
 
@@ -121,5 +122,22 @@ export class OrdersController {
   @ApiResponse({ status: 404, description: 'Order not found' })
   refund(@Param('id') id: string) {
     return this.ordersService.refund(id);
+  }
+
+  @Post('cleanup-expired')
+  @Roles('ADMINISTRATOR')
+  @ApiOperation({ summary: 'Manually trigger cleanup of expired orders' })
+  @ApiResponse({ status: 200, description: 'Cleanup completed successfully' })
+  async manualCleanup() {
+    await this.ordersService.manualCleanupExpiredOrders();
+    return { message: 'Cleanup completed successfully' };
+  }
+
+  @Get('expired/count')
+  @Roles('ADMINISTRATOR')
+  @ApiOperation({ summary: 'Get count of expired orders' })
+  @ApiResponse({ status: 200, description: 'Count of expired orders' })
+  async getExpiredCount() {
+    return this.ordersService.getExpiredOrdersCount();
   }
 }

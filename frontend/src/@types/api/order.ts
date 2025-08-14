@@ -138,9 +138,25 @@ export interface OrdersListResponse extends ApiResponse<OrderListData[]> {
 	};
 }
 
+export interface PaymentData {
+	bin: string;
+	accountNumber: string;
+	accountName: string;
+	amount: number;
+	description: string;
+	orderCode: number;
+	currency: string;
+	paymentLinkId: string;
+	status: string;
+	expiredAt?: number;
+	checkoutUrl: string;
+	qrCode: string;
+}
+
 export interface OrderResponse extends ApiResponse<OrderData> {}
 export interface OrderItemsResponse extends ApiResponse<OrderItem[]> {}
-export interface CreateOrderResponse extends ApiResponse<Order> {}
+export interface CreateOrderResponse extends ApiResponse<PaymentData> {}
+
 // Error types
 export interface ApiError {
 	message: string;

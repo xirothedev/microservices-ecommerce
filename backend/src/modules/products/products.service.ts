@@ -175,7 +175,6 @@ export class ProductsService {
   }
 
   public async findBySeller(sellerId: string) {
-    // eslint-disable-next-line prisma/require-select
     const products = await this.prismaService.product.findMany({
       where: { sellerId },
       include: {
@@ -230,7 +229,6 @@ export class ProductsService {
       ];
     }
 
-    // eslint-disable-next-line prisma/require-select
     const products = await this.prismaService.product.findMany({
       where,
       include: {

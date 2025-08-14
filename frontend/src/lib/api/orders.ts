@@ -1,5 +1,8 @@
 import {
 	ApiError,
+	CreateOrderFromCartRequest,
+	CreateOrderRequest,
+	CreateOrderResponse,
 	FindAllOrdersRequest,
 	OrderData,
 	OrderListData,
@@ -12,21 +15,21 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
 
 class OrdersApi {
-	// /**
-	//  * Create a new order
-	//  */
-	// async createOrder(data: CreateOrderRequest): Promise<CreateOrderResponse> {
-	// 	const response = await axiosInstance.post<CreateOrderResponse>("/orders", data);
-	// 	return response.data;
-	// }
+	/**
+	 * Create a new order
+	 */
+	async createOrder(data: CreateOrderRequest): Promise<CreateOrderResponse> {
+		const response = await axiosInstance.post<CreateOrderResponse>("/orders", data);
+		return response.data;
+	}
 
-	// /**
-	//  * Create order from cart
-	//  */
-	// async createOrderFromCart(data: CreateOrderFromCartRequest): Promise<CreateOrderResponse> {
-	// 	const response = await axiosInstance.post<CreateOrderResponse>(`/orders/from-cart`, data);
-	// 	return response.data;
-	// }
+	/**
+	 * Create order from cart
+	 */
+	async createOrderFromCart(data: CreateOrderFromCartRequest): Promise<CreateOrderResponse> {
+		const response = await axiosInstance.post<CreateOrderResponse>(`/orders/from-cart`, data);
+		return response.data;
+	}
 
 	/**
 	 * Get user orders (for users to see their own orders)

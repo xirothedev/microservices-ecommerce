@@ -38,7 +38,7 @@ model ProductItem {
   isSold Boolean   @default(false) @map("is_sold")
   soldAt DateTime? @map("sold_at") @db.Timestamptz
 
-  order OrderItem?
+  orderItems OrderItem[]
 
   @@map("product_item")
 }

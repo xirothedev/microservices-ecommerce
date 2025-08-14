@@ -16,9 +16,9 @@ export class CreateOrderItemDto {
   @IsNotEmpty()
   productId: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
-  productItemId: string;
+  productItemId?: string;
 
   @IsPositive()
   quantity: number;

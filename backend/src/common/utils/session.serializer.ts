@@ -15,7 +15,6 @@ export class SessionSerializer extends PassportSerializer {
 
   async deserializeUser(user: User, done: (err: any, user?: User | null) => void) {
     try {
-      // eslint-disable-next-line prisma/require-select
       const data = await this.prisma.user.findUnique({ where: { id: user.id } });
       done(null, data);
     } catch (error) {

@@ -1,37 +1,68 @@
+import { PaymentService } from '@/modules/payment/payment.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { BillStatus, BillType, Prisma, SelectFrom } from '@prisma/generated';
 import { Request } from 'express';
+import { CreateOrderFromCartDto } from './dto/create-order-from-cart.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { FindAllOrdersDto } from './dto/find-all-orders.dto';
-import { OrderItem } from './orders.interface';
 import { PdfGeneratorService } from './pdf-generator.service';
+import { OrdersScheduler } from './orders.scheduler';
 
 @Injectable()
 export class OrdersService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly pdfGeneratorService: PdfGeneratorService,
+    private readonly paymentService: PaymentService,
+    private readonly ordersScheduler: OrdersScheduler,
   ) {}
 
-  public async create(req: Request, createOrderDto: CreateOrderDto) {
+  async manualCleanupExpiredOrders() {
+    console.log('Manual cleanup triggered');
+    await this.ordersScheduler.performCleanup();
+  }
+
+  async getExpiredOrdersCount() {
+    const cleanupThresholdMinutes = 15;
+    const fifteenMinutesAgo = new Date(Date.now() - cleanupThresholdMinutes * 60 * 1000);
+
+    const count = await this.prismaService.order.count({
+      where: {
+        createdAt: {
+          lt: fifteenMinutesAgo,
+        },
+        bill: {
+          status: BillStatus.PENDING,
+        },
+      },
+    });
+
+    return {
+      expiredOrdersCount: count,
+      thresholdMinutes: cleanupThresholdMinutes,
+      currentTime: new Date(),
+      thresholdTime: fifteenMinutesAgo,
+    };
+  }
+
+  public async create(req: Request, body: CreateOrderDto) {
     const user = req.user;
 
-    // Validate and calculate total price
     let totalPrice = 0;
-    const orderItemsData: OrderItem[] = [];
+    const orderItems: Omit<Prisma.OrderItemCreateManyInput, 'orderId'>[] = [];
 
-    for (const item of createOrderDto.items) {
-      // Validate product exists and is active
-      const product = await this.prismaService.product.findFirst({
+    // validation
+    for (const item of body.items) {
+      const product = await this.prismaService.product.findUnique({
         where: {
           id: item.productId,
           isActive: true,
         },
-        select: {
-          id: true,
-          discountPrice: true,
-          stock: true,
+        include: {
+          productItems: {
+            where: { isSold: false },
+          },
         },
       });
 
@@ -39,123 +70,115 @@ export class OrdersService {
         throw new NotFoundException(`Product ${item.productId} not found or inactive`);
       }
 
-      // Validate product item exists and is not sold
-      const productItem = await this.prismaService.productItem.findFirst({
-        where: {
-          id: item.productItemId,
-          productId: item.productId,
-          isSold: false,
-        },
-        select: {
-          id: true,
-        },
-      });
+      if (product.productItems.length === 0) {
+        // Product sử dụng stock thủ công
+        if (product.stock < item.quantity) {
+          throw new BadRequestException(
+            `Insufficient stock for product ${item.productId}. Available: ${product.stock}, Requested: ${item.quantity}`,
+          );
+        }
+      } else {
+        // Product sử dụng stock dựa trên productItems
+        const availableProductItems = product.productItems.filter((pi) => !pi.isSold);
 
-      if (!productItem) {
-        throw new NotFoundException(`Product item ${item.productItemId} not found or already sold`);
-      }
-
-      // Check stock availability
-      if (product.stock < item.quantity) {
-        throw new BadRequestException(`Insufficient stock for product ${item.productId}`);
+        if (item.productItemId) {
+          // Kiểm tra productItem cụ thể có tồn tại và chưa bán không
+          const specificProductItem = availableProductItems.find((pi) => pi.id === item.productItemId);
+          if (!specificProductItem) {
+            throw new BadRequestException(
+              `Product item ${item.productItemId} is not available for product ${item.productId}`,
+            );
+          }
+        } else {
+          // Không có productItem cụ thể - kiểm tra có đủ productItems không
+          if (availableProductItems.length === 0) {
+            throw new BadRequestException(`Product ${item.productId} is sold out`);
+          }
+        }
       }
 
       const itemPrice = product.discountPrice * item.quantity;
       totalPrice += itemPrice;
 
-      orderItemsData.push({
+      const orderItem: Omit<Prisma.OrderItemCreateManyInput, 'orderId'> = {
         productId: item.productId,
-        productItemId: item.productItemId,
         quantity: item.quantity,
         price: itemPrice,
         from: item.from,
-      });
-    }
-
-    try {
-      const result = await this.prismaService.$transaction(async (tx) => {
-        // Create bill first
-        const bill = await tx.bill.create({
-          data: {
-            paymentMethod: createOrderDto.paymentMethod,
-            type: BillType.MONEY_IN,
-            status: BillStatus.PENDING,
-            amount: totalPrice,
-            note: createOrderDto.note || '',
-            userId: user.id,
-          },
-        });
-
-        // Create order
-        const order = await tx.order.create({
-          data: {
-            totalPrice,
-            userId: user.id,
-            billId: bill.id,
-            items: {
-              createMany: {
-                data: orderItemsData,
-              },
-            },
-          },
-          include: {
-            items: {
-              include: {
-                product: true,
-                productItem: true,
-              },
-            },
-            bill: true,
-          },
-        });
-
-        // Mark product items as sold and update stock
-        for (const item of createOrderDto.items) {
-          await tx.productItem.update({
-            where: { id: item.productItemId },
-            data: { isSold: true },
-          });
-
-          await tx.product.update({
-            where: { id: item.productId },
-            data: {
-              stock: { decrement: item.quantity },
-              sold: { increment: item.quantity },
-            },
-          });
-        }
-
-        // If order was created from cart, clear cart items
-        if (createOrderDto.from === SelectFrom.CART) {
-          const productIds = createOrderDto.items.map((item) => item.productId);
-          await tx.cartItem.deleteMany({
-            where: {
-              userId: user.id,
-              productId: { in: productIds },
-            },
-          });
-        }
-
-        return order;
-      });
-
-      return {
-        message: 'Order created successfully',
-        data: result,
       };
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        throw new BadRequestException('Failed to create order: ' + error.message);
+
+      if (item.productItemId) {
+        orderItem.productItemId = item.productItemId;
       }
-      throw error;
+
+      orderItems.push(orderItem);
     }
+
+    const result = await this.prismaService.$transaction(async (tx) => {
+      // create bill
+      const bill = await tx.bill.create({
+        data: {
+          userId: user.id,
+          type: BillType.MONEY_IN,
+          status: BillStatus.PENDING,
+          paymentMethod: body.paymentMethod,
+          amount: totalPrice,
+          note: body.note || '',
+        },
+      });
+
+      console.log(orderItems);
+
+      // create order
+      const order = await tx.order.create({
+        data: {
+          userId: user.id,
+          totalPrice,
+          billId: bill.id,
+          items: {
+            createMany: {
+              data: orderItems,
+            },
+          },
+        },
+        include: {
+          items: {
+            include: {
+              product: true,
+              productItem: true,
+            },
+          },
+          bill: true,
+        },
+      });
+
+      try {
+        const paymentResult = await this.paymentService.createPayment(order);
+
+        await tx.bill.update({
+          where: { id: bill.id },
+          data: {
+            transactionId: paymentResult.orderCode.toString(),
+          },
+        });
+
+        return paymentResult;
+      } catch (error) {
+        console.error('Failed to create payment link:', error);
+        throw new BadRequestException('Failed to create payment link');
+      }
+    });
+
+    return {
+      message: 'Order created successfully',
+      data: result,
+    };
   }
 
-  public async createFromCart(req: Request, body: { paymentMethod: string; note?: string }) {
+  public async createFromCart(req: Request, body: CreateOrderFromCartDto) {
     const user = req.user;
 
     // Get cart items
-    // eslint-disable-next-line prisma/require-select
     const cartItems = await this.prismaService.cartItem.findMany({
       where: { userId: user.id },
       include: {
@@ -167,7 +190,6 @@ export class OrdersService {
             isActive: true,
             productItems: {
               where: { isSold: false },
-              take: 1,
             },
           },
         },
@@ -184,26 +206,40 @@ export class OrdersService {
         throw new BadRequestException(`Product ${cartItem.product.id} is no longer active`);
       }
 
-      if (cartItem.product.stock < cartItem.quantity) {
-        throw new BadRequestException(`Insufficient stock for product ${cartItem.product.id}`);
-      }
+      const product = cartItem.product;
 
-      if (cartItem.product.productItems.length === 0) {
-        throw new BadRequestException(`No available product items for ${cartItem.product.id}`);
-      }
+      if (product.productItems.length === 0) {
+        // Product sử dụng stock thủ công
+        if (product.stock < cartItem.quantity) {
+          throw new BadRequestException(
+            `Insufficient stock for product ${product.id}. Available: ${product.stock}, Requested: ${cartItem.quantity}`,
+          );
+        }
+        return {
+          productId: cartItem.productId,
+          quantity: cartItem.quantity,
+          from: SelectFrom.CART,
+        };
+      } else {
+        // Product sử dụng stock dựa trên productItems
+        const availableProductItems = product.productItems.filter((pi) => !pi.isSold);
+        if (availableProductItems.length === 0) {
+          throw new BadRequestException(`Product ${product.id} is sold out`);
+        }
 
-      return {
-        productId: cartItem.productId,
-        productItemId: cartItem.product.productItems[0].id,
-        quantity: cartItem.quantity,
-        from: SelectFrom.CART,
-      };
+        return {
+          productId: cartItem.productId,
+          productItemId: availableProductItems[0].id,
+          quantity: cartItem.quantity,
+          from: SelectFrom.CART,
+        };
+      }
     });
 
     // Create order using existing create method
     const createOrderDto: CreateOrderDto = {
       items: orderItems,
-      paymentMethod: body.paymentMethod as any,
+      paymentMethod: body.paymentMethod,
       note: body.note,
       from: SelectFrom.CART,
     };
@@ -254,7 +290,6 @@ export class OrdersService {
       if (endDate) where.createdAt.lte = new Date(endDate);
     }
 
-    // eslint-disable-next-line prisma/require-select
     const orders = await this.prismaService.order.findMany({
       where,
       include: {
@@ -351,7 +386,6 @@ export class OrdersService {
       if (endDate) where.createdAt.lte = new Date(endDate);
     }
 
-    // eslint-disable-next-line prisma/require-select
     const orders = await this.prismaService.order.findMany({
       where,
       include: {
@@ -412,7 +446,6 @@ export class OrdersService {
   public async findOne(req: Request, id: string) {
     const user = req.user;
 
-    // eslint-disable-next-line prisma/require-select
     const order = await this.prismaService.order.findFirst({
       where: {
         id,
@@ -470,7 +503,6 @@ export class OrdersService {
       throw new NotFoundException('Order not found');
     }
 
-    // eslint-disable-next-line prisma/require-select
     const orderItems = await this.prismaService.orderItem.findMany({
       where: { orderId },
       include: {
@@ -498,7 +530,6 @@ export class OrdersService {
   public async cancel(req: Request, orderId: string) {
     const user = req.user;
 
-    // eslint-disable-next-line prisma/require-select
     const order = await this.prismaService.order.findFirst({
       where: {
         id: orderId,
@@ -529,7 +560,7 @@ export class OrdersService {
         // Restore product items and stock
         for (const item of order.items) {
           await tx.productItem.update({
-            where: { id: item.productItemId },
+            where: { id: item.productItemId ?? undefined },
             data: { isSold: false },
           });
 
@@ -552,7 +583,6 @@ export class OrdersService {
   }
 
   public async refund(orderId: string) {
-    // eslint-disable-next-line prisma/require-select
     const order = await this.prismaService.order.findFirst({
       where: {
         id: orderId,
@@ -582,7 +612,7 @@ export class OrdersService {
         // Restore product items and stock
         for (const item of order.items) {
           await tx.productItem.update({
-            where: { id: item.productItemId },
+            where: { id: item.productItemId ?? undefined },
             data: { isSold: false },
           });
 
@@ -608,7 +638,6 @@ export class OrdersService {
     const user = req.user;
 
     // Get order with all details
-    // eslint-disable-next-line prisma/require-select
     const order = await this.prismaService.order.findFirst({
       where: {
         id: orderId,
