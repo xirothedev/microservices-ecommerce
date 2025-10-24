@@ -5,12 +5,16 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto, UpdateUserDto, UserResponseDto } from './dto';
+import { S3Service } from '@/storage/s3.service';
 import * as bcrypt from 'bcryptjs';
-import { User } from 'generated/prisma';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private s3Service: S3Service,
+  ) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserResponseDto> {
     const { email, username, password, ...rest } = createUserDto;
@@ -151,7 +155,58 @@ export class UsersService {
     return bcrypt.compare(plainPassword, hashedPassword);
   }
 
+  async updateAvatar(
+    userId: string,
+    avatarUrl: string,
+  ): Promise<UserResponseDto> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId, isActive: true },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id: userId },
+      data: { avatar: avatarUrl },
+    });
+
+    return this.excludePassword(updatedUser);
+  }
+
+  async deleteAvatar(userId: string): Promise<UserResponseDto> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId, isActive: true },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    // If user has an avatar, try to delete it from S3
+    if (user.avatar) {
+      try {
+        // Extract key from avatar URL
+        const urlParts = user.avatar.split('/');
+        const key = urlParts[urlParts.length - 1];
+        await this.s3Service.deleteFile(key);
+      } catch (error) {
+        // Log error but don't fail the operation
+        console.warn('Failed to delete avatar from S3:', error);
+      }
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id: userId },
+      data: { avatar: null },
+    });
+
+    return this.excludePassword(updatedUser);
+  }
+
   private excludePassword(user: User): UserResponseDto {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...result } = user;
     return result;
   }

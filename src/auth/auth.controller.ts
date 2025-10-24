@@ -5,10 +5,10 @@ import {
   Post,
   Req,
   Res,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import type { Request, Response } from 'express';
+import type { Response } from 'express';
 import type { UserResponseDto } from '../users/dto';
 import { AuthService } from './auth.service';
 import { AuthResponseDto, LoginDto, RegisterDto } from './dto';

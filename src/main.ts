@@ -37,7 +37,7 @@ async function bootstrap() {
       client: {
         brokers: ['localhost:9092'],
       },
-      consumer: { groupId: 'users-consumer' },
+      consumer: { groupId: 'ecommerce-consumer' },
       producer: {
         allowAutoTopicCreation: true,
       },

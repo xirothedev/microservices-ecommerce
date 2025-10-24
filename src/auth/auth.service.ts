@@ -7,12 +7,15 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { LoginDto, RegisterDto, AuthResponseDto } from './dto';
 import { UserResponseDto } from '../users/dto';
+import { JwtPayloadDto } from '@/libs/common/jwt.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async validateUser(
@@ -75,17 +78,17 @@ export class AuthService {
   }
 
   // Generate JWT token with custom options
-  generateToken(payload: any, expiresIn?: string): string {
+  generateToken(payload: JwtPayloadDto): string {
     return this.jwtService.sign(payload, {
-      expiresIn: expiresIn || process.env.JWT_EXPIRES_IN || '7d',
-    } as any);
+      expiresIn: this.configService.getOrThrow('JWT_EXPIRES_IN'),
+    });
   }
 
   // Verify JWT token
-  verifyToken(token: string): any {
+  verifyToken(token: string): JwtPayloadDto {
     try {
-      return this.jwtService.verify(token);
-    } catch (error) {
+      return this.jwtService.verify<JwtPayloadDto>(token);
+    } catch {
       throw new UnauthorizedException('Invalid token');
     }
   }

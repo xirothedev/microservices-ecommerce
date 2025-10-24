@@ -90,4 +90,19 @@ export class UsersController {
       payload.hashedPassword,
     );
   }
+
+  @Patch(':id/avatar')
+  @UseGuards(JwtAuthGuard)
+  updateAvatar(
+    @Param('id') id: string,
+    @Body('avatarUrl') avatarUrl: string,
+  ): Promise<UserResponseDto> {
+    return this.usersService.updateAvatar(id, avatarUrl);
+  }
+
+  @Delete(':id/avatar')
+  @UseGuards(JwtAuthGuard)
+  deleteAvatar(@Param('id') id: string): Promise<UserResponseDto> {
+    return this.usersService.deleteAvatar(id);
+  }
 }
