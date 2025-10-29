@@ -1,0 +1,234 @@
+model Payment {
+  id              String         @id @default(cuid())
+  orderId         String // ID từ Orders Service
+  userId          String // ID từ Auth Service
+  amount          Decimal        @db.Decimal(10, 2)
+  currency        String         @default("VND")
+  method          PaymentMethod  @relation(fields: [paymentMethodId], references: [id])
+  status          PaymentStatus  @default(PENDING)
+  gateway         PaymentGateway
+  gatewayId       String? // ID từ payment gateway
+  gatewayResponse Json? // Response từ payment gateway
+  failureReason   String?
+  processedAt     DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  // Relations
+  transactions    PaymentTransaction[]
+  refunds         PaymentRefund[]
+  paymentMethodId String
+
+  @@map("payments")
+  @@schema("payments")
+}
+
+model PaymentTransaction {
+  id              String            @id @default(cuid())
+  paymentId       String
+  type            TransactionType
+  amount          Decimal           @db.Decimal(10, 2)
+  status          TransactionStatus @default(PENDING)
+  gatewayId       String? // ID từ payment gateway
+  gatewayResponse Json? // Response từ payment gateway
+  failureReason   String?
+  processedAt     DateTime?
+  createdAt       DateTime          @default(now())
+
+  // Relations
+  payment Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+
+  @@map("payment_transactions")
+  @@schema("payments")
+}
+
+model PaymentRefund {
+  id              String       @id @default(cuid())
+  paymentId       String
+  amount          Decimal      @db.Decimal(10, 2)
+  reason          String?
+  status          RefundStatus @default(PENDING)
+  gatewayId       String? // ID từ payment gateway
+  gatewayResponse Json? // Response từ payment gateway
+  processedAt     DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  // Relations
+  payment Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+
+  @@map("payment_refunds")
+  @@schema("payments")
+}
+
+model PaymentMethod {
+  id         String            @id @default(cuid())
+  userId     String // ID từ Auth Service
+  type       PaymentMethodType
+  provider   String // VNPay, MoMo, Stripe, etc.
+  providerId String // ID từ payment provider
+  isDefault  Boolean           @default(false)
+  isActive   Boolean           @default(true)
+  metadata   Json? // Additional provider-specific data
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+  Payment    Payment[]
+
+  @@map("payment_methods")
+  @@schema("payments")
+}
+
+model Wallet {
+  id        String   @id @default(cuid())
+  userId    String // ID từ Auth Service
+  balance   Decimal  @default(0) @db.Decimal(10, 2)
+  currency  String   @default("VND")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  transactions WalletTransaction[]
+
+  @@unique([userId])
+  @@map("wallets")
+  @@schema("payments")
+}
+
+model WalletTransaction {
+  id            String                @id @default(cuid())
+  walletId      String
+  type          WalletTransactionType
+  amount        Decimal               @db.Decimal(10, 2)
+  balanceBefore Decimal               @db.Decimal(10, 2)
+  balanceAfter  Decimal               @db.Decimal(10, 2)
+  description   String?
+  referenceId   String? // ID của order, payment, etc.
+  referenceType String? // order, payment, refund, etc.
+  createdAt     DateTime              @default(now())
+
+  // Relations
+  wallet Wallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+  @@map("wallet_transactions")
+  @@schema("payments")
+}
+
+model Coupon {
+  id             String     @id @default(cuid())
+  code           String     @unique
+  name           String
+  description    String?
+  type           CouponType
+  value          Decimal    @db.Decimal(10, 2)
+  minOrderAmount Decimal?   @db.Decimal(10, 2)
+  maxDiscount    Decimal?   @db.Decimal(10, 2)
+  usageLimit     Int?
+  usedCount      Int        @default(0)
+  isActive       Boolean    @default(true)
+  validFrom      DateTime
+  validUntil     DateTime
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  // Relations
+  usages CouponUsage[]
+
+  @@map("coupons")
+  @@schema("payments")
+}
+
+model CouponUsage {
+  id        String   @id @default(cuid())
+  couponId  String
+  userId    String // ID từ Auth Service
+  orderId   String // ID từ Orders Service
+  discount  Decimal  @db.Decimal(10, 2)
+  createdAt DateTime @default(now())
+
+  // Relations
+  coupon Coupon @relation(fields: [couponId], references: [id], onDelete: Cascade)
+
+  @@unique([couponId, orderId])
+  @@map("coupon_usages")
+  @@schema("payments")
+}
+
+enum PaymentGateway {
+  VNPAY
+  MOMO
+  STRIPE
+  PAYPAL
+  BANK_TRANSFER
+  CASH
+
+  @@schema("payments")
+}
+
+enum TransactionType {
+  PAYMENT
+  REFUND
+  CHARGEBACK
+  ADJUSTMENT
+
+  @@schema("payments")
+}
+
+enum TransactionStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+
+  @@schema("payments")
+}
+
+enum RefundStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+
+  @@schema("payments")
+}
+
+enum WalletTransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  PAYMENT
+  REFUND
+  BONUS
+  PENALTY
+
+  @@schema("payments")
+}
+
+enum CouponType {
+  PERCENTAGE
+  FIXED_AMOUNT
+  FREE_SHIPPING
+
+  @@schema("payments")
+}
+
+enum PaymentMethodType {
+  CREDIT_CARD
+  DEBIT_CARD
+  PAYPAL
+  BANK_TRANSFER
+  CASH
+
+  @@schema("payments")
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+
+  @@schema("payments")
+}

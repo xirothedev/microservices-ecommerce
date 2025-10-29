@@ -1,0 +1,117 @@
+model User {
+  id         String   @id @default(cuid())
+  email      String   @unique
+  username   String   @unique
+  password   String
+  firstName  String?
+  lastName   String?
+  phone      String?
+  avatar     String?
+  isActive   Boolean  @default(true)
+  isVerified Boolean  @default(false)
+  role       UserRole @default(CUSTOMER)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  addresses     Address[]
+  sessions      UserSession[]
+  refreshTokens RefreshToken[]
+
+  @@map("users")
+  @@schema("auth")
+}
+
+model Address {
+  id         String      @id @default(cuid())
+  userId     String
+  type       AddressType @default(SHIPPING)
+  firstName  String
+  lastName   String
+  company    String?
+  address1   String
+  address2   String?
+  city       String
+  state      String
+  postalCode String
+  country    String      @default("VN")
+  phone      String?
+  isDefault  Boolean     @default(false)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("addresses")
+  @@schema("auth")
+}
+
+model UserSession {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+  isActive  Boolean  @default(true)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_sessions")
+  @@schema("auth")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+  @@schema("auth")
+}
+
+model VerificationCode {
+  id        String           @id @default(cuid())
+  email     String
+  code      String
+  type      VerificationType
+  expiresAt DateTime
+  isUsed    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  @@map("verification_codes")
+  @@schema("auth")
+}
+
+enum UserRole {
+  CUSTOMER
+  FARMER
+  ADMIN
+  MODERATOR
+  SUPPORT
+
+  @@schema("auth")
+}
+
+enum AddressType {
+  SHIPPING
+  BILLING
+
+  @@schema("auth")
+}
+
+enum VerificationType {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+  PHONE_VERIFICATION
+
+  @@schema("auth")
+}

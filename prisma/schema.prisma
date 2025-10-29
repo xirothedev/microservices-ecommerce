@@ -1,37 +1,24 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Main Prisma Schema - Ecommerce Agricultural Products
+// This file serves as the main configuration and can be used for shared models
 
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["postgresqlExtensions", "relationJoins"]
   binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
   engineType      = "library"
-  relationMode    = "prisma"
+  output          = "./generated/client"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["public", "auth", "products", "orders", "inventory", "payments", "notifications"]
 }
 
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  username  String   @unique
-  password  String
-  firstName String?
-  lastName  String?
-  avatar    String?
-  isActive  Boolean  @default(true)
-  role      UserRole @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("users")
-}
-
-enum UserRole {
-  USER
-  ADMIN
-  MODERATOR
-}
+// Individual service schemas are in their respective directories:
+// - prisma/schemas/auth/schema.prisma
+// - prisma/schemas/products/schema.prisma
+// - prisma/schemas/orders/schema.prisma
+// - prisma/schemas/inventory/schema.prisma
+// - prisma/schemas/payments/schema.prisma
+// - prisma/schemas/notifications/schema.prisma

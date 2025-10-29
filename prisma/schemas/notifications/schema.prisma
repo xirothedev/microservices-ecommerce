@@ -1,0 +1,232 @@
+model Notification {
+  id          String               @id @default(cuid())
+  userId      String? // ID từ Auth Service (null for system notifications)
+  type        NotificationType
+  channel     NotificationChannel
+  title       String
+  message     String
+  data        Json? // Additional data
+  status      NotificationStatus   @default(PENDING)
+  priority    NotificationPriority @default(NORMAL)
+  scheduledAt DateTime?
+  sentAt      DateTime?
+  readAt      DateTime?
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+
+  // Relations
+  templates NotificationTemplate[]
+
+  @@map("notifications")
+  @@schema("notifications")
+}
+
+model NotificationTemplate {
+  id        String              @id @default(cuid())
+  name      String              @unique
+  type      NotificationType
+  channel   NotificationChannel
+  subject   String?
+  title     String
+  content   String
+  variables String[] // Available template variables
+  isActive  Boolean             @default(true)
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+
+  // Relations
+  notifications Notification[]
+
+  @@map("notification_templates")
+  @@schema("notifications")
+}
+
+model NotificationPreference {
+  id        String              @id @default(cuid())
+  userId    String // ID từ Auth Service
+  type      NotificationType
+  channel   NotificationChannel
+  isEnabled Boolean             @default(true)
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+
+  @@unique([userId, type, channel])
+  @@map("notification_preferences")
+  @@schema("notifications")
+}
+
+model EmailQueue {
+  id           String      @id @default(cuid())
+  to           String
+  cc           String?
+  bcc          String?
+  subject      String
+  content      String
+  htmlContent  String?
+  status       EmailStatus @default(PENDING)
+  priority     Int         @default(0)
+  attempts     Int         @default(0)
+  maxAttempts  Int         @default(3)
+  errorMessage String?
+  scheduledAt  DateTime?
+  sentAt       DateTime?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@map("email_queue")
+  @@schema("notifications")
+}
+
+model SmsQueue {
+  id           String    @id @default(cuid())
+  to           String
+  message      String
+  status       SmsStatus @default(PENDING)
+  priority     Int       @default(0)
+  attempts     Int       @default(0)
+  maxAttempts  Int       @default(3)
+  errorMessage String?
+  scheduledAt  DateTime?
+  sentAt       DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@map("sms_queue")
+  @@schema("notifications")
+}
+
+model PushNotification {
+  id           String     @id @default(cuid())
+  userId       String // ID từ Auth Service
+  deviceToken  String
+  title        String
+  body         String
+  data         Json?
+  status       PushStatus @default(PENDING)
+  priority     Int        @default(0)
+  attempts     Int        @default(0)
+  maxAttempts  Int        @default(3)
+  errorMessage String?
+  scheduledAt  DateTime?
+  sentAt       DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@map("push_notifications")
+  @@schema("notifications")
+}
+
+model Webhook {
+  id            String    @id @default(cuid())
+  name          String
+  url           String
+  events        String[] // Array of event types
+  secret        String?
+  isActive      Boolean   @default(true)
+  lastTriggered DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  logs WebhookLog[]
+
+  @@map("webhooks")
+  @@schema("notifications")
+}
+
+model WebhookLog {
+  id           String   @id @default(cuid())
+  webhookId    String
+  event        String
+  payload      Json
+  response     Json?
+  status       Int? // HTTP status code
+  errorMessage String?
+  createdAt    DateTime @default(now())
+
+  // Relations
+  webhook Webhook @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+
+  @@map("webhook_logs")
+  @@schema("notifications")
+}
+
+enum NotificationType {
+  ORDER_CONFIRMED
+  ORDER_SHIPPED
+  ORDER_DELIVERED
+  ORDER_CANCELLED
+  PAYMENT_SUCCESS
+  PAYMENT_FAILED
+  LOW_STOCK
+  PRICE_DROP
+  NEW_PRODUCT
+  PROMOTION
+  ACCOUNT_VERIFICATION
+  PASSWORD_RESET
+  SECURITY_ALERT
+  SYSTEM_MAINTENANCE
+  GENERAL
+
+  @@schema("notifications")
+}
+
+enum NotificationChannel {
+  EMAIL
+  SMS
+  PUSH
+  IN_APP
+  WEBHOOK
+
+  @@schema("notifications")
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  DELIVERED
+  FAILED
+  CANCELLED
+
+  @@schema("notifications")
+}
+
+enum NotificationPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+
+  @@schema("notifications")
+}
+
+enum EmailStatus {
+  PENDING
+  SENT
+  DELIVERED
+  FAILED
+  BOUNCED
+  CANCELLED
+
+  @@schema("notifications")
+}
+
+enum SmsStatus {
+  PENDING
+  SENT
+  DELIVERED
+  FAILED
+  CANCELLED
+
+  @@schema("notifications")
+}
+
+enum PushStatus {
+  PENDING
+  SENT
+  DELIVERED
+  FAILED
+  CANCELLED
+
+  @@schema("notifications")
+}

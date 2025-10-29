@@ -1,0 +1,177 @@
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  image       String?
+  parentId    String?
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  parent   Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryHierarchy")
+  products Product[]
+
+  @@map("categories")
+  @@schema("products")
+}
+
+model Product {
+  id               String        @id @default(cuid())
+  name             String
+  slug             String        @unique
+  description      String?
+  shortDescription String?
+  sku              String        @unique
+  barcode          String?
+  price            Decimal       @db.Decimal(10, 2)
+  comparePrice     Decimal?      @db.Decimal(10, 2)
+  costPrice        Decimal?      @db.Decimal(10, 2)
+  weight           Decimal?      @db.Decimal(8, 3) // kg
+  dimensions       Json? // {length, width, height}
+  categoryId       String
+  farmerId         String // ID của nông dân
+  status           ProductStatus @default(DRAFT)
+  isActive         Boolean       @default(true)
+  isDigital        Boolean       @default(false)
+  trackQuantity    Boolean       @default(true)
+  allowBackorder   Boolean       @default(false)
+  minQuantity      Int           @default(1)
+  maxQuantity      Int?
+  metaTitle        String?
+  metaDescription  String?
+  tags             String[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  // Relations
+  category       Category               @relation(fields: [categoryId], references: [id])
+  images         ProductImage[]
+  variants       ProductVariant[]
+  attributes     ProductAttribute[]
+  reviews        ProductReview[]
+  inventoryItems ProductInventoryItem[]
+
+  @@map("products")
+  @@schema("products")
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String
+  url       String
+  alt       String?
+  sortOrder Int      @default(0)
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  // Relations
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+  @@schema("products")
+}
+
+model ProductVariant {
+  id           String   @id @default(cuid())
+  productId    String
+  name         String
+  sku          String   @unique
+  price        Decimal  @db.Decimal(10, 2)
+  comparePrice Decimal? @db.Decimal(10, 2)
+  costPrice    Decimal? @db.Decimal(10, 2)
+  weight       Decimal? @db.Decimal(8, 3)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_variants")
+  @@schema("products")
+}
+
+model ProductAttribute {
+  id        String   @id @default(cuid())
+  productId String
+  name      String
+  value     String
+  createdAt DateTime @default(now())
+
+  // Relations
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_attributes")
+  @@schema("products")
+}
+
+model ProductReview {
+  id         String   @id @default(cuid())
+  productId  String
+  userId     String // ID từ Auth Service
+  rating     Int // 1-5
+  title      String?
+  comment    String?
+  isVerified Boolean  @default(false)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_reviews")
+  @@schema("products")
+}
+
+model ProductInventoryItem {
+  id           String   @id @default(cuid())
+  productId    String
+  locationId   String
+  quantity     Int      @default(0)
+  reserved     Int      @default(0)
+  available    Int      @default(0) // quantity - reserved
+  reorderLevel Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  product  Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  location Location @relation(fields: [locationId], references: [id])
+
+  @@unique([productId, locationId])
+  @@map("inventory_items")
+  @@schema("products")
+}
+
+model Location {
+  id         String   @id @default(cuid())
+  name       String
+  address    String
+  city       String
+  state      String
+  postalCode String
+  country    String   @default("VN")
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  inventoryItems ProductInventoryItem[]
+
+  @@map("locations")
+  @@schema("products")
+}
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+
+  @@schema("products")
+}

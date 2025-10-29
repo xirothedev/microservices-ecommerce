@@ -1,0 +1,197 @@
+model Order {
+  id                String            @id @default(cuid())
+  orderNumber       String            @unique
+  userId            String // ID từ Auth Service
+  status            OrderStatus       @default(PENDING)
+  paymentStatus     OrderPaymentStatus     @default(PENDING)
+  fulfillmentStatus FulfillmentStatus @default(UNFULFILLED)
+
+  // Pricing
+  subtotal       Decimal @db.Decimal(10, 2)
+  taxAmount      Decimal @default(0) @db.Decimal(10, 2)
+  shippingAmount Decimal @default(0) @db.Decimal(10, 2)
+  discountAmount Decimal @default(0) @db.Decimal(10, 2)
+  totalAmount    Decimal @db.Decimal(10, 2)
+
+  // Customer Info
+  customerEmail String
+  customerPhone String?
+  customerNote  String?
+
+  // Shipping
+  shippingAddress Json // Address object
+  billingAddress  Json? // Address object
+
+  // Timestamps
+  processedAt DateTime?
+  shippedAt   DateTime?
+  deliveredAt DateTime?
+  cancelledAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  items     OrderItem[]
+  shipments Shipment[]
+  refunds   Refund[]
+  notes     OrderNote[]
+
+  @@map("orders")
+  @@schema("orders")
+}
+
+model OrderItem {
+  id          String   @id @default(cuid())
+  orderId     String
+  productId   String // ID từ Products Service
+  variantId   String? // ID từ Products Service
+  sku         String
+  name        String
+  description String?
+  quantity    Int
+  price       Decimal  @db.Decimal(10, 2)
+  totalPrice  Decimal  @db.Decimal(10, 2)
+  weight      Decimal? @db.Decimal(8, 3)
+  createdAt   DateTime @default(now())
+
+  // Relations
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("order_items")
+  @@schema("orders")
+}
+
+model Shipment {
+  id             String         @id @default(cuid())
+  orderId        String
+  trackingNumber String?        @unique
+  carrier        String?
+  method         String?
+  status         ShipmentStatus @default(PENDING)
+  shippedAt      DateTime?
+  deliveredAt    DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  // Relations
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("shipments")
+  @@schema("orders")
+}
+
+model Refund {
+  id          String       @id @default(cuid())
+  orderId     String
+  amount      Decimal      @db.Decimal(10, 2)
+  reason      String?
+  status      OrderRefundStatus @default(PENDING)
+  processedAt DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  // Relations
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("refunds")
+  @@schema("orders")
+}
+
+model OrderNote {
+  id        String   @id @default(cuid())
+  orderId   String
+  note      String
+  isPublic  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  // Relations
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("order_notes")
+  @@schema("orders")
+}
+
+model Cart {
+  id        String   @id @default(cuid())
+  userId    String // ID từ Auth Service
+  sessionId String? // For guest users
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  items CartItem[]
+
+  @@unique([userId])
+  @@map("carts")
+  @@schema("orders")
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  cartId    String
+  productId String // ID từ Products Service
+  variantId String? // ID từ Products Service
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  cart Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
+
+  @@unique([cartId, productId, variantId])
+  @@map("cart_items")
+  @@schema("orders")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  RETURNED
+
+  @@schema("orders")
+}
+
+enum FulfillmentStatus {
+  UNFULFILLED
+  PARTIALLY_FULFILLED
+  FULFILLED
+  PARTIALLY_RETURNED
+  RETURNED
+
+  @@schema("orders")
+}
+
+enum ShipmentStatus {
+  PENDING
+  SHIPPED
+  IN_TRANSIT
+  DELIVERED
+  FAILED
+  RETURNED
+
+  @@schema("orders")
+}
+
+enum OrderRefundStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+
+  @@schema("orders")
+}
+
+enum OrderPaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+
+  @@schema("orders")
+}
