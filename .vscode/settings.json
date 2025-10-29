@@ -1,0 +1,13 @@
+{
+  "go.toolsManagement.checkForUpdates": "off",
+  "go.useLanguageServer": false,
+  "protobuf.languageServer": {
+    "enabled": false
+  },
+  "files.associations": {
+    "*.proto": "protobuf"
+  },
+  "protoc": {
+    "path": ""
+  }
+}

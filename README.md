@@ -6,7 +6,7 @@ This project implements complete user management and authentication modules for 
 
 ### User Module
 - Complete CRUD operations for users
-- Password hashing with bcrypt
+- Password hashing with argon2
 - Soft delete functionality
 - Email and username uniqueness validation
 - Both REST API and microservice message patterns
@@ -115,7 +115,7 @@ The User model includes:
 
 ## Security Features
 
-- Password hashing with bcrypt
+- Password hashing with argon2
 - JWT token authentication
 - Input validation with class-validator
 - CORS enabled

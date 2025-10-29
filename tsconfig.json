@@ -1,6 +1,15 @@
 {
-  "exclude": ["node_modules", "dist", "test", "**/*spec.ts", "scripts"],
-  "include": ["src/**/*.ts"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "test",
+    "**/*spec.ts",
+    "scripts"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "apps/**/*.ts"
+  ],
   "compilerOptions": {
     "module": "nodenext",
     "moduleResolution": "nodenext",
@@ -24,7 +33,9 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   }
 }
