@@ -3,3 +3,7 @@ ignoredBuiltDependencies:
   - '@prisma/client'
   - '@prisma/engines'
   - prisma
+packages:
+  - "apps/*"
+  - "prisma"
+  - "scripts"

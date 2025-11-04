@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "start:dev": "nest start --watch -p tsconfig.app.json"
+  }
+}

@@ -17,19 +17,19 @@ export class AuthServiceController {
   }
 
   @MessagePattern('auth.login')
-  async login(@Body() data: LoginRequest): Promise<AuthResponse> {
+  login(@Body() data: LoginRequest): AuthResponse {
     console.log('Auth Service - Login request:', data);
     return this.authServiceService.login(data);
   }
 
   @MessagePattern('auth.register')
-  async register(@Body() data: RegisterRequest): Promise<AuthResponse> {
+  register(@Body() data: RegisterRequest): AuthResponse {
     console.log('Auth Service - Register request:', data);
     return this.authServiceService.register(data);
   }
 
   @MessagePattern('auth.validate')
-  async validateToken(@Body() data: { token: string }): Promise<AuthResponse> {
+  validateToken(@Body() data: { token: string }): AuthResponse {
     console.log('Auth Service - Validate token request');
     return this.authServiceService.validateToken(data.token);
   }

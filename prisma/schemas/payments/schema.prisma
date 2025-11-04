@@ -4,7 +4,7 @@ model Payment {
   userId          String // ID từ Auth Service
   amount          Decimal        @db.Decimal(10, 2)
   currency        String         @default("VND")
-  method          PaymentMethod  @relation(fields: [paymentMethodId], references: [id])
+  method          PaymentMethodType
   status          PaymentStatus  @default(PENDING)
   gateway         PaymentGateway
   gatewayId       String? // ID từ payment gateway
@@ -17,7 +17,6 @@ model Payment {
   // Relations
   transactions    PaymentTransaction[]
   refunds         PaymentRefund[]
-  paymentMethodId String
 
   @@map("payments")
   @@schema("payments")
@@ -47,7 +46,7 @@ model PaymentRefund {
   paymentId       String
   amount          Decimal      @db.Decimal(10, 2)
   reason          String?
-  status          RefundStatus @default(PENDING)
+  status          PaymentRefundStatus @default(PENDING)
   gatewayId       String? // ID từ payment gateway
   gatewayResponse Json? // Response từ payment gateway
   processedAt     DateTime?
@@ -72,7 +71,6 @@ model PaymentMethod {
   metadata   Json? // Additional provider-specific data
   createdAt  DateTime          @default(now())
   updatedAt  DateTime          @updatedAt
-  Payment    Payment[]
 
   @@map("payment_methods")
   @@schema("payments")
@@ -184,7 +182,7 @@ enum TransactionStatus {
   @@schema("payments")
 }
 
-enum RefundStatus {
+enum PaymentRefundStatus {
   PENDING
   PROCESSING
   COMPLETED
