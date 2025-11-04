@@ -14,11 +14,3 @@ datasource db {
   url      = env("DATABASE_URL")
   schemas  = ["public", "auth", "products", "orders", "inventory", "payments", "notifications"]
 }
-
-// Individual service schemas are in their respective directories:
-// - prisma/schemas/auth/schema.prisma
-// - prisma/schemas/products/schema.prisma
-// - prisma/schemas/orders/schema.prisma
-// - prisma/schemas/inventory/schema.prisma
-// - prisma/schemas/payments/schema.prisma
-// - prisma/schemas/notifications/schema.prisma
