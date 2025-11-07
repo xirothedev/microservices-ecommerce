@@ -11,6 +11,11 @@ import type {
   RegisterRequest,
   AuthResponse,
 } from './interfaces/auth.interface';
+import type {
+  CreateUserRequest,
+  User,
+  UserList,
+} from './interfaces/user.interface';
 
 @Controller()
 export class ApiGatewayController {
@@ -58,5 +63,24 @@ export class ApiGatewayController {
     const token = authHeader?.replace('Bearer ', '') || '';
     console.log('API Gateway - Calling AuthService.ValidateToken');
     return this.apiGatewayService.validateToken(token);
+  }
+
+  // Users endpoints
+  @Post('api/users/register')
+  createUser(@Body() data: CreateUserRequest): Observable<User> {
+    console.log('API Gateway - Calling UsersService.CreateUser with:', data);
+    return this.apiGatewayService.createUser(data);
+  }
+
+  @Get('api/users/:id')
+  getUser(@Param('id') id: string): Observable<User> {
+    console.log('API Gateway - Calling UsersService.GetUser for ID:', id);
+    return this.apiGatewayService.getUser(id);
+  }
+
+  @Get('api/users')
+  getAllUsers(): Observable<UserList> {
+    console.log('API Gateway - Calling UsersService.GetAllUsers');
+    return this.apiGatewayService.getAllUsers();
   }
 }

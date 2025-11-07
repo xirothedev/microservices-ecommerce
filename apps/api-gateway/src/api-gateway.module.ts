@@ -32,6 +32,19 @@ import { ApiGatewayService } from './api-gateway.service';
           },
         },
       },
+      {
+        name: 'USERS_SERVICE',
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            clientId: 'api-gateway',
+            brokers: ['localhost:9092'],
+          },
+          consumer: {
+            groupId: 'api-gateway-group',
+          },
+        },
+      },
     ]),
   ],
   controllers: [ApiGatewayController],

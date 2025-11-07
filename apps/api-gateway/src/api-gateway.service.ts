@@ -11,12 +11,18 @@ import {
   LoginRequest,
   RegisterRequest,
 } from 'apps/auth-service/src/interfaces/auth.interface';
+import {
+  CreateUserRequest,
+  User,
+  UserList,
+} from 'apps/users-service/src/interfaces/user.interface';
 
 @Injectable()
 export class ApiGatewayService {
   constructor(
     @Inject('PRODUCT_SERVICE') private readonly productClient: ClientKafka,
     @Inject('AUTH_SERVICE') private readonly authClient: ClientKafka,
+    @Inject('USERS_SERVICE') private readonly userClient: ClientKafka,
   ) {}
 
   async onModuleInit() {
@@ -29,6 +35,11 @@ export class ApiGatewayService {
     this.authClient.subscribeToResponseOf('auth.login');
     this.authClient.subscribeToResponseOf('auth.register');
     this.authClient.subscribeToResponseOf('auth.validate');
+
+    // Subscribe to response topics for users
+    this.userClient.subscribeToResponseOf('user.create');
+    this.userClient.subscribeToResponseOf('user.get');
+    this.userClient.subscribeToResponseOf('user.getAll');
 
     // Connect to Kafka
     await this.productClient.connect();
@@ -59,5 +70,18 @@ export class ApiGatewayService {
 
   validateToken(token: string): Observable<AuthResponse> {
     return this.authClient.send('auth.validate', { token });
+  }
+
+  // Users methods
+  createUser(userData: CreateUserRequest): Observable<User> {
+    return this.userClient.send('user.create', userData);
+  }
+
+  getUser(id: string): Observable<User> {
+    return this.userClient.send('user.get', { id });
+  }
+
+  getAllUsers(): Observable<UserList> {
+    return this.userClient.send('user.getAll', {});
   }
 }
